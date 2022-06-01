@@ -11,21 +11,16 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2017",
     "module": "es2020",
-    "types": [
-      // ... your other types
-      "node"
-    ],
     "lib": [
       "es2020",
-      "dom",
-      "ES6"
+      "dom"
     ]
   },
   "angularCompilerOptions": {
