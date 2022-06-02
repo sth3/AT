@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { AppService } from '../app.service';
-import { Card } from './card.model';
-import { NotifierService } from '../notifier.service';
+import { AppService } from '../../services/app.service';
+import { Card } from '../../models/card.model';
+import { NotifierService } from '../../services/notifier.service';
 
 
 
@@ -18,7 +18,7 @@ export class HomeComponent {
   cards: Card[] = [];
   cardsForHandset: Card[] = [];
   cardsForWeb: Card[] = [];
-  
+
   isHandset: boolean = false;
   isHandsetObserver: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
@@ -29,7 +29,7 @@ export class HomeComponent {
     })
   );
 
-  constructor(private breakpointObserver: BreakpointObserver, 
+  constructor(private breakpointObserver: BreakpointObserver,
     public appService: AppService,
     private notifierService:NotifierService ) {}
 
@@ -39,18 +39,18 @@ export class HomeComponent {
       console.log(currentObserverValue);
       this.loadCards();
     });
-    
+
     this.appService.getDeals().subscribe(response => {
-      this.cardsForHandset = response.handsetCards;      
-      this.cardsForWeb = response.webCards; 
-      this.notifierService.showNotification('Loaded successfully','OK','success');   
+      this.cardsForHandset = response.handsetCards;
+      this.cardsForWeb = response.webCards;
+      this.notifierService.showNotification('Loaded successfully','OK','success');
       this.loadCards();
-    });      
+    });
   }
 
   loadCards(){
-    this.cards = this.isHandset? this.cardsForHandset : this.cardsForWeb;    
-    console.log(this.cards);    
+    this.cards = this.isHandset? this.cardsForHandset : this.cardsForWeb;
+    console.log(this.cards);
   }
 
   getImage(imageName: string): string {
@@ -58,6 +58,6 @@ export class HomeComponent {
   }
 }
 
-  
+
 
 

@@ -8,17 +8,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'AT';
-  constructor(private http: HttpClient) {}
-    
+  constructor() {}
+
   ngOnInit() {
-    
-    const headers = new HttpHeaders({
-        'Content-Type':'application/json; charset=utf-8',
-        'myCustomHeader':'itsolutionstuff.com'
-      });
-    
-    const requestOptions = { headers: headers };
-        
-    
   }
 }
