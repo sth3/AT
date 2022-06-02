@@ -1,0 +1,42 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$AT-primary: mat.define-palette(mat.$green-palette);
+$AT-accent: mat.define-palette(mat.$green-palette);
+$AT-warn: mat.define-palette(mat.$red-palette);
+
+$AT-theme: mat.define-light-theme((
+  color: (
+    primary: $AT-primary,
+    accent: $AT-accent,
+    warn: $AT-warn,
+  )
+));
+@include mat.all-component-themes($AT-theme);
+
+// dark theme
+$AT-primary-dark: mat.define-palette(mat.$orange-palette);
+$AT-accent-dark: mat.define-palette(mat.$yellow-palette);
+$AT-warn-dark: mat.define-palette(mat.$red-palette);
+
+$AT-theme-dark: mat.define-dark-theme((
+  color: (
+    primary: $AT-primary-dark,
+    accent: $AT-accent-dark,
+    warn: $AT-warn-dark,
+  )
+));
+.dark-theme-mode{
+  @include mat.all-component-themes($AT-theme-dark);
+}
