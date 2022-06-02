@@ -1,9 +1,11 @@
 const express = require('express')
-const path = require('path');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload");
 const api = require('./api.js');
+const dealsRouter = require('./routes/deals');
+const cors = require("cors");
+const path = require("path");
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -17,5 +19,9 @@ app.use(connectLiveReload());
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/api', api);
+app.use('/deals', dealsRouter);
+
