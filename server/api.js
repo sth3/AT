@@ -1,14 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const bigArray = [];
-for (let i = 0; i < 10000; i++) {
-    bigArray.push({
-        id: i,
-        title: 'title' + i,
-        value: '' + Math.floor(Math.random() * 500)
-    })
-}
+const bigArray = prepareData();
+
 router.get('/filter', (req, res) => {
     console.log('request: ', req.query.input);
     res.json({response: 'yes'});
@@ -18,16 +12,20 @@ router.get('/data', (req, res) => {
     // console.log('query: ', req.query)
     const filterId = req.query.search?.value | null; // filter value (from search field)
     // console.log('filter ', filterId);
-    let bigData = []
+    let data;
     if (filterId) {
-        bigData = bigArray.filter(e => e.value.indexOf(filterId) > -1);
+        data = bigArray.filter(e => e.value.indexOf(filterId) > -1);
     } else {
-        bigData = bigArray;
+        data = bigArray;
     }
     // SELECT * FROM ... LIMIT = req.query.length OFFSET = req.query.start
-    const data = JSON.stringify(bigData.slice(req.query.start, +req.query.start + +req.query.length));
+    if (req.query.start != null && req.query.length != null) {
+        data = JSON.stringify(data.slice(req.query.start, +req.query.start + +req.query.length));
+    } else {
+        data = JSON.stringify(data);
+    }
     const recordsTotal = bigArray.length; // from DB
-    const recordsFiltered = bigData.length;
+    const recordsFiltered = data.length;
     res.json({
         'draw': parseInt(req.query.draw),
         'recordsFiltered': recordsFiltered,
@@ -44,5 +42,23 @@ router.delete('/data/:id', ((req, res) => {
     console.log(bigArray.slice(0, 10)); // just to check first 10
     res.send()
 }))
+
+function prepareData() {
+    const arr = [];
+    let obj;
+    for (let i = 0; i < 10000; i++) {
+        obj = {
+            no: i,
+            id: String(i).padStart(5, '0'),
+            name: 'name' + i
+        }
+        for (let j = 0; j < Math.floor(Math.random() * (30 - 1 + 1)) + 1; j++) {
+            obj['componentName' + j] = 'component' + j;
+            obj['componentSP' + j] = j;
+        }
+        arr.push(obj)
+    }
+    return arr;
+}
 
 module.exports = router;
