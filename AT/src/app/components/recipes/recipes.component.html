@@ -1,0 +1,10 @@
+<div style="flex: 1 1 0;">
+  <ag-grid-angular style="height: 80vh; width: auto"
+                   class="ag-theme-alpine"
+                   [columnDefs]="colDefs"
+                   [defaultColDef]="defaultColDef"
+                   [rowData]="data"
+                   (gridReady)="onGridReady($event)"
+                   [pagination]="true">
+  </ag-grid-angular>
+</div>
