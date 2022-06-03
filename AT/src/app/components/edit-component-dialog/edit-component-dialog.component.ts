@@ -29,7 +29,7 @@ export class EditComponentDialogComponent implements OnInit {
     component: ComponentModel,
     editMode: boolean
    }) {
-    this.formControl = new FormControl(data.component.name,
+    this.formControl = new FormControl(data.component?.name,
       [Validators.required,
         Validators.minLength(3),
         this.validComponentNameValidator.bind(this)]);
@@ -40,9 +40,10 @@ export class EditComponentDialogComponent implements OnInit {
 
   validComponentNameValidator(control: FormControl) {
     const value = control.value;
-    const allComponents = this.data?.allComponents;
-    const currentComponent = this.data?.component;
-    const isValid = allComponents.every(component => component.name !== value || component.id === currentComponent.id);
+    const allComponents = this.data.allComponents;
+    const currentComponent = this.data.component;
+    const isValid = allComponents.every(component => component.name !== value
+      || (currentComponent !== null && component.id === currentComponent.id ));
     return isValid ? null : { invalidComponentName: true };
   }
 

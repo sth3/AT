@@ -82,7 +82,7 @@ export class ComponentsComponent implements OnInit {
   onEditClick(e: any) {
     const data = e.rowData;
     this.dialogService.customDialog(EditComponentDialogComponent,
-      { component: e.rowData, allComponents: this.data })
+      { component: e.rowData, allComponents: this.data, editMode: true })
       .subscribe(result => {
         if (result) {
           console.log('edit clicked: ', e, result);
@@ -90,6 +90,22 @@ export class ComponentsComponent implements OnInit {
             .subscribe(response => {
               console.log('component updated: ', response);
               this.data[this.data.findIndex(c => c.id === response.id)] = response;
+              this.setData();
+            })
+        }
+      })
+  }
+
+  createComponent() {
+    this.dialogService.customDialog(EditComponentDialogComponent,
+      { component: null, allComponents: this.data, editMode: false })
+      .subscribe(result => {
+        if (result) {
+          console.log('create clicked: ', result);
+          this.componentService.addComponent(result)
+            .subscribe(response => {
+              console.log('component created: ', response);
+              this.data.push(response);
               this.setData();
             })
         }

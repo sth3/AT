@@ -23,7 +23,7 @@ export class ComponentService {
     return this.http.delete(`${environment.apiUrl}/components/${id}`);
   }
 
-  addComponent(component: ComponentModel) {
-    return this.http.post(`${environment.apiUrl}/components`, component);
+  addComponent(component: ComponentModel): Observable<ComponentModel> {
+    return this.http.post<ComponentModel>(`${environment.apiUrl}/components`, component);
   }
 }
