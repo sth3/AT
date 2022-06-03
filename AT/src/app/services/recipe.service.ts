@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ComponentModel, RecipeResponse } from '../models/recipe.model';
+import { ComponentItemModel, ComponentModel, RecipeResponse } from '../models/recipe.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class RecipeService {
   }
 
   private getComponents(recipe: any) {
-    const arr: ComponentModel[] = [];
+    const arr: ComponentItemModel[] = [];
     Object.keys(recipe)
       .filter(key => key.startsWith('componentName'))
       .forEach(key => {

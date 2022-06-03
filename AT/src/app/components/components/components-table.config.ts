@@ -1,14 +1,14 @@
 import { ColDef } from 'ag-grid-community';
 
-export const recipesTableDefaultColDef: ColDef = {
+export const componentsTableDefaultColDef: ColDef = {
   filter: 'agTextColumnFilter',
   sortable: true,
   width: 100,
   resizable: true,
 }
 
-export const recipesTableColDef: ColDef[] = [
+export const componentsTableColDef: ColDef[] = [
   { field: 'no', headerName: 'Number' },
   { field: 'id', headerName: 'ID' },
-  { field: 'name', headerName: 'Recipe name' }
+  { field: 'name', headerName: 'Component name' },
 ]

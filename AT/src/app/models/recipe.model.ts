@@ -2,13 +2,19 @@ export interface RecipeModel {
   no: number;
   id: string;
   name: string;
-  components: ComponentModel[]
+  components: ComponentItemModel[]
 }
 
-export interface ComponentModel {
+export interface ComponentItemModel {
   id: number;
   componentName: string;
   componentSP: number;
+}
+
+export interface ComponentModel {
+  no: number;
+  id: number;
+  name: string;
 }
 
 export interface RecipeResponse {
