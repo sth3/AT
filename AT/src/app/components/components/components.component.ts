@@ -23,8 +23,7 @@ export class ComponentsComponent implements OnInit {
   constructor(private componentService: ComponentService,
               private dialogService: DialogService) {
     this.defaultColDef = componentsTableDefaultColDef;
-    this.colDefs = componentsTableColDef;
-    this.colDefs.push(this.getButtonsColDef());
+    this.colDefs = [...componentsTableColDef, this.getButtonsColDef() ];
   }
 
   ngOnInit(): void {
