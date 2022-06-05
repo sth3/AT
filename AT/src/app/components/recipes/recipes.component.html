@@ -1,4 +1,12 @@
 <div style="flex: 1 1 0;">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Quick filter</mat-label>
+    <input matInput placeholder="goulash" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
+  </mat-form-field>
+  <button mat-button (click)="createRecipe()" style="float: right; margin: 10px">
+    <mat-icon>add</mat-icon>
+    Create new recipe
+  </button>
   <ag-grid-angular style="height: 80vh; width: auto"
                    class="ag-theme-alpine"
                    [columnDefs]="colDefs"

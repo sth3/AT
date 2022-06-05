@@ -32,6 +32,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EditComponentDialogComponent } from './components/edit-component-dialog/edit-component-dialog.component';
+import { EditRecipeDialogComponent } from './components/edit-recipe-dialog/edit-recipe-dialog.component';
 
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -47,6 +48,7 @@ import { EditComponentDialogComponent } from './components/edit-component-dialog
     ButtonsRendererComponent,
     ConfirmDialogComponent,
     EditComponentDialogComponent,
+    EditRecipeDialogComponent,
   ],
   imports: [
     BrowserModule,

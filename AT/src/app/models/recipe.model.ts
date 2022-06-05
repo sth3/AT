@@ -2,7 +2,7 @@ export interface RecipeModel {
   no: number;
   id: string;
   name: string;
-  components: ComponentItemModel[]
+  components?: ComponentItemModel[]
 }
 
 export interface ComponentItemModel {
