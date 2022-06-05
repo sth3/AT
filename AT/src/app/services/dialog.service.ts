@@ -25,7 +25,7 @@ export class DialogService {
   customDialog(component: any, data: any): Observable<any> {
     const dialogRef = this.dialog.open(component, {
       width: '400px',
-      height: '250px',
+      height: '350px',
       data: data
     });
     return dialogRef.afterClosed();

@@ -88,7 +88,7 @@ export class ComponentsComponent implements OnInit {
           this.componentService.updateComponent(data.id, result)
             .subscribe(response => {
               console.log('component updated: ', response);
-              this.data[this.data.findIndex(c => c.id === response.id)] = response;
+              this.data[this.data.findIndex(c => c.no === response.no)] = response;
               this.setData();
             })
         }

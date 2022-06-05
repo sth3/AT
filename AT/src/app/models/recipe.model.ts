@@ -13,7 +13,7 @@ export interface ComponentItemModel {
 
 export interface ComponentModel {
   no: number;
-  id: number;
+  id: string;
   name: string;
 }
 
