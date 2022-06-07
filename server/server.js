@@ -4,6 +4,7 @@ const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload");
 const api = require('./api.js');
 const dealsRouter = require('./routes/deals');
+const componentsRouter = require('./routes/components');
 const cors = require("cors");
 const path = require("path");
 
@@ -24,4 +25,5 @@ app.use(cors());
 
 app.use('/api', api);
 app.use('/deals', dealsRouter);
+app.use('/components',componentsRouter);
 

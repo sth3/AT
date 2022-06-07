@@ -3,17 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var dealsRouter = require('./routes/deals');
+var componentsRouters = require('./routes/components');
+
 var cors = require('cors');
-const sql = require("./dbOperation");
+const sql = require('./src/data/events/dbIndexComponents');
+const config = require('./config');
+
 var Conection
-var allDataFromSelectKomponent , lengthOfSelectKomponent , numberOfSelectRowsKomponent ;
+
 var allDataFromSelectRecipe , lengthOfSelectRecipe , numberOfSelectRowsRecipe ;
-const IDKomponent = [];
-const NAMEKomponent = [];
-const NoKomponent = [];
+
 const IDRecipe = [];
 const NAMERecipe = [];
 const NoRecipe = [];
@@ -48,10 +51,11 @@ const RecipeName28 = []; const RecipeSP28 = [];
 const RecipeName29 = []; const RecipeSP29 = [];
 const RecipeName30 = []; const RecipeSP30 = [];
 
-const komponentArray = [];
+
 const recipeArray = [];
 
 var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,10 +66,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
 app.use(cors());
 app.use('/', indexRouter);
 app.use('/deals', dealsRouter);
+app.use('/components', componentsRouters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -83,21 +89,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-sql.getdataKomponent().then((result)=>{       // Select all from table KOMPONENT  
-    
-  allDataFromSelectKomponent = result[0];
-  lengthOfSelectKomponent = result[1];     
-  numberOfSelectRowsKomponent = result[2]; 
-  
-  for ( let i = 0; i < lengthOfSelectKomponent; i++){
-      NoKomponent[i] = allDataFromSelectKomponent[0][i].No; //    
-      IDKomponent[i] = allDataFromSelectKomponent[0][i].ID; // 
-      NAMEKomponent[i] = allDataFromSelectKomponent[0][i].NAME; // 
-      
-      komponentArray.push({id: NoKomponent[i], title: NAMEKomponent[i]  + i, value: '' + IDKomponent[i]} )
-      console.log(komponentArray[i]);
-          } 
-  }); 
+
+
 
 sql.getdataRecipe().then((result)=>{       // Select all from table Recipe  
 
@@ -142,7 +135,7 @@ sql.getdataRecipe().then((result)=>{       // Select all from table Recipe
       RecipeName30[i] = allDataFromSelectRecipe[0][i].KOMPONENT_NAME_30; RecipeSP30[i]= allDataFromSelectRecipe[0][i].KOMPONENT_SP_30; //  
       
       recipeArray.push({id: i, title: NAMERecipe[i]  + i, value: '' + IDRecipe[i]} )
-      console.log(recipeArray[i]);
+      //console.log(recipeArray[i]);
   } 
   });  
 

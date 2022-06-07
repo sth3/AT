@@ -9,7 +9,7 @@ export class AppService {
   constructor( public httpClient: HttpClient) { }
 
   getDeals(): Observable<any> {
-   return this.httpClient.get('http://localhost:3001/deals');
+   return this.httpClient.get('http://localhost:3000/deals');
     
   }
 }
