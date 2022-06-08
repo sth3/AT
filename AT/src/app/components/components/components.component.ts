@@ -84,15 +84,21 @@ export class ComponentsComponent implements OnInit {
       { component: e.rowData, allComponents: this.data, editMode: true })
       .subscribe(result => {
         if (result) {
-          console.log('edit clicked: ', e, result);
-          this.componentService.updateComponent(data.id, result)
-            .subscribe(response => {
-              console.log('component updated: ', response);
-              this.data[this.data.findIndex(c => c.no === response.no)] = response;
-              this.setData();
-            })
-        }
-      })
+          this.dialogService.confirmDialog('Are you sure you want to update this component?')
+          .subscribe(resultS => {
+            if (resultS) {
+              console.log('edit clicked: ', e, result);
+              this.componentService.updateComponent(data.id, result)
+                .subscribe(response => {
+                  console.log('component updated: ', response);
+                  this.data[this.data.findIndex(c => c.no === response.no)] = response;
+                  this.setData();
+                  location.reload();// neviem ci to je naj. riesenie ale po update sa neaktualizovali data
+                })
+           }
+          }) 
+        }//if
+      })//sub
   }
 
   createComponent() {
