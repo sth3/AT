@@ -14,7 +14,67 @@ router.get('/filter', (req, res) => {
     res.json({response: 'yes'});
 })
 
+router.get('/components', (req, res) => {
+    fs.readFile('components.json',(err, data) => {
+        if (err) throw err;
+        const components = JSON.parse(data);
+        console.log(components);
+        res.json(components);
+    });
+})
 
+router.put('/components/:ID', (req, res) => {
+    fs.readFile('components.json',(err, data) => {
+        if (err) throw err;
+        const components = JSON.parse(data);
+        const index = components.findIndex(c => c.id === req.params.id);
+        const changedComponent = {
+            ...components[index],
+            ...req.body
+        };
+        components[index] = changedComponent;
+        fs.writeFile('components.json', JSON.stringify(components), (err) => {
+            if (err) throw err;
+            console.log('Component ' + changedComponent.id + ' changed: ', changedComponent);
+            res.json(changedComponent);
+        });
+    });
+})
+
+router.delete('/components/:ID', (req, res) => {
+    fs.readFile('components.json',(err, data) => {
+        if (err) throw err;
+        const components = JSON.parse(data);
+        const index = components.findIndex(c => c.id === req.params.id);
+        components.splice(index, 1);
+        fs.writeFile('components.json', JSON.stringify(components), (err) => {
+            if (err) throw err;
+            console.log('Component ' + req.params.id + ' removed');
+            res.status(204);
+            res.send();
+        });
+    });
+})
+
+router.post('/components', (req, res) => {
+    fs.readFile('components.json', (err, data) => {
+        if (err) throw err;
+        const components = JSON.parse(data);
+        const id = Math.max(...components.map(o => parseInt(o.id))) + 1;
+        const no = Math.max(...components.map(o => o.no)) + 1;
+        const newRecipe = {
+            no,
+            id: String(id).padStart(10, '0'),
+            ...req.body
+        }
+        components.push(newRecipe);
+        fs.writeFile('components.json', JSON.stringify(components), (err) => {
+            if (err) throw err;
+            console.log('New component added: ', newRecipe);
+            res.json(newRecipe);
+        });
+    })
+})
 
 router.get('/recipes', (req, res) => {
     fs.readFile('recipes.json',(err, data) => {
@@ -25,7 +85,7 @@ router.get('/recipes', (req, res) => {
     });
 })
 
-router.put('/recipes/:id', (req, res) => {
+router.put('/recipes/:ID', (req, res) => {
     fs.readFile('recipes.json',(err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
@@ -44,7 +104,7 @@ router.put('/recipes/:id', (req, res) => {
     });
 })
 
-router.delete('/recipes/:id', (req, res) => {
+router.delete('/recipes/:ID', (req, res) => {
     fs.readFile('recipes.json',(err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
@@ -105,10 +165,10 @@ router.get('/data', (req, res) => {
     })
 })
 
-router.delete('/data/:id', ((req, res) => {
+router.delete('/data/:ID', ((req, res) => {
     // SQL Delete, remove stuff below
     const index = bigArray.findIndex(e => e.id === +req.params.id);
-    console.log('delete id: ' + req.params.id + ' at index: ' + index);
+    console.log('delete ID: ' + req.params.id + ' at index: ' + index);
     bigArray.splice(index, 1);
     console.log(bigArray.slice(0, 10)); // just to check first 10
     res.send()

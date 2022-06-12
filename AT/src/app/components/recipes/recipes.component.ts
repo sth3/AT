@@ -6,11 +6,21 @@ import { RecipeService } from '../../services/recipe.service';
 import { ButtonsRendererComponent } from '../buttons-renderer/buttons-renderer.component';
 import { DialogService } from '../../services/dialog.service';
 import { EditRecipeDialogComponent } from '../edit-recipe-dialog/edit-recipe-dialog.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { finalize } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.css']
+  styleUrls: ['./recipes.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class RecipesComponent implements OnInit {
 
@@ -19,6 +29,15 @@ export class RecipesComponent implements OnInit {
   data: RecipeModel[] = [];
   gridApi!: GridApi;
   quickFilter: string = '';
+  columnsToDisplay = [
+    { field: 'no', header: 'No' },
+    { field: 'id', header: 'ID' },
+    { field: 'name', header: 'Recipe name' }
+  ];
+  isLoading = true;
+  columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field), 'actions'];
+  expandedRecipe: RecipeModel | null = null;
+  dataSource: MatTableDataSource<RecipeModel> = new MatTableDataSource<RecipeModel>([]);
 
   constructor(private recipeService: RecipeService,
               private dialogService: DialogService) {
@@ -27,14 +46,7 @@ export class RecipesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recipeService.getRecipes()
-      .subscribe(response => {
-        console.log('data: ', response);
-        this.data = response;
-        if (this.gridApi) {
-          this.setData();
-        }
-      })
+    this.loadRecipes();
   }
 
   onGridReady(params: GridReadyEvent) {
@@ -43,14 +55,20 @@ export class RecipesComponent implements OnInit {
     if (this.data.length) {
       this.setData();
     }
+    this.gridApi.addEventListener('rowClicked', (params: any) => {
+      params.node.setExpanded(true);
+    });
   }
 
   setData() {
-    this.gridApi.setRowData(this.data);
+    // this.gridApi.setRowData(this.data);
+    this.dataSource.data = this.data;
   }
 
   changeFilter() {
-    this.gridApi.setQuickFilter(this.quickFilter);
+    console.log('filter changed: ', this.quickFilter.trim().toLowerCase());
+    // this.gridApi.setQuickFilter(this.quickFilter);
+    this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
   getButtonsColDef(): ColDef {
@@ -64,35 +82,25 @@ export class RecipesComponent implements OnInit {
     }
   }
 
-  onDeleteClick(e: any) {
+  onDeleteClick(data: any) {
     this.dialogService.confirmDialog('Are you sure you want to delete this recipe?')
       .subscribe(result => {
         if (result) {
-          console.log('delete clicked: ', e);
-          const data = e.rowData;
           this.recipeService.deleteRecipe(data.id)
-            .subscribe(response => {
-              console.log('recipe deleted: ', response);
-              this.data.splice(this.data.findIndex(c => c.id === data.id), 1);
-              this.setData();
+            .subscribe(() => {
+              console.log('recipe deleted: ', data);
+              this.loadRecipes();
             })
         }
       })
   }
 
-  onEditClick(e: any) {
-    const data = e.rowData;
+  onEditClick(data: any) {
     this.dialogService.customDialog(EditRecipeDialogComponent,
-      { recipe: e.rowData, allRecipes: this.data, editMode: true })
+      { recipe: data, allRecipes: this.data, editMode: true })
       .subscribe(result => {
         if (result) {
-          console.log('edit clicked: ', e, result);
-          this.recipeService.updateRecipe(data.id, result)
-            .subscribe(response => {
-              console.log('recipe updated: ', response);
-              this.data[this.data.findIndex(c => c.no === response.no)] = response;
-              this.setData();
-            })
+          this.promptSave(result);
         }
       })
   }
@@ -102,12 +110,36 @@ export class RecipesComponent implements OnInit {
       { recipe: null, allRecipes: this.data, editMode: false })
       .subscribe(result => {
         if (result) {
-          console.log('create clicked: ', result);
           this.recipeService.addRecipe(result)
             .subscribe(response => {
               console.log('recipe created: ', response);
-              this.data.push(response);
-              this.setData();
+              this.loadRecipes();
+            })
+        }
+      })
+  }
+
+  private loadRecipes() {
+    this.recipeService.getRecipes()
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe((response: RecipeModel[]) => {
+        console.log('data: ', response);
+        this.data = response;
+        this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
+        if (this.gridApi) {
+          this.setData();
+        }
+      })
+  }
+
+  private promptSave(data: any) {
+    this.dialogService.confirmDialog('Are you sure you want to save this recipe?')
+      .subscribe(result => {
+        if (result) {
+          this.recipeService.updateRecipe(data.id, data)
+            .subscribe(response => {
+              console.log('recipe updated: ', response);
+              this.loadRecipes();
             })
         }
       })

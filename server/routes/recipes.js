@@ -58,7 +58,7 @@ router.get('/recipes', (req, res) => {
     });
 })
 
-router.put('/recipes/:id', (req, res) => {
+router.put('/recipes/:ID', (req, res) => {
     fs.readFile('recipes.json',(err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
@@ -77,7 +77,7 @@ router.put('/recipes/:id', (req, res) => {
     });
 })
 
-router.delete('/recipes/:id', (req, res) => {
+router.delete('/recipes/:ID', (req, res) => {
     fs.readFile('recipes.json',(err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
@@ -138,10 +138,10 @@ router.get('/data', (req, res) => {
     })
 })
 
-router.delete('/data/:id', ((req, res) => {
+router.delete('/data/:ID', ((req, res) => {
     // SQL Delete, remove stuff below
     const index = bigArray.findIndex(e => e.id === +req.params.id);
-    console.log('delete id: ' + req.params.id + ' at index: ' + index);
+    console.log('delete ID: ' + req.params.id + ' at index: ' + index);
     bigArray.splice(index, 1);
     console.log(bigArray.slice(0, 10)); // just to check first 10
     res.send()

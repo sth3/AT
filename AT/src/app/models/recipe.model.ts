@@ -12,9 +12,9 @@ export interface ComponentItemModel {
 }
 
 export interface ComponentModel {
-  no: number;
-  id: string;
-  name: string;
+  No: number;
+  ID: string;
+  NAME: string;
 }
 
 export interface RecipeResponse {

@@ -27,7 +27,7 @@ export class RecipeService {
   }
 
   updateRecipe(id: string, recipe: RecipeModel) {
-    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${id}`, this.prepareRequest(recipe));
+    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${id}`, recipe);
   }
 
   deleteRecipe(id: string) {
@@ -35,7 +35,7 @@ export class RecipeService {
   }
 
   addRecipe(recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, this.prepareRequest(recipe));
+    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe);
   }
 
   private getComponents(recipe: any) {

@@ -33,6 +33,10 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { MatDialogModule } from '@angular/material/dialog';
 import { EditComponentDialogComponent } from './components/edit-component-dialog/edit-component-dialog.component';
 import { EditRecipeDialogComponent } from './components/edit-recipe-dialog/edit-recipe-dialog.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -50,30 +54,34 @@ import { EditRecipeDialogComponent } from './components/edit-recipe-dialog/edit-
     EditComponentDialogComponent,
     EditRecipeDialogComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MatButtonModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatSnackBarModule,
-    MatSlideToggleModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatProgressBarModule,
-    AgGridModule,
-    MatInputModule,
-    MatDialogModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MatButtonModule,
+        LayoutModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MatGridListModule,
+        MatCardModule,
+        MatMenuModule,
+        MatSnackBarModule,
+        MatSlideToggleModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatProgressBarModule,
+        AgGridModule,
+        MatInputModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatSelectModule
+    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],

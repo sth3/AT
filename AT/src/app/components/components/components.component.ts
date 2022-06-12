@@ -71,7 +71,7 @@ export class ComponentsComponent implements OnInit {
           this.componentService.deleteComponent(data.id)
             .subscribe(response => {
               console.log('component deleted: ', response);
-              this.data.splice(this.data.findIndex(c => c.id === data.id), 1);
+              this.data.splice(this.data.findIndex(c => c.ID === data.id), 1);
               this.setData();
             })
         }
@@ -91,12 +91,12 @@ export class ComponentsComponent implements OnInit {
               this.componentService.updateComponent(data.id, result)
                 .subscribe(response => {
                   console.log('component updated: ', response);
-                  this.data[this.data.findIndex(c => c.no === response.no)] = response;
+                  this.data[this.data.findIndex(c => c.No === response.No)] = response;
                   this.setData();
                   location.reload();// neviem ci to je naj. riesenie ale po update sa neaktualizovali data
                 })
            }
-          }) 
+          })
         }//if
       })//sub
   }

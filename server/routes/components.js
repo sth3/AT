@@ -29,7 +29,7 @@ router.get('/components', (req, res) => {
 res.json(komponentArray);
 })
 
-router.put('/components/:id', (req, res) => {
+router.put('/components/:ID', (req, res) => {
     fs.readFile('components.json',(err, data) => {
         if (err) throw err;
         const components = Object.values(allDataFromSelectKomponent[0]);// JSON.parse(data);
@@ -50,7 +50,7 @@ router.put('/components/:id', (req, res) => {
     });
 })
 
-router.delete('/components/:id', (req, res) => {
+router.delete('/components/:ID', (req, res) => {
     fs.readFile('components.json',(err, data) => {
         if (err) throw err;
         const components = Object.values(allDataFromSelectKomponent[0]);// JSON.parse(data);
@@ -82,7 +82,7 @@ router.post('/components', (req, res) => {
         }
         components.push(newRecipe);
         
-        //console.log(typeof newRecipe['no']);
+        //console.log(typeof newRecipe['No']);
         sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
