@@ -1,14 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~ag-grid-community/dist/styles/ag-grid.css';
 @import '~ag-grid-community/dist/styles/ag-theme-alpine.css';
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.error.mat-snack-bar-container{
-    background: #cc0000;
-    color: white;
+html, body {
+  height: 100%;
 }
-.success.mat-snack-bar-container{
-    background: #00cc11;
-    color: white;
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.error.mat-snack-bar-container {
+  background: #cc0000;
+  color: white;
+}
+
+.success.mat-snack-bar-container {
+  background: #00cc11;
+  color: white;
+}
+
+.note {
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.light {
+  color: #b9b8b8;
 }

@@ -8,7 +8,8 @@ export const componentsTableDefaultColDef: ColDef = {
 }
 
 export const componentsTableColDef: ColDef[] = [
-  { field: 'No', headerName: 'Number' },
-  { field: 'ID', headerName: 'ID' },
-  { field: 'NAME', headerName: 'Component NAME' },
+  { field: 'no', headerName: 'Number' },
+  { field: 'id', headerName: 'ID' },
+  { field: 'name', headerName: 'Component name' },
+  { field: 'lastUpdate', headerName: 'Last update', filter: 'agDateColumnFilter', },
 ]

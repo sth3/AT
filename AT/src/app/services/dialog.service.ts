@@ -3,6 +3,11 @@ import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 
+export interface ICustomDialogOptions {
+  width: string;
+  height: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,10 +27,10 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  customDialog(component: any, data: any): Observable<any> {
+  customDialog(component: any, data: any, options?: ICustomDialogOptions): Observable<any> {
     const dialogRef = this.dialog.open(component, {
-      width: '400px',
-      height: '350px',
+      width: options?.width || '400px',
+      height: options?.height || '350px',
       data: data
     });
     return dialogRef.afterClosed();

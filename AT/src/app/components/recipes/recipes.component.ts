@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { recipesTableColDef, recipesTableDefaultColDef } from './recipes-table.config';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { RecipeModel } from '../../models/recipe.model';
@@ -9,6 +9,8 @@ import { EditRecipeDialogComponent } from '../edit-recipe-dialog/edit-recipe-dia
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { finalize } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-recipes',
@@ -32,12 +34,15 @@ export class RecipesComponent implements OnInit {
   columnsToDisplay = [
     { field: 'no', header: 'No' },
     { field: 'id', header: 'ID' },
-    { field: 'name', header: 'Recipe name' }
+    { field: 'name', header: 'Recipe name' },
+    { field: 'lastUpdate', header: 'Last update', width: '20%' },
   ];
   isLoading = true;
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field), 'actions'];
   expandedRecipe: RecipeModel | null = null;
   dataSource: MatTableDataSource<RecipeModel> = new MatTableDataSource<RecipeModel>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private recipeService: RecipeService,
               private dialogService: DialogService) {
@@ -97,7 +102,8 @@ export class RecipesComponent implements OnInit {
 
   onEditClick(data: any) {
     this.dialogService.customDialog(EditRecipeDialogComponent,
-      { recipe: data, allRecipes: this.data, editMode: true })
+      { recipe: data, allRecipes: this.data, editMode: true },
+      { width: '700px', height: '700px' })
       .subscribe(result => {
         if (result) {
           this.promptSave(result);
@@ -107,7 +113,8 @@ export class RecipesComponent implements OnInit {
 
   createRecipe() {
     this.dialogService.customDialog(EditRecipeDialogComponent,
-      { recipe: null, allRecipes: this.data, editMode: false })
+      { recipe: null, allRecipes: this.data, editMode: false },
+      { width: '700px', height: '700px' })
       .subscribe(result => {
         if (result) {
           this.recipeService.addRecipe(result)
@@ -126,6 +133,8 @@ export class RecipesComponent implements OnInit {
         console.log('data: ', response);
         this.data = response;
         this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         if (this.gridApi) {
           this.setData();
         }

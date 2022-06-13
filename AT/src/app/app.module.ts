@@ -37,6 +37,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSortModule } from '@angular/material/sort';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -54,34 +57,37 @@ import { MatSelectModule } from '@angular/material/select';
     EditComponentDialogComponent,
     EditRecipeDialogComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        MatButtonModule,
-        LayoutModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-        MatGridListModule,
-        MatCardModule,
-        MatMenuModule,
-        MatSnackBarModule,
-        MatSlideToggleModule,
-        MatFormFieldModule,
-        FormsModule,
-        MatProgressBarModule,
-        AgGridModule,
-        MatInputModule,
-        MatDialogModule,
-        ReactiveFormsModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatProgressSpinnerModule,
-        MatSelectModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatButtonModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatProgressBarModule,
+    AgGridModule,
+    MatInputModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSortModule,
+    MatAutocompleteModule,
+    MatChipsModule
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],

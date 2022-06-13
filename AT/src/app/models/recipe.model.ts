@@ -2,24 +2,19 @@ export interface RecipeModel {
   no: number;
   id: string;
   name: string;
+  lastUpdate: string;
   components?: ComponentItemModel[]
 }
 
 export interface ComponentItemModel {
-  id: number;
-  componentName: string;
+  id: string;
+  name: string;
   componentSP: number;
 }
 
 export interface ComponentModel {
-  No: number;
-  ID: string;
-  NAME: string;
-}
-
-export interface RecipeResponse {
-  draw: number;
-  recordsFiltered: number;
-  recordsTotal: number;
-  data: RecipeModel[];
+  no: number;
+  id: string;
+  name: string;
+  lastUpdate: string;
 }

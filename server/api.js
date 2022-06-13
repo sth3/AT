@@ -93,7 +93,6 @@ router.get('/recipes', (req, res) => {
                         })
                     }
                 })
-                console.log(recipes);
                 res.json(recipes);
             })
         })
@@ -106,6 +105,7 @@ router.put('/recipes/:id', (req, res) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
         const index = recipes.findIndex(c => c.id === req.params.id);
+        console.log('BODY:', req.body);
         const changedRecipe = {
             no: recipes[index].no,
             id: req.body.id,
@@ -113,10 +113,10 @@ router.put('/recipes/:id', (req, res) => {
             lastUpdate: new Date(),
         };
         recipes[index] = changedRecipe;
-        fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
+        fs.writeFile('recipes.json', JSON.stringify(recipes), async (err) => {
             if (err) throw err;
             console.log('Recipe ' + changedRecipe.id + ' changed: ', changedRecipe);
-            changeComponents(req.params.id, req.body.components);
+            await changeComponents(req.params.id, req.body.components);
             res.json(changedRecipe);
         });
     });
@@ -179,7 +179,7 @@ function addComponentsToRecipe(id, components) {
     fs.readFile('recipe-components.json', (err, data) => {
         if (err) throw err;
         let mapping = JSON.parse(data);
-        components.forEach(c => {
+        components?.forEach(c => {
             mapping.push({
                 recipeId: id,
                 componentId: c.id,
