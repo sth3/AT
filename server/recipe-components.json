@@ -1,0 +1,32 @@
+[
+  {
+    "recipeId": "0000000001",
+    "componentId": "0000000023",
+    "componentSP": 0.2
+  },
+  {
+    "recipeId": "0000000001",
+    "componentId": "0000000003",
+    "componentSP": 5
+  },
+  {
+    "recipeId": "0000000001",
+    "componentId": "0000000004",
+    "componentSP": 3
+  },
+  {
+    "recipeId": "0000000001",
+    "componentId": "0000000024",
+    "componentSP": 2
+  },
+  {
+    "recipeId": "0123123123",
+    "componentId": "0000000002",
+    "componentSP": 0.4
+  },
+  {
+    "recipeId": "0123123123",
+    "componentId": "0000000003",
+    "componentSP": 2.5
+  }
+]
