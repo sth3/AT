@@ -39,7 +39,8 @@
           [matAutocomplete]="auto"
           [matChipInputFor]="chipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="add($event)">
+          (matChipInputTokenEnd)="add($event)"
+          [readOnly]="selectedComponents.length > 30">
       </mat-chip-list>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
         <mat-option *ngFor="let component of filteredComponents | async" [value]="component">
@@ -61,7 +62,8 @@
         </mat-form-field>
         <mat-form-field style="width: 30%" appearance="outline">
           <mat-label>Quantity</mat-label>
-          <input matInput placeholder="10" formControlName="quantity" id="componentSP{{i}}" type="number">
+          <input matInput placeholder="10" formControlName="quantity" id="componentSP{{i}}"
+                 type="number" min="0" onfocus="this.select()">
           <span matSuffix>kg</span>
         </mat-form-field>
       </div>
