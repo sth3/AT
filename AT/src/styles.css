@@ -1,6 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~ag-grid-community/dist/styles/ag-grid.css';
-@import '~ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 html, body {
   height: 100%;
@@ -28,4 +26,8 @@ body {
 
 .light {
   color: #b9b8b8;
+}
+
+.lightred-background {
+  background: #ffcccc;
 }

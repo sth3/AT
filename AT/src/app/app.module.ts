@@ -24,9 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { InterceptorService } from './loader/interceptor.service';
 import { RecipesComponent } from './components/recipes/recipes.component';
-import { AgGridModule } from 'ag-grid-angular';
 import { ComponentsComponent } from './components/components/components.component';
-import { ButtonsRendererComponent } from './components/buttons-renderer/buttons-renderer.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -52,7 +50,6 @@ import { MatChipsModule } from '@angular/material/chips';
     NotifierComponent,
     RecipesComponent,
     ComponentsComponent,
-    ButtonsRendererComponent,
     ConfirmDialogComponent,
     EditComponentDialogComponent,
     EditRecipeDialogComponent,
@@ -76,7 +73,6 @@ import { MatChipsModule } from '@angular/material/chips';
     MatFormFieldModule,
     FormsModule,
     MatProgressBarModule,
-    AgGridModule,
     MatInputModule,
     MatDialogModule,
     ReactiveFormsModule,

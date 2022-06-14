@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { recipesTableColDef, recipesTableDefaultColDef } from './recipes-table.config';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { RecipeModel } from '../../models/recipe.model';
 import { RecipeService } from '../../services/recipe.service';
-import { ButtonsRendererComponent } from '../buttons-renderer/buttons-renderer.component';
 import { DialogService } from '../../services/dialog.service';
 import { EditRecipeDialogComponent } from '../edit-recipe-dialog/edit-recipe-dialog.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -26,10 +23,7 @@ import { MatSort } from '@angular/material/sort';
 })
 export class RecipesComponent implements OnInit {
 
-  colDefs: ColDef[];
-  defaultColDef: ColDef;
   data: RecipeModel[] = [];
-  gridApi!: GridApi;
   quickFilter: string = '';
   columnsToDisplay = [
     { field: 'no', header: 'No' },
@@ -46,45 +40,16 @@ export class RecipesComponent implements OnInit {
 
   constructor(private recipeService: RecipeService,
               private dialogService: DialogService) {
-    this.defaultColDef = recipesTableDefaultColDef;
-    this.colDefs = [...recipesTableColDef, this.getButtonsColDef()];
   }
 
   ngOnInit(): void {
     this.loadRecipes();
   }
 
-  onGridReady(params: GridReadyEvent) {
-    this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
-    if (this.data.length) {
-      this.setData();
-    }
-    this.gridApi.addEventListener('rowClicked', (params: any) => {
-      params.node.setExpanded(true);
-    });
-  }
-
-  setData() {
-    // this.gridApi.setRowData(this.data);
-    this.dataSource.data = this.data;
-  }
-
   changeFilter() {
     console.log('filter changed: ', this.quickFilter.trim().toLowerCase());
     // this.gridApi.setQuickFilter(this.quickFilter);
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
-  }
-
-  getButtonsColDef(): ColDef {
-    return {
-      headerName: 'Actions',
-      cellRenderer: ButtonsRendererComponent,
-      cellRendererParams: {
-        onDelete: this.onDeleteClick.bind(this),
-        onEdit: this.onEditClick.bind(this)
-      }
-    }
   }
 
   onDeleteClick(data: any) {
@@ -127,6 +92,7 @@ export class RecipesComponent implements OnInit {
   }
 
   private loadRecipes() {
+    this.isLoading = true;
     this.recipeService.getRecipes()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((response: RecipeModel[]) => {
@@ -135,9 +101,6 @@ export class RecipesComponent implements OnInit {
         this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        if (this.gridApi) {
-          this.setData();
-        }
       })
   }
 

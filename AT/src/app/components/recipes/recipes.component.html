@@ -1,7 +1,7 @@
 <div style="flex: 1 1 0;">
-  <mat-form-field class="example-full-width" appearance="outline">
+  <mat-form-field appearance="outline">
     <mat-label>Quick filter</mat-label>
-    <input matInput placeholder="Gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
+    <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
   </mat-form-field>
   <button mat-button (click)="createRecipe()" style="float: right; margin: 10px">
     <mat-icon>add</mat-icon>
@@ -87,8 +87,7 @@
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
-        class="example-element-row"
-        [style]="{ 'backgroundColor': element.isValid ? 'white' : '#f08b8b' }"
+        class="example-element-row" [ngClass]="!element.isValid ? 'lightred-background' : ''"
         [class.example-expanded-row]="expandedRecipe === element">
     </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
