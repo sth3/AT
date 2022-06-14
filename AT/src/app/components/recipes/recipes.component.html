@@ -4,7 +4,7 @@
     <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
   </mat-form-field>
   <div style="float: right; margin: 10px">
-    <button mat-button (click)="exportCSV()">
+    <button mat-button [matMenuTriggerFor]="exportMenu">
       <mat-icon>file_download</mat-icon>
       Export table
     </button>
@@ -13,6 +13,14 @@
       Create new recipe
     </button>
   </div>
+  <mat-menu #exportMenu="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item (click)="exportCSV(false)">
+      Export entire table to CSV
+    </button>
+    <button mat-menu-item (click)="exportCSV(true)">
+      Export visible data to CSV
+    </button>
+  </mat-menu>
 
   <table mat-table
          matSort

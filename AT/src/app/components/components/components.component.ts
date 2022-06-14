@@ -110,7 +110,13 @@ export class ComponentsComponent implements OnInit {
       })
   }
 
-  exportCSV() {
-    this.exportService.downloadFile(this.data, ['no', 'id', 'name', 'lastUpdate'], 'components');
+  exportCSV(visibleDataOnly: boolean) {
+    const headerList = ['no', 'id', 'name', 'lastUpdate'];
+    if (visibleDataOnly) {
+      // @ts-ignore
+      this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'components');
+    } else {
+      this.exportService.downloadFile(this.data, headerList, 'components');
+    }
   }
 }

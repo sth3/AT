@@ -126,9 +126,15 @@ export class RecipesComponent implements OnInit {
     return this.recipeService.getInvalidComponents(element)
   }
 
-  exportCSV() {
-    const data = this.exportService.convertRecipesForDownload(this.data);
-    const headers = this.exportService.getRecipesHeaders();
-    this.exportService.downloadFile(data, headers, 'recipes');
+  exportCSV(visibleDataOnly: boolean) {
+    const headerList = this.exportService.getRecipesHeaders();
+    let data;
+    if (visibleDataOnly) {
+      // @ts-ignore
+      data = this.exportService.convertRecipesForDownload(this.dataSource._renderData.value);
+    } else {
+      data = this.exportService.convertRecipesForDownload(this.data);
+    }
+    this.exportService.downloadFile(data, headerList, 'recipes');
   }
 }
