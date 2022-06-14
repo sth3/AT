@@ -7,7 +7,8 @@ import { NotifierComponent } from '../components/notifier/notifier.component';
 })
 export class NotifierService {
 
-  constructor( private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) {
+  }
 
   // showNotification(displayMessage:string, buttonText:string){
   //   this.snackBar.open(displayMessage, buttonText, {
@@ -16,17 +17,25 @@ export class NotifierService {
   //     verticalPosition:'bottom'
   //   });
   // }
-   showNotification(displayMessage:string, buttonText:string, messageType:'error' | 'success'){
-    this.snackBar.openFromComponent(NotifierComponent,{
+  showNotification(displayMessage: string, buttonText: string, messageType: 'error' | 'success') {
+    this.snackBar.openFromComponent(NotifierComponent, {
       data: {
-        message:displayMessage,
-        buttonText:buttonText,
-        type:messageType
+        message: displayMessage,
+        buttonText: buttonText,
+        type: messageType
       },
 
-      horizontalPosition:'center',
-      verticalPosition:'bottom',
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
       panelClass: messageType
+    });
+  }
+
+  showDefaultNotification(displayMessage: string) {
+    this.snackBar.open(displayMessage, '', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
     });
   }
 }

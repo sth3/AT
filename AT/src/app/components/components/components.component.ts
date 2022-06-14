@@ -8,6 +8,7 @@ import { finalize } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
+import { NotifierService } from '../../services/notifier.service';
 
 @Component({
   selector: 'app-components',
@@ -32,14 +33,14 @@ export class ComponentsComponent implements OnInit {
 
   constructor(private componentService: ComponentService,
               private dialogService: DialogService,
-              private exportService: ExportService) {
+              private exportService: ExportService,
+              private notifierService: NotifierService) {
   }
 
   ngOnInit(): void {
     this.loadComponents();
   }
 
-  // todo - add delete/edit confirmation
   onDeleteClick(data: any) {
     this.dialogService.confirmDialog('Are you sure you want to delete this component?')
       .subscribe(result => {
@@ -48,7 +49,7 @@ export class ComponentsComponent implements OnInit {
           this.componentService.deleteComponent(data.id)
             .subscribe(response => {
               console.log('component deleted: ', response);
-              this.data.splice(this.data.findIndex(c => c.id === data.id), 1);
+              this.notifierService.showDefaultNotification('Component deleted');
               this.loadComponents();
             })
         }
@@ -67,6 +68,7 @@ export class ComponentsComponent implements OnInit {
               this.componentService.updateComponent(data.id, result)
                 .subscribe(response => {
                   console.log('component updated: ', response);
+                  this.notifierService.showDefaultNotification('Component updated');
                   this.loadComponents();
                 })
            }
@@ -84,6 +86,7 @@ export class ComponentsComponent implements OnInit {
           this.componentService.addComponent(result)
             .subscribe(response => {
               console.log('component created: ', response);
+              this.notifierService.showDefaultNotification('New component created');
               this.loadComponents();
             })
         }

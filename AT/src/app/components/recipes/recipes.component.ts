@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
+import { NotifierService } from '../../services/notifier.service';
 
 @Component({
   selector: 'app-recipes',
@@ -41,7 +42,8 @@ export class RecipesComponent implements OnInit {
 
   constructor(private recipeService: RecipeService,
               private dialogService: DialogService,
-              private exportService: ExportService) {
+              private exportService: ExportService,
+              private notifierService: NotifierService) {
   }
 
   ngOnInit(): void {
@@ -49,8 +51,6 @@ export class RecipesComponent implements OnInit {
   }
 
   changeFilter() {
-    console.log('filter changed: ', this.quickFilter.trim().toLowerCase());
-    // this.gridApi.setQuickFilter(this.quickFilter);
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
@@ -61,6 +61,7 @@ export class RecipesComponent implements OnInit {
           this.recipeService.deleteRecipe(data.id)
             .subscribe(() => {
               console.log('recipe deleted: ', data);
+              this.notifierService.showDefaultNotification('Recipe deleted');
               this.loadRecipes();
             })
         }
@@ -87,6 +88,7 @@ export class RecipesComponent implements OnInit {
           this.recipeService.addRecipe(result)
             .subscribe(response => {
               console.log('recipe created: ', response);
+              this.notifierService.showDefaultNotification('New recipe created');
               this.loadRecipes();
             })
         }
@@ -113,6 +115,7 @@ export class RecipesComponent implements OnInit {
           this.recipeService.updateRecipe(data.id, data)
             .subscribe(response => {
               console.log('recipe updated: ', response);
+              this.notifierService.showDefaultNotification('Recipe updated');
               this.loadRecipes();
             })
         }
