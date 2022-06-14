@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { finalize } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ExportService } from '../../services/export.service';
 
 @Component({
   selector: 'app-components',
@@ -30,7 +31,8 @@ export class ComponentsComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private componentService: ComponentService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private exportService: ExportService) {
   }
 
   ngOnInit(): void {
@@ -103,5 +105,9 @@ export class ComponentsComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       })
+  }
+
+  exportCSV() {
+    this.exportService.downloadFile(this.data, ['no', 'id', 'name', 'lastUpdate'], 'components');
   }
 }

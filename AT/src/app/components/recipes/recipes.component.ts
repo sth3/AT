@@ -8,6 +8,7 @@ import { finalize } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ExportService } from '../../services/export.service';
 
 @Component({
   selector: 'app-recipes',
@@ -39,7 +40,8 @@ export class RecipesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private recipeService: RecipeService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private exportService: ExportService) {
   }
 
   ngOnInit(): void {
@@ -119,5 +121,11 @@ export class RecipesComponent implements OnInit {
 
   getInvalidComponents(element: RecipeModel) {
     return this.recipeService.getInvalidComponents(element)
+  }
+
+  exportCSV() {
+    const data = this.exportService.convertRecipesForDownload(this.data);
+    const headers = this.exportService.getRecipesHeaders();
+    this.exportService.downloadFile(data, headers, 'recipes');
   }
 }

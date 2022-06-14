@@ -38,7 +38,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
-
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -82,7 +81,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatSelectModule,
     MatSortModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }

@@ -1,12 +1,18 @@
 <div style="flex: 1 1 0;">
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" style="margin: 5px 10px 0">
     <mat-label>Quick filter</mat-label>
     <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
   </mat-form-field>
-  <button mat-button (click)="createRecipe()" style="float: right; margin: 10px">
-    <mat-icon>add</mat-icon>
-    Create new recipe
-  </button>
+  <div style="float: right; margin: 10px">
+    <button mat-button (click)="exportCSV()">
+      <mat-icon>file_download</mat-icon>
+      Export table
+    </button>
+    <button mat-button (click)="createRecipe()">
+      <mat-icon>add</mat-icon>
+      Create new recipe
+    </button>
+  </div>
 
   <table mat-table
          matSort
