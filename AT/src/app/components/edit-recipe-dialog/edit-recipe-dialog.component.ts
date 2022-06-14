@@ -101,12 +101,9 @@ export class EditRecipeDialogComponent implements OnInit {
   }
 
   setComponents() {
-    console.log('setting components ', this.selectedComponents);
     const formArray = this.form.get('components') as FormArray;
-    console.log(this.selectedComponents.length, formArray.controls.length);
 
     this.selectedComponents.forEach((component: ComponentModel) => {
-      console.log('exists? ', !formArray.controls.find(control => control.get('name')!.value === component), component);
       if (!formArray.controls.find(control => control.get('id')!.value === component.id)) {
         formArray.push(new FormGroup({
           id: new FormControl(component.id),
@@ -115,7 +112,6 @@ export class EditRecipeDialogComponent implements OnInit {
         }));
       }
     });
-    console.log(this.selectedComponents.length, formArray.controls.length);
     if (this.selectedComponents.length < formArray.controls.length) {
       formArray.controls.forEach((control, index) => {
         if (!this.selectedComponents.find(component => component.id === control.get('id')!.value)) {
@@ -148,7 +144,6 @@ export class EditRecipeDialogComponent implements OnInit {
   }
 
   add(event: MatChipInputEvent): void {
-    console.log('adding ', event);
     const value = (event.value || '').trim();
 
     if (value) {
@@ -163,7 +158,6 @@ export class EditRecipeDialogComponent implements OnInit {
 
   remove(component: ComponentModel): void {
     const index = this.selectedComponents.indexOf(component);
-    console.log('removing ', component, index);
 
     if (index >= 0) {
       this.selectedComponents.splice(index, 1);

@@ -3,13 +3,8 @@ export interface RecipeModel {
   id: string;
   name: string;
   lastUpdate: string;
-  components?: ComponentItemModel[]
-}
-
-export interface ComponentItemModel {
-  id: string;
-  name: string;
-  componentSP: number;
+  components: ComponentItemModel[];
+  isValid?: boolean;
 }
 
 export interface ComponentModel {
@@ -17,4 +12,8 @@ export interface ComponentModel {
   id: string;
   name: string;
   lastUpdate: string;
+}
+
+export interface ComponentItemModel extends ComponentModel {
+  componentSP: number;
 }

@@ -153,4 +153,8 @@ export class RecipesComponent implements OnInit {
         }
       })
   }
+
+  getInvalidComponents(element: RecipeModel) {
+    return this.recipeService.getInvalidComponents(element)
+  }
 }
