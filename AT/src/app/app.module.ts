@@ -38,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { OrdersComponent } from './components/orders/orders.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -52,6 +53,7 @@ import { MatChipsModule } from '@angular/material/chips';
     ConfirmDialogComponent,
     EditComponentDialogComponent,
     EditRecipeDialogComponent,
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,
