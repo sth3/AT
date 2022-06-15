@@ -1,1 +1,47 @@
-[{"recipeId":"0000000001","componentId":"0000000023","componentSP":0.2},{"recipeId":"0000000001","componentId":"0000000003","componentSP":5},{"recipeId":"0000000001","componentId":"0000000004","componentSP":3},{"recipeId":"0000000001","componentId":"0000000024","componentSP":2},{"recipeId":"0123123123","componentId":"0000000002","componentSP":0.4},{"recipeId":"0123123123","componentId":"0000000003","componentSP":2.5},{"recipeId":"0000000003","componentId":"0000000004","componentSP":5},{"recipeId":"012312311s","componentId":"0000000NaN","componentSP":12},{"recipeId":"012312311s","componentId":"0000000023","componentSP":2}]
+[
+  {
+    "recipeNo": 1,
+    "componentNo": 1,
+    "componentSP": 0.2
+  },
+  {
+    "recipeNo": 1,
+    "componentNo": 3,
+    "componentSP": 5
+  },
+  {
+    "recipeNo": 1,
+    "componentNo": 4,
+    "componentSP": 3
+  },
+  {
+    "recipeNo": 1,
+    "componentNo": 9,
+    "componentSP": 2
+  },
+  {
+    "recipeNo": 12,
+    "componentNo": 2,
+    "componentSP": 0.4
+  },
+  {
+    "recipeNo": 12,
+    "componentNo": 3,
+    "componentSP": 2.5
+  },
+  {
+    "recipeNo": 3,
+    "componentNo": 4,
+    "componentSP": 5
+  },
+  {
+    "recipeNo": 13,
+    "componentNo": 5,
+    "componentSP": 12
+  },
+  {
+    "recipeNo": 13,
+    "componentNo": 1,
+    "componentSP": 2
+  }
+]

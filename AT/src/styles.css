@@ -31,3 +31,13 @@ body {
 .lightred-background {
   background: #ffcccc;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.table-title {
+  text-align: center;
+  display: inline-block;
+  width: 65%;
+}

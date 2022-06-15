@@ -84,14 +84,14 @@ export class EditRecipeDialogComponent implements OnInit {
   validRecipeNameValidator(control: FormControl) {
     const value = control.value;
     const isValid = this.data.allRecipes.every(recipe => recipe.name !== value
-      || (this.data.recipe !== null && recipe.id === this.data.recipe.id));
+      || (this.data.recipe !== null && recipe.no === this.data.recipe.no));
     return isValid ? null : { invalidRecipeName: true };
   }
 
   validRecipeIdValidator(control: FormControl) {
     const value = control.value;
     const isValid = this.data.allRecipes.every(recipe => recipe.id !== value
-      || (this.data.recipe !== null && recipe.id === this.data.recipe.id));
+      || (this.data.recipe !== null && recipe.no === this.data.recipe.no));
     return isValid ? null : { invalidRecipeId: true };
   }
 

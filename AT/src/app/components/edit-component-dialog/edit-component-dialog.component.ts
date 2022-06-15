@@ -68,7 +68,7 @@ export class EditComponentDialogComponent implements OnInit {
     const allComponents = this.data.allComponents;
     const currentComponent = this.data.component;
     const isValid = allComponents.every(component => component.name !== value
-      || (currentComponent !== null && component.id === currentComponent.id));
+      || (currentComponent !== null && component.no === currentComponent.no));
     return isValid ? null : { invalidComponentName: true };
   }
 
@@ -77,7 +77,7 @@ export class EditComponentDialogComponent implements OnInit {
     const allComponents = this.data.allComponents;
     const currentComponent = this.data.component;
     const isValid = allComponents.every(component => component.id !== value
-      || (currentComponent !== null && component.id === currentComponent.id));
+      || (currentComponent !== null && component.no === currentComponent.no));
     return isValid ? null : { invalidComponentId: true };
   }
 

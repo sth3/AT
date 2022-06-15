@@ -35,12 +35,12 @@ export class RecipeService {
     // }));
   }
 
-  updateRecipe(id: string, recipe: RecipeModel) {
-    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${id}`, recipe);
+  updateRecipe(no: number, recipe: RecipeModel) {
+    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${no}`, recipe);
   }
 
-  deleteRecipe(id: string) {
-    return this.http.delete(`${environment.apiUrl}/recipes/${id}`);
+  deleteRecipe(no: number) {
+    return this.http.delete(`${environment.apiUrl}/recipes/${no}`);
   }
 
   addRecipe(recipe: RecipeModel): Observable<RecipeModel> {

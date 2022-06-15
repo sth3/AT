@@ -58,7 +58,7 @@ export class RecipesComponent implements OnInit {
     this.dialogService.confirmDialog('Are you sure you want to delete this recipe?')
       .subscribe(result => {
         if (result) {
-          this.recipeService.deleteRecipe(data.id)
+          this.recipeService.deleteRecipe(data.no)
             .subscribe(() => {
               console.log('recipe deleted: ', data);
               this.notifierService.showDefaultNotification('Recipe deleted');
@@ -112,7 +112,7 @@ export class RecipesComponent implements OnInit {
     this.dialogService.confirmDialog('Are you sure you want to save this recipe?')
       .subscribe(result => {
         if (result) {
-          this.recipeService.updateRecipe(data.id, data)
+          this.recipeService.updateRecipe(data.no, data)
             .subscribe(response => {
               console.log('recipe updated: ', response);
               this.notifierService.showDefaultNotification('Recipe updated');

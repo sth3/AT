@@ -46,7 +46,7 @@ export class ComponentsComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           console.log('delete clicked: ', data);
-          this.componentService.deleteComponent(data.id)
+          this.componentService.deleteComponent(data.no)
             .subscribe(response => {
               console.log('component deleted: ', response);
               this.notifierService.showDefaultNotification('Component deleted');
@@ -65,7 +65,7 @@ export class ComponentsComponent implements OnInit {
           .subscribe(resultS => {
             if (resultS) {
               console.log('edit clicked: ', data, result);
-              this.componentService.updateComponent(data.id, result)
+              this.componentService.updateComponent(data.no, result)
                 .subscribe(response => {
                   console.log('component updated: ', response);
                   this.notifierService.showDefaultNotification('Component updated');

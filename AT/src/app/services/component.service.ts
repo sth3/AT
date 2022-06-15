@@ -15,12 +15,12 @@ export class ComponentService {
     return this.http.get<ComponentModel[]>(`${environment.apiUrl}/components`);
   }
 
-  updateComponent(id: string, component: ComponentModel) {
-    return this.http.put<ComponentModel>(`${environment.apiUrl}/components/${id}`, component);
+  updateComponent(no: number, component: ComponentModel) {
+    return this.http.put<ComponentModel>(`${environment.apiUrl}/components/${no}`, component);
   }
 
-  deleteComponent(id: string) {
-    return this.http.delete(`${environment.apiUrl}/components/${id}`);
+  deleteComponent(no: string) {
+    return this.http.delete(`${environment.apiUrl}/components/${no}`);
   }
 
   addComponent(component: ComponentModel): Observable<ComponentModel> {

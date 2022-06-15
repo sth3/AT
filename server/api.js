@@ -16,11 +16,11 @@ router.get('/components', (req, res) => {
     });
 })
 
-router.put('/components/:id', (req, res) => {
+router.put('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components = JSON.parse(data);
-        const index = components.findIndex(c => c.id === req.params.id);
+        const index = components.findIndex(c => c.no === req.params.no);
         const changedComponent = {
             ...components[index],
             ...req.body,
@@ -29,21 +29,21 @@ router.put('/components/:id', (req, res) => {
         components[index] = changedComponent;
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
-            console.log('Component ' + changedComponent.id + ' changed: ', changedComponent);
+            console.log('Component ' + changedComponent.no + ' changed: ', changedComponent);
             res.json(changedComponent);
         });
     });
 })
 
-router.delete('/components/:id', (req, res) => {
+router.delete('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components = JSON.parse(data);
-        const index = components.findIndex(c => c.id === req.params.id);
+        const index = components.findIndex(c => c.no === req.params.no);
         components.splice(index, 1);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
-            console.log('Component ' + req.params.id + ' removed');
+            console.log('Component ' + req.params.no + ' removed');
             res.status(204);
             res.send();
         });
@@ -81,11 +81,11 @@ router.get('/recipes', (req, res) => {
                 if (err) throw err;
                 const mapping = JSON.parse(mappingData);
                 recipes = recipes.map(r => {
-                    const selectedComponents = mapping.filter(m => m.recipeId === r.id);
+                    const selectedComponents = mapping.filter(m => m.recipeNo === r.no);
                     return {
                         ...r,
                         components: selectedComponents.map(c => {
-                            const component = components.find(s => s.id === c.componentId);
+                            const component = components.find(s => s.no === c.componentNo);
                             return {
                                 ...component,
                                 componentSP: c.componentSP
@@ -100,11 +100,11 @@ router.get('/recipes', (req, res) => {
 })
 
 
-router.put('/recipes/:id', (req, res) => {
+router.put('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
-        const index = recipes.findIndex(c => c.id === req.params.id);
+        const index = recipes.findIndex(c => c.no === req.params.no);
         console.log('BODY:', req.body);
         const changedRecipe = {
             no: recipes[index].no,
@@ -115,23 +115,23 @@ router.put('/recipes/:id', (req, res) => {
         recipes[index] = changedRecipe;
         fs.writeFile('recipes.json', JSON.stringify(recipes), async (err) => {
             if (err) throw err;
-            console.log('Recipe ' + changedRecipe.id + ' changed: ', changedRecipe);
-            await changeComponents(req.params.id, req.body.components);
+            console.log('Recipe ' + changedRecipe.no + ' changed: ', changedRecipe);
+            await changeComponents(req.params.no, req.body.components);
             res.json(changedRecipe);
         });
     });
 })
 
-router.delete('/recipes/:id', (req, res) => {
+router.delete('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
-        const index = recipes.findIndex(c => c.id === req.params.id);
+        const index = recipes.findIndex(c => c.no === req.params.no);
         recipes.splice(index, 1);
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
-            console.log('Recipe ' + req.params.id + ' removed');
-            removeComponents(req.params.id);
+            console.log('Recipe ' + req.params.no + ' removed');
+            removeComponents(req.params.no);
             res.status(204);
             res.send();
         });
@@ -154,48 +154,118 @@ router.post('/recipes', (req, res) => {
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
             console.log('New recipe added: ', newRecipe);
-            addComponentsToRecipe(newRecipe.id, req.body.components);
+            addComponentsToRecipe(newRecipe.no, req.body.components);
             res.json(newRecipe);
         });
     })
 })
 
-function removeComponents(id) {
+router.get('/orders', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        fs.readFile('recipes.json', (err, recipesData) => {
+            if (err) throw err;
+            const recipes = JSON.parse(recipesData);
+            orders.forEach(o => {
+                o.recipe = recipes.find(r => r.no === o.recipeNo);
+            })
+            res.json(orders);
+        });
+    })
+})
+
+router.post('/orders', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        const no = Math.max(...orders.map(o => o.no)) + 1;
+        const newOrder = {
+            no,
+            lastUpdate: new Date(),
+            createdAt: new Date(),
+            completedAt: null,
+            ...req.body
+        }
+        orders.push(newOrder);
+        fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
+            if (err) throw err;
+            console.log('New order added: ', newOrder);
+            res.json(newOrder);
+        });
+    })
+})
+
+router.put('/orders/:no', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        const index = orders.findIndex(o => o.no === req.params.no);
+        const changedOrder = {
+            ...orders[index],
+            lastUpdate: new Date(),
+            ...req.body
+        }
+        orders[index] = changedOrder;
+        fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
+            if (err) throw err;
+            console.log('Order ' + changedOrder.no + ' changed: ', changedOrder);
+            res.json(changedOrder);
+        })
+    })
+})
+
+router.delete('/orders/:no', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        const index = orders.findIndex(o => o.no === req.params.no);
+        orders.splice(index, 1);
+        fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
+            if (err) throw err;
+            console.log('Order ' + req.params.no + ' removed');
+            res.status(204);
+            res.send();
+        });
+    });
+})
+
+function removeComponents(no) {
     return new Promise((resolve, reject) => {
         fs.readFile('recipe-components.json', (err, data) => {
             if (err) throw err;
             let mapping = JSON.parse(data);
-            mapping = mapping.filter(c => c.recipeId !== id);
+            mapping = mapping.filter(c => c.recipeNo !== no);
             fs.writeFile('recipe-components.json', JSON.stringify(mapping), (err) => {
                 if (err) throw err;
-                console.log('Components mappings for recipe ' + id + ' removed');
+                console.log('Components mappings for recipe ' + no + ' removed');
                 resolve();
             });
         });
     });
 }
 
-function addComponentsToRecipe(id, components) {
+function addComponentsToRecipe(no, components) {
     fs.readFile('recipe-components.json', (err, data) => {
         if (err) throw err;
         let mapping = JSON.parse(data);
         components?.forEach(c => {
             mapping.push({
-                recipeId: id,
-                componentId: c.id,
+                recipeNo: no,
+                componentNo: c.no,
                 componentSP: c.componentSP
             });
         });
         fs.writeFile('recipe-components.json', JSON.stringify(mapping), (err) => {
             if (err) throw err;
-            console.log('Components mappings for recipe ' + id + ' added');
+            console.log('Components mappings for recipe ' + no + ' added');
         })
     })
 }
 
-async function changeComponents(id, components) {
-    await removeComponents(id);
-    addComponentsToRecipe(id, components);
+async function changeComponents(no, components) {
+    await removeComponents(no);
+    addComponentsToRecipe(no, components);
 }
 
 module.exports = router;
