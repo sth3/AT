@@ -11,7 +11,6 @@ router.get('/components', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components = JSON.parse(data);
-        console.log(components);
         res.json(components);
     });
 })
@@ -20,7 +19,7 @@ router.put('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components = JSON.parse(data);
-        const index = components.findIndex(c => c.no === req.params.no);
+        const index = components.findIndex(c => c.no === +req.params.no);
         const changedComponent = {
             ...components[index],
             ...req.body,
@@ -39,7 +38,7 @@ router.delete('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components = JSON.parse(data);
-        const index = components.findIndex(c => c.no === req.params.no);
+        const index = components.findIndex(c => c.no === +req.params.no);
         components.splice(index, 1);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
@@ -104,7 +103,7 @@ router.put('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
-        const index = recipes.findIndex(c => c.no === req.params.no);
+        const index = recipes.findIndex(c => c.no === +req.params.no);
         console.log('BODY:', req.body);
         const changedRecipe = {
             no: recipes[index].no,
@@ -116,7 +115,7 @@ router.put('/recipes/:no', (req, res) => {
         fs.writeFile('recipes.json', JSON.stringify(recipes), async (err) => {
             if (err) throw err;
             console.log('Recipe ' + changedRecipe.no + ' changed: ', changedRecipe);
-            await changeComponents(req.params.no, req.body.components);
+            await changeComponents(+req.params.no, req.body.components);
             res.json(changedRecipe);
         });
     });
@@ -126,7 +125,7 @@ router.delete('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
         const recipes = JSON.parse(data);
-        const index = recipes.findIndex(c => c.no === req.params.no);
+        const index = recipes.findIndex(c => c.no === +req.params.no);
         recipes.splice(index, 1);
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
@@ -154,7 +153,7 @@ router.post('/recipes', (req, res) => {
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
             console.log('New recipe added: ', newRecipe);
-            addComponentsToRecipe(newRecipe.no, req.body.components);
+            addComponentsToRecipe(+newRecipe.no, req.body.components);
             res.json(newRecipe);
         });
     })
@@ -200,7 +199,7 @@ router.put('/orders/:no', (req, res) => {
     fs.readFile('orders.json', (err, data) => {
         if (err) throw err;
         const orders = JSON.parse(data);
-        const index = orders.findIndex(o => o.no === req.params.no);
+        const index = orders.findIndex(o => o.no === +req.params.no);
         const changedOrder = {
             ...orders[index],
             lastUpdate: new Date(),
@@ -219,7 +218,7 @@ router.delete('/orders/:no', (req, res) => {
     fs.readFile('orders.json', (err, data) => {
         if (err) throw err;
         const orders = JSON.parse(data);
-        const index = orders.findIndex(o => o.no === req.params.no);
+        const index = orders.findIndex(o => o.no === +req.params.no);
         orders.splice(index, 1);
         fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
             if (err) throw err;

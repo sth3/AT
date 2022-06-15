@@ -39,6 +39,7 @@ export class EditRecipeDialogComponent implements OnInit {
           this.validRecipeIdValidator.bind(this)]),
       components: new FormArray(data.recipe ? data.recipe?.components!.map(component => {
         return new FormGroup({
+          no: new FormControl(component.no),
           id: new FormControl(component.id),
           name: new FormControl(component.name.trim()),
           quantity: new FormControl(component.componentSP, Validators.required)
@@ -106,6 +107,7 @@ export class EditRecipeDialogComponent implements OnInit {
     this.selectedComponents.forEach((component: ComponentModel) => {
       if (!formArray.controls.find(control => control.get('id')!.value === component.id)) {
         formArray.push(new FormGroup({
+          no: new FormControl(component.no),
           id: new FormControl(component.id),
           name: new FormControl(component.name),
           quantity: new FormControl(0, Validators.required)
@@ -136,6 +138,7 @@ export class EditRecipeDialogComponent implements OnInit {
   getComponents() {
     return this.components.value.map((c: any) => {
       return {
+        no: c.no,
         id: c.id,
         name: c.name,
         componentSP: c.quantity

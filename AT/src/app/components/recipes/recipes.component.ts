@@ -74,7 +74,7 @@ export class RecipesComponent implements OnInit {
       { width: '700px', height: '700px' })
       .subscribe(result => {
         if (result) {
-          this.promptSave(result);
+          this.promptSave(data.no, result);
         }
       })
   }
@@ -108,11 +108,11 @@ export class RecipesComponent implements OnInit {
       })
   }
 
-  private promptSave(data: any) {
+  private promptSave(no: number, data: any) {
     this.dialogService.confirmDialog('Are you sure you want to save this recipe?')
       .subscribe(result => {
         if (result) {
-          this.recipeService.updateRecipe(data.no, data)
+          this.recipeService.updateRecipe(no, data)
             .subscribe(response => {
               console.log('recipe updated: ', response);
               this.notifierService.showDefaultNotification('Recipe updated');
