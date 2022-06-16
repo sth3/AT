@@ -41,3 +41,24 @@ body {
   display: inline-block;
   width: 65%;
 }
+
+table {
+  width: 100%;
+}
+tr.default-detail-row {
+  height: 0 !important;
+}
+
+tr.default-element-row:not(.default-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.default-element-row:not(.default-expanded-row):active {
+  background: #efefef;
+}
+
+.default-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+

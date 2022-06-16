@@ -1,1 +1,117 @@
-<p>orders works!</p>
+<div style="flex: 1 1 0;">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <div style="font-size: 15px">
+        <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
+          <mat-label>Quick filter</mat-label>
+          <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
+          <span matSuffix><mat-icon>filter_alt</mat-icon></span>
+        </mat-form-field>
+      </div>
+      <h2 class="table-title">Orders</h2>
+      <span class="spacer"></span>
+      <button mat-button [matMenuTriggerFor]="exportMenu">
+        <mat-icon>file_download</mat-icon>
+        Export table
+      </button>
+      <button mat-button (click)="createOrder()">
+        <mat-icon>add</mat-icon>
+        Create new order
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-menu #exportMenu="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item (click)="exportCSV(false)">
+      Export entire table to CSV
+    </button>
+    <button mat-menu-item (click)="exportCSV(true)">
+      Export visible data to CSV
+    </button>
+  </mat-menu>
+
+  <table mat-table
+         matSort
+         [dataSource]="dataSource" multiTemplateDataRows
+         class="mat-elevation-z8">
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row"
+                (click)="(expandedOrder = expandedOrder === element ? null : element); $event.stopPropagation()">
+          <mat-icon *ngIf="expandedOrder !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedOrder === element">keyboard_arrow_up</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header
+          [style]="{'width': column.width || 'auto'}"> {{column.header}} </th>
+      <ng-container *ngIf="column.field === 'lastUpdate'; else normalTd">
+        <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'medium'}} </td>
+      </ng-container>
+      <ng-template #normalTd>
+        <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>
+      </ng-template>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions" style="width: 15%;">&nbsp;</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick(element)">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+<!--        <button mat-icon-button [matMenuTriggerFor]="popup" *ngIf="!element.isValid">-->
+<!--          <mat-icon style="color: red">flag</mat-icon>-->
+<!--        </button>-->
+<!--        <mat-menu #popup="matMenu">-->
+<!--          <p style="margin: 10px">Some components were changed in this recipe after its creation:</p>-->
+<!--          <mat-list>-->
+<!--            <mat-list-item *ngFor="let component of getInvalidComponents(element)">-->
+<!--              <div matLine>-->
+<!--                <span class="light note">{{component.id}}</span>-->
+<!--                <span>{{component.name}}</span>-->
+<!--              </div>-->
+<!--              <span matLine>{{component.lastUpdate | date : 'medium'}}</span>-->
+<!--            </mat-list-item>-->
+<!--          </mat-list>-->
+<!--        </mat-menu>-->
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="default-element-detail"
+             [@detailExpand]="element == expandedOrder ? 'expanded' : 'collapsed'">
+          hello there
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+        [class.default-expanded-row]="expandedOrder === element">
+<!--        class="default-element-row" [ngClass]="!element.isValid ? 'lightred-background' : ''"-->
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{quickFilter}}".</td>
+    </tr>
+  </table>
+  <div *ngIf="isLoading"
+       style="display: flex; justify-content: center; align-items: center; background: white;">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+  <mat-paginator [length]="orders.length"
+                 [pageSizeOptions]="[10, 20, 50, 100]"
+                 [showFirstLastButtons]="true"
+                 [pageSize]="20" aria-label="Select page of orders search results"></mat-paginator>
+</div>
