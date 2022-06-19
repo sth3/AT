@@ -60,5 +60,7 @@ tr.default-element-row:not(.default-expanded-row):active {
 .default-element-detail {
   overflow: hidden;
   display: flex;
+  flex-direction: column;
+  margin: 0 20px
 }
 

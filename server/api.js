@@ -159,17 +159,16 @@ router.post('/recipes', (req, res) => {
     })
 })
 
+
 router.get('/orders', (req, res) => {
     fs.readFile('orders.json', (err, data) => {
         if (err) throw err;
         const orders = JSON.parse(data);
-        fs.readFile('recipes.json', (err, recipesData) => {
+        fs.readFile('recipes.json', async (err, recipesData) => {
             if (err) throw err;
             const recipes = JSON.parse(recipesData);
-            orders.forEach(o => {
-                o.recipe = recipes.find(r => r.no === o.recipeNo);
-            })
-            res.json(orders);
+            const result = await mapComponentsForOrders(orders, recipes);
+            res.json(result);
         });
     })
 })
@@ -265,6 +264,39 @@ function addComponentsToRecipe(no, components) {
 async function changeComponents(no, components) {
     await removeComponents(no);
     addComponentsToRecipe(no, components);
+}
+
+async function mapComponentsForOrders(orders, recipes) {
+    await Promise.all(orders.map(async (o) => {
+        o.recipe = await mapComponents(o.recipeNo, recipes.find(r => r.no === o.recipeNo));
+    }));
+    return orders;
+}
+
+async function mapComponents(recipeNo, recipe) {
+    return new Promise((resolve, reject) => {
+        if (!recipe) {
+            resolve(reject(`Recipe ${recipeNo} not found`));
+        }
+        fs.readFile('components.json', (err, data) => {
+            if (err) throw err;
+            const components = JSON.parse(data);
+            fs.readFile('recipe-components.json', (err, mappingData) => {
+                if (err) throw err;
+                let mapping = JSON.parse(mappingData);
+                recipe.components = mapping
+                    .filter(c => c.recipeNo === recipe.no)
+                    .map(c => {
+                        const component = components.find(r => r.no === c.componentNo);
+                        return {
+                            ...component,
+                            componentSP: c.componentSP
+                        }
+                    })
+                resolve(recipe);
+            })
+        })
+    })
 }
 
 module.exports = router;

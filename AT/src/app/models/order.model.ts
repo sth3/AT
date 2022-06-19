@@ -14,4 +14,6 @@ export interface OrderModel {
   createdAt: string;
   lastUpdate: string;
   completedAt: string | null;
+  operatorId: string;
+  operatorName: string;
 }
