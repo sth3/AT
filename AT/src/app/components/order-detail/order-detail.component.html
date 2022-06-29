@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-title>Order detail</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <fieldset [disabled]="!editable" style="border: none">
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Order ID</mat-label>
+          <input matInput placeholder="ID" formControlName="id">
+          <mat-error *ngIf="id!.hasError('invalidOrderId')">This order id is already in use.</mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Order name</mat-label>
+          <input matInput placeholder="Name" formControlName="name">
+          <mat-error *ngIf="id!.hasError('invalidOrderName')">This order name is already in use.</mat-error>
+        </mat-form-field>
+      </fieldset>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick()">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+    <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick()">
+      <mat-icon>delete_forever</mat-icon>
+      Delete
+    </button>
+  </mat-card-actions>
+</mat-card>

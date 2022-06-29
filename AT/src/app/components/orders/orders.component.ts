@@ -9,6 +9,7 @@ import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
 import { finalize } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -43,7 +44,8 @@ export class OrdersComponent implements OnInit {
   constructor(private ordersService: OrdersService,
               private dialogService: DialogService,
               private exportService: ExportService,
-              private notifierService: NotifierService) { }
+              private notifierService: NotifierService,
+              private router: Router, private r: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getOrders();
@@ -82,47 +84,13 @@ export class OrdersComponent implements OnInit {
   }
 
   onEditClick(data: any) {
-    // todo
-    // this.dialogService.customDialog(EditOrderDialogComponent,
-    //   { recipe: data, allOrders: this.orders, editMode: true },
-    //   { width: '700px', height: '700px' })
-    //   .subscribe(result => {
-    //     if (result) {
-    //       this.promptSave(data.no, result);
-    //     }
-    //   })
+    this.router.navigate([data.no], { relativeTo: this.r })
   }
 
   createOrder() {
-    // todo
-    // this.dialogService.customDialog(EditOrderDialogComponent,
-    //   { order: null, allOrders: this.orders, editMode: false },
-    //   { width: '700px', height: '700px' })
-    //   .subscribe(result => {
-    //     if (result) {
-    //       this.ordersService.addOrder(result)
-    //         .subscribe(response => {
-    //           console.log('order created: ', response);
-    //           this.notifierService.showDefaultNotification('New order created');
-    //           this.getOrders();
-    //         })
-    //     }
-    //   })
+    this.router.navigate(['new'], { relativeTo: this.r })
   }
 
-  private promptSave(no: number, data: any) {
-    this.dialogService.confirmDialog('Are you sure you want to save this order?')
-      .subscribe(result => {
-        if (result) {
-          this.ordersService.updateOrder(no, data)
-            .subscribe(response => {
-              console.log('order updated: ', response);
-              this.notifierService.showDefaultNotification('Recipe updated');
-              this.getOrders();
-            })
-        }
-      })
-  }
 
   exportCSV(visibleDataOnly: boolean) {
     // todo

@@ -39,6 +39,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { OrdersComponent } from './components/orders/orders.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -54,6 +55,7 @@ import { OrdersComponent } from './components/orders/orders.component';
     EditComponentDialogComponent,
     EditRecipeDialogComponent,
     OrdersComponent,
+    OrderDetailComponent,
   ],
   imports: [
     BrowserModule,

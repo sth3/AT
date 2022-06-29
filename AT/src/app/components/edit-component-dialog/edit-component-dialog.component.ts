@@ -6,33 +6,35 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-edit-component-dialog',
   template: `
-      <h1 mat-dialog-title>{{ data.editMode ? 'Edit' : 'Create' }}
-          component {{data.editMode ? data.component.id : ''}}</h1>
-      <div mat-dialog-content style="height: 150px; width: 100%">
-          <form [formGroup]="form">
-              <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput placeholder="Name" formControlName="name">
-                  <mat-error *ngIf="name!.hasError('required')">Component name is required.</mat-error>
-                  <mat-error *ngIf="name!.hasError('minlength')">Component name must be at least 3 characters long.
-                  </mat-error>
-                  <mat-error *ngIf="name!.hasError('invalidComponentName')">This component name is already in use.
-                  </mat-error>
-              </mat-form-field>
-              <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput placeholder="ID" formControlName="id">
-                  <mat-error *ngIf="id!.hasError('required')">Component ID is required.</mat-error>
-                  <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')">Component ID must be exactly
-                      10 characters long.
-                  </mat-error>
-                  <mat-error *ngIf="id!.hasError('invalidComponentId')">This ID is already in use.
-                  </mat-error>
-              </mat-form-field>
-          </form>
-      </div>
-      <div mat-dialog-actions>
-          <button mat-button [mat-dialog-close]="false">Cancel</button>
-          <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid">Save</button>
-      </div>
+    <h1 mat-dialog-title>{{ data.editMode ? 'Edit' : 'Create' }}
+      component {{data.editMode ? data.component.id : ''}}</h1>
+    <div mat-dialog-content style="height: 150px; width: 100%">
+      <form [formGroup]="form">
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Component name</mat-label>
+          <input matInput placeholder="Name" formControlName="name">
+          <mat-error *ngIf="name!.hasError('required')">Component name is required.</mat-error>
+          <mat-error *ngIf="name!.hasError('minlength')">Component name must be at least 3 characters long.
+          </mat-error>
+          <mat-error *ngIf="name!.hasError('invalidComponentName')">This component name is already in use.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Component ID</mat-label>
+          <input matInput placeholder="ID" formControlName="id">
+          <mat-error *ngIf="id!.hasError('required')">Component ID is required.</mat-error>
+          <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')">Component ID must be exactly
+            10 characters long.
+          </mat-error>
+          <mat-error *ngIf="id!.hasError('invalidComponentId')">This ID is already in use.
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="false">Cancel</button>
+      <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid">Save</button>
+    </div>
   `,
 })
 export class EditComponentDialogComponent implements OnInit {
@@ -60,6 +62,7 @@ export class EditComponentDialogComponent implements OnInit {
   get id() {
     return this.form.get('id');
   }
+
   ngOnInit(): void {
   }
 

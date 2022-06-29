@@ -228,6 +228,22 @@ router.delete('/orders/:no', (req, res) => {
     });
 })
 
+router.get('/orders/:no', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        const order = orders.find(o => o.no === +req.params.no);
+        fs.readFile('recipes.json', async (err, recipeData) => {
+            if (err) throw err;
+            const recipe = JSON.parse(recipeData).find(r => r.no === order.recipeNo)
+            console.log('finding recipe: ', recipe);
+            order.recipe = await mapComponents(order.recipeNo, recipe);
+            console.log('returning order: ', order);
+            res.json(order);
+        })
+    })
+})
+
 function removeComponents(no) {
     return new Promise((resolve, reject) => {
         fs.readFile('recipe-components.json', (err, data) => {
