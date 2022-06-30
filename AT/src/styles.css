@@ -64,3 +64,26 @@ tr.default-element-row:not(.default-expanded-row):active {
   margin: 0 20px
 }
 
+.order-form-field {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  flex-grow: 3;
+  margin-right: 3em;
+}
+
+.order-form-field h3 {
+  margin-bottom: 0;
+}
+
+.order-form-container {
+  border: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+mat-card-actions > button {
+  width: 10em !important;
+}
+

@@ -40,6 +40,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { OrdersComponent } from './components/orders/orders.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -86,6 +88,8 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
     MatSortModule,
     MatAutocompleteModule,
     MatChipsModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }

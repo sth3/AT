@@ -2,26 +2,101 @@
   <mat-card-title>Order detail</mat-card-title>
   <mat-card-content>
     <form [formGroup]="form">
-      <fieldset [disabled]="!editable" style="border: none">
-        <mat-form-field style="width: 100%" appearance="outline">
-          <mat-label>Order ID</mat-label>
-          <input matInput placeholder="ID" formControlName="id">
-          <mat-error *ngIf="id!.hasError('invalidOrderId')">This order id is already in use.</mat-error>
-        </mat-form-field>
-        <mat-form-field style="width: 100%" appearance="outline">
-          <mat-label>Order name</mat-label>
-          <input matInput placeholder="Name" formControlName="name">
-          <mat-error *ngIf="id!.hasError('invalidOrderName')">This order name is already in use.</mat-error>
-        </mat-form-field>
+      <fieldset [disabled]="!editable" class="order-form-container">
+        <div class="order-form-field">
+          <h3>Order ID</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="ID" formControlName="id">
+            <mat-error *ngIf="id!.hasError('invalidOrderId')">This order id is already in use.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="order-form-field">
+          <h3>Order name</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Name" formControlName="name">
+            <mat-error *ngIf="name!.hasError('invalidOrderName')">This order name is already in use.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="order-form-field">
+          <h3>Customer name</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Customer name" formControlName="customerName">
+          </mat-form-field>
+        </div>
+        <div class="order-form-field">
+          <h3>Due date</h3>
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="picker" formControlName="dueDate">
+            <mat-hint>DD-MM-YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="order-form-field">
+          <h3>Recipe ID</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Recipe ID" formControlName="customerName">
+          </mat-form-field>
+        </div>
+        <div class="order-form-field">
+          <h3>Quantity</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Quantity" formControlName="quantity">
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Mixer ID</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Mixer ID" formControlName="idMixer">
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Mixing time</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Mixing time" formControlName="mixingTime">
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Packing machine ID</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine">
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Operator ID</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Operator ID" formControlName="operatorId">
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Operator name</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Operator name" formControlName="operatorName">
+          </mat-form-field>
+        </div>
       </fieldset>
     </form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick()">
+    <button mat-icon-button color="primary"
+            aria-label="Edit item" (click)="onEditClick()"
+            *ngIf="!editable">
       <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick()">
+    <button mat-icon-button color="primary"
+            aria-label="Save item" (click)="saveOrder()"
+            *ngIf="editable">
+      <mat-icon>save</mat-icon>
+      Save
+    </button>
+    <button mat-icon-button color="danger"
+            aria-label="Delete item" (click)="onDeleteClick()">
       <mat-icon>delete_forever</mat-icon>
       Delete
     </button>

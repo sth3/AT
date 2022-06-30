@@ -41,6 +41,10 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('id') as FormControl;
   }
 
+  get name() {
+    return this.form.get('name') as FormControl;
+  }
+
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', Validators.required),
@@ -67,5 +71,11 @@ export class OrderDetailComponent implements OnInit {
 
   onDeleteClick() {
     // todo
+  }
+
+  saveOrder() {
+    // todo
+    this.editable = false;
+    console.log('save me ', this.form.value);
   }
 }
