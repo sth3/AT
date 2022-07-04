@@ -14,7 +14,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div *ngIf = "loaderService.isLoading | async" class="loader-container">
+    <div *ngIf = "loaderService.isLoading() | async" class="loader-container">
       <mat-progress-bar mode = "indeterminate">     </mat-progress-bar>
       <!--<mat-spiner></mat-spiner>-->
     </div>
