@@ -87,3 +87,19 @@ mat-card-actions > button {
   width: 10em !important;
 }
 
+.mat-input-element:disabled, .mat-select-disabled .mat-select-value {
+  color: black;
+  font-weight: 500;
+}
+
+.order-time-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+}
+
+.order-time {
+  margin: 20px;
+}

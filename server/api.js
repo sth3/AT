@@ -173,6 +173,14 @@ router.get('/orders', (req, res) => {
     })
 })
 
+router.get('/orders/list', (req, res) => {
+    fs.readFile('orders.json', (err, data) => {
+        if (err) throw err;
+        const orders = JSON.parse(data);
+        res.json(orders);
+    })
+})
+
 router.post('/orders', (req, res) => {
     fs.readFile('orders.json', (err, data) => {
         if (err) throw err;
@@ -301,9 +309,9 @@ async function mapComponents(recipeNo, recipe) {
                 if (err) throw err;
                 let mapping = JSON.parse(mappingData);
                 recipe.components = mapping
-                    .filter(c => c.recipeNo === recipe.no)
+                    .filter(c => c.recipeNo === +recipe.no)
                     .map(c => {
-                        const component = components.find(r => r.no === c.componentNo);
+                        const component = components.find(r => r.no === +c.componentNo);
                         return {
                             ...component,
                             componentSP: c.componentSP

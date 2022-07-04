@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { OrderModel } from '../models/order.model';
+import { OrderListModel, OrderModel } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class OrdersService {
     return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders`);
   }
 
-  deleteOrder(no: string) {
+  deleteOrder(no: number) {
     return this.http.delete(`${environment.apiUrl}/orders/${no}`);
   }
 
@@ -30,5 +30,9 @@ export class OrdersService {
 
   getOrderByNo(no: any) {
     return this.http.get<OrderModel>(`${environment.apiUrl}/orders/${no}`);
+  }
+
+  getOrdersList(): Observable<OrderListModel[]> {
+    return this.http.get<OrderListModel[]>(`${environment.apiUrl}/orders/list`);
   }
 }

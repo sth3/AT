@@ -17,3 +17,9 @@ export interface OrderModel {
   operatorId: string;
   operatorName: string;
 }
+
+export interface OrderListModel {
+  no: number;
+  id: string;
+  name: string;
+}
