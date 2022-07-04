@@ -15,14 +15,12 @@ export class LoaderService {
   }
 
   startLoading() {
-    console.log('start loading: ', this._isLoading.getValue());
     if (!this._isLoading.getValue()) {
       this._isLoading.next(true);
     }
   }
 
   stopLoading() {
-    console.log('stop loading: ', this._isLoading.getValue());
     if (this._isLoading.getValue()) {
       this._isLoading.next(false);
     }
