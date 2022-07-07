@@ -53,12 +53,12 @@ var dataFromSelectOrder, lengthSelectOrder, numberOfRowsSelectOrder;
         const sqlQueries = await utils.loadSqlQueries('events');	
         let result = await pool
           .request()
-          .input( "No", sql.BigInt, componentsNo )
-          .input( "ID", sql.VarChar( 10 ), componentsID )
-          .input( "NAME", sql.VarChar( 25 ), componentsName )	
+          .input( "No", sql.Int, componentsNo )
+          .input( "ID", sql.NVarChar( 10 ), componentsID )
+          .input( "NAME", sql.NVarChar( 25 ), componentsName )	
           .query(sqlQueries.addComponents)
           //.query('INSERT INTO [dbo].[COMPONENTS]([No],[ID],[NAME])VALUES(@No, @ID, @Name)');      // where LINE = @ID'     
-          console.log(sqlQueries.addComponents);
+          //console.log(sqlQueries.addComponents);
           sql.close();  
 
         } catch(error){
@@ -68,13 +68,13 @@ var dataFromSelectOrder, lengthSelectOrder, numberOfRowsSelectOrder;
       }
 
   // ====================================== REMOVE - COMPONENT - DATABASE    
-  async function deleteComponent(componentsID) {    
+  async function deleteComponent(componentsNo) {    
     try {  
         let pool = await sql.connect(sqlConfig);
         const sqlQueries = await utils.loadSqlQueries('events');	
         let result = await pool
           .request()          
-          .input( "ID", sql.VarChar( 10 ), componentsID )          
+          .input( "No", sql.Int, componentsNo )          
           .query(sqlQueries.deleteComponents)          
           sql.close();  
 
@@ -90,10 +90,12 @@ var dataFromSelectOrder, lengthSelectOrder, numberOfRowsSelectOrder;
         const sqlQueries = await utils.loadSqlQueries('events');	
         let result = await pool
           .request()
-          .input( "No", sql.BigInt, componentsNo )          
-          .input( "ID", sql.VarChar( 10 ), componentsID )
-          .input( "NAME", sql.VarChar( 25 ), componentsName )	          
-          .query(sqlQueries.updateComponents)          
+          .input( "No", sql.Int, componentsNo )          
+          .input( "ID", sql.NVarChar( 10 ), componentsID )
+          .input( "Name", sql.NVarChar( 25 ), componentsName )	          
+          .query(sqlQueries.updateComponents) 
+          console.log(sqlQueries.updateComponents);  
+          console.log(componentsID +' '+ componentsName +' '+ componentsNo  );       
           sql.close();  
 
         } catch(error){

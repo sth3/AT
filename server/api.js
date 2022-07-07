@@ -3,9 +3,20 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const sql = require("./src/data/events/dbIndexComponents");
 
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
+
+var allDataFromSelectKomponent , lengthOfSelectKomponent , numberOfSelectRowsKomponent ;
+const IDKomponent = [];
+const NAMEKomponent = [];
+const NoKomponent = [];
+const komponentArray = [];
+const lastUpdate = [];
+
+var total=1 , missing;
+
 
 router.get('/components', (req, res) => {
     fs.readFile('components.json', (err, data) => {
@@ -13,12 +24,13 @@ router.get('/components', (req, res) => {
         const components = JSON.parse(data);
         res.json(components);
     });
+    //res.json(komponentArray);
 })
 
 router.put('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components = JSON.parse(data);
+        const components = JSON.parse(data);// Object.values(allDataFromSelectKomponent[0]);
         const index = components.findIndex(c => c.no === +req.params.no);
         const changedComponent = {
             ...components[index],
@@ -26,6 +38,7 @@ router.put('/components/:no', (req, res) => {
             lastUpdate: new Date()
         };
         components[index] = changedComponent;
+       // sql.updateComponent(changedComponent.id, changedComponent.name, req.params.no);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
             console.log('Component ' + changedComponent.no + ' changed: ', changedComponent);
@@ -37,9 +50,11 @@ router.put('/components/:no', (req, res) => {
 router.delete('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components = JSON.parse(data);
+        const components = JSON.parse(data);// Object.values(allDataFromSelectKomponent[0]);
         const index = components.findIndex(c => c.no === +req.params.no);
         components.splice(index, 1);
+        
+        //sql.deleteComponent(req.params.no);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
             console.log('Component ' + req.params.no + ' removed');
@@ -52,14 +67,15 @@ router.delete('/components/:no', (req, res) => {
 router.post('/components', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components = JSON.parse(data);
-        const no = Math.max(...components.map(o => o.no)) + 1;
+        const components =JSON.parse(data); // Object.values(allDataFromSelectKomponent[0]);
+        const no = Math.max(...components.map(o => o.no)) + 1;// missing;
         const newRecipe = {
             no,
             lastUpdate: new Date(),
             ...req.body
         }
         components.push(newRecipe);
+       // sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
             console.log('New component added: ', newRecipe);
@@ -322,5 +338,33 @@ async function mapComponents(recipeNo, recipe) {
         })
     })
 }
+
+
+// sql.getdataKomponent().then((result)=>{       // Select all from table KOMPONENT  
+    
+//     allDataFromSelectKomponent = result[0];
+//     lengthOfSelectKomponent = result[1];     
+//     numberOfSelectRowsKomponent = result[2]; 
+      
+//     for ( let i = 0; i < lengthOfSelectKomponent; i++){
+//         NoKomponent[i] = allDataFromSelectKomponent[0][i].No; //    
+//         IDKomponent[i] = allDataFromSelectKomponent[0][i].ID; // 
+//         NAMEKomponent[i] = allDataFromSelectKomponent[0][i].NAME.trim(); // 
+//         lastUpdate[i] = allDataFromSelectKomponent[0][i].lastUpdate; // 
+
+//         komponentArray.push({no: NoKomponent[i], id: IDKomponent[i], name: NAMEKomponent[i] , lastUpdate: lastUpdate[i]} )
+//         console.log(komponentArray[i]);
+//             } 
+//     // ID Number - if it's missing, put the missing number in the No
+//     let n = NoKomponent.length;
+//     let k;    
+   
+//         for (k = 1; k<= 2147483647; k++){
+//             if (NoKomponent[k-1] != k){
+//                 missing = k;
+//                 console.log(missing);
+//                 break;        
+//         }};          
+//     }); 
 
 module.exports = router;

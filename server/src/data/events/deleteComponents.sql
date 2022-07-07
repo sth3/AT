@@ -1,2 +1,2 @@
-DELETE  [dbo].[COMPONENTS]
-WHERE   [ID] = @ID;
+DELETE  [dbo].[COMPONENT]
+WHERE   [No] = @No;

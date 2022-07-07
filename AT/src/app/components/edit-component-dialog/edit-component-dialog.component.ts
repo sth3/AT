@@ -70,7 +70,7 @@ export class EditComponentDialogComponent implements OnInit {
     const value = control.value;
     const allComponents = this.data.allComponents;
     const currentComponent = this.data.component;
-    const isValid = allComponents.every(component => component.name !== value
+    const isValid = allComponents.every(component => component.name !== value.toLowerCase()
       || (currentComponent !== null && component.no === currentComponent.no));
     return isValid ? null : { invalidComponentName: true };
   }
@@ -79,7 +79,7 @@ export class EditComponentDialogComponent implements OnInit {
     const value = control.value;
     const allComponents = this.data.allComponents;
     const currentComponent = this.data.component;
-    const isValid = allComponents.every(component => component.id !== value
+    const isValid = allComponents.every(component => component.id !== value.toLowerCase()
       || (currentComponent !== null && component.no === currentComponent.no));
     return isValid ? null : { invalidComponentId: true };
   }
