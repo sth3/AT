@@ -4,18 +4,18 @@ const router = express.Router();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const sql = require("./src/data/events/dbIndexComponents");
+const { addRecipeH } = require('./src/data/events/dbIndexComponents');
 
-router.use(bodyParser.urlencoded({extended: false}));
+router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-var allDataFromSelectKomponent , lengthOfSelectKomponent , numberOfSelectRowsKomponent ;
-const IDKomponent = [];
-const NAMEKomponent = [];
-const NoKomponent = [];
-const komponentArray = [];
-const lastUpdate = [];
+var allDataFromSelectKomponent, lengthOfSelectKomponent, numberOfSelectRowsKomponent;
+var allDataFromSelectRecipeH, lengthOfSelectRecipeH, numberOfSelectRowsRecipeH;
+var allDataFromSelectRecipeB, lengthOfSelectRecipeB, numberOfSelectRowsRecipeB;
+const IDKomponent = [], NAMEKomponent = [], NoKomponent = [], komponentArray = [], lastUpdate = [], RecipeHArray = [], RecipeBArray = [];
 
-var total=1 , missing;
+
+var total = 1, missingKomponent, missingRecipe;
 
 
 router.get('/components', (req, res) => {
@@ -30,7 +30,7 @@ router.get('/components', (req, res) => {
 router.put('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components = JSON.parse(data);// Object.values(allDataFromSelectKomponent[0]);
+        const components = JSON.parse(data);//Object.values(allDataFromSelectKomponent[0]);// JSON.parse(data);
         const index = components.findIndex(c => c.no === +req.params.no);
         const changedComponent = {
             ...components[index],
@@ -38,7 +38,7 @@ router.put('/components/:no', (req, res) => {
             lastUpdate: new Date()
         };
         components[index] = changedComponent;
-       // sql.updateComponent(changedComponent.id, changedComponent.name, req.params.no);
+        //sql.updateComponent(changedComponent.id, changedComponent.name, req.params.no);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
             console.log('Component ' + changedComponent.no + ' changed: ', changedComponent);
@@ -50,10 +50,10 @@ router.put('/components/:no', (req, res) => {
 router.delete('/components/:no', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components = JSON.parse(data);// Object.values(allDataFromSelectKomponent[0]);
+        const components = JSON.parse(data);//Object.values(allDataFromSelectKomponent[0]);// JSON.parse(data);
         const index = components.findIndex(c => c.no === +req.params.no);
         components.splice(index, 1);
-        
+
         //sql.deleteComponent(req.params.no);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
@@ -67,15 +67,15 @@ router.delete('/components/:no', (req, res) => {
 router.post('/components', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
-        const components =JSON.parse(data); // Object.values(allDataFromSelectKomponent[0]);
-        const no = Math.max(...components.map(o => o.no)) + 1;// missing;
+        const components =  JSON.parse(data);//Object.values(allDataFromSelectKomponent[0]); // JSON.parse(data);
+        const no = missingKomponent; //Math.max(...components.map(o => o.no)) + 1;// 
         const newRecipe = {
             no,
             lastUpdate: new Date(),
             ...req.body
         }
         components.push(newRecipe);
-       // sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
+        sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
         fs.writeFile('components.json', JSON.stringify(components), (err) => {
             if (err) throw err;
             console.log('New component added: ', newRecipe);
@@ -88,13 +88,13 @@ router.post('/components', (req, res) => {
 router.get('/recipes', (req, res) => {
     fs.readFile('recipes.json', (err, recipesData) => {
         if (err) throw err;
-        let recipes = JSON.parse(recipesData);
+        let recipes = JSON.parse(recipesData);//RecipeHArray;//JSON.parse(recipesData);
         fs.readFile('components.json', (err, componentsData) => {
             if (err) throw err;
-            const components = JSON.parse(componentsData);
+            const components = JSON.parse(componentsData);//komponentArray// JSON.parse(componentsData);
             fs.readFile('recipe-components.json', (err, mappingData) => {
                 if (err) throw err;
-                const mapping = JSON.parse(mappingData);
+                const mapping = JSON.parse(mappingData);//RecipeBArray;// JSON.parse(mappingData);
                 recipes = recipes.map(r => {
                     const selectedComponents = mapping.filter(m => m.recipeNo === r.no);
                     return {
@@ -118,7 +118,7 @@ router.get('/recipes', (req, res) => {
 router.put('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
-        const recipes = JSON.parse(data);
+        const recipes = JSON.parse(data);//RecipeHArray;//JSON.parse(data);
         const index = recipes.findIndex(c => c.no === +req.params.no);
         console.log('BODY:', req.body);
         const changedRecipe = {
@@ -128,6 +128,7 @@ router.put('/recipes/:no', (req, res) => {
             lastUpdate: new Date(),
         };
         recipes[index] = changedRecipe;
+        //sql.updateRecipeH(changedRecipe.id, changedRecipe.name, req.params.no);
         fs.writeFile('recipes.json', JSON.stringify(recipes), async (err) => {
             if (err) throw err;
             console.log('Recipe ' + changedRecipe.no + ' changed: ', changedRecipe);
@@ -140,9 +141,10 @@ router.put('/recipes/:no', (req, res) => {
 router.delete('/recipes/:no', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
-        const recipes = JSON.parse(data);
+        const recipes =JSON.parse(data);/ // JSON.parse(data);//RecipeHArray;
         const index = recipes.findIndex(c => c.no === +req.params.no);
         recipes.splice(index, 1);
+       // sql.deleteRecipeH(req.params.no);
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
             console.log('Recipe ' + req.params.no + ' removed');
@@ -157,14 +159,15 @@ router.delete('/recipes/:no', (req, res) => {
 router.post('/recipes', (req, res) => {
     fs.readFile('recipes.json', (err, data) => {
         if (err) throw err;
-        const recipes = JSON.parse(data);
-        const no = Math.max(...recipes.map(o => o.no)) + 1;
+        const recipes = JSON.parse(data);//RecipeHArray;//
+        const no = Math.max(...recipes.map(o => o.no)) + 1;//missingRecipe;//Math.max(...recipes.map(o => o.no)) + 1;
         const newRecipe = {
             no,
             id: req.body.id,
             name: req.body.name,
             lastUpdate: new Date(),
         }
+        //sql.addRecipeH(newRecipe['no'], newRecipe['id'], newRecipe['name']);
         recipes.push(newRecipe);
         fs.writeFile('recipes.json', JSON.stringify(recipes), (err) => {
             if (err) throw err;
@@ -272,8 +275,9 @@ function removeComponents(no) {
     return new Promise((resolve, reject) => {
         fs.readFile('recipe-components.json', (err, data) => {
             if (err) throw err;
-            let mapping = JSON.parse(data);
+            let mapping = JSON.parse(data);//JSON.parse(data);//RecipeBArray;
             mapping = mapping.filter(c => c.recipeNo !== no);
+            //sql.deleteRecipeB(no);
             fs.writeFile('recipe-components.json', JSON.stringify(mapping), (err) => {
                 if (err) throw err;
                 console.log('Components mappings for recipe ' + no + ' removed');
@@ -286,13 +290,15 @@ function removeComponents(no) {
 function addComponentsToRecipe(no, components) {
     fs.readFile('recipe-components.json', (err, data) => {
         if (err) throw err;
-        let mapping = JSON.parse(data);
+        let mapping =JSON.parse(data); //RecipeBArray;//
         components?.forEach(c => {
             mapping.push({
                 recipeNo: no,
                 componentNo: c.no,
                 componentSP: c.componentSP
             });
+
+        //sql.addRecipeB(no, c.no, c.componentSP);    
         });
         fs.writeFile('recipe-components.json', JSON.stringify(mapping), (err) => {
             if (err) throw err;
@@ -303,6 +309,7 @@ function addComponentsToRecipe(no, components) {
 
 async function changeComponents(no, components) {
     await removeComponents(no);
+    //await sql.deleteRecipeB(no);
     addComponentsToRecipe(no, components);
 }
 
@@ -320,10 +327,10 @@ async function mapComponents(recipeNo, recipe) {
         }
         fs.readFile('components.json', (err, data) => {
             if (err) throw err;
-            const components = JSON.parse(data);
+            const components =  JSON.parse(data);//komponentArray;//
             fs.readFile('recipe-components.json', (err, mappingData) => {
                 if (err) throw err;
-                let mapping = JSON.parse(mappingData);
+                let mapping =JSON.parse(mappingData);// RecipeBArray;//
                 recipe.components = mapping
                     .filter(c => c.recipeNo === +recipe.no)
                     .map(c => {
@@ -340,31 +347,76 @@ async function mapComponents(recipeNo, recipe) {
 }
 
 
-// sql.getdataKomponent().then((result)=>{       // Select all from table KOMPONENT  
-    
+// sql.getdataKomponent().then((result) => {       // Select all from table KOMPONENT  
+
 //     allDataFromSelectKomponent = result[0];
-//     lengthOfSelectKomponent = result[1];     
-//     numberOfSelectRowsKomponent = result[2]; 
-      
-//     for ( let i = 0; i < lengthOfSelectKomponent; i++){
+//     lengthOfSelectKomponent = result[1];
+//     numberOfSelectRowsKomponent = result[2];
+
+//     for (let i = 0; i < lengthOfSelectKomponent; i++) {
 //         NoKomponent[i] = allDataFromSelectKomponent[0][i].No; //    
 //         IDKomponent[i] = allDataFromSelectKomponent[0][i].ID; // 
 //         NAMEKomponent[i] = allDataFromSelectKomponent[0][i].NAME.trim(); // 
 //         lastUpdate[i] = allDataFromSelectKomponent[0][i].lastUpdate; // 
 
-//         komponentArray.push({no: NoKomponent[i], id: IDKomponent[i], name: NAMEKomponent[i] , lastUpdate: lastUpdate[i]} )
-//         console.log(komponentArray[i]);
-//             } 
+//         komponentArray.push({ no: NoKomponent[i], id: IDKomponent[i], name: NAMEKomponent[i], lastUpdate: lastUpdate[i] })
+//         //console.log(komponentArray[i]);
+//     }
 //     // ID Number - if it's missing, put the missing number in the No
-//     let n = NoKomponent.length;
-//     let k;    
-   
-//         for (k = 1; k<= 2147483647; k++){
-//             if (NoKomponent[k-1] != k){
-//                 missing = k;
-//                 console.log(missing);
-//                 break;        
-//         }};          
-//     }); 
+
+//     for (let k = 1; k <= 2147483647; k++) {
+//         if (NoKomponent[k - 1] != k) {
+//             missingKomponent = k;
+//             console.log('missing component ' + missingKomponent);
+//             break;
+//         }
+//     };
+// });
+
+// sql.getdataRecipeHead().then((result) => {       // Select all from table recipe head  
+
+//     allDataFromSelectRecipeH = result[0];
+//     lengthOfSelectRecipeH = result[1];
+//     numberOfSelectRowsRecipeH = result[2];
+//     let noSql = [], idSql = [], nameSql = [], lastUpdateSql = [];
+//     for (let i = 0; i < lengthOfSelectRecipeH; i++) {
+
+//         noSql[i] = allDataFromSelectRecipeH[0][i].no; //    
+//         idSql[i] = allDataFromSelectRecipeH[0][i].id; // 
+//         nameSql[i] = allDataFromSelectRecipeH[0][i].name.trim(); // 
+//         lastUpdateSql[i] = allDataFromSelectRecipeH[0][i].lastUpdate; // 
+
+//         RecipeHArray.push({ no: noSql[i], id: idSql[i], name: nameSql[i], lastUpdate: lastUpdateSql[i] });
+//         console.log(RecipeHArray[i]);
+//     }
+//     // ID Number - if it's missing, put the missing number in the No
+
+//     for (let k = 1; k <= 2147483647; k++) {
+//         if (noSql[k - 1] != k) {
+//             missingRecipe = k;
+//             console.log('missing recipe ' + missingRecipe);
+//             break;
+//         }
+//     };
+
+// });
+
+// sql.getdataRecipeBody().then((result) => {       // Select all from table recipe body  
+
+//     allDataFromSelectRecipeB = result[0];
+//     lengthOfSelectRecipeB = result[1];
+//     numberOfSelectRowsRecipeB = result[2];
+//     let recipeNo = [], componentNo = [], componentSP = [], lastUpdateSql = [];
+//     for (let i = 0; i < lengthOfSelectRecipeB; i++) {
+
+//         recipeNo[i] = allDataFromSelectRecipeB[0][i].recipeNo; //    
+//         componentNo[i] = allDataFromSelectRecipeB[0][i].componentNo; // 
+//         componentSP[i] = allDataFromSelectRecipeB[0][i].componentSP; //             
+
+//         RecipeBArray.push({ recipeNo: recipeNo[i], componentNo: componentNo[i], componentSP: componentSP[i].toFixed(3) });
+//         console.log(RecipeBArray[i]);
+//     }
+
+// });
 
 module.exports = router;

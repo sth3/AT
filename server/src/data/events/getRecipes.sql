@@ -1,1 +1,0 @@
-SELECT * FROM [AT].[dbo].[RECIPE]
