@@ -85,7 +85,9 @@ export class EditComponentDialogComponent implements OnInit {
   }
 
   getNewId(allComponents: ComponentModel[]): string {
-    const maxId = allComponents.reduce((max, component) => Math.max(max, parseInt(component.id)), 0);
+    const maxId = allComponents
+      .filter(c => !isNaN(parseInt(c.id)))
+      .reduce((max, component) => Math.max(max, parseInt(component.id)), 0);
     return (maxId + 1).toString().padStart(10, '0');
   }
 

@@ -1,13 +1,14 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { OrderListModel, OrderModel } from '../../models/order.model';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { RecipeModel } from '../../models/recipe.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DialogService } from '../../services/dialog.service';
 import { NotifierService } from '../../services/notifier.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-order-detail',
@@ -35,6 +36,10 @@ export class OrderDetailComponent implements OnInit {
   selectedRecipeDisplay: string = '';
   allOrders: OrderListModel[] = [];
   isNew!: boolean;
+  now = new Date();
+
+  @ViewChild('recipeSelect')
+  recipeSelect!: MatSelect;
 
   constructor(private r: ActivatedRoute,
               private router: Router,
@@ -83,16 +88,26 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('name') as FormControl;
   }
 
+  get idPackingMachine() {
+    return this.form.get('idPackingMachine') as FormControl;
+  }
+
+  get idMixer() {
+    return this.form.get('idMixer') as FormControl;
+  }
+
   private prepareForm() {
     this.form = new FormGroup({
-      id: new FormControl(this.order?.id || '', [Validators.required, this.validOrderIdValidator.bind(this)]),
-      name: new FormControl(this.order?.name || '', [Validators.required, this.validOrderNameValidator.bind(this)]),
+      id: new FormControl(this.order?.id || '', [Validators.required,
+        Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
+      name: new FormControl(this.order?.name || '', [Validators.required,
+        Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
       customerName: new FormControl(this.order?.customerName || '', Validators.required),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
-      quantity: new FormControl(this.order?.quantity || 0, Validators.required),
+      quantity: new FormControl(this.order?.quantity || null, Validators.required),
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
-      mixingTime: new FormControl(this.order?.mixingTime || 0, Validators.required),
+      mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
       operatorId: new FormControl(this.order?.operatorId || '001'),
       // todo get real used id/name here
@@ -121,6 +136,8 @@ export class OrderDetailComponent implements OnInit {
 
   saveOrder() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.recipeSelect?.ngControl?.control?.markAsTouched();
       this.notifier.showNotification('Please fill out all fields correctly.', 'Close', 'error');
       return;
     }
@@ -156,6 +173,7 @@ export class OrderDetailComponent implements OnInit {
     const value = control.value;
     const isValid = this.allOrders.every(o => o.name !== value
       || (this.order !== null && o.no === this.order?.no));
+    console.log('is valid messsing me? ', isValid);
     return isValid ? null : { invalidOrderName: true };
   }
 

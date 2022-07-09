@@ -7,7 +7,9 @@
           <h3>Order ID</h3>
           <mat-form-field appearance="outline">
             <input matInput placeholder="ID" formControlName="id">
-            <mat-error *ngIf="id!.hasError('invalidOrderId')">This order id is already in use.</mat-error>
+            <mat-error *ngIf="id.hasError('invalidOrderId')">This order id is already in use.</mat-error>
+            <mat-error *ngIf="id.hasError('maxlength') || id.hasError('minlength')">
+              Order ID must be exactly 10 characters.</mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
@@ -15,6 +17,8 @@
           <mat-form-field appearance="outline">
             <input matInput placeholder="Name" formControlName="name">
             <mat-error *ngIf="name!.hasError('invalidOrderName')">This order name is already in use.</mat-error>
+            <mat-error *ngIf="name!.hasError('minlength')">
+              Order name must be at least 3 characters long.</mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
@@ -26,7 +30,7 @@
         <div class="order-form-field">
           <h3>Due date</h3>
           <mat-form-field appearance="outline">
-            <input matInput [matDatepicker]="picker" formControlName="dueDate">
+            <input matInput [matDatepicker]="picker" formControlName="dueDate" [min]="now">
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -47,7 +51,7 @@
             <h3>Recipe</h3>
             <mat-form-field appearance="outline">
               <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
-                          [ngModelOptions]="{ standalone: true }" [disabled]="!editable">
+                          [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
                 <mat-select-trigger>
                   <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
                 </mat-select-trigger>
@@ -115,7 +119,8 @@
         <div class="order-form-field">
           <h3>Mixer ID</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Mixer ID" formControlName="idMixer">
+            <input matInput placeholder="Mixer ID" formControlName="idMixer" min="1" max="4" type="number">
+            <mat-error *ngIf="idMixer!.invalid">Valid mixer IDs are 1-4.</mat-error>
           </mat-form-field>
         </div>
 
@@ -130,7 +135,8 @@
         <div class="order-form-field">
           <h3>Packing machine ID</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine">
+            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8" type="number">
+            <mat-error *ngIf="idPackingMachine!.invalid">Valid packing machine IDs are 1-8.</mat-error>
           </mat-form-field>
         </div>
 

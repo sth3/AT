@@ -97,7 +97,9 @@ export class EditRecipeDialogComponent implements OnInit {
   }
 
   getNewId(allRecipes: RecipeModel[]) {
-    const maxId = allRecipes.reduce((max, recipe) => Math.max(max, parseInt(recipe.id)), 0);
+    const maxId = allRecipes
+      .filter(r => !isNaN(parseInt(r.id)))
+      .reduce((max, recipe) => Math.max(max, parseInt(recipe.id)), 0);
     return (maxId + 1).toString().padStart(10, '0');
   }
 
