@@ -68,7 +68,8 @@ router.post('/components', (req, res) => {
     fs.readFile('components.json', (err, data) => {
         if (err) throw err;
         const components =  JSON.parse(data);//Object.values(allDataFromSelectKomponent[0]); // JSON.parse(data);
-        const no = missingKomponent; //Math.max(...components.map(o => o.no)) + 1;// 
+        // const no = missingKomponent;
+        const no = Math.max(...components.map(o => o.no)) + 1;
         const newRecipe = {
             no,
             lastUpdate: new Date(),
