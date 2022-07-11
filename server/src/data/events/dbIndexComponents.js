@@ -232,6 +232,7 @@ async function deleteRecipeB(No) {
     sql.close();
   }
 }
+// ====================================== UPDATE - updateRecipeH - DATABASE  
 async function updateRecipeH(ID, Name, No) {
   try {
     let pool = await sql.connect(sqlConfig);
@@ -251,7 +252,7 @@ async function updateRecipeH(ID, Name, No) {
     sql.close();
   }
 }
-
+// ====================================== UPDATE - updateRecipeB - DATABASE  
 async function updateRecipeB(recipeNo, componentNo, componentSP) {
   try {
     let pool = await sql.connect(sqlConfig);
@@ -272,14 +273,15 @@ async function updateRecipeB(recipeNo, componentNo, componentSP) {
   }
 }
 
-
+// ====================================== SELECT DATABASE getdataOrder
 async function getdataOrder() {
   try {
     let pool = await sql.connect(sqlConfig);
+    const sqlQueries = await utils.loadSqlQueries('events');
     let result = await pool
       .request()
       .input("ID", sql.Int, 1)
-      .query('select * from [AT].[dbo].[ORDER]');
+      .query(sqlQueries.getOrders);
 
     dataFromSelectOrder = JSON.parse(JSON.stringify(result.recordsets));
     lengthSelectOrder = dataFromSelectOrder[0].length;
@@ -298,6 +300,83 @@ async function getdataOrder() {
     sql.close();
   }
 }
+// ====================================== REMOVE - COMPONENT - DATABASE  - RECIPE HEAD  
+async function deleteOrders(no) {
+  try {
+    let pool = await sql.connect(sqlConfig);
+    const sqlQueries = await utils.loadSqlQueries('events');
+    let result = await pool
+      .request()
+      .input("no", sql.Int, no)
+      .query(sqlQueries.deleteOrders)
+    sql.close();
+
+  } catch (error) {
+    console.log(error.message);
+    sql.close();
+  }
+}
+// ====================================== ADD - NEW ORDERS - DATABASE    
+async function addOrders(no, id, name, customerName, dueDate, recipeNo, operatorId, operatorName, quantity, idMixer, mixingTime, idPackingMachine) {
+  try {
+    let pool = await sql.connect(sqlConfig);
+    const sqlQueries = await utils.loadSqlQueries('events');
+    let result = await pool
+      .request()
+
+      .input("no", sql.Int, no)
+      .input("id", sql.NVarChar(10), id)
+      .input("name", sql.NVarChar(25), name)
+      .input("customerName", sql.NVarChar(25), customerName)
+      .input("dueDate", sql.Date, dueDate)
+      .input("recipeNo", sql.Int, recipeNo)
+      .input("operatorId", sql.Int, operatorId)
+      .input("operatorName", sql.NVarChar(25), operatorName)
+      .input("quantity", sql.Real, quantity)
+      .input("idMixer", sql.Int, idMixer)
+      .input("mixingTime", sql.Int, mixingTime)
+      .input("idPackingMachine", sql.Int, idPackingMachine)
+      
+      .query(sqlQueries.addOrders)
+    
+    sql.close();
+
+  } catch (error) {
+    console.log(error.message);
+    sql.close();
+  }
+}
+
+// ====================================== UPDATE - ORDERS - DATABASE    
+async function updateOrders(no, id, name, customerName, dueDate, recipeNo, operatorId, operatorName, quantity, idMixer, mixingTime, idPackingMachine) {
+  try {
+    let pool = await sql.connect(sqlConfig);
+    const sqlQueries = await utils.loadSqlQueries('events');
+    let result = await pool
+      .request()
+
+      .input("no", sql.Int, no)
+      .input("id", sql.NVarChar(10), id)
+      .input("name", sql.NVarChar(25), name)
+      .input("customerName", sql.NVarChar(25), customerName)
+      .input("dueDate", sql.Date, dueDate)
+      .input("recipeNo", sql.Int, recipeNo)
+      .input("operatorId", sql.Int, operatorId)
+      .input("operatorName", sql.NVarChar(25), operatorName)
+      .input("quantity", sql.Real, quantity)
+      .input("idMixer", sql.Int, idMixer)
+      .input("mixingTime", sql.Int, mixingTime)
+      .input("idPackingMachine", sql.Int, idPackingMachine)
+      
+      .query(sqlQueries.updateOrders)
+    
+    sql.close();
+
+  } catch (error) {
+    console.log(error.message);
+    sql.close();
+  }
+}
 
 
 module.exports = {
@@ -307,12 +386,15 @@ module.exports = {
   getdataRecipeBody: getdataRecipeBody,
   getdataOrder: getdataOrder,
   addComponent: addComponent,
-  deleteComponent: deleteComponent,
-  updateComponent: updateComponent,
   addRecipeH:addRecipeH,
   addRecipeB:addRecipeB,
+  addOrders:addOrders,
+  deleteComponent: deleteComponent,
+  deleteOrders:deleteOrders,
   deleteRecipeH:deleteRecipeH,
   deleteRecipeB:deleteRecipeB,
+  updateComponent: updateComponent,   
   updateRecipeH:updateRecipeH,
-  updateRecipeB:updateRecipeB
+  updateRecipeB:updateRecipeB,
+  updateOrders:updateOrders
 };
