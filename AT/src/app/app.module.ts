@@ -42,6 +42,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -58,6 +59,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     EditRecipeDialogComponent,
     OrdersComponent,
     OrderDetailComponent,
+    StatisticsComponent,
   ],
   imports: [
     BrowserModule,
