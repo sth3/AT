@@ -400,8 +400,9 @@ async function getStatDose() {
         componentPV[i] = result.recordsets[0][i].pv; // 
 
         doseArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i].toFixed(3) , componentPV: componentPV[i].toFixed(3)  })
-        //console.log(doseArray[i]);
+        
     }   
+    console.log(doseArray[lengthSelectDose-1]);
       sql.close();
   
       return [doseArray, lengthSelectDose, numberOfRowsSelectDose];

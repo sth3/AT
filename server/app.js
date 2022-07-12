@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var dealsRouter = require('./routes/deals');
 var componentsRouters = require('./routes/components');
-var recipesRouters = require('./routes/recipes');
+var recipesRouters = require('./api.js');
 
 var cors = require('cors');
 const sql = require('./src/data/events/dbIndexComponents');
@@ -33,8 +33,8 @@ app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/deals', dealsRouter);
-app.use('/components', componentsRouters);
-//app.use('/recipes', recipesRouters);
+//app.use('/components', componentsRouters);
+app.use('/api', recipesRouters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

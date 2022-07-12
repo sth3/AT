@@ -30,12 +30,18 @@ var total = 1, missingKomponent, missingRecipe, missingOrder;
 
 
 
-
-// router.get('/dose-statistics', (req, res) => {
+router.get('/dose-statistics', (req, res) => {
+            
+        sql.getStatDose().then((result) => {       // Select all from table KOMPONENT  
     
-    
-//     res.json(doseArray[0]);
-// })
+            let allDataFromSelectDose =  JSON.parse(JSON.stringify(result[0]));    
+            
+            res.json(allDataFromSelectDose);
+        }).catch((error) => {
+            console.error(error);
+        });
+              
+})
 
 
 router.get('/components', (req, res) => {
@@ -546,17 +552,6 @@ async function mapComponents(recipeNo, recipe) {
 // }).catch((error) => {
 //     console.error(error);
 //   });;
-
-
-
-// sql.getStatDose().then((result) => {       // Select all from table KOMPONENT  
-
-//     let allDataFromSelectDose = JSON.parse(JSON.stringify(result[0]));    
-//     doseArray.push(allDataFromSelectDose) ;
-    
-// }).catch((error) => {
-//     console.error(error);
-// });
 
 
 
