@@ -5,6 +5,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const sql = require("./src/data/events/dbIndexComponents");
 const { addRecipeH } = require('./src/data/events/dbIndexComponents');
+const { Console } = require('console');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -13,23 +14,28 @@ var allDataFromSelectKomponent, lengthOfSelectKomponent, numberOfSelectRowsKompo
 var allDataFromSelectRecipeH, lengthOfSelectRecipeH, numberOfSelectRowsRecipeH;
 var allDataFromSelectRecipeB, lengthOfSelectRecipeB, numberOfSelectRowsRecipeB;
 var allDataFromSelectOrder, lengthOfSelectOrder, numberOfSelectRowsOrder;
-const IDKomponent = [], NAMEKomponent = [], NoKomponent = [], komponentArray = [], lastUpdate = [], RecipeHArray = [], RecipeBArray = [], orderArray= [];
+
+const IDKomponent = [], 
+NAMEKomponent = [], 
+NoKomponent = [], 
+komponentArray = [], 
+lastUpdate = [], 
+RecipeHArray = [], 
+RecipeBArray = [], 
+orderArray= [], 
+doseArray = [];
 
 
 var total = 1, missingKomponent, missingRecipe, missingOrder;
 
-var doseArray = [];
-doseArray.push({ no: 1, datetime: '2022-08-09', name: 'paprika' , componentSP: 8.8, componentPV: 9.7 }, 
-{ no: 2, datetime: '2022-10-11', name: 'horcica' , componentSP: 3.2, componentPV: 6.5 }, 
-{ no: 3, datetime: '2022-11-12', name: 'annas' , componentSP: 4.5, componentPV: 7.6 }, 
-{ no: 4, datetime: '2022-12-11', name: 'banna' , componentSP: 10.11, componentPV: 12.13 }, 
-{ no: 5, datetime: '2022-09-09', name: 'citron' , componentSP: 7.66, componentPV: 5.99 });
 
 
-router.get('/dose-statistics', (req, res) => {
+
+// router.get('/dose-statistics', (req, res) => {
     
-    res.json(doseArray);
-})
+    
+//     res.json(doseArray[0]);
+// })
 
 
 router.get('/components', (req, res) => {
@@ -540,5 +546,19 @@ async function mapComponents(recipeNo, recipe) {
 // }).catch((error) => {
 //     console.error(error);
 //   });;
+
+
+
+// sql.getStatDose().then((result) => {       // Select all from table KOMPONENT  
+
+//     let allDataFromSelectDose = JSON.parse(JSON.stringify(result[0]));    
+//     doseArray.push(allDataFromSelectDose) ;
+    
+// }).catch((error) => {
+//     console.error(error);
+// });
+
+
+
 
 module.exports = router;

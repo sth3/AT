@@ -378,13 +378,47 @@ async function updateOrders(no, id, name, customerName, dueDate, recipeNo, opera
   }
 }
 
+// ====================================== SELECT DATABASE getStatDose
+async function getStatDose() {
+  try {
+    let pool = await sql.connect(sqlConfig);
+    const sqlQueries = await utils.loadSqlQueries('events');
+    let result = await pool
+      .request()      
+      .query(sqlQueries.getStatDose);   
+      let no = [], datetime = [],name = [], componentSP = [], componentPV = [], doseArray= [];
+      
+      let dataFromSelectDose = JSON.parse(JSON.stringify(result.recordsets));
+      let lengthSelectDose = dataFromSelectDose[0].length;
+      let numberOfRowsSelectDose = Object.keys(dataFromSelectDose[0][0]).length;
+      
+      for (let i = 0; i < lengthSelectDose; i++) {
+        no[i] = result.recordsets[0][i].no; //    
+        datetime[i] = result.recordsets[0][i].datetime.toLocaleString("sk-SK", { timeZone: 'UTC' })
+        name[i] = result.recordsets[0][i].name.trim(); // 
+        componentSP[i] = result.recordsets[0][i].sp; // 
+        componentPV[i] = result.recordsets[0][i].pv; // 
+
+        doseArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i].toFixed(3) , componentPV: componentPV[i].toFixed(3)  })
+        //console.log(doseArray[i]);
+    }   
+      sql.close();
+  
+      return [doseArray, lengthSelectDose, numberOfRowsSelectDose];
+
+  } catch (error) {
+    console.log(error.message);
+    sql.close();
+  }
+}
 
 module.exports = {
   getdata: getdata,
   getdataKomponent: getdataKomponent,
   getdataRecipeHead: getdataRecipeHead,
-  getdataRecipeBody: getdataRecipeBody,
+  getdataRecipeBody: getdataRecipeBody,  
   getdataOrder: getdataOrder,
+  getStatDose:getStatDose,
   addComponent: addComponent,
   addRecipeH:addRecipeH,
   addRecipeB:addRecipeB,
