@@ -1,8 +1,8 @@
 UPDATE  [dbo].[COMPONENT]
-SET     [ID] = @ID
-       ,[NAME] = @Name
+SET     [id] = @ID
+       ,[name] = @Name
        ,[lastUpdate] = GetDate()         
-WHERE   [No] = @No;
+WHERE   [no] = @No;
 
 SELECT *
 FROM	[dbo].[COMPONENT]

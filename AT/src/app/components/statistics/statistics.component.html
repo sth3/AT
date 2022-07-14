@@ -33,8 +33,8 @@
         <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style]="{'width': column.width || 'auto'}">
                 {{column.header}} </th>
-            <ng-container *ngIf="column.field === 'lastUpdate'; else normalTd">
-                <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'medium'}} </td>
+            <ng-container *ngIf="column.field === 'datetime'; else normalTd">
+                <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss'  }} </td>
             </ng-container>
             <ng-template #normalTd>
                 <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>

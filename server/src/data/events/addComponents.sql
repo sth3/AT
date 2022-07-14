@@ -1,7 +1,7 @@
 INSERT INTO [dbo].[COMPONENT]
-([No]
-,[ID]
-,[NAME]
+([no]
+,[id]
+,[name]
 ,[lastUpdate]
 )
 VALUES

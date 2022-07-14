@@ -1,2 +1,2 @@
 DELETE  [dbo].[COMPONENT]
-WHERE   [No] = @No;
+WHERE   [no] = @No;

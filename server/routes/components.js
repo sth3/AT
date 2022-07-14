@@ -92,31 +92,31 @@ router.post('/components', (req, res) => {
     })
 })
 
-sql.getdataKomponent().then((result)=>{       // Select all from table KOMPONENT  
+// sql.getDataComponent().then((result)=>{       // Select all from table KOMPONENT  
     
-    allDataFromSelectKomponent = result[0];
-    lengthOfSelectKomponent = result[1];     
-    numberOfSelectRowsKomponent = result[2]; 
+//     allDataFromSelectKomponent = result[0];
+//     lengthOfSelectKomponent = result[1];     
+//     numberOfSelectRowsKomponent = result[2]; 
       
-    for ( let i = 0; i < lengthOfSelectKomponent; i++){
-        NoKomponent[i] = allDataFromSelectKomponent[0][i].No; //    
-        IDKomponent[i] = allDataFromSelectKomponent[0][i].ID; // 
-        NAMEKomponent[i] = allDataFromSelectKomponent[0][i].NAME; // 
+//     for ( let i = 0; i < lengthOfSelectKomponent; i++){
+//         NoKomponent[i] = allDataFromSelectKomponent[0][i].No; //    
+//         IDKomponent[i] = allDataFromSelectKomponent[0][i].ID; // 
+//         NAMEKomponent[i] = allDataFromSelectKomponent[0][i].NAME; // 
         
-        komponentArray.push({no: NoKomponent[i], id: IDKomponent[i], name: NAMEKomponent[i]} )
-        console.log(komponentArray[i]);
-            } 
-    // ID Number - if it's missing, put the missing number in the No
-    let n = NoKomponent.length;
-    let k;    
+//         komponentArray.push({no: NoKomponent[i], id: IDKomponent[i], name: NAMEKomponent[i]} )
+//         console.log(komponentArray[i]);
+//             } 
+//     // ID Number - if it's missing, put the missing number in the No
+//     let n = NoKomponent.length;
+//     let k;    
    
-        for (k = 1; k<= 2147483647; k++){
-            if (NoKomponent[k-1] != k){
-                missing = k;
-                console.log(missing);
-                break;        
-        }};          
-    }); 
+//         for (k = 1; k<= 2147483647; k++){
+//             if (NoKomponent[k-1] != k){
+//                 missing = k;
+//                 console.log(missing);
+//                 break;        
+//         }};          
+//     }); 
   
 
 module.exports = router;
