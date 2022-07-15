@@ -342,7 +342,7 @@ function addComponentsToRecipe(no, components) {
     })
 }
 
-function changeComponents(no, components) {
+async function changeComponents(no, components) {
     await removeComponents(no);    
     addComponentsToRecipe(no, components);
 
@@ -428,7 +428,7 @@ function functionForComponents(req, res, condition) {
         const no = result[3];
 
         console.log(condition);
-        if (condition == 1) { // Update Component
+        if (condition === 1) { // Update Component
 
             const index = components.findIndex(c => c.no === +req.params.no);
             const changedComponent = {
@@ -440,8 +440,8 @@ function functionForComponents(req, res, condition) {
 
             sql.updateComponent(changedComponent.id, changedComponent.name, req.params.no);
             res.json(components);
-        };
-        if (condition == 2) { // Remove Component
+        }
+        if (condition === 2) { // Remove Component
 
             const index = components.findIndex(c => c.no === +req.params.no);
             components.splice(index, 1);
@@ -449,8 +449,8 @@ function functionForComponents(req, res, condition) {
 
             res.status(204);
             res.send();
-        };
-        if (condition == 3) { //ADD Component
+        }
+        if (condition === 3) { //ADD Component
 
             const newRecipe = {
                 no,
@@ -461,7 +461,7 @@ function functionForComponents(req, res, condition) {
 
             sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
             res.json(newRecipe);
-        };
+        }
 
     }).catch((error) => {
         return console.error(error);
@@ -469,10 +469,10 @@ function functionForComponents(req, res, condition) {
 }
 
 function functionForRecipes(req, res, condition) {
-    sql.getdataRecipeHead().then((result) => {       // Select all from table statDose  
+    sql.getdataRecipeHead().then(async (result) => {       // Select all from table statDose
         let recipes = result[0];
         const no = result[3];
-        if (condition == 1) {
+        if (condition === 1) {
 
             sql.getDataComponent().then((result) => {
                 const components = result[0];
@@ -502,7 +502,7 @@ function functionForRecipes(req, res, condition) {
             });
         }
 
-        if (condition == 2) {
+        if (condition === 2) {
             const index = recipes.findIndex(c => c.no === +req.params.no);
             console.log('BODY:', req.body);
             const changedRecipe = {
@@ -514,11 +514,11 @@ function functionForRecipes(req, res, condition) {
             recipes[index] = changedRecipe;
 
             sql.updateRecipeH(changedRecipe.id, changedRecipe.name, req.params.no);
-            changeComponents(+req.params.no, req.body.components);
+            await changeComponents(+req.params.no, req.body.components);
             res.json(changedRecipe);
         }
 
-        if (condition == 3) {
+        if (condition === 3) {
             const index = recipes.findIndex(c => c.no === +req.params.no);
             recipes.splice(index, 1);
 
@@ -527,7 +527,7 @@ function functionForRecipes(req, res, condition) {
             res.status(204);
             res.send();
         }
-        if (condition == 4) {
+        if (condition === 4) {
 
             const newRecipe = {
                 no,
