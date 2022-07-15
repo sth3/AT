@@ -66,16 +66,18 @@ export class OrderDetailComponent implements OnInit {
           this.isNew = false;
           this.order = order;
           this.prepareForm();
+
+          this.recipeService.getRecipes()
+            .subscribe(recipes => {
+              console.log('recipes: ', recipes);
+              this.recipes = recipes;
+              this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
+              console.log('selected recipe: ', this.selectedRecipe);
+              this.changeDetectorRef.detectChanges();
+            })
         })
     })
-    this.recipeService.getRecipes()
-      .subscribe(recipes => {
-        console.log('recipes: ', recipes);
-        this.recipes = recipes;
-        this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
-        console.log('selected recipe: ', this.selectedRecipe);
-        this.changeDetectorRef.detectChanges();
-      })
+    
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
   }

@@ -43,11 +43,11 @@ async function getDataComponent() {
     for (let k = 1; k <= 2147483647; k++) {
       if (no[k - 1] != k) {
         missingNo = k;
-        console.log('missing component ' + missingNo);
+        //console.log('missing component ' + missingNo);
         break;
       }
     };
-    console.log(dataArray[result.recordsets[0].length - 1]);
+    //console.log(dataArray[result.recordsets[0].length - 1]);
     
 
     return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
@@ -106,8 +106,8 @@ async function updateComponent(componentsID, componentsName, componentsNo) {
       .input("ID", sql.NVarChar(10), componentsID)
       .input("Name", sql.NVarChar(25), componentsName)
       .query(sqlQueries.updateComponents)
-    console.log(sqlQueries.updateComponents);
-    console.log(componentsID + ' ' + componentsName + ' ' + componentsNo);
+    //console.log(sqlQueries.updateComponents);
+    //console.log(componentsID + ' ' + componentsName + ' ' + componentsNo);
     
 
   } catch (error) {
@@ -131,7 +131,7 @@ async function getdataRecipeHead() {
       no[i] = result.recordsets[0][i].no; //    
       id[i] = result.recordsets[0][i].id;
       name[i] = result.recordsets[0][i].name.trim(); // 
-      lastUpdate[i] = result.recordsets[0][i].lastUpdate; // 
+      lastUpdate[i] =  result.recordsets[0][i].lastUpdate; // 
 
 
       dataArray.push({ no: no[i], id: id[i], name: name[i], lastUpdate: lastUpdate[i] })
@@ -140,11 +140,11 @@ async function getdataRecipeHead() {
     for (let k = 1; k <= 2147483647; k++) {
       if (no[k - 1] != k) {
         missingNo = k;
-        console.log('missing Recipe ' + missingNo);
+        //console.log('missing Recipe ' + missingNo);
         break;
       }
     };
-    console.log(dataArray[result.recordsets[0].length - 1]);
+    //console.log(dataArray[result.recordsets[0].length - 1]);
     
 
     return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
@@ -173,7 +173,7 @@ async function getdataRecipeBody() {
       componentSP[i] = Number(result.recordsets[0][i].componentSP); // 
 
 
-      dataArray.push({ recipeNo: recipeNo[i], componentNo: componentNo[i], componentSP: componentSP[i].toFixed(3) })
+      dataArray.push({ recipeNo: recipeNo[i], componentNo: componentNo[i], componentSP: componentSP[i] })
 
     }
 
@@ -218,7 +218,7 @@ async function addRecipeB(noRecipe, noComponent, componentSP) {
       .input("componentNo", sql.Int, noComponent)
       .input("componentSP", sql.Real, componentSP)
       .query(sqlQueries.addRecipeBody)
-    console.log(noRecipe, noComponent, componentSP);
+   // console.log(noRecipe, noComponent, componentSP);
     
 
   } catch (error) {
@@ -320,9 +320,9 @@ async function getdataOrder() {
       customerName[i] = result.recordsets[0][i].customerName.trim(); //             
       dueDate[i] = result.recordsets[0][i].dueDate; //             
       recipeNo[i] = result.recordsets[0][i].recipeNo; //             
-      operatorId[i] = result.recordsets[0][i].operatorId; //             
-      operatorName[i] = result.recordsets[0][i].operatorName; //             
-      quantity[i] = result.recordsets[0][i].quantity; //             
+      operatorId[i] = result.recordsets[0][i].operatorId.trim(); //             
+      operatorName[i] = result.recordsets[0][i].operatorName.trim(); //             
+      quantity[i] = Number(result.recordsets[0][i].quantity.toFixed(3) ); //             
       idMixer[i] = result.recordsets[0][i].idMixer; //             
       mixingTime[i] = result.recordsets[0][i].mixingTime; //             
       idPackingMachine[i] = result.recordsets[0][i].idPackingMachine; //             
@@ -333,19 +333,21 @@ async function getdataOrder() {
 
       dataArray.push({
         no: no[i], id: id[i], name: name[i], customerName: customerName[i], dueDate: dueDate[i],
-        recipeNo: recipeNo[i], operatorId: operatorId[i], operatorName: operatorName[i], quantity: quantity[i].toFixed(3),
+        recipeNo: recipeNo[i], operatorId: operatorId[i], operatorName: operatorName[i], quantity: quantity[i],
         idMixer: idMixer[i], mixingTime: mixingTime[i], idPackingMachine: idPackingMachine[i], createdAt: createdAt[i], lastUpdate: lastUpdate[i], completedAt: completedAt[i]
       });
+      
     }
+    
 
     for (let k = 1; k <= 2147483647; k++) {
       if (no[k - 1] != k) {
         missingNo = k;
-        console.log('missing component ' + missingNo);
+        //console.log('missing component ' + missingNo);
         break;
       }
     };
-    console.log(dataArray[result.recordsets[0].length - 1]);
+    //console.log(dataArray[result.recordsets[0].length - 1]);
     
 
     return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
@@ -447,10 +449,10 @@ async function getStatDose() {
       no[i] = result.recordsets[0][i].no; //    
       datetime[i] = result.recordsets[0][i].datetime;
       name[i] = result.recordsets[0][i].name.trim(); // 
-      componentSP[i] = result.recordsets[0][i].sp; // 
-      componentPV[i] = result.recordsets[0][i].pv; // 
+      componentSP[i] = Number(result.recordsets[0][i].sp.toFixed(3) ); // 
+      componentPV[i] = Number(result.recordsets[0][i].pv.toFixed(3) ); // 
 
-      dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i].toFixed(3) + ' kg', componentPV: componentPV[i].toFixed(3) + ' kg' })
+      dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i] , componentPV: componentPV[i]})
 
     }
     //console.log(dataArray[result.recordsets[0].length - 1]);
