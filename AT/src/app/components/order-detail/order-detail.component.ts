@@ -42,12 +42,12 @@ export class OrderDetailComponent implements OnInit {
   recipeSelect!: MatSelect;
 
   constructor(private r: ActivatedRoute,
-              private router: Router,
-              private ordersService: OrdersService,
-              private recipeService: RecipeService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private dialogService: DialogService,
-              private notifier: NotifierService) {
+    private router: Router,
+    private ordersService: OrdersService,
+    private recipeService: RecipeService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private dialogService: DialogService,
+    private notifier: NotifierService) {
     this.prepareForm();
   }
 
@@ -77,7 +77,14 @@ export class OrderDetailComponent implements OnInit {
             })
         })
     })
-    
+    this.recipeService.getRecipes()
+      .subscribe(recipes => {
+        console.log('recipes: ', recipes);
+        this.recipes = recipes;
+        this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
+        console.log('selected recipe: ', this.selectedRecipe);
+        this.changeDetectorRef.detectChanges();
+      })
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
   }
@@ -101,9 +108,9 @@ export class OrderDetailComponent implements OnInit {
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [Validators.required,
-        Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
+      Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
       name: new FormControl(this.order?.name || '', [Validators.required,
-        Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
+      Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
       customerName: new FormControl(this.order?.customerName || '', Validators.required),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
