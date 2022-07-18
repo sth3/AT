@@ -443,16 +443,19 @@ async function getStatDose() {
       .request()
       .query(sqlQueries.getStatDose);
 
-    let no = [], datetime = [], name = [], componentSP = [], componentPV = [], dataArray = [];
+    
+    let no = [], datetime = [], name = [], componentSP = [], componentPV = [], dataArray = [], idContainer = [],idOrder  = [];
 
     for (let i = 0; i < result.recordsets[0].length; i++) {
       no[i] = result.recordsets[0][i].no; //    
       datetime[i] = result.recordsets[0][i].datetime;
       name[i] = result.recordsets[0][i].name.trim(); // 
-      componentSP[i] = Number(result.recordsets[0][i].sp.toFixed(3) ); // 
-      componentPV[i] = Number(result.recordsets[0][i].pv.toFixed(3) ); // 
+      componentSP[i] = Number(result.recordsets[0][i].componentSP.toFixed(3)); // 
+      componentPV[i] = Number(result.recordsets[0][i].componentPV.toFixed(3)); // 
+      idContainer[i] = result.recordsets[0][i].idContainer.trim();
+      idOrder[i] = result.recordsets[0][i].idOrder.trim();
 
-      dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i] , componentPV: componentPV[i]})
+      dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i] , componentPV: componentPV[i] , idContainer: idContainer[i], idOrder: idOrder[i]})
 
     }
     //console.log(dataArray[result.recordsets[0].length - 1]);

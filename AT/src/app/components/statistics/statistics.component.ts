@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { finalize } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import {FormGroup, FormControl} from '@angular/forms';
 
 import { DoseModel } from '../../models/statistics.model';
 import { ExportService } from '../../services/export.service';
@@ -17,6 +18,11 @@ export class StatisticsComponent implements OnInit {
 
   data: DoseModel[] = [];
   quickFilter: string = '';
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+ 
 
   columnsToDisplay = [
     { field: 'no', header: 'Poradové čislo' },
@@ -24,6 +30,8 @@ export class StatisticsComponent implements OnInit {
     { field: 'name', header: 'Meno Komponentu', width: '40%' },
     { field: 'componentSP', header: 'Žiadaná Hodnota' },
     { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
+    { field: 'idContainer', header: 'ID Kontajnera' },
+    { field: 'idOrder', header: 'ID Zákazky' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<DoseModel> = new MatTableDataSource<DoseModel>([]);
@@ -33,7 +41,7 @@ export class StatisticsComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private statisticsService: StatisticsService,
-              private exportService: ExportService) { }
+              private exportService: ExportService,) { }
 
   ngOnInit(): void {
     this.loadComponents();
@@ -59,7 +67,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['no', 'dateTime', 'name', 'componentSP', 'componentPV'];
+    const headerList = ['no', 'dateTime', 'name', 'componentSP', 'componentPV', 'idContainer', 'idOrder' ];
     if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'DoseStatistics');

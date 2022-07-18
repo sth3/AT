@@ -1,1 +1,1 @@
-SELECT * FROM [AT].[dbo].[statDose]
+SELECT * FROM [AT].[dbo].[statDoses]

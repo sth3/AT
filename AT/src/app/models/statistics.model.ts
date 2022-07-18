@@ -4,6 +4,8 @@ export interface DoseModel {
     datetime: string;  
     name: string;
     componentSP: number;
-    componentPV: number;      
+    componentPV: number;
+    idContainer: string;
+    idOrder: string; 
   }
 
