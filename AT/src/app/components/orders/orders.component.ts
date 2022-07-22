@@ -91,6 +91,9 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['new'], { relativeTo: this.r })
   }
 
+  pdfClick(data: any) {    
+    this.router.navigate(['../pdf/'+data.no], { relativeTo: this.r })
+  }
 
   exportCSV(visibleDataOnly: boolean) {
     // todo

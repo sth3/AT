@@ -43,6 +43,7 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { StatisticsComponent } from './components/statistics/statistics.component';
+import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -60,6 +61,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
     OrdersComponent,
     OrderDetailComponent,
     StatisticsComponent,
+    ToPDFComponent,
   ],
   imports: [
     BrowserModule,
