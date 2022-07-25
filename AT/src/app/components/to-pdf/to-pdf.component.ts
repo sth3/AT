@@ -6,6 +6,8 @@ import { OrderListModel, OrderModel } from '../../models/order.model';
 import { RecipeModel } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
+
+import { animate, style, transition, trigger } from '@angular/animations';
 // declare var require: any;
 // import * as pdfMake from "pdfmake/build/pdfmake";
 // import * as pdfFonts from "pdfmake/build/vfs_fonts";
@@ -17,7 +19,18 @@ import domtoimage from 'dom-to-image';
 @Component({
   selector: 'app-to-pdf',
   templateUrl: './to-pdf.component.html',
-  styleUrls: ['./to-pdf.component.css']
+  styleUrls: ['./to-pdf.component.css'],
+  animations: [
+    trigger('grow', [ // Note the trigger name
+      transition(':enter', [
+        style({ height: '0', overflow: 'hidden' }),
+        animate(500, style({ height: '*' }))
+      ]),
+      transition(':leave', [
+        animate(500, style({ height: 0, overflow: 'hidden' }))
+      ])
+    ])
+  ]
 })
 export class ToPDFComponent implements OnInit {
   editable = true;
@@ -26,9 +39,12 @@ export class ToPDFComponent implements OnInit {
   recipes: RecipeModel[] = [];
   allOrders: OrderListModel[] = [];
   selectedRecipe: RecipeModel | undefined;
-  orderNo:number | undefined;
+  orderDueDate:string | undefined;
    
   form!: FormGroup;
+
+  
+
   constructor(private router: Router, private r: ActivatedRoute,
     private ordersService: OrdersService,
     private recipeService: RecipeService,
@@ -42,7 +58,7 @@ export class ToPDFComponent implements OnInit {
         .subscribe(order => {
           console.log('this order: ', order);
           console.log('this order: ', order['no']);
-          this.orderNo = order['no'];
+          this.orderDueDate = order['dueDate'];
           this.editable = false;
           this.isNew = false;
           this.order = order;
@@ -61,6 +77,13 @@ export class ToPDFComponent implements OnInit {
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
   }
+
+  recipeSelected() {
+    console.log('selected recipe: ', this.selectedRecipe);
+    this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
+  }
+
+
 
   @ViewChild('pdfTable')
   pdfTable!: ElementRef;

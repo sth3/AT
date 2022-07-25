@@ -1,58 +1,181 @@
 <div class="container">
     <div id="pdfTable" #pdfTable>
-      <h2>Angular HTML To PDF Generator Example - FreakyJolly.com</h2>
+     
+    
+      <mat-card>
+        <mat-card-title>Order detail</mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="form">
+            <fieldset [disabled]="!editable" class="order-form-container">
+              <div class="order-form-field">
+                <h3>Order ID</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="ID" formControlName="id">                  
+                </mat-form-field>
+              </div>
+              <div class="order-form-field">
+                <h3>Order name</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Name" formControlName="name">
+                  
+                </mat-form-field>
+              </div>
+              <div class="order-form-field">
+                <h3>Customer name</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Customer name" formControlName="customerName">
+                </mat-form-field>
+              </div>
+              <div class="order-form-field">
+                <h3>Due date</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput value="{{this.orderDueDate | date : 'd.M.y'}}" >
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  
+                </mat-form-field>
+              </div>
+      
+      <!--        <ng-container *ngIf="order?.recipe; else selectRecipe">-->
+      <!--          <div class="order-form-field">-->
+      <!--            <h3>Recipe ID</h3>-->
+      <!--            <mat-form-field appearance="outline">-->
+      <!--              <input matInput placeholder="Recipe ID" formControlName="customerName">-->
+      <!--            </mat-form-field>-->
+      <!--          </div>-->
+      
+      <!--        </ng-container>-->
+      <!--        <ng-template #selectRecipe>-->
+                <div class="order-form-field">
+                  <h3>Recipe</h3>
+                  <mat-form-field appearance="outline">
+                    <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
+                                [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
+                      <mat-select-trigger>
+                        <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
+                      </mat-select-trigger>
+                      <ng-container *ngFor="let recipe of recipes">
+                        <mat-option [value]="recipe">
+                          {{ recipe.id }} - {{recipe.name}}
+                          <button mat-icon-button [matMenuTriggerFor]="menu" style="float: right"
+                                  (click)="$event.stopPropagation()">
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+                        </mat-option>
+                        <mat-menu #menu="matMenu">
+                          <mat-list>
+                            <h3>Components</h3>
+                            <ng-container *ngFor="let component of recipe.components; let i = index">
+                              <mat-list-item>
+                                <div matLine>
+                                  <p style="float:left">
+                                    <span class="light note">{{component.id}}</span>
+                                    {{component.name}}
+                                  </p>
+                                  <p style="float:right">{{component.componentSP}} kg</p>
+                                </div>
+                              </mat-list-item>
+                              <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
+                            </ng-container>
+                            <span style="margin: auto"
+                                  *ngIf="recipe?.components?.length === 0">No components in this recipe.</span>
+                          </mat-list>
+                        </mat-menu>
+                      </ng-container>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+      <!--        </ng-template>-->
+              <div class="order-form-field">
+                <h3>Quantity</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity">
+                  <span matSuffix>kg</span>
+                </mat-form-field>
+              </div>
+      
+              <div style="flex-direction: column; width: 100%; margin-bottom: 20px" *ngIf="selectedRecipe?.components"
+                   [@grow]>
+                <mat-list>
+                  <h2>Components</h2>
+                  <ng-container *ngFor="let component of selectedRecipe?.components; let i = index">
+                    <mat-list-item>
+                      <div matLine>
+                        <p style="float:left">
+                          <span class="light note">{{component.id}}</span>
+                          {{component.name}}
+                        </p>
+                        <p style="float:right">{{component.componentSP}} kg</p>
+                      </div>
+                    </mat-list-item>
+                    <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider>
+                  </ng-container>
+                  <span style="margin: auto"
+                        *ngIf="selectedRecipe!.components?.length === 0">No components in this recipe.</span>
+                </mat-list>
+              </div>
+      
+              <div class="order-form-field">
+                <h3>Mixer ID</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Mixer ID" formControlName="idMixer" min="1" max="4" type="number">
+                  
+                </mat-form-field>
+              </div>
+      
+              <div class="order-form-field">
+                <h3>Mixing time</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Mixing time" type="number" min="1" formControlName="mixingTime">
+                  <span matSuffix>min</span>
+                </mat-form-field>
+              </div>
+      
+              <div class="order-form-field">
+                <h3>Packing machine ID</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8" type="number">
+                  
+                </mat-form-field>
+              </div>
+      
+              <div class="order-form-field">
+                <h3>Operator</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Operator" formControlName="operatorName" readonly>
+                </mat-form-field>
+              </div>
+      
+            </fieldset>
+          </form>
+      
+          <div *ngIf="!isNew" class="order-time-container">
+            <div class="order-time">
+              <h3>Created at</h3>
+              <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div class="order-time">
+              <h3>Last update</h3>
+              <span>{{order?.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div *ngIf="order?.completedAt" class="order-time">
+              <h3>Completed at</h3>
+              <span>{{order?.completedAt | date: 'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
   
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{this.orderNo}}</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-          </tr>
-          <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>mary@example.com</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>jdsadasdasdsa</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>jdsadasdasdsa</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>jdsadasdasdsa</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>jdsadasdasdsa</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>jdsadasdasdsa</td>
-          </tr>
-          
-        </tbody>
-      </table>
       <br />
       <br />
     </div>
-    <button class="btn btn-primary" (click)="downloadAsPDF();">Export To PDF</button>
-    <button class="btn btn-primary" (click)="backToOrder();">Back to order</button>
+    <div style="flex: 1 1 0;">      
+      <button mat-button color="primary" (click)="backToOrder();">
+        <mat-icon>arrow_back</mat-icon>
+        Back to order      
+      </button>
+      <button mat-button color="primary" (click)="downloadAsPDF();">      
+        <mat-icon>file_download</mat-icon>
+        Export To PDF
+      </button>
+    </div>
   </div>
