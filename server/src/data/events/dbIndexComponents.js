@@ -29,33 +29,37 @@ async function getDataComponent() {
       .query(sqlQueries.getComponents);
 
     let no = [], id = [], name = [], lastUpdate = [], dataArray = [], missingNo;
+    console.log('result get component', result.recordsets[0].length);
 
-    for (let i = 0; i < result.recordsets[0].length; i++) {
-      no[i] = result.recordsets[0][i].no; //    
-      id[i] = result.recordsets[0][i].id;
-      name[i] = result.recordsets[0][i].name.trim(); // 
-      lastUpdate[i] = result.recordsets[0][i].lastUpdate; // 
+    if (result.recordsets[0].length > 0) {
+
+      for (let i = 0; i < result.recordsets[0].length; i++) {
+        no[i] = result.recordsets[0][i].no; //    
+        id[i] = result.recordsets[0][i].id;
+        name[i] = result.recordsets[0][i].name.trim(); // 
+        lastUpdate[i] = result.recordsets[0][i].lastUpdate; // 
 
 
-      dataArray.push({ no: no[i], id: id[i], name: name[i], lastUpdate: lastUpdate[i] })
-    }
-
-    for (let k = 1; k <= 2147483647; k++) {
-      if (no[k - 1] != k) {
-        missingNo = k;
-        //console.log('missing component ' + missingNo);
-        break;
+        dataArray.push({ no: no[i], id: id[i], name: name[i], lastUpdate: lastUpdate[i] })
       }
-    };
-    //console.log(dataArray[result.recordsets[0].length - 1]);
-    
+      for (let k = 1; k <= 2147483647; k++) {
+        if (no[k - 1] != k) {
+          missingNo = k;
+          //console.log('missing component ' + missingNo);
+          break;
+        }
+      };
+      //console.log(dataArray[result.recordsets[0].length - 1]);
 
-    return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+
+      return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+    }
+    return [dataArray, 0, 0, 1];
     //console.log(obj[0][0].SP9);
     //console.log(JSON.stringify(result.recordsets[0], null, 2)); --- objekt do string 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== ADD - NEW COMPONENT - DATABASE    
@@ -71,11 +75,11 @@ async function addComponent(componentsNo, componentsID, componentsName) {
       .query(sqlQueries.addComponents)
     //.query('INSERT INTO [dbo].[COMPONENTS]([No],[ID],[NAME])VALUES(@No, @ID, @Name)');      // where LINE = @ID'     
     //console.log(sqlQueries.addComponents);
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -88,11 +92,11 @@ async function deleteComponent(componentsNo) {
       .request()
       .input("No", sql.Int, componentsNo)
       .query(sqlQueries.deleteComponents)
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== UPDATE - COMPONENT - DATABASE     
@@ -108,11 +112,11 @@ async function updateComponent(componentsID, componentsName, componentsNo) {
       .query(sqlQueries.updateComponents)
     //console.log(sqlQueries.updateComponents);
     //console.log(componentsID + ' ' + componentsName + ' ' + componentsNo);
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -126,33 +130,35 @@ async function getdataRecipeHead() {
       .query(sqlQueries.getRecipesHead);
 
     let no = [], id = [], name = [], lastUpdate = [], dataArray = [], missingNo;
+    if (result.recordsets[0].length > 0) {
+      for (let i = 0; i < result.recordsets[0].length; i++) {
+        no[i] = result.recordsets[0][i].no; //    
+        id[i] = result.recordsets[0][i].id;
+        name[i] = result.recordsets[0][i].name.trim(); // 
+        lastUpdate[i] = result.recordsets[0][i].lastUpdate; // 
 
-    for (let i = 0; i < result.recordsets[0].length; i++) {
-      no[i] = result.recordsets[0][i].no; //    
-      id[i] = result.recordsets[0][i].id;
-      name[i] = result.recordsets[0][i].name.trim(); // 
-      lastUpdate[i] =  result.recordsets[0][i].lastUpdate; // 
 
-
-      dataArray.push({ no: no[i], id: id[i], name: name[i], lastUpdate: lastUpdate[i] })
-    }
-
-    for (let k = 1; k <= 2147483647; k++) {
-      if (no[k - 1] != k) {
-        missingNo = k;
-        //console.log('missing Recipe ' + missingNo);
-        break;
+        dataArray.push({ no: no[i], id: id[i], name: name[i], lastUpdate: lastUpdate[i] })
       }
-    };
-    //console.log(dataArray[result.recordsets[0].length - 1]);
-    
 
-    return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+      for (let k = 1; k <= 2147483647; k++) {
+        if (no[k - 1] != k) {
+          missingNo = k;
+          //console.log('missing Recipe ' + missingNo);
+          break;
+        }
+      };
+      //console.log(dataArray[result.recordsets[0].length - 1]);
+
+
+      return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+    }
+    return [dataArray, 0, 0, 1];
 
   } catch (error) {
 
     console.log(error.message);
-    
+
 
   }
 }
@@ -166,25 +172,26 @@ async function getdataRecipeBody() {
       .query(sqlQueries.getRecipesBody);
 
     let recipeNo = [], componentNo = [], componentSP = [], dataArray = [];
+    if (result.recordsets[0].length > 0) {
+      for (let i = 0; i < result.recordsets[0].length; i++) {
+        recipeNo[i] = result.recordsets[0][i].recipeNo; //    
+        componentNo[i] = result.recordsets[0][i].componentNo;
+        componentSP[i] = Number(result.recordsets[0][i].componentSP); // 
 
-    for (let i = 0; i < result.recordsets[0].length; i++) {
-      recipeNo[i] = result.recordsets[0][i].recipeNo; //    
-      componentNo[i] = result.recordsets[0][i].componentNo;
-      componentSP[i] = Number(result.recordsets[0][i].componentSP); // 
+
+        dataArray.push({ recipeNo: recipeNo[i], componentNo: componentNo[i], componentSP: componentSP[i] })
+
+      }
 
 
-      dataArray.push({ recipeNo: recipeNo[i], componentNo: componentNo[i], componentSP: componentSP[i] })
 
+      return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length];    // VRATENIE DAT S FUNKCIE     
     }
-
-    
-
-    return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length];    // VRATENIE DAT S FUNKCIE     
-
+    return [dataArray, 0, 0];
   } catch (error) {
 
     console.log(error.message);
-    
+
 
   }
 }
@@ -200,11 +207,11 @@ async function addRecipeH(No, ID, Name) {
       .input("NAME", sql.NVarChar(25), Name)
       .query(sqlQueries.addRecipeH)
 
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== ADD - NEW RECIPE BODY - DATABASE    
@@ -218,12 +225,12 @@ async function addRecipeB(noRecipe, noComponent, componentSP) {
       .input("componentNo", sql.Int, noComponent)
       .input("componentSP", sql.Real, componentSP)
       .query(sqlQueries.addRecipeBody)
-   // console.log(noRecipe, noComponent, componentSP);
-    
+    // console.log(noRecipe, noComponent, componentSP);
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== REMOVE - COMPONENT - DATABASE  - RECIPE HEAD  
@@ -235,11 +242,11 @@ async function deleteRecipeH(No) {
       .request()
       .input("No", sql.Int, No)
       .query(sqlQueries.deleteRecipeH)
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== REMOVE - COMPONENT - DATABASE  - RECIPE BODY  
@@ -251,11 +258,11 @@ async function deleteRecipeB(No) {
       .request()
       .input("noRecipe", sql.Int, No)
       .query(sqlQueries.deleteRecipeB)
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== UPDATE - updateRecipeH - DATABASE  
@@ -271,11 +278,11 @@ async function updateRecipeH(ID, Name, No) {
       .query(sqlQueries.updateRecipeH)
     //console.log(sqlQueries.updateComponents);
     //console.log(componentsID + ' ' + componentsName + ' ' + componentsNo);
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== UPDATE - updateRecipeB - DATABASE  
@@ -291,11 +298,11 @@ async function updateRecipeB(recipeNo, componentNo, componentSP) {
       .query(sqlQueries.updateRecipeB)
     //console.log(sqlQueries.updateComponents);
     //console.log(componentsID + ' ' + componentsName + ' ' + componentsNo);
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -312,49 +319,52 @@ async function getdataOrder() {
     let no = [], id = [], name = [], customerName = [], dueDate = [], recipeNo = [],
       operatorId = [], operatorName = [], quantity = [], idMixer = [], mixingTime = [],
       idPackingMachine = [], createdAt = [], lastUpdate = [], completedAt = [], dataArray = [];
+    if (result.recordsets[0].length > 0) {
+      for (let i = 0; i < result.recordsets[0].length; i++) {
+        no[i] = result.recordsets[0][i].no; //    
+        id[i] = result.recordsets[0][i].id; // 
+        name[i] = result.recordsets[0][i].name.trim(); //             
+        customerName[i] = result.recordsets[0][i].customerName.trim(); //             
+        dueDate[i] = result.recordsets[0][i].dueDate; //             
+        recipeNo[i] = result.recordsets[0][i].recipeNo; //             
+        operatorId[i] = result.recordsets[0][i].operatorId.trim(); //             
+        operatorName[i] = result.recordsets[0][i].operatorName.trim(); //             
+        quantity[i] = Number(result.recordsets[0][i].quantity.toFixed(3)); //             
+        idMixer[i] = result.recordsets[0][i].idMixer; //             
+        mixingTime[i] = result.recordsets[0][i].mixingTime; //             
+        idPackingMachine[i] = result.recordsets[0][i].idPackingMachine; //             
+        createdAt[i] = result.recordsets[0][i].createdAt; //             
+        lastUpdate[i] = result.recordsets[0][i].lastUpdate; //             
+        completedAt[i] = result.recordsets[0][i].completedAt; //   
 
-    for (let i = 0; i < result.recordsets[0].length; i++) {
-      no[i] = result.recordsets[0][i].no; //    
-      id[i] = result.recordsets[0][i].id; // 
-      name[i] = result.recordsets[0][i].name.trim(); //             
-      customerName[i] = result.recordsets[0][i].customerName.trim(); //             
-      dueDate[i] = result.recordsets[0][i].dueDate; //             
-      recipeNo[i] = result.recordsets[0][i].recipeNo; //             
-      operatorId[i] = result.recordsets[0][i].operatorId.trim(); //             
-      operatorName[i] = result.recordsets[0][i].operatorName.trim(); //             
-      quantity[i] = Number(result.recordsets[0][i].quantity.toFixed(3) ); //             
-      idMixer[i] = result.recordsets[0][i].idMixer; //             
-      mixingTime[i] = result.recordsets[0][i].mixingTime; //             
-      idPackingMachine[i] = result.recordsets[0][i].idPackingMachine; //             
-      createdAt[i] = result.recordsets[0][i].createdAt; //             
-      lastUpdate[i] = result.recordsets[0][i].lastUpdate; //             
-      completedAt[i] = result.recordsets[0][i].completedAt; //   
 
+        dataArray.push({
+          no: no[i], id: id[i], name: name[i], customerName: customerName[i], dueDate: dueDate[i],
+          recipeNo: recipeNo[i], operatorId: operatorId[i], operatorName: operatorName[i], quantity: quantity[i],
+          idMixer: idMixer[i], mixingTime: mixingTime[i], idPackingMachine: idPackingMachine[i], createdAt: createdAt[i], lastUpdate: lastUpdate[i], completedAt: completedAt[i]
+        });
 
-      dataArray.push({
-        no: no[i], id: id[i], name: name[i], customerName: customerName[i], dueDate: dueDate[i],
-        recipeNo: recipeNo[i], operatorId: operatorId[i], operatorName: operatorName[i], quantity: quantity[i],
-        idMixer: idMixer[i], mixingTime: mixingTime[i], idPackingMachine: idPackingMachine[i], createdAt: createdAt[i], lastUpdate: lastUpdate[i], completedAt: completedAt[i]
-      });
-      
-    }
-    
-
-    for (let k = 1; k <= 2147483647; k++) {
-      if (no[k - 1] != k) {
-        missingNo = k;
-        //console.log('missing component ' + missingNo);
-        break;
       }
-    };
-    //console.log(dataArray[result.recordsets[0].length - 1]);
-    
 
-    return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+
+      for (let k = 1; k <= 2147483647; k++) {
+        if (no[k - 1] != k) {
+          missingNo = k;
+          //console.log('missing component ' + missingNo);
+          break;
+        }
+      };
+      //console.log(dataArray[result.recordsets[0].length - 1]);
+
+
+      return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length, missingNo];
+
+    }
+    return [dataArray, 0, 0, 1];
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== REMOVE - COMPONENT - DATABASE  - RECIPE HEAD  
@@ -366,11 +376,11 @@ async function deleteOrders(no) {
       .request()
       .input("no", sql.Int, no)
       .query(sqlQueries.deleteOrders)
-    
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 // ====================================== ADD - NEW ORDERS - DATABASE    
@@ -396,11 +406,11 @@ async function addOrders(no, id, name, customerName, dueDate, recipeNo, operator
 
       .query(sqlQueries.addOrders)
 
-   
+
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -427,10 +437,10 @@ async function updateOrders(no, id, name, customerName, dueDate, recipeNo, opera
 
       .query(sqlQueries.updateOrders)
 
-    
+
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -443,29 +453,30 @@ async function getStatDose() {
       .request()
       .query(sqlQueries.getStatDose);
 
-    
-    let no = [], datetime = [], name = [], componentSP = [], componentPV = [], dataArray = [], idContainer = [],idOrder  = [];
 
-    for (let i = 0; i < result.recordsets[0].length; i++) {
-      no[i] = result.recordsets[0][i].no; //    
-      datetime[i] = result.recordsets[0][i].datetime;
-      name[i] = result.recordsets[0][i].name.trim(); // 
-      componentSP[i] = Number(result.recordsets[0][i].componentSP.toFixed(3)); // 
-      componentPV[i] = Number(result.recordsets[0][i].componentPV.toFixed(3)); // 
-      idContainer[i] = result.recordsets[0][i].idContainer.trim();
-      idOrder[i] = result.recordsets[0][i].idOrder.trim();
+    let no = [], datetime = [], name = [], componentSP = [], componentPV = [], dataArray = [], idContainer = [], idOrder = [];
+    if (result.recordsets[0].length > 0) {
+      for (let i = 0; i < result.recordsets[0].length; i++) {
+        no[i] = result.recordsets[0][i].no; //    
+        datetime[i] = result.recordsets[0][i].datetime;
+        name[i] = result.recordsets[0][i].name.trim(); // 
+        componentSP[i] = Number(result.recordsets[0][i].componentSP.toFixed(3)); // 
+        componentPV[i] = Number(result.recordsets[0][i].componentPV.toFixed(3)); // 
+        idContainer[i] = result.recordsets[0][i].idContainer.trim();
+        idOrder[i] = result.recordsets[0][i].idOrder.trim();
 
-      dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i] , componentPV: componentPV[i] , idContainer: idContainer[i], idOrder: idOrder[i]})
+        dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i], componentPV: componentPV[i], idContainer: idContainer[i], idOrder: idOrder[i] })
 
+      }
+      //console.log(dataArray[result.recordsets[0].length - 1]);
+
+
+      return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length];
     }
-    //console.log(dataArray[result.recordsets[0].length - 1]);
-    
-
-    return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length];
-
+    return [dataArray, 0, 0, 1];
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
