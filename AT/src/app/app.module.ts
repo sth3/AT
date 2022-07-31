@@ -22,7 +22,6 @@ import { NotifierComponent } from './components/notifier/notifier.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { InterceptorService } from './loader/interceptor.service';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { ComponentsComponent } from './components/components/components.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,6 +43,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
+import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -62,6 +64,7 @@ import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
     OrderDetailComponent,
     StatisticsComponent,
     ToPDFComponent,
+    AuthDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,7 +99,8 @@ import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
     MatDatepickerModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

@@ -30,6 +30,9 @@
       </button>
       <span>AT</span>
       <span style="flex: auto;"></span>
+      <button mat-icon-button aria-label="Profile icon" style="margin-bottom: 5px" [matMenuTriggerFor]="accountMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
       <mat-slide-toggle [(ngModel)]="isDarkTheme" labelPosition = "before" (change)="storeThemeSelection()">
         <mat-icon>lightbulb</mat-icon>
       </mat-slide-toggle>
@@ -39,3 +42,8 @@
     <!-- Add Content Here -->
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<mat-menu #accountMenu="matMenu">
+  Hello
+  <button (click)="login()"></button>
+</mat-menu>

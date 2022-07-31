@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { LoaderService } from '../../loader/loader.service';
+import { LoaderService } from '../../services/loader.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -20,13 +21,23 @@ export class NavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-    public loaderService: LoaderService) {}
+              public loaderService: LoaderService,
+              private authService: AuthService) {
+  }
 
-  ngOnInit(){
+  ngOnInit() {
     this.isDarkTheme = localStorage.getItem('theme') === "Dark" ? true : false;
   }
 
-  storeThemeSelection(){
-    localStorage.setItem('theme',this.isDarkTheme?"Dark":"Light")
+  storeThemeSelection() {
+    localStorage.setItem('theme', this.isDarkTheme ? "Dark" : "Light")
+  }
+
+  login() {
+    this.authService.promptLogin('Login');
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RecipeModel } from '../models/recipe.model';
+import { OrderModel } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -70,5 +71,13 @@ export class ExportService {
       headers.push('componentSP' + i);
     }
     return headers;
+  }
+
+  getOrdersHeaders() {
+    return ['no', 'id', 'name', 'lastUpdate'];
+  }
+
+  convertOrdersForDownload(orders: OrderModel[]) {
+    return orders;
   }
 }
