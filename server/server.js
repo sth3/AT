@@ -7,6 +7,7 @@ const api = require('./api.js');
 // const componentsRouter = require('./routes/components');
 const cors = require("cors");
 const path = require("path");
+const cookieParser = require('cookie-parser')
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -22,6 +23,7 @@ app.listen(port, () => {
 })
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+app.use(cookieParser())
 
 app.use('/api', api);
 // app.use('/deals', dealsRouter);

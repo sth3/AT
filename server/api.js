@@ -4,9 +4,15 @@ const router = express.Router();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const sql = require("./src/data/events/dbIndexComponents");
+const { login, authorizationCheck, logout, refreshToken, roles} = require("./auth");
 
-router.use(bodyParser.urlencoded({ extended: false }));
+
+router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
+
+router.post('/login', login);
+router.get('/logout', logout);
+// router.post('/refresh', refreshToken);
 
 router.get('/dose-statistics', (req, res) => {
     sql.getStatDose().then((result) => {       // Select all from table statDose  
@@ -16,6 +22,15 @@ router.get('/dose-statistics', (req, res) => {
         console.error(error);
     });
 })
+
+// 2 metody na test auth zatial, nedaval som este vsade aby sa ti s tym dalo robit
+router.get('/testAuthAdmin', authorizationCheck(roles.ADMIN), (req, res) => {
+    res.json({message: 'You are authorized'});
+});
+
+router.get('/testAuthOperator', authorizationCheck(roles.OPERATOR), (req, res) => {
+    res.json({message: 'You are authorized'});
+});
 
 router.get('/components', (req, res) => {
     // fs.readFile('components.json', (err, data) => {
@@ -644,9 +659,6 @@ function functionForOrders(req, res, condition) {
          console.error(error);
     });
 }
-
-
-
 
 
 module.exports = router;

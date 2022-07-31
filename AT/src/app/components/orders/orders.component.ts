@@ -91,11 +91,19 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['new'], { relativeTo: this.r })
   }
 
-  pdfClick(data: any) {    
+  pdfClick(data: any) {
     this.router.navigate(['../pdf/'+data.no], { relativeTo: this.r })
   }
 
   exportCSV(visibleDataOnly: boolean) {
-    // todo
+    const headerList = this.exportService.getOrdersHeaders();
+    let data;
+    if (visibleDataOnly) {
+      // @ts-ignore
+      data = this.exportService.convertOrdersForDownload(this.dataSource._renderData.value);
+    } else {
+      data = this.exportService.convertOrdersForDownload(this.orders);
+    }
+    this.exportService.downloadFile(data, headerList, 'orders');
   }
 }
