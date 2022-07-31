@@ -15,7 +15,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 // (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 import  jsPDF from 'jspdf';
-import domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
+
 @Component({
   selector: 'app-to-pdf',
   templateUrl: './to-pdf.component.html',
@@ -85,61 +86,71 @@ export class ToPDFComponent implements OnInit {
 
 
 
-  @ViewChild('pdfTable')
-  pdfTable!: ElementRef;
-
-  public downloadAsPDF() {
-    // const pdfTable = this.pdfTable.nativeElement;
-    // var html = htmlToPdfmake(pdfTable.innerHTML);
-    // const documentDefinition = { content: html };
-    // pdfMake.createPdf(documentDefinition).download();
-    let div = this.pdfTable.nativeElement;
+  //@ViewChild('pdfTable')
+  //pdfTable!: ElementRef;
+  @ViewChild('invoice') invoiceElement!: ElementRef;
+  // public downloadAsPDF() {
+  //   // const pdfTable = this.pdfTable.nativeElement;
+  //   // var html = htmlToPdfmake(pdfTable.innerHTML);
+  //   // const documentDefinition = { content: html };
+  //   // pdfMake.createPdf(documentDefinition).download();
+  //   let div = this.pdfTable.nativeElement;
    
-    var img:any;
-    var filename;
-    var newImage:any;
+  //   var img:any;
+  //   var filename;
+  //   var newImage:any;
 
 
-    domtoimage.toPng(div, { bgcolor: '#fff' })
+  //   domtoimage.toPng(div, { bgcolor: '#fff' })
 
-      .then(function(dataUrl) {
+  //     .then(function(dataUrl) {
 
-        img = new Image();
-        img.src = dataUrl;
-        newImage = img.src;
+  //       img = new Image();
+  //       img.src = dataUrl;
+  //       newImage = img.src;
 
-        img.onload = function(){
+  //       img.onload = function(){
 
-        var pdfWidth = img.width;
-        var pdfHeight = img.height;
+  //       var pdfWidth = img.width;
+  //       var pdfHeight = img.height;
 
-          // FileSaver.saveAs(dataUrl, 'my-pdfimage.png'); // Save as Image
+  //         // FileSaver.saveAs(dataUrl, 'my-pdfimage.png'); // Save as Image
 
-          var doc;
+  //         var doc;
 
-          if(pdfWidth > pdfHeight)
-          {
-            doc = new jsPDF('l', 'px', [pdfWidth , pdfHeight]);
-          }
-          else
-          {
-            doc = new jsPDF('p', 'px', [pdfWidth , pdfHeight]);
-          }
-
-
-          var width = doc.internal.pageSize.getWidth();
-          var height = doc.internal.pageSize.getHeight();
+  //         if(pdfWidth > pdfHeight)
+  //         {
+  //           doc = new jsPDF('l', 'px', [pdfWidth , pdfHeight]);
+  //         }
+  //         else
+  //         {
+  //           doc = new jsPDF('p', 'px', [pdfWidth , pdfHeight]);
+  //         }
 
 
-          doc.addImage(newImage, 'PNG',  10, 10, width, height);
-          filename = 'mypdf_' + '.pdf';
-          doc.save(filename);
-
-        };
+  //         var width = doc.internal.pageSize.getWidth();
+  //         var height = doc.internal.pageSize.getHeight();
 
 
-      })}
-      
+  //         doc.addImage(newImage, 'PNG',  10, 10, width, height);
+  //         filename = 'mypdf_' + '.pdf';
+  //         doc.save(filename);
+
+  //       };
+
+
+  //     })}
+  public openPDF(): void {
+    html2canvas(this.invoiceElement.nativeElement, { scale: 3 }).then((canvas) => {
+      const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
+      const fileWidth = 200;
+      const generatedImageHeight = (canvas.height * fileWidth) / canvas.width;
+      let PDF = new jsPDF('p', 'mm', 'a4',);
+      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 5, fileWidth, generatedImageHeight,);
+      PDF.html(this.invoiceElement.nativeElement.innerHTML)
+      PDF.save('angular-invoice-pdf-demo.pdf');
+    });
+  } 
 
   private prepareForm() {
     this.form = new FormGroup({
