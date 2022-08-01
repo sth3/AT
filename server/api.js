@@ -4,7 +4,9 @@ const router = express.Router();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const sql = require("./src/data/events/dbIndexComponents");
-const { login, authorizationCheck, logout, refreshToken, roles} = require("./auth");
+const { login, authorizationCheck, logout } = require("./auth");
+const userController = require('./user-controller');
+const { roles } = require("./user-service");
 
 
 router.use(bodyParser.urlencoded({extended: false}));
@@ -12,7 +14,8 @@ router.use(bodyParser.json());
 
 router.post('/login', login);
 router.get('/logout', logout);
-// router.post('/refresh', refreshToken);
+router.use(userController);
+
 
 router.get('/dose-statistics', (req, res) => {
     sql.getStatDose().then((result) => {       // Select all from table statDose  

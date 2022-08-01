@@ -1,16 +1,11 @@
-export interface BasicUserModel {
+export interface UserModel {
   id: number;
   username: string;
   firstName: string;
   lastName: string;
   role: UserRole;
-}
-
-
-export interface UserModel extends BasicUserModel{
   registrationDate: Date;
   lastLoginDate: Date;
-  token: string;
 }
 
 export enum UserRole {
