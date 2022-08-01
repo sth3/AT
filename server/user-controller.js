@@ -7,29 +7,30 @@ const { getSession, authorizationCheck } = require("./auth");
 router.use(express.json());
 
 // cannot be guarded, because it would refresh cookie
-router.get('/currentUser', (req, res) => {
+router.get('/currentUser', async (req, res) => {
     const session = getSession(req);
-    res.json(userService.getUserByUsername(session.username));
+    const user = await userService.getUserByUsername(session.username);
+    res.json(user);
 });
 
-router.get('/users/:id', authorizationCheck(userService.roles.ADMIN), (req, res) => {
-    res.json(userService.getUserById(+req.params.id));
+router.get('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    const user = await userService.getUserById(+req.params.id);
+    res.json(user);
 });
 
-router.get('/users', authorizationCheck(userService.roles.ADMIN), (req, res) => {
-    res.json(userService.getUsers());
+router.get('/users', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    const users = await userService.getUsers();
+    res.json(users);
 });
 
-router.post('/users', authorizationCheck(userService.roles.ADMIN), (req, res) => {
-    userService.createUser(req.body);
+router.post('/users', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    await userService.createUser(req.body);
     res.status(201).end();
 });
 
-router.delete('/users/:id', authorizationCheck(userService.roles.ADMIN), (req, res) => {
-    userService.deleteUser(+req.params.id);
+router.delete('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    await userService.deleteUser(+req.params.id);
     res.status(204).end();
 });
 
 module.exports = router;
-
-// todo these will have to be Promises with DB

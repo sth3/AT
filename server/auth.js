@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 const userService = require('./user-service');
 const { roles } = require("./user-service");
+const bcrypt = require('bcryptjs');
 
 class Session {
     constructor(username, role, expiresAt) {
@@ -17,7 +18,7 @@ class Session {
 const sessions = {};
 const MINUTE = 60 * 1000;
 
-const  authorizationCheck = (role) => {
+const authorizationCheck = (role) => {
     return (req, res, next) => {
         // skip auth methods
         if (['login', 'refresh'].includes(req.baseUrl.replace('/api/', ''))) {
@@ -59,20 +60,20 @@ const  authorizationCheck = (role) => {
     }
 }
 
-const login = (req, res) => {
+const login = async (req, res) => {
     const { username, password } = req.body;
     if (!username) {
         res.status(422).send({ message: 'Username is required' });
         return;
     }
 
-    const user = userService.getUserByUsername(username);
+    const user = await userService.getUserByUsername(username);
     if (!user) {
         res.status(401).send({ message: 'Invalid username' });
         return;
     }
-    const expectedPassword = user.password;
-    if (!expectedPassword || expectedPassword !== password) {
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
         res.status(401).send({ message: 'Invalid password' });
         return;
     }
@@ -83,6 +84,8 @@ const login = (req, res) => {
     // set the expiry time as 5min after the current time
     const now = new Date();
     const expiresAt = new Date(+now + 5 *  MINUTE);
+
+    await userService.updateLastLoginDate(user.id);
 
     // create a session containing information about the user, role and expiry time
     sessions[sessionToken] = new Session(username, user.role, expiresAt);

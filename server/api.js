@@ -1,6 +1,7 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
+require('express-async-errors');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const sql = require("./src/data/events/dbIndexComponents");
