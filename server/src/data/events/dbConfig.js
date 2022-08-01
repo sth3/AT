@@ -1,9 +1,12 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const sqlConfig = {
-    user: "AT",
+    user: process.env.SQL_USER,
     port: 1433,
-    password: "123456789",  
-    database: "AT",
-    server: "DESKTOP-DMQC18T\\WINCCUNIFIED",
+    password: process.env.SQL_PASSWORD,
+    database: process.env.SQL_DATABASE,
+    server: process.env.SQL_SERVER,
     pool: {
       max: 10,
       min: 0,
