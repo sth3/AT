@@ -20,6 +20,7 @@
     "http-errors": "~1.6.3",
     "jade": "^1.9.2",
     "livereload": "^0.9.3",
+    "moment": "^2.29.4",
     "morgan": "~1.9.1",
     "msnodesqlv8": "^2.4.8",
     "mssql": "^8.1.2",

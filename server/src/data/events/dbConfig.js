@@ -3,7 +3,7 @@ const sqlConfig = {
     port: 1433,
     password: "123456789",  
     database: "AT",
-    server: "DESKTOP-EPDLM7F\\WINCCUNIFIED",
+    server: "DESKTOP-DMQC18T\\WINCCUNIFIED",
     pool: {
       max: 10,
       min: 0,

@@ -9,6 +9,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { DialogService } from '../../services/dialog.service';
 import { NotifierService } from '../../services/notifier.service';
 import { MatSelect } from '@angular/material/select';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -47,8 +48,10 @@ export class OrderDetailComponent implements OnInit {
     private recipeService: RecipeService,
     private changeDetectorRef: ChangeDetectorRef,
     private dialogService: DialogService,
-    private notifier: NotifierService) {
+    private notifier: NotifierService,
+    private dateAdapter: DateAdapter<Date>) {
     this.prepareForm();
+    this.dateAdapter.setLocale('en-GB');
   }
 
   ngOnInit(): void {

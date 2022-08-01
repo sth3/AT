@@ -1,10 +1,8 @@
 var sqlConfig = require("./dbConfig.js");// DATA NA SPOJENIE S DATABAZOV
 const sql = require('mssql/msnodesqlv8');
 const utils = require('../utils');
-
-var dataFromSelectKomponent, lengthSelectKomponent, numberOfRowsSelectKomponent;
-var dataFromSelectRecipeHead, lengthSelectRecipeHead, numberOfRowsSelectRecipeHead, dataFromSelectRecipeBody, lengthSelectRecipeBody, numberOfRowsSelectRecipeBody;
-var dataFromSelectOrder, lengthSelectOrder, numberOfRowsSelectOrder;
+const { DateTime } = require("mssql/msnodesqlv8");
+const moment = require('moment');
 
 //console.log(sqlConfig); // OVERENIE SPRAVNOSTI DAT NA SPOJENIE S MSSQL
 // ====================================== VYPIS SPOJENIA
@@ -466,10 +464,11 @@ async function getStatDose() {
         idOrder[i] = result.recordsets[0][i].idOrder.trim();
 
         dataArray.push({ no: no[i], datetime: datetime[i], name: name[i], componentSP: componentSP[i], componentPV: componentPV[i], idContainer: idContainer[i], idOrder: idOrder[i] })
-
+        //let dumStrung = datetime[i].split('');
+        console.log( JSON.stringify(datetime[i]));
       }
       //console.log(dataArray[result.recordsets[0].length - 1]);
-
+      
 
       return [dataArray, result.recordsets[0].length, Object.keys(result.recordsets[0][0]).length];
     }

@@ -148,7 +148,7 @@ export class ToPDFComponent implements OnInit {
       let PDF = new jsPDF('p', 'mm', 'a4',);
       PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 5, fileWidth, generatedImageHeight,);
       PDF.html(this.invoiceElement.nativeElement.innerHTML)
-      PDF.save('angular-invoice-pdf-demo.pdf');
+      PDF.save('Orders.pdf');
     });
   } 
 
