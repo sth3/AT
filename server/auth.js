@@ -15,6 +15,7 @@ class Session {
     }
 }
 
+// todo this should probably go to database
 const sessions = {};
 const MINUTE = 60 * 1000;
 
