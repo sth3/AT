@@ -1,17 +1,6 @@
 const uuid = require('uuid');
-
-const roles = {
-    ADMIN: 'ADMIN',
-    TECHNOLOG: 'TECHNOLOG',
-    OPERATOR: 'OPERATOR'
-};
-
-const users = [
-    { username: 'admin', password: 'admin' , role: roles.ADMIN },
-    { username: 'technolog', password: 'technolog' , role: roles.TECHNOLOG },
-    { username: 'operator', password: 'operator' , role: roles.OPERATOR }
-]
-
+const userService = require('./user-service');
+const { roles } = require("./user-service");
 
 class Session {
     constructor(username, role, expiresAt) {
@@ -28,10 +17,7 @@ class Session {
 const sessions = {};
 const MINUTE = 60 * 1000;
 
-const authorizationCheck = (role) => {
-    if (!role) {
-        role = roles.OPERATOR;
-    }
+const  authorizationCheck = (role) => {
     return (req, res, next) => {
         // skip auth methods
         if (['login', 'refresh'].includes(req.baseUrl.replace('/api/', ''))) {
@@ -80,8 +66,7 @@ const login = (req, res) => {
         return;
     }
 
-    // todo take this from the database
-    const user = users.find(u => u.username === username);
+    const user = userService.getUserByUsername(username);
     if (!user) {
         res.status(401).send({ message: 'Invalid username' });
         return;
@@ -139,6 +124,18 @@ const refreshToken = (req, res, next, userSession) => {
     next();
 }
 
+const getSession = (req) => {
+    if (!req.cookies) {
+        return null;
+    }
+    const sessionToken = req.cookies['session_token'];
+    if (!sessionToken) {
+        return null;
+    }
+    console.log('get session, any session out there? ', sessions, sessionToken, sessions[sessionToken]);
+    return sessions[sessionToken];
+}
+
 const isSufficientRole = (role, requestedRole) => {
     switch (requestedRole) {
         case roles.ADMIN:
@@ -157,5 +154,5 @@ module.exports = {
     login,
     logout,
     refreshToken,
-    roles
+    getSession
 };

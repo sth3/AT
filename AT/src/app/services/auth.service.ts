@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BasicUserModel } from '../models/user.model';
+import { UserModel } from '../models/user.model';
 import { BehaviorSubject } from 'rxjs';
 import { DialogService } from './dialog.service';
 import { AuthDialogComponent } from '../components/auth-dialog/auth-dialog.component';
@@ -8,16 +8,16 @@ import { AuthDialogComponent } from '../components/auth-dialog/auth-dialog.compo
   providedIn: 'root'
 })
 export class AuthService {
-  user$: BehaviorSubject<BasicUserModel | null> = new BehaviorSubject<BasicUserModel | null>(null);
+  user$: BehaviorSubject<UserModel | null> = new BehaviorSubject<UserModel | null>(null);
 
   constructor(private dialogService: DialogService) {
   }
 
-  setUser(user: BasicUserModel) {
+  setUser(user: UserModel) {
     this.user$.next(user);
   }
 
-  getUser(): BasicUserModel | null {
+  getUser(): UserModel | null {
     return this.user$.value;
   }
 
