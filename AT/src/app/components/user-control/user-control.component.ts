@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 import { DialogService } from '../../services/dialog.service';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { NotifierService } from '../../services/notifier.service';
+import { PasswordChangeDialogComponent } from './password-change-dialog/password-change-dialog.component';
 
 @Component({
   selector: 'app-user-control',
@@ -100,7 +101,16 @@ export class UserControlComponent implements OnInit {
   }
 
   onChangePassword(user: UserModel) {
-    // todo
-    console.log('change password clicked: ', user);
+    this.dialogService.customDialog(PasswordChangeDialogComponent, {}, { width: '250px', height: '400px' })
+      .subscribe(result => {
+        if (result) {
+          console.log('change password clicked: ', user, result);
+          this.userService.changePassword(user.id, result)
+            .subscribe(() => {
+              console.log('Password changed');
+              this.notifier.showDefaultNotification(`Password changed for user ${user.id}`);
+            })
+        }
+      })
   }
 }

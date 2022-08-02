@@ -11,7 +11,6 @@ export class EditUserComponent implements OnInit {
 
   form: FormGroup;
   roles = Object.keys(UserRole);
-  noMatch: boolean = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     allUsers: UserModel[],
     user: UserModel,
@@ -29,6 +28,11 @@ export class EditUserComponent implements OnInit {
       password: new FormControl({ value: '', disabled: this.data.user }, [Validators.required, Validators.minLength(5)]),
       confirmPass: new FormControl({ value: '', disabled: this.data.user }, [Validators.required, Validators.minLength(5)]),
     });
+    if (!data.editMode) {
+      this.form.valueChanges.subscribe(() => {
+        this.confirmPass.setErrors(this.password.value !== this.confirmPass.value ? { invalidConfirmPass: true } : null);
+      });
+    }
   }
 
   get username() {

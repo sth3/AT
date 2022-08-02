@@ -22,6 +22,9 @@ const UPDATE_LAST_LOGIN_DATE = 'UPDATE [AT].[dbo].[USERS] ' +
     'SET lastLoginDate = GETDATE() ' +
     'WHERE id = @id';
 const DELETE_USER = 'DELETE FROM [AT].[dbo].[USERS] WHERE id = @id';
+const UPDATE_PASSWORD = 'UPDATE [AT].[dbo].[USERS] ' +
+    'SET password = @password ' +
+    'WHERE id = @id';
 
 
 const getUserById = async (id) => {
@@ -90,6 +93,21 @@ const updateLastLoginDate = async (id) => {
         .query(UPDATE_LAST_LOGIN_DATE);
 }
 
+const changePassword = async (id, oldPassword, newPassword) => {
+    const user = await getUserById(id);
+    const match = await bcrypt.compare(oldPassword, user.password);
+    if (!match) {
+        throw new Error('Incorrect old password.');
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newPassword, salt);
+    const pool = await poolPromise;
+    return pool.request()
+        .input('id', sql.Int, id)
+        .input('password', hash)
+        .query(UPDATE_PASSWORD);
+}
+
 module.exports = {
     getUserById,
     getUserByUsername,
@@ -98,5 +116,6 @@ module.exports = {
     deleteUser,
     roles,
     updateUser,
-    updateLastLoginDate
+    updateLastLoginDate,
+    changePassword
 }

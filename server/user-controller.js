@@ -43,4 +43,14 @@ router.put('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req
     res.status(204).end();
 });
 
+router.put('/users/:id/password', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    try {
+        await userService.changePassword(+req.params.id, req.body.oldPassword, req.body.newPassword);
+    } catch (err) {
+        res.status(403).json({ message: 'Invalid old password.' });
+        return;
+    }
+    res.status(204).end();
+});
+
 module.exports = router;

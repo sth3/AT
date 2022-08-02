@@ -38,7 +38,7 @@
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Confirm password</mat-label>
         <input matInput formControlName="confirmPass" type="password">
-        <mat-error *ngIf="password.value !== confirmPass.value">Passwords don't match.</mat-error>
+        <mat-error *ngIf="confirmPass.hasError('invalidConfirmPass')">Passwords don't match.</mat-error>
       </mat-form-field>
     </ng-container>
   </form>

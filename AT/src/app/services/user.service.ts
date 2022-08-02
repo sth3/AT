@@ -33,4 +33,9 @@ export class UserService {
     return this.http.delete(`${environment.apiUrl}/users/${id}`, { withCredentials: true });
   }
 
+  changePassword(id: number, result: any) {
+    return this.http.put(`${environment.apiUrl}/users/${id}/password`,
+      { oldPassword: result.oldPassword, newPassword: result.newPassword },
+      { withCredentials: true });
+  }
 }

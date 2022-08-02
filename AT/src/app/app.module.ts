@@ -48,6 +48,7 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { UserControlComponent } from './components/user-control/user-control.component';
 import { EditUserComponent } from './components/user-control/edit-user/edit-user.component';
+import { PasswordChangeDialogComponent } from './components/user-control/password-change-dialog/password-change-dialog.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -69,6 +70,7 @@ import { EditUserComponent } from './components/user-control/edit-user/edit-user
     AuthDialogComponent,
     UserControlComponent,
     EditUserComponent,
+    PasswordChangeDialogComponent,
   ],
   imports: [
     BrowserModule,
