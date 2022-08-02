@@ -22,7 +22,11 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:4200',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 app.use(cookieParser())
 
 app.use('/api', api);
