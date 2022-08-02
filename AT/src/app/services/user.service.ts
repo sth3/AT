@@ -13,23 +13,24 @@ export class UserService {
   }
 
   getCurrentUser(): Observable<UserModel> {
-    return this.http.get<UserModel>(`${environment.apiUrl}/currentUser`);
+    return this.http.get<UserModel>(`${environment.apiUrl}/currentUser`, { withCredentials: true });
   }
 
   getUsers() {
-    return this.http.get<UserModel[]>(`${environment.apiUrl}/users`);
+    return this.http.get<UserModel[]>(`${environment.apiUrl}/users`, { withCredentials: true });
   }
 
   addUser(user: UserModel) {
-    return this.http.post(`${environment.apiUrl}/users`, user);
+    return this.http.post(`${environment.apiUrl}/users`, user, { withCredentials: true });
   }
 
-  updateUser(user: UserModel) {
-    return this.http.put(`${environment.apiUrl}/users/${user.id}`, user);
+  updateUser(id: number, user: UserModel) {
+    console.log('update user: ', user);
+    return this.http.put(`${environment.apiUrl}/users/${id}`, user, { withCredentials: true });
   }
 
   deleteUser(id: number) {
-    return this.http.delete(`${environment.apiUrl}/users/${id}`);
+    return this.http.delete(`${environment.apiUrl}/users/${id}`, { withCredentials: true });
   }
 
 }

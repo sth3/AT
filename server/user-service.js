@@ -16,8 +16,7 @@ const ADD_USER = 'INSERT INTO [AT].[dbo].[USERS] ' +
     '(username, password, role, firstName, lastName) ' +
     'VALUES (@username, @password, @role, @firstName, @lastName)';
 const UPDATE_USER = 'UPDATE [AT].[dbo].[USERS] ' +
-    'SET username = @username, password = @password, role = @role, firstName = @firstName, ' +
-    'lastName = @lastName, lastLoginDate = GETDATE() ' +
+    'SET username = @username, role = @role, firstName = @firstName, lastName = @lastName ' +
     'WHERE id = @id';
 const UPDATE_LAST_LOGIN_DATE = 'UPDATE [AT].[dbo].[USERS] ' +
     'SET lastLoginDate = GETDATE() ' +
@@ -53,20 +52,13 @@ const createUser = async (user) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
     console.log('create user from: ', user);
-    user = {
-        username: user.username,
-        password: user.password,
-        role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName,
-    };
     const pool = await poolPromise;
     return pool.request()
         .input('username', user.username)
-        .input('password', user.password)
         .input('role', user.role)
         .input('firstName', user.firstName)
         .input('lastName', user.lastName)
+        .input('password', user.password)
         .query(ADD_USER);
 }
 
@@ -78,11 +70,11 @@ const deleteUser = async (id) => {
         .query(DELETE_USER);
 }
 
-const updateUser = async (user) => {
+const updateUser = async (id, user) => {
     console.log('update user: ', user);
     const pool = await poolPromise;
     return pool.request()
-        .input('id', sql.Int, user.id)
+        .input('id', sql.Int, id)
         .input('username', user.username)
         .input('password', user.password)
         .input('role', user.role)

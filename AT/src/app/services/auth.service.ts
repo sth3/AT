@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserModel } from '../models/user.model';
+import { UserModel, UserRole } from '../models/user.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DialogService } from './dialog.service';
 import { AuthDialogComponent } from '../components/auth-dialog/auth-dialog.component';
@@ -60,11 +60,7 @@ export class AuthService {
     return this.http.get<UserModel>(`${environment.apiUrl}/currentUser`, { withCredentials: true });
   }
 
-  testAdmin() {
-    return this.http.get(`${environment.apiUrl}/testAuthAdmin`, { withCredentials: true });
-  }
-
-  testOperator() {
-    return this.http.get(`${environment.apiUrl}/testAuthOperator`, { withCredentials: true });
+  isAdmin(): boolean {
+    return this.user$ !== null && this.user$.value?.role === UserRole.ADMIN;
   }
 }

@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { LoaderService } from '../../services/loader.service';
 import { AuthService } from '../../services/auth.service';
-import { UserModel } from '../../models/user.model';
+import { UserModel, UserRole } from '../../models/user.model';
 
 @Component({
   selector: 'app-nav',
@@ -21,12 +21,17 @@ export class NavComponent {
       map(result => result.matches),
       shareReplay()
     );
+  isAdmin = false;
 
   constructor(private breakpointObserver: BreakpointObserver,
               public loaderService: LoaderService,
               private authService: AuthService) {
     this.user = this.authService.user$;
+    this.user.subscribe(user => {
+      this.isAdmin = user?.role === UserRole.ADMIN;
+    });
   }
+
 
   ngOnInit() {
     this.isDarkTheme = localStorage.getItem('theme') === "Dark" ? true : false;

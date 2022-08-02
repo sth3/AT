@@ -38,6 +38,7 @@ router.delete('/users/:id', authorizationCheck(userService.roles.ADMIN), async (
 });
 
 router.put('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    console.log('update user: ', req.body);
     await userService.updateUser(+req.params.id, req.body);
     res.status(204).end();
 });

@@ -46,6 +46,8 @@ import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
 import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { UserControlComponent } from './components/user-control/user-control.component';
+import { EditUserComponent } from './components/user-control/edit-user/edit-user.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -65,6 +67,8 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
     StatisticsComponent,
     ToPDFComponent,
     AuthDialogComponent,
+    UserControlComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,
