@@ -88,11 +88,15 @@ const login = async (req, res) => {
 
     await userService.updateLastLoginDate(user.id);
 
+    // don't send password back to client
+    user.lastLoginDate = now;
+    delete user.password;
+
     // create a session containing information about the user, role and expiry time
     sessions[sessionToken] = new Session(username, user.role, expiresAt);
 
     res.cookie('session_token', sessionToken, { expires: expiresAt, httpOnly: true });
-    res.send({ message: 'Login successful' });
+    res.json(user);
 }
 
 const logout = (req, res) => {
@@ -110,7 +114,7 @@ const logout = (req, res) => {
     delete sessions[sessionToken];
 
     res.cookie('session_token', '', { expires: new Date() });
-    res.end();
+    res.status(204).end();
 }
 
 const refreshToken = (req, res, next, userSession) => {

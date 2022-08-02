@@ -10,7 +10,7 @@
       <a mat-list-item routerLink="/recipes">Recipes</a>
       <a mat-list-item routerLink="/orders">Orders</a>
       <a mat-list-item routerLink="/statistics">Statistics</a>
-      
+
       <!--<a mat-list-item href="#">Link 3</a>-->
     </mat-nav-list>
   </mat-sidenav>
@@ -43,7 +43,24 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 
-<mat-menu #accountMenu="matMenu">
-  Hello
-  <button (click)="login()"></button>
+<mat-menu #accountMenu="matMenu" class="menu-no-padding">
+  <ng-container *ngIf="user | async as user; else noUser">
+    <mat-card>
+      <mat-card-title>{{user.username}}</mat-card-title>
+      <mat-card-subtitle>Current user</mat-card-subtitle>
+      <mat-card-content>
+        <p>Role: <strong>{{user.role}}</strong></p>
+        <p>Full name: <strong>{{user.firstName}} {{user.lastName}}</strong></p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-icon-button (click)="logout()" style="width: 100%"><mat-icon>logout</mat-icon>Logout</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+  <ng-template #noUser>
+    <p style="margin: 5px">
+      You are currently not logged in. <br> Some actions will be limited.
+    </p>
+  <button mat-icon-button (click)="login()" style="width: 100%"><mat-icon>login</mat-icon>Login</button>
+  </ng-template>
 </mat-menu>

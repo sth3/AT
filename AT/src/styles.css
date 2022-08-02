@@ -45,6 +45,7 @@ body {
 table {
   width: 100%;
 }
+
 tr.default-detail-row {
   height: 0 !important;
 }
@@ -102,4 +103,12 @@ mat-card-actions > button {
 
 .order-time {
   margin: 20px;
+}
+
+.menu-no-padding > .mat-menu-content {
+  padding: 0 !important;
+}
+
+.menu-no-padding > .mat-menu-content > p {
+  padding: 8px !important;
 }

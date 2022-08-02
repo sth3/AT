@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { LoaderService } from '../../services/loader.service';
 import { AuthService } from '../../services/auth.service';
+import { UserModel } from '../../models/user.model';
 
 @Component({
   selector: 'app-nav',
@@ -12,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavComponent {
+  user: BehaviorSubject<UserModel | null>;
 
   isDarkTheme: boolean = false;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -23,6 +25,7 @@ export class NavComponent {
   constructor(private breakpointObserver: BreakpointObserver,
               public loaderService: LoaderService,
               private authService: AuthService) {
+    this.user = this.authService.user$;
   }
 
   ngOnInit() {
@@ -38,6 +41,8 @@ export class NavComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe(() => {
+      console.log('logged out');
+    });
   }
 }

@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
 router.post('/login', login);
-router.get('/logout', logout);
+router.post('/logout', logout);
 router.use(userController);
 
 

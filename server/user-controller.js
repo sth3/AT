@@ -9,6 +9,10 @@ router.use(express.json());
 // cannot be guarded, because it would refresh cookie
 router.get('/currentUser', async (req, res) => {
     const session = getSession(req);
+    if (!session) {
+        res.send(null);
+        return;
+    }
     const user = await userService.getUserByUsername(session.username);
     res.json(user);
 });
@@ -30,6 +34,11 @@ router.post('/users', authorizationCheck(userService.roles.ADMIN), async (req, r
 
 router.delete('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
     await userService.deleteUser(+req.params.id);
+    res.status(204).end();
+});
+
+router.put('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
+    await userService.updateUser(+req.params.id, req.body);
     res.status(204).end();
 });
 
