@@ -14,7 +14,8 @@ const SELECT_USER_BY_USERNAME = 'SELECT * FROM [AT].[dbo].[USERS] WHERE username
 const SELECT_ALL_USERS = 'SELECT * FROM [AT].[dbo].[USERS]';
 const ADD_USER = 'INSERT INTO [AT].[dbo].[USERS] ' +
     '(username, password, role, firstName, lastName) ' +
-    'VALUES (@username, @password, @role, @firstName, @lastName)';
+    'VALUES (@username, @password, @role, @firstName, @lastName) ' +
+    'SELECT SCOPE_IDENTITY() as id';
 const UPDATE_USER = 'UPDATE [AT].[dbo].[USERS] ' +
     'SET username = @username, role = @role, firstName = @firstName, lastName = @lastName ' +
     'WHERE id = @id';
@@ -56,13 +57,14 @@ const createUser = async (user) => {
     user.password = await bcrypt.hash(user.password, salt);
     console.log('create user from: ', user);
     const pool = await poolPromise;
-    return pool.request()
+    const { recordset } = await pool.request()
         .input('username', user.username)
         .input('role', user.role)
         .input('firstName', user.firstName)
         .input('lastName', user.lastName)
         .input('password', user.password)
         .query(ADD_USER);
+    return recordset[0];
 }
 
 const deleteUser = async (id) => {

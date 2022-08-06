@@ -28,8 +28,8 @@ router.get('/users', authorizationCheck(userService.roles.ADMIN), async (req, re
 });
 
 router.post('/users', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
-    await userService.createUser(req.body);
-    res.status(201).end();
+    const response = await userService.createUser(req.body);
+    res.status(201).json(response);
 });
 
 router.delete('/users/:id', authorizationCheck(userService.roles.ADMIN), async (req, res) => {

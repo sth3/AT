@@ -47,7 +47,8 @@ export class UserControlComponent implements OnInit {
 
   onEditClick(user: UserModel) {
     this.dialogService.customDialog(EditUserComponent,
-      { user, allUsers: this.users, editMode: true })
+      { user, allUsers: this.users, editMode: true },
+      { width: '400px', height: '500px' })
       .subscribe(result => {
         if (result) {
           console.log('edit clicked: ', user, result);
@@ -80,16 +81,18 @@ export class UserControlComponent implements OnInit {
 
   addUser() {
     this.dialogService.customDialog(EditUserComponent,
-      { user: null, allUsers: this.users, editMode: false })
+      { user: null, allUsers: this.users, editMode: false },
+      { width: '400px', height: '500px' })
       .subscribe(result => {
         if (result) {
           delete result.confirmPass;
           console.log('create clicked: ', result);
           this.userService.addUser(result)
             .subscribe(response => {
-              console.log('user added: ', response);
+              const user = {...response, ...result, registrationDate: new Date() };
+              console.log('user added: ', user);
               this.notifier.showDefaultNotification('New user added');
-              this.users.push(result);
+              this.users.push(user);
               this.dataSource.data = this.users;
             })
         }
