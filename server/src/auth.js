@@ -1,6 +1,6 @@
 const uuid = require('uuid');
-const userService = require('./user-service');
-const { roles } = require("./user-service");
+const userService = require('./services/user-service');
+const { roles } = require("./services/user-service");
 const bcrypt = require('bcryptjs');
 
 class Session {

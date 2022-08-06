@@ -1,7 +1,7 @@
-const { poolPromise } = require('./src/data/events/dbIndexComponents');
+const { poolPromise } = require('../data/events/dbIndexComponents');
 const sql = require('mssql/msnodesqlv8');
 const bcrypt = require('bcryptjs');
-const { trimTrailingWhitespace } = require('./src/data/utils');
+const { trimTrailingWhitespace } = require('../data/utils');
 
 const roles = {
     ADMIN: 'ADMIN',

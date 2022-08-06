@@ -1,8 +1,8 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const userService = require('./user-service');
-const { getSession, authorizationCheck } = require("./auth");
+const userService = require('../services/user-service');
+const { getSession, authorizationCheck } = require("../auth");
 
 router.use(express.json());
 
