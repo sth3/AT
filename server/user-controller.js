@@ -28,7 +28,8 @@ router.get('/users', authorizationCheck(userService.roles.ADMIN), async (req, re
 });
 
 router.post('/users', authorizationCheck(userService.roles.ADMIN), async (req, res) => {
-    const response = await userService.createUser(req.body);
+    const user = await userService.createUser(req.body);
+    const response = await userService.getUserById(user.id);
     res.status(201).json(response);
 });
 

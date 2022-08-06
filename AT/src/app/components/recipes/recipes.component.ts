@@ -62,7 +62,8 @@ export class RecipesComponent implements OnInit {
             .subscribe(() => {
               console.log('recipe deleted: ', data);
               this.notifierService.showDefaultNotification('Recipe deleted');
-              this.loadRecipes();
+              this.data = this.data.filter(r => r.no !== data.no);
+              this.dataSource.data = this.data;
             })
         }
       })
@@ -87,9 +88,11 @@ export class RecipesComponent implements OnInit {
         if (result) {
           this.recipeService.addRecipe(result)
             .subscribe(response => {
-              console.log('recipe created: ', response);
+              const recipe = { ...response, ...result };
+              console.log('recipe created: ', recipe);
               this.notifierService.showDefaultNotification('New recipe created');
-              this.loadRecipes();
+              this.data.push(recipe);
+              this.dataSource.data = this.data;
             })
         }
       })
@@ -116,7 +119,8 @@ export class RecipesComponent implements OnInit {
             .subscribe(response => {
               console.log('recipe updated: ', response);
               this.notifierService.showDefaultNotification('Recipe updated');
-              this.loadRecipes();
+              this.data = this.data.map(r => r.no === no ? {...r, ...response} : r);
+              this.dataSource.data = this.data;
             })
         }
       })

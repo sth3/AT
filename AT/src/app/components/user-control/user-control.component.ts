@@ -89,7 +89,7 @@ export class UserControlComponent implements OnInit {
           console.log('create clicked: ', result);
           this.userService.addUser(result)
             .subscribe(response => {
-              const user = {...response, ...result, registrationDate: new Date() };
+              const user = {...response, ...result };
               console.log('user added: ', user);
               this.notifier.showDefaultNotification('New user added');
               this.users.push(user);

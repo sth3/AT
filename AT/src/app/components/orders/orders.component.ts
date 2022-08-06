@@ -77,7 +77,8 @@ export class OrdersComponent implements OnInit {
             .subscribe(() => {
               console.log('order deleted: ', data);
               this.notifierService.showDefaultNotification('Order deleted');
-              this.getOrders();
+              this.orders = this.orders.filter(o => o.no !== data.no);
+              this.dataSource.data = this.orders;
             })
         }
       })

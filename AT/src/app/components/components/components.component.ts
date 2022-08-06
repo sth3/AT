@@ -50,7 +50,8 @@ export class ComponentsComponent implements OnInit {
             .subscribe(response => {
               console.log('component deleted: ', response);
               this.notifierService.showDefaultNotification('Component deleted');
-              this.loadComponents();
+              this.data = this.data.filter(u => u.no !== data.no);
+              this.dataSource.data = this.data;
             })
         }
       })
@@ -69,7 +70,8 @@ export class ComponentsComponent implements OnInit {
                 .subscribe(response => {
                   console.log('component updated: ', response);
                   this.notifierService.showDefaultNotification('Component updated');
-                  this.loadComponents();
+                  this.data = this.data.map(c => c.no === data.no ? {...c, ...result} : c);
+                  this.dataSource.data = this.data;
                 })
            }
           })
@@ -85,9 +87,11 @@ export class ComponentsComponent implements OnInit {
           console.log('create clicked: ', result);
           this.componentService.addComponent(result)
             .subscribe(response => {
-              console.log('component created: ', response);
+              const component = { ...response, ...result };
+              console.log('component created: ', component);
               this.notifierService.showDefaultNotification('New component created');
-              this.loadComponents();
+              this.data.push(component);
+              this.dataSource.data = this.data;
             })
         }
       })
