@@ -36,15 +36,15 @@ export class RecipeService {
   }
 
   updateRecipe(no: number, recipe: RecipeModel) {
-    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${no}`, recipe);
+    return this.http.put<RecipeModel>(`${environment.apiUrl}/recipes/${no}`, recipe, { withCredentials: true });
   }
 
   deleteRecipe(no: number) {
-    return this.http.delete(`${environment.apiUrl}/recipes/${no}`);
+    return this.http.delete(`${environment.apiUrl}/recipes/${no}`, { withCredentials: true });
   }
 
   addRecipe(recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe);
+    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe, { withCredentials: true });
   }
 
   checkValidity(recipe: RecipeModel): boolean {

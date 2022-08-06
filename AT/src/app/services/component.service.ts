@@ -16,14 +16,14 @@ export class ComponentService {
   }
 
   updateComponent(no: number, component: ComponentModel) {
-    return this.http.put<ComponentModel>(`${environment.apiUrl}/components/${no}`, component);
+    return this.http.put<ComponentModel>(`${environment.apiUrl}/components/${no}`, component, { withCredentials: true });
   }
 
   deleteComponent(no: string) {
-    return this.http.delete(`${environment.apiUrl}/components/${no}`);
+    return this.http.delete(`${environment.apiUrl}/components/${no}`, { withCredentials: true });
   }
 
   addComponent(component: ComponentModel): Observable<ComponentModel> {
-    return this.http.post<ComponentModel>(`${environment.apiUrl}/components`, component);
+    return this.http.post<ComponentModel>(`${environment.apiUrl}/components`, component, { withCredentials: true });
   }
 }
