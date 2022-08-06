@@ -4,13 +4,14 @@ const router = express.Router();
 const { authorizationCheck } = require("../auth");
 const sql = require("../data/events/dbIndexComponents");
 const { roles } = require("../services/user-service");
+const { getAllRecipes } = require("../services/recipe-service");
 
 router.use(express.json());
 
 // toto spravi join medzi tabulkami, je to klasicky manyToMany mapping
-router.get('/recipes', (req, res) => {
-    let condition = 1;
-    functionForRecipes(req, res, condition);
+router.get('/recipes', async (req, res) => {
+    const response = await getAllRecipes();
+    res.json(response);
 })
 
 
