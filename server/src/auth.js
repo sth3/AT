@@ -19,7 +19,7 @@ class Session {
 const sessions = {};
 const MINUTE = 60 * 1000;
 
-const authorizationCheck = (role) => {
+const authorizationCheck = (role, refresh = true) => {
     return (req, res, next) => {
         // skip auth methods
         if (['login', 'refresh'].includes(req.baseUrl.replace('/api/', ''))) {
@@ -55,6 +55,10 @@ const authorizationCheck = (role) => {
         if (!isSufficientRole(userSession.role, role)) {
             console.error('insufficient role');
             res.status(403).send({ message: 'Role ' + userSession.role + ' is not sufficient for this operation.' });
+            return;
+        }
+        if (!refresh) {
+            next();
             return;
         }
         return refreshToken(req, res, next, userSession);

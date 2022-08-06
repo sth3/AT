@@ -1,83 +1,43 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const { authorizationCheck } = require("../auth");
-const sql = require('../data/events/dbIndexComponents');
+const { authorizationCheck, getSession } = require("../auth");
 const { roles } = require("../services/user-service");
+const { getAllComponents, getComponentByNo, addComponent, updateComponent, deleteComponent } = require("../services/component-service");
+const userService = require("../services/user-service");
 
 router.use(express.json());
 
-router.get('/components', (req, res) => {
-    getAllDataC(res);
+router.get('/components', async (req, res) => {
+    const response = await getAllComponents();
+    res.json(response);
 })
 
-router.put('/components/:no', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 1;
-    functionForComponents(req, res, condition);
+router.get('/components/:no', async (req, res) => {
+    const response = await getComponentByNo(+req.params.no);
+    res.json(response);
+});
+
+router.put('/components/:no', authorizationCheck(roles.TECHNOLOG, false), async (req, res) => {
+    const session = getSession(req);
+    if (!session) {
+        res.send(null);
+        return;
+    }
+    const user = await userService.getUserByUsername(session.username);
+    const response = await updateComponent(+req.params.no, req.body, user.id);
+    res.json(response);
 })
 
-router.delete('/components/:no', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 2;
-    functionForComponents(req, res, condition);
+router.delete('/components/:no', authorizationCheck(roles.TECHNOLOG), async (req, res) => {
+    await deleteComponent(+req.params.no);
+    res.status(204).end();
 })
 
 router.post('/components', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 3;
-    functionForComponents(req, res, condition);
+    const component = addComponent(req.body);
+    const response = getComponentByNo(component.no);
+    res.json(response);
 })
-function functionForComponents(req, res, condition) {
-    sql.getDataComponent().then((result) => {       // Select all from table statDose
-        const components = result[0];
-        const no = result[3];
-
-        console.log(condition);
-        if (condition === 1) { // Update Component
-
-            const index = components.findIndex(c => c.no === +req.params.no);
-            const changedComponent = {
-                ...components[index],
-                ...req.body,
-                lastUpdate: new Date()
-            };
-            components[index] = changedComponent;
-
-            sql.updateComponent(changedComponent.id, changedComponent.name, req.params.no);
-            res.json(components);
-        }
-        if (condition === 2) { // Remove Component
-
-            const index = components.findIndex(c => c.no === +req.params.no);
-            components.splice(index, 1);
-            sql.deleteComponent(req.params.no);
-
-            res.status(204);
-            res.send();
-        }
-        if (condition === 3) { //ADD Component
-
-            const newRecipe = {
-                no,
-                lastUpdate: new Date(),
-                ...req.body
-            }
-            components.push(newRecipe);
-
-            sql.addComponent(newRecipe['no'], newRecipe['id'], newRecipe['name']);
-            res.json(newRecipe);
-        }
-
-    }).catch((error) => {
-        return console.error(error);
-    });
-}
-
-function getAllDataC(res) {
-    sql.getDataComponent().then((result) => {   // Select all from table statDose
-        return res.json(result[0]);
-    }).catch((error) => {
-        return console.error(error);
-    });
-}
-
 
 module.exports = router;

@@ -51,27 +51,6 @@ async function mapComponents(recipeNo, recipe) {
         if (!recipe) {
             resolve(reject(`Recipe ${recipeNo} not found`));
         }
-        // fs.readFile('components.json', (err, data) => {
-        //     if (err) throw err;
-        //     const components = JSON.parse(data);
-
-        //     fs.readFile('recipe-components.json', (err, mappingData) => {
-        //         if (err) throw err;
-        //         let mapping = JSON.parse(mappingData);
-
-
-        //         recipe.components = mapping
-        //             .filter(c => c.recipeNo === +recipe.no)
-        //             .map(c => {
-        //                 const component = components.find(r => r.no === +c.componentNo);
-        //                 return {
-        //                     ...component,
-        //                     componentSP: c.componentSP
-        //                 }
-        //             })
-        //         resolve(recipe);
-        //     })
-        // })
         sql.getDataComponent().then((result) => {
             const components = result[0];
             sql.getdataRecipeBody().then((resultT) => {
