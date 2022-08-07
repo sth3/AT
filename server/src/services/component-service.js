@@ -14,7 +14,6 @@ const ADD_CHANGE = 'INSERT INTO [AT].[dbo].[COMPONENTS_CHANGES] ' +
 const UPDATE_LAST_UPDATE = 'UPDATE [AT].[dbo].[COMPONENT] ' +
     'SET lastUpdate = GETDATE() ' +
     'WHERE no = @no';
-
 const DELETE_COMPONENT = 'DELETE FROM [AT].[dbo].[COMPONENT] WHERE no = @no';
 
 
@@ -59,7 +58,7 @@ const updateComponent = async (no, component, userId) => {
     console.log('newComponentNo', newComponentNo);
     const newComponent = await getComponentByNo(newComponentNo.no);
     console.log('newComponent', newComponent);
-    const change = getChange(oldComponent, newComponent);
+    const change = getChange(oldComponent, newComponent).join(', ');
     console.log('change', change);
     const pool = await poolPromise;
     await pool.request()
@@ -79,13 +78,17 @@ const deleteComponent = async (no) => {
 }
 
 const getChange = (oldComponent, newComponent) => {
+    const changes = [];
     if (oldComponent.id !== newComponent.id) {
-        return `id: ${oldComponent.id} -> ${newComponent.id}`;
+        changes.push(`id: ${oldComponent.id} -> ${newComponent.id}`);
     }
     if (oldComponent.name !== newComponent.name) {
-        return `name: ${oldComponent.name} -> ${newComponent.name}`;
+        changes.push(`name: ${oldComponent.name} -> ${newComponent.name}`);
     }
-    return 'unknown change';
+    if (changes.length === 0) {
+        changes.push('unknown change');
+    }
+    return changes;
 }
 
 module.exports = {

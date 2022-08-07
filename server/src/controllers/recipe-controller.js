@@ -1,130 +1,43 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const { authorizationCheck } = require("../auth");
-const sql = require("../data/events/dbIndexComponents");
+const { authorizationCheck, getSession } = require("../auth");
 const { roles } = require("../services/user-service");
-const { getAllRecipes } = require("../services/recipe-service");
+const { getAllRecipes, getRecipeByNo, addRecipe, deleteRecipe, updateRecipe } = require("../services/recipe-service");
+const userService = require("../services/user-service");
 
 router.use(express.json());
 
-// toto spravi join medzi tabulkami, je to klasicky manyToMany mapping
 router.get('/recipes', async (req, res) => {
     const response = await getAllRecipes();
     res.json(response);
 })
 
-
-router.put('/recipes/:no', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 2;
-    functionForRecipes(req, res, condition);
+router.get('/recipes/:no', async (req, res) => {
+    const response = await getRecipeByNo(+req.params.no);
+    res.json(response);
 })
 
-router.delete('/recipes/:no', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 3;
-    functionForRecipes(req, res, condition);
+router.put('/recipes/:no', authorizationCheck(roles.TECHNOLOG, false), async (req, res) => {
+    const session = getSession(req);
+    if (!session) {
+        res.send(null);
+        return;
+    }
+    const user = await userService.getUserByUsername(session.username);
+    const response = await updateRecipe(+req.params.no, req.body, user.id);
+    res.json(response);
 })
 
-
-router.post('/recipes', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    let condition = 4;
-    functionForRecipes(req, res, condition);
+router.delete('/recipes/:no', authorizationCheck(roles.TECHNOLOG), async (req, res) => {
+    await deleteRecipe(+req.params.no);
+    res.status(204).send();
 })
 
-function functionForRecipes(req, res, condition) {
-    sql.getdataRecipeHead().then(async (result) => {       // Select all from table statDose
-        let recipes = result[0];
-        const no = result[3];
-        if (condition === 1) {
-
-            sql.getDataComponent().then((result) => {
-                const components = result[0];
-                sql.getdataRecipeBody().then((result) => {
-                    const mapping = result[0];
-
-                    recipes = recipes.map(r => {
-                        const selectedComponents = mapping.filter(m => m.recipeNo === r.no);
-                        return {
-                            ...r,
-                            components: selectedComponents.map(c => {
-                                const component = components.find(s => s.no === c.componentNo);
-                                return {
-                                    ...component,
-                                    componentSP: c.componentSP
-                                }
-                            })
-                        }
-                    })
-                    res.json(recipes);
-
-                }).catch((error) => {
-                    return console.error(error);
-                });
-            }).catch((error) => {
-                return console.error(error);
-            });
-        }
-
-        if (condition === 2) {
-            const index = recipes.findIndex(c => c.no === +req.params.no);
-            console.log('BODY:', req.body);
-            const changedRecipe = {
-                no: recipes[index].no,
-                id: req.body.id,
-                name: req.body.name,
-                lastUpdate: new Date(),
-            };
-            recipes[index] = changedRecipe;
-
-            sql.updateRecipeH(changedRecipe.id, changedRecipe.name, req.params.no);
-            await changeComponents(+req.params.no, req.body.components);
-            res.json(changedRecipe);
-        }
-
-        if (condition === 3) {
-            const index = recipes.findIndex(c => c.no === +req.params.no);
-            recipes.splice(index, 1);
-
-            sql.deleteRecipeH(req.params.no);
-            sql.deleteRecipeB(req.params.no);
-            res.status(204);
-            res.send();
-        }
-        if (condition === 4) {
-
-            const newRecipe = {
-                no,
-                id: req.body.id,
-                name: req.body.name,
-                lastUpdate: new Date(),
-            }
-            sql.addRecipeH(newRecipe['no'], newRecipe['id'], newRecipe['name']);
-
-            recipes.push(newRecipe);
-            res.json(newRecipe);
-
-            req.body.components?.forEach(c => {
-                console.log(no, c.no, parseFloat(c.componentSP));
-
-                sql.addRecipeB(parseInt(no), parseInt(c.no), parseFloat(c.componentSP));
-            });
-        }
-
-    }).catch((error) => {
-        return console.error(error);
-    });
-}
-
-async function changeComponents(no, components) {
-    sql.deleteRecipeB(no).then(() => {
-        components?.forEach(c => {
-            console.log(no, c.no, parseFloat(c.componentSP));
-
-            sql.addRecipeB(parseInt(no), parseInt(c.no), parseFloat(c.componentSP));
-        });
-    }).catch((error) => {
-        return console.error(error);
-    });
-}
+router.post('/recipes', authorizationCheck(roles.TECHNOLOG), async (req, res) => {
+    const recipeNo = await addRecipe(req.body);
+    const response = await getRecipeByNo(recipeNo);
+    res.status(201).json(response);
+})
 
 module.exports = router;

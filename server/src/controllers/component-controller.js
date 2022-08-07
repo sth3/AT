@@ -37,7 +37,7 @@ router.delete('/components/:no', authorizationCheck(roles.TECHNOLOG), async (req
 router.post('/components', authorizationCheck(roles.TECHNOLOG), (req, res) => {
     const component = addComponent(req.body);
     const response = getComponentByNo(component.no);
-    res.json(response);
+    res.status(201).json(response);
 })
 
 module.exports = router;
