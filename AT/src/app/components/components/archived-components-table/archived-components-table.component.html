@@ -1,0 +1,83 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <strong>Archived components</strong>
+      </mat-panel-title>
+      <mat-panel-description>
+        Click to show components that were changed but might still be used in recipes
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <table mat-table
+           matSort
+           [dataSource]="dataSource"
+           class="mat-elevation-z8"
+           multiTemplateDataRows>
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button aria-label="expand row"
+                  (click)="(expandedComponent = expandedComponent === element ? null : element); $event.stopPropagation()">
+            <mat-icon *ngIf="expandedComponent !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedComponent === element">keyboard_arrow_up</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
+            [style]="{'width': column.width || 'auto'}"> {{column.header}} </th>
+        <ng-container *ngIf="column.field === 'date'; else normalTd">
+          <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' : 'UTC'  }} </td>
+        </ng-container>
+        <ng-template #normalTd>
+          <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>
+        </ng-template>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div class="default-element-detail"
+               [@detailExpand]="element == expandedComponent ? 'expanded' : 'collapsed'">
+              <h3>New component</h3>
+            <div style="display: flex; flex-direction: row">
+              <mat-form-field style="width: 30%" appearance="outline">
+                <mat-label>Component No</mat-label>
+                <input matInput id="componentSP{{element.id}}" readonly [value]="element.newComponent.no">
+              </mat-form-field>
+              <mat-form-field style="width: 20%" appearance="outline">
+                <mat-label>Component ID</mat-label>
+                <input matInput readonly [value]="element.newComponent.id" id="newComponentID-{{element.id}}">
+              </mat-form-field>
+              <mat-form-field style="width: 50%" appearance="outline">
+                <mat-label>Component name</mat-label>
+                <input matInput readonly [value]="element.newComponent.name" id="componentName{{element.id}}">
+              </mat-form-field>
+            </div>
+            <mat-list style="width: 40%; margin: 20px">
+              <h3>Changes</h3>
+              <ng-container *ngFor="let change of element.changes; let i = index">
+                <mat-list-item>
+                  <div matLine>
+                    {{ change }}
+                  </div>
+                </mat-list-item>
+                <mat-divider *ngIf="i !== element.changes.length - 1"></mat-divider>
+              </ng-container>
+            </mat-list>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+          class="default-element-row" [class.default-expanded-row]="expandedComponent === element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
+    </table>
+    <mat-paginator [length]="_data.length"
+                   [pageSizeOptions]="[10, 20, 50, 100]"
+                   [showFirstLastButtons]="true"
+                   [pageSize]="20" aria-label="Select page of archived components"></mat-paginator>
+
+  </mat-expansion-panel>
+</mat-accordion>
+

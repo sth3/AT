@@ -2,7 +2,17 @@ const { poolPromise } = require('../data/events/dbIndexComponents');
 const sql = require('mssql/msnodesqlv8');
 const { trimTrailingWhitespace } = require('../data/utils');
 
-const GET_COMPONENTS = 'SELECT * FROM [AT].[dbo].[COMPONENT]';
+const GET_ALL_COMPONENTS = 'SELECT * FROM [AT].[dbo].[COMPONENT]';
+const GET_ACTIVE_COMPONENTS = 'SELECT CO.* FROM [AT].[dbo].[COMPONENT] CO ' +
+    'WHERE CO.no NOT IN ' +
+    '   (SELECT CH.oldComponentNo ' +
+    '   FROM [AT].[dbo].[COMPONENTS_CHANGES] CH)';
+const GET_ARCHIVED_COMPONENTS = 'SELECT CH.id, CH.change, CH.date, ' +
+    'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
+    'CH.oldComponentNo, CH.newComponentNo ' +
+    'FROM [AT].[dbo].[COMPONENTS_CHANGES] CH ' +
+    'JOIN [AT].[dbo].[COMPONENT] CO ON CH.oldComponentNo = CO.no ' +
+    'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId'
 const GET_COMPONENT_BY_NO = 'SELECT * FROM [AT].[dbo].[COMPONENT] WHERE no = @no';
 const ADD_COMPONENT = 'INSERT INTO [AT].[dbo].[COMPONENT] ' +
     '(id, name) ' +
@@ -19,9 +29,18 @@ const DELETE_COMPONENT = 'DELETE FROM [AT].[dbo].[COMPONENT] WHERE no = @no';
 
 
 const getAllComponents = async () => {
+    const active = await getActiveComponents();
+    const archived = await getArchivedComponents();
+    return {
+        active,
+        archived
+    }
+}
+
+const getActiveComponents = async () => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
-        .query(GET_COMPONENTS);
+        .query(GET_ACTIVE_COMPONENTS);
     return trimTrailingWhitespace(recordset);
 }
 
@@ -91,8 +110,20 @@ const getChange = (oldComponent, newComponent) => {
     return changes;
 }
 
+const getArchivedComponents = async () => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .query(GET_ARCHIVED_COMPONENTS);
+    for (const change of recordset) {
+        change.oldComponent = await getComponentByNo(change.oldComponentNo);
+        change.newComponent = await getComponentByNo(change.newComponentNo);
+    }
+    return recordset;
+}
+
 module.exports = {
     getAllComponents,
+    getActiveComponents,
     getComponentByNo,
     addComponent,
     updateComponent,

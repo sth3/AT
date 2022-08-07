@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ComponentService } from '../../services/component.service';
-import { ComponentModel } from '../../models/recipe.model';
+import { ChangedComponentModel, ComponentModel } from '../../models/recipe.model';
 import { DialogService } from '../../services/dialog.service';
 import { EditComponentDialogComponent } from '../edit-component-dialog/edit-component-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,6 +17,7 @@ import { NotifierService } from '../../services/notifier.service';
 })
 export class ComponentsComponent implements OnInit {
 
+  archivedData: ChangedComponentModel[] = [];
   data: ComponentModel[] = [];
   quickFilter: string = '';
   columnsToDisplay = [
@@ -103,14 +104,15 @@ export class ComponentsComponent implements OnInit {
 
   private loadComponents() {
     this.isLoading = true;
-    this.componentService.getComponents()
+    this.componentService.getAllComponents()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(data => {
         console.log('components loaded: ', data);
-        this.data = data;
+        this.data = data.active;
         this.dataSource = new MatTableDataSource<ComponentModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.archivedData = data.archived;
       })
   }
 

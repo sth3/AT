@@ -8,16 +8,21 @@ const {
     getComponentByNo,
     addComponent,
     updateComponent,
-    deleteComponent
+    deleteComponent, getActiveComponents
 } = require('../services/component-service');
 const userService = require('../services/user-service');
 
 router.use(express.json());
 
 router.get('/components', async (req, res) => {
-    const response = await getAllComponents();
+    const response = await getActiveComponents();
     res.json(response);
 });
+
+router.get('/components/all', async (req, res) => {
+    const response = await getAllComponents();
+    res.json(response);
+})
 
 router.get('/components/:no', async (req, res) => {
     const response = await getComponentByNo(+req.params.no);

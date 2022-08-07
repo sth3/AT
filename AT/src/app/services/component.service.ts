@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ComponentModel } from '../models/recipe.model';
+import { ChangedComponentModel, ComponentModel } from '../models/recipe.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+
+interface ComponentResponse {
+  active: ComponentModel[];
+  archived: ChangedComponentModel[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +18,10 @@ export class ComponentService {
 
   getComponents(): Observable<ComponentModel[]> {
     return this.http.get<ComponentModel[]>(`${environment.apiUrl}/components`);
+  }
+
+  getAllComponents(): Observable<ComponentResponse> {
+    return this.http.get<ComponentResponse>(`${environment.apiUrl}/components/all`);
   }
 
   updateComponent(no: number, component: ComponentModel) {
