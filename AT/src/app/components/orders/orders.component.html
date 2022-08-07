@@ -127,7 +127,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Operator</mat-label>
-              <input matInput placeholder="John" readonly [value]="element.operatorName">
+              <input matInput placeholder="John" readonly [value]="element.operator.firstName + ' ' + element.operator.lastName">
             </mat-form-field>
           </div>
           <div style="flex-grow: 1; margin-bottom: 20px">

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { OrderListModel, OrderModel } from '../models/order.model';
+import { UserModel } from '../models/user.model';
+import { formatDate } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +23,12 @@ export class OrdersService {
   }
 
   addOrder(order: OrderModel): Observable<OrderModel> {
+    order.dueDate = formatDate(new Date(order.dueDate), 'yyyy-MM-dd', 'en-GB');
     return this.http.post<OrderModel>(`${environment.apiUrl}/orders`, order, { withCredentials: true });
   }
 
   updateOrder(no: number, order: OrderModel) {
+    order.dueDate = formatDate(new Date(order.dueDate), 'yyyy-MM-dd', 'en-GB');
     return this.http.put<OrderModel>(`${environment.apiUrl}/orders/${no}`, order, { withCredentials: true });
   }
 
@@ -34,5 +38,12 @@ export class OrdersService {
 
   getOrdersList(): Observable<OrderListModel[]> {
     return this.http.get<OrderListModel[]>(`${environment.apiUrl}/orders/list`);
+  }
+
+  showFullUserName(user: UserModel): string {
+    if (!user) {
+      return '';
+    }
+    return `${user.firstName} ${user.lastName}`;
   }
 }

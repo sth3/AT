@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { OrderListModel, OrderModel } from '../../models/order.model';
-import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { RecipeModel } from '../../models/recipe.model';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -10,13 +10,15 @@ import { DialogService } from '../../services/dialog.service';
 import { NotifierService } from '../../services/notifier.service';
 import { MatSelect } from '@angular/material/select';
 import { DateAdapter } from '@angular/material/core';
+import { AuthService } from '../../services/auth.service';
+import { UserModel } from '../../models/user.model';
 
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.css'],
   animations: [
-    trigger('grow', [ // Note the trigger name
+    trigger('grow', [
       transition(':enter', [
         style({ height: '0', overflow: 'hidden' }),
         animate(500, style({ height: '*' }))
@@ -38,20 +40,29 @@ export class OrderDetailComponent implements OnInit {
   allOrders: OrderListModel[] = [];
   isNew!: boolean;
   now = new Date();
+  operator: UserModel | null = null;
 
   @ViewChild('recipeSelect')
   recipeSelect!: MatSelect;
 
   constructor(private r: ActivatedRoute,
-    private router: Router,
-    private ordersService: OrdersService,
-    private recipeService: RecipeService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private dialogService: DialogService,
-    private notifier: NotifierService,
-    private dateAdapter: DateAdapter<Date>) {
+              private router: Router,
+              private ordersService: OrdersService,
+              private recipeService: RecipeService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private dialogService: DialogService,
+              private notifier: NotifierService,
+              private dateAdapter: DateAdapter<Date>,
+              private auth: AuthService) {
     this.prepareForm();
     this.dateAdapter.setLocale('en-GB');
+    this.auth.user$.subscribe(user => {
+      this.operator = user;
+      this.form.patchValue({
+        operatorId: user?.id || null,
+        operatorName: this.ordersService.showFullUserName(user as UserModel)
+      })
+    });
   }
 
   ngOnInit(): void {
@@ -111,9 +122,9 @@ export class OrderDetailComponent implements OnInit {
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [Validators.required,
-      Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
+        Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
       name: new FormControl(this.order?.name || '', [Validators.required,
-      Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
+        Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
       customerName: new FormControl(this.order?.customerName || '', Validators.required),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
@@ -121,9 +132,8 @@ export class OrderDetailComponent implements OnInit {
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
-      operatorId: new FormControl(this.order?.operatorId || '001'),
-      // todo get real used id/name here
-      operatorName: new FormControl(this.order?.operatorName || 'admin')
+      operatorId: new FormControl(this.order?.operator.id || null),
+      operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null)
     })
   }
 

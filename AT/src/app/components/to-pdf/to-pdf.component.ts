@@ -41,10 +41,10 @@ export class ToPDFComponent implements OnInit {
   allOrders: OrderListModel[] = [];
   selectedRecipe: RecipeModel | undefined;
   orderDueDate:string | undefined;
-   
+
   form!: FormGroup;
 
-  
+
 
   constructor(private router: Router, private r: ActivatedRoute,
     private ordersService: OrdersService,
@@ -67,7 +67,7 @@ export class ToPDFComponent implements OnInit {
 
           this.recipeService.getRecipes()
             .subscribe(recipes => {
-              console.log('recipes: ', recipes);              
+              console.log('recipes: ', recipes);
               this.recipes = recipes;
               this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
               console.log('selected recipe: ', this.selectedRecipe);
@@ -95,7 +95,7 @@ export class ToPDFComponent implements OnInit {
   //   // const documentDefinition = { content: html };
   //   // pdfMake.createPdf(documentDefinition).download();
   //   let div = this.pdfTable.nativeElement;
-   
+
   //   var img:any;
   //   var filename;
   //   var newImage:any;
@@ -150,7 +150,7 @@ export class ToPDFComponent implements OnInit {
       PDF.html(this.invoiceElement.nativeElement.innerHTML)
       PDF.save('Orders.pdf');
     });
-  } 
+  }
 
   private prepareForm() {
     this.form = new FormGroup({
@@ -165,9 +165,9 @@ export class ToPDFComponent implements OnInit {
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
-      operatorId: new FormControl(this.order?.operatorId || '001'),
+      operatorId: new FormControl(this.order?.operator.id || '001'),
       // todo get real used id/name here
-      operatorName: new FormControl(this.order?.operatorName || 'admin')
+      operatorName: new FormControl(this.order?.operator.username || 'admin')
     })
   }
 

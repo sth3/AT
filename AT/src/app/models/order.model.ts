@@ -1,4 +1,5 @@
 import { RecipeModel } from './recipe.model';
+import { UserModel } from './user.model';
 
 export interface OrderModel {
   no: number;
@@ -14,8 +15,7 @@ export interface OrderModel {
   createdAt: string;
   lastUpdate: string;
   completedAt: string | null;
-  operatorId: string;
-  operatorName: string;
+  operator: UserModel;
 }
 
 export interface OrderListModel {
