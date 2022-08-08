@@ -2,10 +2,10 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <strong>Archived components</strong>
+        <strong>Archived recipes</strong>
       </mat-panel-title>
       <mat-panel-description>
-        Click to show components that were changed but might still be used in recipes
+        Click to show recipes that were changed but might still be used in orders
       </mat-panel-description>
     </mat-expansion-panel-header>
     <table mat-table
@@ -17,9 +17,9 @@
         <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
         <td mat-cell *matCellDef="let element">
           <button mat-icon-button aria-label="expand row"
-                  (click)="(expandedComponent = expandedComponent === element ? null : element); $event.stopPropagation()">
-            <mat-icon *ngIf="expandedComponent !== element">keyboard_arrow_down</mat-icon>
-            <mat-icon *ngIf="expandedComponent === element">keyboard_arrow_up</mat-icon>
+                  (click)="(expandedRecipe = expandedRecipe === element ? null : element); $event.stopPropagation()">
+            <mat-icon *ngIf="expandedRecipe !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedRecipe === element">keyboard_arrow_up</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -42,20 +42,20 @@
       <ng-container matColumnDef="expandedDetail">
         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
           <div class="default-element-detail"
-               [@detailExpand]="element == expandedComponent ? 'expanded' : 'collapsed'">
-              <h3>New component</h3>
+               [@detailExpand]="element == expandedRecipe ? 'expanded' : 'collapsed'">
+            <h3>New component</h3>
             <div style="display: flex; flex-direction: row">
               <mat-form-field style="width: 30%" appearance="outline">
-                <mat-label>Component No</mat-label>
-                <input matInput id="componentSP{{element.id}}" readonly [value]="element.newComponent.no">
+                <mat-label>Recipe No</mat-label>
+                <input matInput id="componentSP{{element.id}}" readonly [value]="element.newRecipe.no">
               </mat-form-field>
               <mat-form-field style="width: 20%" appearance="outline">
-                <mat-label>Component ID</mat-label>
-                <input matInput readonly [value]="element.newComponent.id" id="newComponentID-{{element.id}}">
+                <mat-label>Recipe ID</mat-label>
+                <input matInput readonly [value]="element.newRecipe.id" id="newRecipeID-{{element.id}}">
               </mat-form-field>
               <mat-form-field style="width: 50%" appearance="outline">
-                <mat-label>Component name</mat-label>
-                <input matInput readonly [value]="element.newComponent.name" id="componentName{{element.id}}">
+                <mat-label>Recipe name</mat-label>
+                <input matInput readonly [value]="element.newRecipe.name" id="componentName{{element.id}}">
               </mat-form-field>
             </div>
             <mat-list style="width: 40%; margin: 20px">
@@ -74,7 +74,7 @@
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
       <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
-          class="default-element-row" [class.default-expanded-row]="expandedComponent === element">
+          class="default-element-row" [class.default-expanded-row]="expandedRecipe === element">
       </tr>
       <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
     </table>

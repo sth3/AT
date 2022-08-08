@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RecipeModel } from '../models/recipe.model';
+import { ChangedRecipeModel, RecipeModel } from '../models/recipe.model';
 import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
 
+interface RecipeResponse {
+  active: RecipeModel[];
+  archived: ChangedRecipeModel[];
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -15,14 +18,6 @@ export class RecipeService {
 
   getRecipes(): Observable<RecipeModel[]> {
     return this.http.get<RecipeModel[]>(`${environment.apiUrl}/recipes`)
-      .pipe(map(recipes => {
-        return recipes.map(recipe => {
-          return {
-            ...recipe,
-            isValid: this.checkValidity(recipe)
-          }
-        })
-      }));
     // .pipe(map(response => {
     //   return response.map(recipe => {
     //     return {
@@ -33,6 +28,10 @@ export class RecipeService {
     //     }
     //   })
     // }));
+  }
+
+  getAllRecipes(): Observable<RecipeResponse> {
+    return this.http.get<RecipeResponse>(`${environment.apiUrl}/recipes/all`);
   }
 
   updateRecipe(no: number, recipe: RecipeModel) {

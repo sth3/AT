@@ -3,12 +3,24 @@ const express = require('express');
 const router = express.Router();
 const { authorizationCheck, getSession } = require('../auth');
 const { roles } = require('../services/user-service');
-const { getAllRecipes, getRecipeByNo, addRecipe, deleteRecipe, updateRecipe } = require('../services/recipe-service');
+const {
+    getAllRecipes,
+    getRecipeByNo,
+    addRecipe,
+    deleteRecipe,
+    updateRecipe,
+    getActiveRecipes
+} = require('../services/recipe-service');
 const userService = require('../services/user-service');
 
 router.use(express.json());
 
 router.get('/recipes', async (req, res) => {
+    const response = await getActiveRecipes();
+    res.json(response);
+});
+
+router.get('/recipes/all', async (req, res) => {
     const response = await getAllRecipes();
     res.json(response);
 });

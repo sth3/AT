@@ -51,6 +51,7 @@ import { EditUserComponent } from './components/user-control/edit-user/edit-user
 import { PasswordChangeDialogComponent } from './components/user-control/password-change-dialog/password-change-dialog.component';
 import { ArchivedComponentsTableComponent } from './components/components/archived-components-table/archived-components-table.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ArchivedRecipesTableComponent } from './components/recipes/archived-recipes-table/archived-recipes-table.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -74,6 +75,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     EditUserComponent,
     PasswordChangeDialogComponent,
     ArchivedComponentsTableComponent,
+    ArchivedRecipesTableComponent,
   ],
     imports: [
         BrowserModule,

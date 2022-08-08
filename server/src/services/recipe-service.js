@@ -17,7 +17,7 @@ const GET_ALL_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   WHERE M.recipeNo = R.no ' +
     '   FOR JSON PATH) components ' +
     'FROM [AT].[dbo].[RECIPE_H] R ' +
-    'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo '
+    'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ';
 const GET_RECIPE_BY_NO = 'SELECT DISTINCT R.no no, ' +
     '   R.id id,' +
     '   R.name name,' +
@@ -50,20 +50,52 @@ const DELETE_COMPONENTS_MAPPING = 'DELETE FROM [AT].[dbo].[RECIPE_B] ' +
 const ADD_RECIPE_CHANGE = 'INSERT INTO [AT].[dbo].[RECIPES_CHANGES] ' +
     '(oldRecipeNo, newRecipeNo, userId, change) ' +
     'VALUES (@oldRecipeNo, @oldRecipeNo, @userId, @change)';
+const GET_ARCHIVED_RECIPES = 'SELECT CH.id, CH.change, CH.date, ' +
+    'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
+    'CH.oldRecipeNo, CH.newRecipeNo ' +
+    'FROM [AT].[dbo].[RECIPES_CHANGES] CH ' +
+    'JOIN [AT].[dbo].[RECIPE_H] R ON CH.oldRecipeNo = R.no ' +
+    'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId';
+const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
+    '   R.id id,' +
+    '   R.name name,' +
+    '   R.lastUpdate lastUpdate,' +
+    '   (SELECT C.no no,' +
+    '   C.id id,' +
+    '   C.name name,' +
+    '   C.lastUpdate lastUpdate,' +
+    '   M.componentSP componentSP' +
+    '   FROM [AT].[dbo].[RECIPE_B] M ' +
+    '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
+    '   WHERE M.recipeNo = R.no ' +
+    '   FOR JSON PATH) components ' +
+    'FROM [AT].[dbo].[RECIPE_H] R ' +
+    'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ' +
+    'WHERE R.no NOT IN ' +
+    '   (SELECT CH.oldRecipeNo ' +
+    '   FROM [AT].[dbo].[RECIPES_CHANGES] CH)';
 
 
 const getAllRecipes = async () => {
+    const active = await getActiveRecipes();
+    const archived = await getArchivedRecipes();
+    return {
+        active: active,
+        archived: archived
+    }
+}
+
+const getActiveRecipes = async () => {
     const pool = await poolPromise;
-    let { recordset } = await pool.request()
-        .query(GET_ALL_RECIPES);
-    recordset = trimTrailingWhitespace(recordset);
-    recordset.forEach(recipe => {
-        if (!recipe.components) {
-            return;
+    const { recordset } = await pool.request()
+        .query(GET_ACTIVE_RECIPES);
+    const recipes = trimTrailingWhitespace(recordset);
+    recipes.forEach(recipe => {
+        if (recipe.components) {
+            recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
         }
-        recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
-    })
-    return recordset;
+    });
+    return recipes;
 }
 
 const getRecipeByNo = async (no) => {
@@ -179,9 +211,21 @@ const getChange = (oldRecipe, newRecipe) => {
     return changes;
 }
 
+const getArchivedRecipes = async () => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .query(GET_ARCHIVED_RECIPES);
+    for (const change of recordset) {
+        change.oldRecipe = await getRecipeByNo(change.oldRecipeNo);
+        change.newRecipe = await getRecipeByNo(change.newRecipeNo);
+    }
+    return recordset;
+}
+
 
 module.exports = {
     getAllRecipes,
+    getActiveRecipes,
     getRecipeByNo,
     addRecipe,
     deleteRecipe,

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RecipeModel } from '../../models/recipe.model';
+import { ChangedRecipeModel, RecipeModel } from '../../models/recipe.model';
 import { RecipeService } from '../../services/recipe.service';
 import { DialogService } from '../../services/dialog.service';
 import { EditRecipeDialogComponent } from '../edit-recipe-dialog/edit-recipe-dialog.component';
@@ -25,6 +25,7 @@ import { NotifierService } from '../../services/notifier.service';
 })
 export class RecipesComponent implements OnInit {
 
+  archivedData: ChangedRecipeModel[] = [];
   data: RecipeModel[] = [];
   quickFilter: string = '';
   columnsToDisplay = [
@@ -100,14 +101,15 @@ export class RecipesComponent implements OnInit {
 
   private loadRecipes() {
     this.isLoading = true;
-    this.recipeService.getRecipes()
+    this.recipeService.getAllRecipes()
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe((response: RecipeModel[]) => {
+      .subscribe((response) => {
         console.log('data: ', response);
-        this.data = response;
+        this.data = response.active;
         this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.archivedData = response.archived;
       })
   }
 

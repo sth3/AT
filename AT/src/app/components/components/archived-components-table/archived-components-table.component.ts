@@ -30,9 +30,9 @@ export class ArchivedComponentsTableComponent implements OnInit {
 
   dataSource: MatTableDataSource<ChangedComponentModel> = new MatTableDataSource<ChangedComponentModel>();
   columnsToDisplay = [
-    { field: 'no', header: 'Number' },
-    { field: 'id', header: 'ID' },
-    { field: 'name', header: 'Component name', width: '40%' },
+    { field: 'no', header: 'Number', parent: 'oldComponent' },
+    { field: 'id', header: 'ID', parent: 'oldComponent' },
+    { field: 'name', header: 'Component name', width: '40%', parent: 'oldComponent' },
     { field: 'date', header: 'Date of change' },
     { field: 'user', header: 'Changed by' }
   ];
