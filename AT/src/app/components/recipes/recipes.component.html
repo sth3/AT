@@ -69,9 +69,9 @@
           <mat-icon style="color: red">flag</mat-icon>
         </button>
         <mat-menu #popup="matMenu">
-          <p style="margin: 10px">Some components were changed in this recipe after its creation:</p>
+          <p style="margin: 10px">Some components were changed in this recipe after its creation. Expand to see all changes.</p>
           <mat-list>
-            <mat-list-item *ngFor="let component of getInvalidComponents(element)">
+            <mat-list-item *ngFor="let component of getInvalidComponents(element)" class="slim-list-item">
               <div matLine>
                 <span class="light note">{{component.id}}</span>
                 <span>{{component.name}}</span>
