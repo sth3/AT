@@ -105,11 +105,7 @@ const getActiveRecipes = async () => {
     const { recordset } = await pool.request()
         .query(GET_ACTIVE_RECIPES);
     const recipes = trimTrailingWhitespace(recordset);
-    recipes.forEach(recipe => {
-        if (recipe.components) {
-            recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
-        }
-    });
+    recipes.map(recipe => parseComponentsAndCheckValidity(recipe));
     return recipes;
 }
 
@@ -121,10 +117,7 @@ const getRecipeByNo = async (no) => {
     if (recordset.length < 0) {
         return null;
     }
-    const recipe = recordset[0];
-    if (recipe.components) {
-        recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
-    }
+    const recipe = parseComponentsAndCheckValidity(recordset[0]);
     return trimTrailingWhitespace(recipe);
 }
 
@@ -260,6 +253,21 @@ const getArchivedRecipes = async () => {
         change.newRecipe = await getRecipeByNo(change.newRecipeNo);
     }
     return recordset;
+}
+
+const parseComponentsAndCheckValidity = (recipe) => {
+    if (recipe.components) {
+        recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
+    }
+    recipe.isValid = true;
+    for (const component of recipe.components) {
+        const lastRecipeUpdate = new Date(recipe.lastUpdate);
+        if (new Date(component.lastUpdate) > lastRecipeUpdate) {
+            recipe.isValid = false;
+            break;
+        }
+    }
+    return recipe;
 }
 
 

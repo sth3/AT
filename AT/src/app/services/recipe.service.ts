@@ -26,7 +26,7 @@ export class RecipeService {
     return this.http.get<RecipeResponse>(`${environment.apiUrl}/recipes/all`)
       .pipe(map(response => {
       return {
-        active: this.checkChange(response.active),
+        active: response.active,
         archived: response.archived
       }
     }));
@@ -41,13 +41,7 @@ export class RecipeService {
   }
 
   addRecipe(recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe, { withCredentials: true })
-      .pipe(map(response => {
-        return {
-          ...response,
-          isValid: true,
-        }
-      }));
+    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe, { withCredentials: true });
   }
 
   checkValidity(recipe: RecipeModel): boolean {
@@ -60,22 +54,22 @@ export class RecipeService {
     const lastRecipeUpdate = new Date(recipe.lastUpdate);
     return recipe.components.filter(component => new Date(component.lastUpdate) > lastRecipeUpdate);
   }
-
-  checkChange(recipes: RecipeModel[]): RecipeModel[] {
-    console.log('recipes: ', recipes);
-    recipes.forEach(recipe => {
-      recipe.isValid = true;
-      recipe.components.forEach(component => {
-        const lastRecipeUpdate = new Date(recipe.lastUpdate);
-        if (new Date(component.lastUpdate) > lastRecipeUpdate) {
-          console.log('component changed: ', component, recipe);
-          recipe.isValid = false;
-          return;
-        }
-      })
-    })
-    return recipes;
-  }
+  //
+  // checkChange(recipes: RecipeModel[]): RecipeModel[] {
+  //   console.log('recipes: ', recipes);
+  //   recipes.forEach(recipe => {
+  //     recipe.isValid = true;
+  //     recipe.components.forEach(component => {
+  //       const lastRecipeUpdate = new Date(recipe.lastUpdate);
+  //       if (new Date(component.lastUpdate) > lastRecipeUpdate) {
+  //         console.log('component changed: ', component, recipe);
+  //         recipe.isValid = false;
+  //         return;
+  //       }
+  //     })
+  //   })
+  //   return recipes;
+  // }
 
   getComponentsChangesForRecipe(recipeNo: number): Observable<ComponentChangeModel[]> {
     return this.http.get<ComponentChangeModel[]>(`${environment.apiUrl}/recipes/${recipeNo}/componentsChanges`)
