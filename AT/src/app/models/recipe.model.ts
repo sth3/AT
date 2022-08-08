@@ -4,6 +4,7 @@ export interface RecipeModel {
   name: string;
   lastUpdate: string;
   components: ComponentItemModel[];
+  isValid?: boolean;
 }
 
 export interface ChangedRecipeModel {

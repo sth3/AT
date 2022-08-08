@@ -1,6 +1,7 @@
 const { poolPromise } = require('../data/events/dbIndexComponents');
 const sql = require('mssql/msnodesqlv8');
 const { trimTrailingWhitespace } = require('../data/utils');
+const { getComponentByNo } = require('./component-service');
 
 const MAX_CHANGE_LENGTH = 512;
 const GET_ALL_RECIPES = 'SELECT DISTINCT R.no no, ' +
@@ -74,6 +75,20 @@ const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
     'WHERE R.no NOT IN ' +
     '   (SELECT CH.oldRecipeNo ' +
     '   FROM [AT].[dbo].[RECIPES_CHANGES] CH)';
+const GET_CHANGES_FOR_RECIPE = 'SELECT CH.id, CH.change, CH.date, ' +
+    'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
+    'CH.oldRecipeNo, CH.newRecipeNo ' +
+    'FROM [AT].[dbo].[RECIPES_CHANGES] CH ' +
+    'JOIN [AT].[dbo].[RECIPE_H] R ON CH.oldRecipeNo = R.no ' +
+    'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId ' +
+    'WHERE R.no = @no';
+const GET_COMPONENTS_CHANGES_FOR_RECIPE = 'SELECT CH.id, ' +
+    'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
+    'CH.change, CH.oldComponentNo, CH.newComponentNo ' +
+    'FROM [AT].[dbo].[RECIPE_B] M ' +
+    'JOIN [AT].[dbo].COMPONENTS_CHANGES CH ON M.componentNo = CH.oldComponentNo ' +
+    'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId ' +
+    'WHERE M.recipeNo = @no';
 
 
 const getAllRecipes = async () => {
@@ -186,6 +201,31 @@ const addRecipeChange = async (oldRecipeNo, newRecipeNo, userId, change) => {
         .query(ADD_RECIPE_CHANGE);
 }
 
+const getChangesForRecipe = async (no) => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .input('no', sql.Int, no)
+        .query(GET_CHANGES_FOR_RECIPE);
+    const oldRecipe = await getRecipeByNo(no);
+    for (const change of recordset) {
+        change.oldRecipe = oldRecipe;
+        change.newRecipe = await getRecipeByNo(change.newRecipeNo);
+    }
+    return trimTrailingWhitespace(recordset);
+}
+
+const getComponentsChangesForRecipe = async (no) => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .input('no', sql.Int, no)
+        .query(GET_COMPONENTS_CHANGES_FOR_RECIPE);
+    for (const change of recordset) {
+        change.oldComponent = await getComponentByNo(change.oldComponentNo);
+        change.newComponent = await getComponentByNo(change.newComponentNo);
+    }
+    return trimTrailingWhitespace(recordset);
+}
+
 const getChange = (oldRecipe, newRecipe) => {
     const changes = [];
     if (oldRecipe.id !== newRecipe.id) {
@@ -230,5 +270,7 @@ module.exports = {
     addRecipe,
     deleteRecipe,
     updateLastUpdate,
-    updateRecipe
+    updateRecipe,
+    getChangesForRecipe,
+    getComponentsChangesForRecipe
 }

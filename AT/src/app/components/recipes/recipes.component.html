@@ -65,9 +65,9 @@
         <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick(element)">
           <mat-icon>delete_forever</mat-icon>
         </button>
-<!--        <button mat-icon-button [matMenuTriggerFor]="popup" *ngIf="!element.isValid">-->
-<!--          <mat-icon style="color: red">flag</mat-icon>-->
-<!--        </button>-->
+        <button mat-icon-button [matMenuTriggerFor]="popup" *ngIf="!element.isValid">
+          <mat-icon style="color: red">flag</mat-icon>
+        </button>
         <mat-menu #popup="matMenu">
           <p style="margin: 10px">Some components were changed in this recipe after its creation:</p>
           <mat-list>
@@ -109,7 +109,8 @@
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
-        class="default-element-row" [class.default-expanded-row]="expandedRecipe === element">
+        class="default-element-row" [ngClass]="!element.isValid ? 'lightred-background' : ''"
+        [class.default-expanded-row]="expandedRecipe === element">
     </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
     <tr class="mat-row" *matNoDataRow>

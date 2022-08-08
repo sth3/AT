@@ -9,7 +9,9 @@ const {
     addRecipe,
     deleteRecipe,
     updateRecipe,
-    getActiveRecipes
+    getActiveRecipes,
+    getChangesForRecipe,
+    getComponentsChangesForRecipe
 } = require('../services/recipe-service');
 const userService = require('../services/user-service');
 
@@ -50,6 +52,16 @@ router.post('/recipes', authorizationCheck(roles.TECHNOLOG), async (req, res) =>
     const recipeNo = await addRecipe(req.body);
     const response = await getRecipeByNo(recipeNo);
     res.status(201).json(response);
+});
+
+router.get('/recipes/:no/changes', async (req, res) => {
+    const response = await getChangesForRecipe(+req.params.no);
+    res.json(response);
+});
+
+router.get('/recipes/:no/componentChanges', async (req, res) => {
+    const response = await getComponentsChangesForRecipe(+req.params.no);
+    res.json(response);
 });
 
 module.exports = router;

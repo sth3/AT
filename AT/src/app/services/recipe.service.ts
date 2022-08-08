@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChangedRecipeModel, RecipeModel } from '../models/recipe.model';
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
 
 interface RecipeResponse {
   active: RecipeModel[];
@@ -31,7 +32,13 @@ export class RecipeService {
   }
 
   getAllRecipes(): Observable<RecipeResponse> {
-    return this.http.get<RecipeResponse>(`${environment.apiUrl}/recipes/all`);
+    return this.http.get<RecipeResponse>(`${environment.apiUrl}/recipes/all`)
+      .pipe(map(response => {
+      return {
+        active: this.checkChange(response.active),
+        archived: response.archived
+      }
+    }));
   }
 
   updateRecipe(no: number, recipe: RecipeModel) {
@@ -55,5 +62,21 @@ export class RecipeService {
   getInvalidComponents(recipe: RecipeModel) {
     const lastRecipeUpdate = new Date(recipe.lastUpdate);
     return recipe.components.filter(component => new Date(component.lastUpdate) > lastRecipeUpdate);
+  }
+
+  checkChange(recipes: RecipeModel[]): RecipeModel[] {
+    console.log('recipes: ', recipes);
+    recipes.forEach(recipe => {
+      recipe.isValid = true;
+      recipe.components.forEach(component => {
+        const lastRecipeUpdate = new Date(recipe.lastUpdate);
+        if (new Date(component.lastUpdate) > lastRecipeUpdate) {
+          console.log('component changed: ', component, recipe);
+          recipe.isValid = false;
+          return;
+        }
+      })
+    })
+    return recipes;
   }
 }
