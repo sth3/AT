@@ -84,7 +84,7 @@ const GET_CHANGES_FOR_RECIPE = 'SELECT CH.id, CH.change, CH.date, ' +
     'WHERE R.no = @no';
 const GET_COMPONENTS_CHANGES_FOR_RECIPE = 'SELECT CH.id, ' +
     'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
-    'CH.change, CH.oldComponentNo, CH.newComponentNo ' +
+    'CH.change, CH.date, CH.oldComponentNo, CH.newComponentNo ' +
     'FROM [AT].[dbo].[RECIPE_B] M ' +
     'JOIN [AT].[dbo].COMPONENTS_CHANGES CH ON M.componentNo = CH.oldComponentNo ' +
     'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId ' +

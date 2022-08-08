@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ChangedComponentModel } from '../../../models/recipe.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ComponentChangeModel } from '../../../models/component.model';
 
 @Component({
   selector: 'app-archived-components-table',
@@ -17,18 +17,18 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ],
 })
 export class ArchivedComponentsTableComponent implements OnInit {
-  _data: ChangedComponentModel[] = [];
+  _data: ComponentChangeModel[] = [];
 
   @Input()
-  set data(newData: ChangedComponentModel[]) {
+  set data(newData: ComponentChangeModel[]) {
     newData.forEach(change => change.changes = change.change.split(', '));
     console.log('we have data: ', newData);
     this._data = newData;
-    this.dataSource = new MatTableDataSource<ChangedComponentModel>(newData);
+    this.dataSource = new MatTableDataSource<ComponentChangeModel>(newData);
     this.dataSource.paginator = this.paginator;
   }
 
-  dataSource: MatTableDataSource<ChangedComponentModel> = new MatTableDataSource<ChangedComponentModel>();
+  dataSource: MatTableDataSource<ComponentChangeModel> = new MatTableDataSource<ComponentChangeModel>();
   columnsToDisplay = [
     { field: 'no', header: 'Number', parent: 'oldComponent' },
     { field: 'id', header: 'ID', parent: 'oldComponent' },
@@ -37,7 +37,7 @@ export class ArchivedComponentsTableComponent implements OnInit {
     { field: 'user', header: 'Changed by' }
   ];
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field)];
-  expandedComponent: ChangedComponentModel| null = null;
+  expandedComponent: ComponentChangeModel| null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 

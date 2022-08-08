@@ -65,6 +65,12 @@ tr.default-element-row:not(.default-expanded-row):active {
   margin: 0 20px
 }
 
+.default-element-detail.row {
+  flex-direction: row !important;
+  margin: 0 !important;
+  max-height: 250px;
+}
+
 .order-form-field {
   display: flex;
   flex-direction: column;
@@ -111,4 +117,16 @@ mat-card-actions > button {
 
 .menu-no-padding > .mat-menu-content > p {
   padding: 8px !important;
+}
+
+.slim-list-item.mat-list-item {
+  height: 35px !important;
+}
+
+td.cell-no-padding {
+  padding: 0 !important;
+}
+
+.flex-break {
+  flex-basis: 100%;
 }

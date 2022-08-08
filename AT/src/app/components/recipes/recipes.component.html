@@ -38,7 +38,7 @@
       <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
       <td mat-cell *matCellDef="let element">
         <button mat-icon-button aria-label="expand row"
-                (click)="(expandedRecipe = expandedRecipe === element ? null : element); $event.stopPropagation()">
+                (click)="expandRecipe(element, $event)">
           <mat-icon *ngIf="expandedRecipe !== element">keyboard_arrow_down</mat-icon>
           <mat-icon *ngIf="expandedRecipe === element">keyboard_arrow_up</mat-icon>
         </button>
@@ -85,12 +85,13 @@
 
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
-        <div class="default-element-detail"
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length" class="cell-no-padding">
+        <div class="default-element-detail row"
              [@detailExpand]="element == expandedRecipe ? 'expanded' : 'collapsed'">
-          <mat-list style="width: 40%; margin: 20px">
+          <mat-list style="width: 45%; padding: 20px">
+            <h3 style="text-align: center">Components</h3>
             <ng-container *ngFor="let component of element.components; let i = index">
-              <mat-list-item>
+              <mat-list-item class="slim-list-item">
                 <div matLine>
                   <p style="float:left">
                     <span class="light note">{{component.id}}</span>
@@ -103,6 +104,33 @@
             </ng-container>
             <span style="margin: auto" *ngIf="element.components.length === 0">No components in this recipe.</span>
           </mat-list>
+
+          <div *ngIf="element.componentsChanges && element.componentsChanges.length > 0"
+                    style="width: 50%; padding: 20px; overflow-y: auto">
+            <h3 style="text-align: center">Components changes</h3>
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+              <ng-container *ngFor="let change of element.componentsChanges; let j = index">
+                  <mat-form-field style="width: 20%" appearance="outline">
+                    <mat-label>Change ID</mat-label>
+                    <input matInput id="changeId-{{change.id}}" readonly [value]="change.id">
+                  </mat-form-field>
+                  <mat-form-field style="width: 40%" appearance="outline">
+                    <mat-label>Changed by</mat-label>
+                    <input matInput readonly [value]="change.user" id="changeUser-{{change.id}}">
+                  </mat-form-field>
+                  <mat-form-field style="width: 40%" appearance="outline">
+                    <mat-label>Date of change</mat-label>
+                    <input matInput readonly id="changeDate-{{change.id}}"
+                           [value]="change.date | date : 'd.M.y, HH:mm:ss' : 'UTC'">
+                  </mat-form-field>
+                  <ul style="width: 100%">
+                    <li *ngFor="let textChange of change.changes" class="slim-list-item">
+                      <span>{{ textChange }}</span>
+                    </li>
+                  </ul>
+              </ng-container>
+            </div>
+          </div>
         </div>
       </td>
     </ng-container>

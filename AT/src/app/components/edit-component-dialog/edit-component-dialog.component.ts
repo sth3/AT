@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ComponentModel } from '../../models/recipe.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ComponentModel } from '../../models/component.model';
 
 @Component({
   selector: 'app-edit-component-dialog',

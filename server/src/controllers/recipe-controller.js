@@ -59,7 +59,7 @@ router.get('/recipes/:no/changes', async (req, res) => {
     res.json(response);
 });
 
-router.get('/recipes/:no/componentChanges', async (req, res) => {
+router.get('/recipes/:no/componentsChanges', async (req, res) => {
     const response = await getComponentsChangesForRecipe(+req.params.no);
     res.json(response);
 });

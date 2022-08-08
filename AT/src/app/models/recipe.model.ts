@@ -1,3 +1,5 @@
+import { ComponentChangeModel, ComponentItemModel } from './component.model';
+
 export interface RecipeModel {
   no: number;
   id: string;
@@ -5,6 +7,7 @@ export interface RecipeModel {
   lastUpdate: string;
   components: ComponentItemModel[];
   isValid?: boolean;
+  componentsChanges?: ComponentChangeModel[];
 }
 
 export interface ChangedRecipeModel {
@@ -15,25 +18,4 @@ export interface ChangedRecipeModel {
   change: string;
   user: string;
   date: string;
-}
-
-export interface ComponentModel {
-  no: number;
-  id: string;
-  name: string;
-  lastUpdate: string;
-}
-
-export interface ComponentItemModel extends ComponentModel {
-  componentSP: number;
-}
-
-export interface ChangedComponentModel {
-  id: number;
-  oldComponent: ComponentModel;
-  newComponent: ComponentModel;
-  changes: string[];
-  user: string;
-  date: string;
-  change: string;
 }

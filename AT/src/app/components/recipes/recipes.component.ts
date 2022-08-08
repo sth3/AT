@@ -143,4 +143,22 @@ export class RecipesComponent implements OnInit {
     }
     this.exportService.downloadFile(data, headerList, 'recipes');
   }
+
+  expandRecipe(element: RecipeModel, event: Event) {
+    this.expandedRecipe = this.expandedRecipe === element ? null : element;
+    event.stopPropagation();
+    console.log('does he need changes? ', this.expandedRecipe);
+    if (this.expandedRecipe && !this.expandedRecipe.componentsChanges) {
+      console.log('loading changes');
+      this.recipeService.getComponentsChangesForRecipe(this.expandedRecipe.no)
+        .subscribe(response => {
+          if (!response) {
+            response = [];
+          }
+          console.log('changes: ', response);
+          this.data = this.data.map(r => r.no === this.expandedRecipe!.no ? {...r, componentsChanges: response} : r);
+          this.dataSource.data = this.data;
+        })
+    }
+  }
 }

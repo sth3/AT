@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ComponentService } from '../../services/component.service';
-import { ChangedComponentModel, ComponentModel } from '../../models/recipe.model';
 import { DialogService } from '../../services/dialog.service';
 import { EditComponentDialogComponent } from '../edit-component-dialog/edit-component-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
+import { ComponentChangeModel, ComponentModel } from '../../models/component.model';
 
 @Component({
   selector: 'app-components',
@@ -17,7 +17,7 @@ import { NotifierService } from '../../services/notifier.service';
 })
 export class ComponentsComponent implements OnInit {
 
-  archivedData: ChangedComponentModel[] = [];
+  archivedData: ComponentChangeModel[] = [];
   data: ComponentModel[] = [];
   quickFilter: string = '';
   columnsToDisplay = [

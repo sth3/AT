@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ChangedRecipeModel, RecipeModel } from '../models/recipe.model';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
+import { ComponentChangeModel } from '../models/component.model';
 
 interface RecipeResponse {
   active: RecipeModel[];
@@ -19,16 +20,6 @@ export class RecipeService {
 
   getRecipes(): Observable<RecipeModel[]> {
     return this.http.get<RecipeModel[]>(`${environment.apiUrl}/recipes`)
-    // .pipe(map(response => {
-    //   return response.map(recipe => {
-    //     return {
-    //       id: recipe.id,
-    //       no: recipe.no,
-    //       name: recipe.name,
-    //       components: this.getComponents(recipe)
-    //     }
-    //   })
-    // }));
   }
 
   getAllRecipes(): Observable<RecipeResponse> {
@@ -50,7 +41,13 @@ export class RecipeService {
   }
 
   addRecipe(recipe: RecipeModel): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe, { withCredentials: true });
+    return this.http.post<RecipeModel>(`${environment.apiUrl}/recipes`, recipe, { withCredentials: true })
+      .pipe(map(response => {
+        return {
+          ...response,
+          isValid: true,
+        }
+      }));
   }
 
   checkValidity(recipe: RecipeModel): boolean {
@@ -78,5 +75,29 @@ export class RecipeService {
       })
     })
     return recipes;
+  }
+
+  getComponentsChangesForRecipe(recipeNo: number): Observable<ComponentChangeModel[]> {
+    return this.http.get<ComponentChangeModel[]>(`${environment.apiUrl}/recipes/${recipeNo}/componentsChanges`)
+      .pipe(map(changes => {
+        return changes.map(change => {
+          return {
+            ...change,
+            changes: change.change.split(', ')
+          }
+        })
+      }));
+  }
+
+  getRecipeChanges(recipeNo: number): Observable<ChangedRecipeModel[]> {
+    return this.http.get<ChangedRecipeModel[]>(`${environment.apiUrl}/recipes/${recipeNo}/changes`)
+      .pipe(map(changes => {
+        return changes.map(change => {
+          return {
+            ...change,
+            changes: change.change.split(', ')
+          }
+        })
+      }));
   }
 }

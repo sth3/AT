@@ -1,6 +1,6 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ComponentModel, RecipeModel } from '../../models/recipe.model';
+import { RecipeModel } from '../../models/recipe.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentService } from '../../services/component.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -8,6 +8,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable, startWith } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ComponentModel } from '../../models/component.model';
 
 @Component({
   selector: 'app-edit-recipe-dialog',

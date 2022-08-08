@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChangedComponentModel, ComponentModel } from '../models/recipe.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ComponentChangeModel, ComponentModel } from '../models/component.model';
 
 interface ComponentResponse {
   active: ComponentModel[];
-  archived: ChangedComponentModel[];
+  archived: ComponentChangeModel[];
 }
 
 @Injectable({
