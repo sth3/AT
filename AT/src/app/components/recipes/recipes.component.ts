@@ -158,6 +158,7 @@ export class RecipesComponent implements OnInit {
           console.log('changes: ', response);
           this.data = this.data.map(r => r.no === this.expandedRecipe!.no ? {...r, componentsChanges: response} : r);
           this.dataSource.data = this.data;
+          this.expandedRecipe = this.data.find(r => r.no === this.expandedRecipe!.no)!;
         })
     }
   }
