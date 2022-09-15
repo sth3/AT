@@ -19,12 +19,17 @@ import { MatPaginator } from '@angular/material/paginator';
 export class ArchivedRecipesTableComponent implements OnInit {
 
   _data: ChangedRecipeModel[] = [];
+  quickFilter: string = '';
+
   @Input()
   set data(newData: ChangedRecipeModel[]) {
     newData.forEach(change => change.changes = change.change.split(', '));
     this._data = newData;
     this.dataSource = new MatTableDataSource<ChangedRecipeModel>(newData);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = ((data1, filter) => {
+      return JSON.stringify(data1).toLowerCase().includes(filter);
+    });
   }
   dataSource: MatTableDataSource<ChangedRecipeModel> = new MatTableDataSource<ChangedRecipeModel>();
   columnsToDisplay = [
@@ -41,6 +46,14 @@ export class ArchivedRecipesTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  changeFilter() {
+    this.dataSource.filter = this.quickFilter.trim().toLowerCase();
+  }
+
+  refreshData() {
+
   }
 
 }

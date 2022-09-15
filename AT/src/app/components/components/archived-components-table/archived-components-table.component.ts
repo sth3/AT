@@ -18,6 +18,7 @@ import { ComponentChangeModel } from '../../../models/component.model';
 })
 export class ArchivedComponentsTableComponent implements OnInit {
   _data: ComponentChangeModel[] = [];
+  quickFilter: string = '';
 
   @Input()
   set data(newData: ComponentChangeModel[]) {
@@ -26,6 +27,9 @@ export class ArchivedComponentsTableComponent implements OnInit {
     this._data = newData;
     this.dataSource = new MatTableDataSource<ComponentChangeModel>(newData);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = ((data1, filter) => {
+      return JSON.stringify(data1).toLowerCase().includes(filter);
+    });
   }
 
   dataSource: MatTableDataSource<ComponentChangeModel> = new MatTableDataSource<ComponentChangeModel>();
@@ -46,4 +50,11 @@ export class ArchivedComponentsTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  changeFilter() {
+    this.dataSource.filter = this.quickFilter.trim().toLowerCase();
+  }
+
+  refreshData() {
+
+  }
 }

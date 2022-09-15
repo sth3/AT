@@ -8,6 +8,19 @@
         Click to show recipes that were changed but might still be used in orders
       </mat-panel-description>
     </mat-expansion-panel-header>
+    <div style="display: flex; flex-direction: row; place-content: space-between;">
+      <div style="font-size: 15px">
+        <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
+          <mat-label>Quick filter</mat-label>
+          <input matInput placeholder="chilli" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
+          <span matSuffix><mat-icon>filter_alt</mat-icon></span>
+        </mat-form-field>
+      </div>
+      <button mat-button (click)="refreshData()">
+        <mat-icon>refresh</mat-icon>
+        Reload
+      </button>
+    </div>
     <table mat-table
            matSort
            [dataSource]="dataSource"
