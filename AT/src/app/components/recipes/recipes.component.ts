@@ -99,7 +99,7 @@ export class RecipesComponent implements OnInit {
       })
   }
 
-  private loadRecipes() {
+  loadRecipes() {
     this.isLoading = true;
     this.recipeService.getAllRecipes()
       .pipe(finalize(() => this.isLoading = false))

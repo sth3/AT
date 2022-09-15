@@ -157,5 +157,5 @@
                  [showFirstLastButtons]="true"
                  [pageSize]="20" aria-label="Select page of recipes search results"></mat-paginator>
 
-  <app-archived-recipes-table [data]="archivedData"></app-archived-recipes-table>
+  <app-archived-recipes-table [data]="archivedData" (reloadData)="loadRecipes()"></app-archived-recipes-table>
 </div>

@@ -77,5 +77,5 @@
                  [showFirstLastButtons]="true"
                  [pageSize]="20" aria-label="Select page of components search results"></mat-paginator>
 
-  <app-archived-components-table [data]="archivedData"></app-archived-components-table>
+  <app-archived-components-table [data]="archivedData" (reloadData)="loadComponents()"></app-archived-components-table>
 </div>

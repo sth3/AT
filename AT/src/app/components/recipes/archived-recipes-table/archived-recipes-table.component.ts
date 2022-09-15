@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { ChangedRecipeModel } from '../../../models/recipe.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,6 +20,9 @@ export class ArchivedRecipesTableComponent implements OnInit {
 
   _data: ChangedRecipeModel[] = [];
   quickFilter: string = '';
+
+  @Output()
+  reloadData = new EventEmitter();
 
   @Input()
   set data(newData: ChangedRecipeModel[]) {
@@ -53,7 +56,7 @@ export class ArchivedRecipesTableComponent implements OnInit {
   }
 
   refreshData() {
-
+    this.reloadData.emit();
   }
 
 }

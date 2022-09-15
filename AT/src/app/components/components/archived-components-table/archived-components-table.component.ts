@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -19,6 +19,9 @@ import { ComponentChangeModel } from '../../../models/component.model';
 export class ArchivedComponentsTableComponent implements OnInit {
   _data: ComponentChangeModel[] = [];
   quickFilter: string = '';
+
+  @Output()
+  reloadData = new EventEmitter();
 
   @Input()
   set data(newData: ComponentChangeModel[]) {
@@ -55,6 +58,6 @@ export class ArchivedComponentsTableComponent implements OnInit {
   }
 
   refreshData() {
-
+    this.reloadData.emit();
   }
 }

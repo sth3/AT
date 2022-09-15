@@ -102,7 +102,7 @@ export class ComponentsComponent implements OnInit {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
-  private loadComponents() {
+  loadComponents() {
     this.isLoading = true;
     this.componentService.getAllComponents()
       .pipe(finalize(() => this.isLoading = false))
