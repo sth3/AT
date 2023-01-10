@@ -11,11 +11,10 @@
                     </span>
                 </mat-form-field>
             </div>
-            <h2 class="table-title">Štatistika</h2>
-            <div style="font-size: 15px">
-                <mat-form-field appearance="fill" style="margin: 20px 10px 0; padding: 0">
-                    <mat-label>Enter a date range</mat-label>
-                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <div style="font-size: 15px; ">
+                <mat-form-field appearance="fill" style="margin: 20px 10px 0; padding: 0; ">
+                    <mat-label >Enter a date range</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker" >
                         <input matStartDate formControlName="start" placeholder="Start date" (ngModelChange)="changeDate()" >
                         <input matEndDate formControlName="end" placeholder="End date" (ngModelChange)="changeDate()">
                     </mat-date-range-input>
@@ -26,6 +25,8 @@
                 <!-- <p>Selected range: {{range.value.start | date : 'd.M.y, HH:mm:ss'  }} Selected range: {{range.value.end | date : 'd.M.y, HH:mm:ss' }}</p> -->
 
             </div>
+            <h2 class="table-title">Štatistika</h2>
+            
 
 
             <span class="spacer"></span>

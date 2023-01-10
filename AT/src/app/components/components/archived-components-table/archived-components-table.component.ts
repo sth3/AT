@@ -4,6 +4,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ComponentChangeModel } from '../../../models/component.model';
 
+import { DateAdapter } from '@angular/material/core';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-archived-components-table',
   templateUrl: './archived-components-table.component.html',
@@ -19,7 +22,10 @@ import { ComponentChangeModel } from '../../../models/component.model';
 export class ArchivedComponentsTableComponent implements OnInit {
   _data: ComponentChangeModel[] = [];
   quickFilter: string = '';
-
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
   @Output()
   reloadData = new EventEmitter();
 
@@ -28,7 +34,26 @@ export class ArchivedComponentsTableComponent implements OnInit {
     newData.forEach(change => change.changes = change.change.split(', '));
     console.log('we have data: ', newData);
     this._data = newData;
-    this.dataSource = new MatTableDataSource<ComponentChangeModel>(newData);
+
+
+    if (this.range.value.start !== null && this.range.value.end !== null) {
+      this._data = newData.filter((item: ComponentChangeModel) => {
+        // console.log('new Date(item.datetime)',new Date(item.datetime));
+        // console.log('range start', this.range.value.start);
+        return new Date(item.date) >= this.range.value.start &&
+          new Date(item.date) <= this.range.value.end;
+      });
+    } else if (this.range.value.start !== null) {
+      this._data = newData.filter((item: ComponentChangeModel) => {
+        return new Date(item.date) >= this.range.value.start ;
+      });
+    } else if (this.range.value.end !== null) {
+      this._data = newData.filter((item: ComponentChangeModel) => {
+        return new Date(item.date) <= this.range.value.end ;
+      });
+    }
+
+    this.dataSource = new MatTableDataSource<ComponentChangeModel>(this._data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = ((data1, filter) => {
       return JSON.stringify(data1).toLowerCase().includes(filter);
@@ -48,7 +73,7 @@ export class ArchivedComponentsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
-  constructor() { }
+  constructor(private dateAdapter: DateAdapter<Date>) { this.dateAdapter.setLocale('en-GB')}
 
   ngOnInit(): void {
   }

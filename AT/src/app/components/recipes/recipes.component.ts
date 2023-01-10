@@ -11,6 +11,9 @@ import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
 
+import { DateAdapter } from '@angular/material/core';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
@@ -28,6 +31,10 @@ export class RecipesComponent implements OnInit {
   archivedData: ChangedRecipeModel[] = [];
   data: RecipeModel[] = [];
   quickFilter: string = '';
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
   columnsToDisplay = [
     { field: 'no', header: 'No' },
     { field: 'id', header: 'ID' },
@@ -44,7 +51,9 @@ export class RecipesComponent implements OnInit {
   constructor(private recipeService: RecipeService,
               private dialogService: DialogService,
               private exportService: ExportService,
-              private notifierService: NotifierService) {
+              private notifierService: NotifierService,
+              private dateAdapter: DateAdapter<Date>) {
+                this.dateAdapter.setLocale('en-GB');
   }
 
   ngOnInit(): void {
@@ -106,6 +115,23 @@ export class RecipesComponent implements OnInit {
       .subscribe((response) => {
         console.log('data: ', response);
         this.data = response.active;
+
+        if (this.range.value.start !== null && this.range.value.end !== null) {
+          this.data = response.active.filter((item: RecipeModel) => {
+            // console.log('new Date(item.datetime)',new Date(item.datetime));
+            // console.log('range start', this.range.value.start);
+            return new Date(item.lastUpdate) >= this.range.value.start &&
+              new Date(item.lastUpdate) <= this.range.value.end;
+          });
+        } else if (this.range.value.start !== null) {
+          this.data = response.active.filter((item: RecipeModel) => {
+            return new Date(item.lastUpdate) >= this.range.value.start ;
+          });
+        } else if (this.range.value.end !== null) {
+          this.data = response.active.filter((item: RecipeModel) => {
+            return new Date(item.lastUpdate) <= this.range.value.end ;
+          });
+        }
         this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

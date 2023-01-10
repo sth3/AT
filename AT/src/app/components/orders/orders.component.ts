@@ -11,6 +11,9 @@ import { finalize } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DateAdapter } from '@angular/material/core';
+import { FormGroup, FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -27,6 +30,11 @@ export class OrdersComponent implements OnInit {
 
   orders: OrderModel[] = [];
   quickFilter: string = '';
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+  
   columnsToDisplay = [
     { field: 'no', header: 'No' },
     { field: 'id', header: 'ID' },
@@ -45,7 +53,9 @@ export class OrdersComponent implements OnInit {
               private dialogService: DialogService,
               private exportService: ExportService,
               private notifierService: NotifierService,
-              private router: Router, private r: ActivatedRoute) { }
+              private router: Router, private r: ActivatedRoute,
+              private dateAdapter: DateAdapter<Date>) {
+                this.dateAdapter.setLocale('en-GB'); }
 
   ngOnInit(): void {
     this.getOrders();
@@ -59,6 +69,23 @@ export class OrdersComponent implements OnInit {
       (data: OrderModel[]) => {
         this.orders = data;
         console.log(this.orders);
+        if (this.range.value.start !== null && this.range.value.end !== null) {
+          this.orders = data.filter((item: OrderModel) => {
+            // console.log('new Date(item.datetime)',new Date(item.datetime));
+            // console.log('range start', this.range.value.start);
+            return new Date(item.lastUpdate) >= this.range.value.start &&
+              new Date(item.lastUpdate) <= this.range.value.end;
+          });
+        } else if (this.range.value.start !== null) {
+          this.orders = data.filter((item: OrderModel) => {
+            return new Date(item.lastUpdate) >= this.range.value.start ;
+          });
+        } else if (this.range.value.end !== null) {
+          this.orders = data.filter((item: OrderModel) => {
+            return new Date(item.lastUpdate) <= this.range.value.end ;
+          });
+        }
+
         this.dataSource = new MatTableDataSource<OrderModel>(this.orders);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

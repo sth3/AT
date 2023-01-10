@@ -10,6 +10,8 @@ import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
 import { ComponentChangeModel, ComponentModel } from '../../models/component.model';
 
+import { DateAdapter } from '@angular/material/core';
+import { FormGroup, FormControl } from '@angular/forms';
 @Component({
   selector: 'app-components',
   templateUrl: './components.component.html',
@@ -20,6 +22,10 @@ export class ComponentsComponent implements OnInit {
   archivedData: ComponentChangeModel[] = [];
   data: ComponentModel[] = [];
   quickFilter: string = '';
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
   columnsToDisplay = [
     { field: 'no', header: 'Number' },
     { field: 'id', header: 'ID' },
@@ -35,7 +41,9 @@ export class ComponentsComponent implements OnInit {
   constructor(private componentService: ComponentService,
               private dialogService: DialogService,
               private exportService: ExportService,
-              private notifierService: NotifierService) {
+              private notifierService: NotifierService,
+              private dateAdapter: DateAdapter<Date>) {
+                this.dateAdapter.setLocale('en-GB');
   }
 
   ngOnInit(): void {
@@ -101,6 +109,9 @@ export class ComponentsComponent implements OnInit {
   changeFilter() {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
+  changeDate() {
+    this.loadComponents();  
+  }
 
   loadComponents() {
     this.isLoading = true;
@@ -109,6 +120,24 @@ export class ComponentsComponent implements OnInit {
       .subscribe(data => {
         console.log('components loaded: ', data);
         this.data = data.active;
+ 
+        if (this.range.value.start !== null && this.range.value.end !== null) {
+          this.data = data.active.filter((item: ComponentModel) => {
+            // console.log('new Date(item.datetime)',new Date(item.datetime));
+            // console.log('range start', this.range.value.start);
+            return new Date(item.lastUpdate) >= this.range.value.start &&
+              new Date(item.lastUpdate) <= this.range.value.end;
+          });
+        } else if (this.range.value.start !== null) {
+          this.data = data.active.filter((item: ComponentModel) => {
+            return new Date(item.lastUpdate) >= this.range.value.start ;
+          });
+        } else if (this.range.value.end !== null) {
+          this.data = data.active.filter((item: ComponentModel) => {
+            return new Date(item.lastUpdate) <= this.range.value.end ;
+          });
+        }
+
         this.dataSource = new MatTableDataSource<ComponentModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
