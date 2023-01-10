@@ -166,6 +166,10 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
+    <button mat-button color="primary" (click)="backToOrder();">
+      <mat-icon>arrow_back</mat-icon>
+      Back to order      
+    </button>
     <button mat-icon-button color="primary"
             aria-label="Edit item" (click)="onEditClick()"
             *ngIf="!editable">

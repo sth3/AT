@@ -205,4 +205,8 @@ export class OrderDetailComponent implements OnInit {
       || (this.order !== null && o.no === this.order?.no));
     return isValid ? null : { invalidOrderId: true };
   }
+
+  backToOrder() {
+    this.router.navigate(['../../orders'], { relativeTo: this.r })
+  }
 }
