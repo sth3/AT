@@ -2,6 +2,7 @@ export interface ComponentModel {
   no: number;
   id: string;
   name: string;
+  packing:number;
   lastUpdate: string;
 }
 

@@ -3,25 +3,31 @@ import { ComponentService } from '../../services/component.service';
 import { DialogService } from '../../services/dialog.service';
 import { EditComponentDialogComponent } from '../edit-component-dialog/edit-component-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
-import { finalize } from 'rxjs';
+import { finalize, BehaviorSubject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
 import { ComponentChangeModel, ComponentModel } from '../../models/component.model';
+import { UserModel , UserRole  } from '../../models/user.model';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
+
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-components',
   templateUrl: './components.component.html',
   styleUrls: ['./components.component.css']
 })
 export class ComponentsComponent implements OnInit {
-
+  user: BehaviorSubject<UserModel | null>;
+  isAdmin = false;
   archivedData: ComponentChangeModel[] = [];
   data: ComponentModel[] = [];
   quickFilter: string = '';
+  currentUser!: UserModel;
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
@@ -30,6 +36,7 @@ export class ComponentsComponent implements OnInit {
     { field: 'no', header: 'Number' },
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Component name', width: '40%' },
+    { field: 'packing', header: 'Packing' },
     { field: 'lastUpdate', header: 'Last update' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field), 'actions'];
@@ -39,11 +46,16 @@ export class ComponentsComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private componentService: ComponentService,
-              private dialogService: DialogService,
-              private exportService: ExportService,
-              private notifierService: NotifierService,
-              private dateAdapter: DateAdapter<Date>) {
-                this.dateAdapter.setLocale('en-GB');
+    private dialogService: DialogService,
+    private exportService: ExportService,
+    private notifierService: NotifierService,
+    private authService: AuthService,
+    private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('en-GB');
+    this.user = this.authService.user$;
+    this.user.subscribe(user => {
+      this.isAdmin = user?.role === UserRole.ADMIN;
+    });
   }
 
   ngOnInit(): void {
@@ -72,45 +84,61 @@ export class ComponentsComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.dialogService.confirmDialog('Are you sure you want to update this component?')
-          .subscribe(resultS => {
-            if (resultS) {
-              console.log('edit clicked: ', data, result);
-              this.componentService.updateComponent(data.no, result)
-                .subscribe(response => {
-                  console.log('component updated: ', response);
-                  this.notifierService.showDefaultNotification('Component updated');
-                  this.data = this.data.map(c => c.no === data.no ? {...c, ...result} : c);
-                  this.dataSource.data = this.data;
-                })
-           }
-          })
+            .subscribe(resultS => {
+              if (resultS) {
+                console.log('edit clicked: ', data, result);
+                this.componentService.updateComponent(data.no, result)
+                  .subscribe(response => {
+                    console.log('component updated: ', response);
+                    this.notifierService.showDefaultNotification('Component updated');
+                    this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                    this.dataSource.data = this.data;
+                  })
+              }
+            })
         }
       })
   }
 
   createComponent() {
-    this.dialogService.customDialog(EditComponentDialogComponent,
-      { component: null, allComponents: this.data, editMode: false })
-      .subscribe(result => {
-        if (result) {
-          console.log('create clicked: ', result);
-          this.componentService.addComponent(result)
-            .subscribe(response => {
-              const component = { ...response, ...result };
-              console.log('component created: ', component);
-              this.notifierService.showDefaultNotification('New component created');
-              this.data.push(component);
-              this.dataSource.data = this.data;
-            })
-        }
-      })
+    this.authService.getCurrentUser().subscribe(data => {
+     
+     this.currentUser = data;
+     console.log('current user: ', data)
+     if (this.currentUser !== null ) {
+      console.log('tuuu current user: ', this.currentUser.role)
+      if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG' ){
+        this.dialogService.customDialog(EditComponentDialogComponent,
+          { component: null, allComponents: this.data, editMode: false })
+          .subscribe(result => {
+            if (result) {
+              console.log('create clicked: ', result);
+              this.componentService.addComponent(result)
+                .subscribe(response => {
+                  const component = { ...response, ...result };
+                  console.log('component created: ', component);
+                  this.notifierService.showDefaultNotification('New component created');
+                  this.data.push(component);
+                  this.dataSource.data = this.data;
+                })
+            }
+          })        
+      } else {
+        this.authService.promptLogin('Login');         
+        return;
+      }
+    }else {
+      this.authService.promptLogin('Login');      
+      return;
+    }
+    })
   }
 
   changeFilter() {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
   changeDate() {
-    this.loadComponents();  
+    this.loadComponents();
   }
 
   loadComponents() {
@@ -120,7 +148,7 @@ export class ComponentsComponent implements OnInit {
       .subscribe(data => {
         console.log('components loaded: ', data);
         this.data = data.active;
- 
+
         if (this.range.value.start !== null && this.range.value.end !== null) {
           this.data = data.active.filter((item: ComponentModel) => {
             // console.log('new Date(item.datetime)',new Date(item.datetime));
@@ -130,11 +158,11 @@ export class ComponentsComponent implements OnInit {
           });
         } else if (this.range.value.start !== null) {
           this.data = data.active.filter((item: ComponentModel) => {
-            return new Date(item.lastUpdate) >= this.range.value.start ;
+            return new Date(item.lastUpdate) >= this.range.value.start;
           });
         } else if (this.range.value.end !== null) {
           this.data = data.active.filter((item: ComponentModel) => {
-            return new Date(item.lastUpdate) <= this.range.value.end ;
+            return new Date(item.lastUpdate) <= this.range.value.end;
           });
         }
 
@@ -143,6 +171,8 @@ export class ComponentsComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.archivedData = data.archived;
       })
+
+    
   }
 
   exportCSV(visibleDataOnly: boolean) {

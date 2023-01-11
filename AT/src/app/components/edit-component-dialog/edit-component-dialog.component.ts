@@ -8,7 +8,7 @@ import { ComponentModel } from '../../models/component.model';
   template: `
     <h1 mat-dialog-title>{{ data.editMode ? 'Edit' : 'Create' }}
       component {{data.editMode ? data.component.id : ''}}</h1>
-    <div mat-dialog-content style="height: 150px; width: 100%">
+    <div mat-dialog-content style="height: 250px; width: 100%">
       <form [formGroup]="form">
         <mat-form-field style="width: 100%" appearance="outline">
           <mat-label>Component name</mat-label>
@@ -19,6 +19,7 @@ import { ComponentModel } from '../../models/component.model';
           <mat-error *ngIf="name!.hasError('invalidComponentName')">This component name is already in use.
           </mat-error>
         </mat-form-field>
+
         <mat-form-field style="width: 100%" appearance="outline">
           <mat-label>Component ID</mat-label>
           <input matInput placeholder="ID" formControlName="id">
@@ -29,6 +30,21 @@ import { ComponentModel } from '../../models/component.model';
           <mat-error *ngIf="id!.hasError('invalidComponentId')">This ID is already in use.
           </mat-error>
         </mat-form-field>
+
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Packing</mat-label>
+          <input matInput placeholder="Packing" formControlName="packing" type="number" min="0" onfocus="this.select()">
+          <mat-error *ngIf="packing!.hasError('required')">Packing is required.</mat-error>
+          
+
+          <!-- <mat-error *ngIf="packing!.hasError('minlength') || packing!.hasError('maxlength')">Component ID must be exactly
+            10 characters long.
+          </mat-error> -->
+          <span matSuffix>kg</span>
+        </mat-form-field>
+
+    
+
       </form>
     </div>
     <div mat-dialog-actions>
@@ -51,7 +67,10 @@ export class EditComponentDialogComponent implements OnInit {
         [Validators.required, Validators.minLength(3), this.validComponentNameValidator.bind(this)]),
       id: new FormControl(data.component ? data.component.id : this.getNewId(data.allComponents),
         [Validators.required, Validators.minLength(10), Validators.maxLength(10),
-          this.validComponentIdValidator.bind(this)])
+        this.validComponentIdValidator.bind(this)]),
+      packing: new FormControl(data.component ? data.component.packing : '',
+       [Validators.required, Validators.minLength(1), Validators.maxLength(3),
+       this.validComponentPackingValidator.bind(this)])
     });
   }
 
@@ -61,6 +80,10 @@ export class EditComponentDialogComponent implements OnInit {
 
   get id() {
     return this.form.get('id');
+  }
+
+  get packing() {
+    return this.form.get('packing');
   }
 
   ngOnInit(): void {
@@ -82,6 +105,15 @@ export class EditComponentDialogComponent implements OnInit {
     const isValid = allComponents.every(component => component.id !== value.toLowerCase()
       || (currentComponent !== null && component.no === currentComponent.no));
     return isValid ? null : { invalidComponentId: true };
+  }
+
+  validComponentPackingValidator(control: FormControl) {
+    const value = control.value;
+    const allComponents = this.data.allComponents;
+    const currentComponent = this.data.component;
+    const isValid = allComponents.every(component => component.packing !== value.toLowerCase()
+      || (currentComponent !== null && component.no === currentComponent.no));
+    return isValid ? null : { invalidComponentPacking: true };
   }
 
   getNewId(allComponents: ComponentModel[]): string {

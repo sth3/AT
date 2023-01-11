@@ -30,7 +30,7 @@ export class DialogService {
   customDialog(component: any, data: any, options?: ICustomDialogOptions): Observable<any> {
     const dialogRef = this.dialog.open(component, {
       width: options?.width || '400px',
-      height: options?.height || '350px',
+      height: options?.height || '400px',
       data: data,
       disableClose: options?.disableClose || false
     });
