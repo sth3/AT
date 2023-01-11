@@ -33,7 +33,7 @@ import { ComponentModel } from '../../models/component.model';
 
         <mat-form-field style="width: 100%" appearance="outline">
           <mat-label>Packing</mat-label>
-          <input matInput placeholder="Packing" formControlName="packing" type="number" min="0" onfocus="this.select()">
+          <input matInput placeholder="Packing" formControlName="packing" type="number" min="0" >
           <mat-error *ngIf="packing!.hasError('required')">Packing is required.</mat-error>
           
 
@@ -69,8 +69,7 @@ export class EditComponentDialogComponent implements OnInit {
         [Validators.required, Validators.minLength(10), Validators.maxLength(10),
         this.validComponentIdValidator.bind(this)]),
       packing: new FormControl(data.component ? data.component.packing : '',
-       [Validators.required, Validators.minLength(1), Validators.maxLength(3),
-       this.validComponentPackingValidator.bind(this)])
+       [Validators.required])
     });
   }
 
@@ -107,14 +106,7 @@ export class EditComponentDialogComponent implements OnInit {
     return isValid ? null : { invalidComponentId: true };
   }
 
-  validComponentPackingValidator(control: FormControl) {
-    const value = control.value;
-    const allComponents = this.data.allComponents;
-    const currentComponent = this.data.component;
-    const isValid = allComponents.every(component => component.packing !== value.toLowerCase()
-      || (currentComponent !== null && component.no === currentComponent.no));
-    return isValid ? null : { invalidComponentPacking: true };
-  }
+  
 
   getNewId(allComponents: ComponentModel[]): string {
     const maxId = allComponents
