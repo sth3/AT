@@ -112,19 +112,44 @@
           </div>
           <div style="flex-direction: row; flex: 1 0 30%">
             <mat-list>
-              <h2>Components</h2>
+              <div style="width: 100%; display: flex;">
+                <div style="width: 50%; height: auto;">
+              <h2>Components/Recipe</h2>
+            </div>
+            <div style="width: 50%; height: auto;">
+              <h2>Components/Order</h2>
+            </div>
+          </div>
               <ng-container *ngFor="let component of element.recipe.components; let i = index">
                 <mat-list-item>
                   <div matLine>
-                    <p style="float:left">
-                      <span class="light note">{{component.id}}</span>
-                      {{component.name}}
-                    </p>
-                    <p style="float:right">{{component.componentSP}} kg</p>
+                  <div style="width: 100%; display: flex;">
+                    <div style="width: 50%; height: auto;">
+                      
+                      <p style="float:left">
+                        <span class="light note">{{component.id}}</span>
+                        {{component.name}}
+                      </p>
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP.toFixed(3)}} kg</p>
+
+                    </div>
+                    <div style="width: 50%; height: auto; ">
+                      
+                      <p style="float:left">
+                        <span  class="light note">{{component.id  }}</span>
+                        {{component.name}}                                            
+                      </p>
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP.toFixed(3) * element.quantity.toFixed(3) | number }} kg</p>
+                    </div>
+                    
+                  </div>
                   </div>
                 </mat-list-item>
-                <mat-divider *ngIf="i !== element.recipe.components.length - 1"></mat-divider>
+                
               </ng-container>
+
+              
+
               <span style="margin: auto"
                     *ngIf="element.recipe.components.length === 0">No components in this recipe.</span>
             </mat-list>
