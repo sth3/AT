@@ -2,35 +2,34 @@
     <div id="invoice" #invoice >
      
     
-      <mat-card>
+      <mat-card style="padding: 10px">
         <mat-card-title>Order detail</mat-card-title>
-        <mat-card-content>
-          <form [formGroup]="form">
+        <mat-card-content >
+          <form [formGroup]="form" >
             <fieldset [disabled]="!editable" class="order-form-container">
               <div class="order-form-field">
                 <h3>Order ID</h3>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="ID" formControlName="id">                  
+                <mat-form-field appearance="outline" >
+                  <input matInput placeholder="ID" formControlName="id" >                  
                 </mat-form-field>
               </div>
               <div class="order-form-field">
                 <h3>Order name</h3>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="Name" formControlName="name">
+                <mat-form-field appearance="outline" >
+                  <input matInput placeholder="Name" formControlName="name" >
                   
                 </mat-form-field>
               </div>
               <div class="order-form-field">
                 <h3>Customer name</h3>
-                <mat-form-field appearance="outline">
-                  <input matInput placeholder="Customer name" formControlName="customerName">
+                <mat-form-field appearance="outline" >
+                  <input matInput placeholder="Customer name" formControlName="customerName" >
                 </mat-form-field>
               </div>
               <div class="order-form-field">
                 <h3>Due date</h3>
                 <mat-form-field appearance="outline">
-                  <input matInput value="{{this.orderDueDate | date : 'd.M.y'}}" >
-                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <input matInput value="{{this.orderDueDate | date : 'd.M.y'}}"  >                 
                   
                 </mat-form-field>
               </div>
@@ -104,7 +103,7 @@
                           <span class="light note">{{component.id}}</span>
                           {{component.name}}
                         </p>
-                        <p style="float:right">{{component.componentSP}} kg</p>
+                        <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
                       </div>
                     </mat-list-item>
                     <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider>
@@ -137,6 +136,14 @@
                   
                 </mat-form-field>
               </div>
+
+              <div class="order-form-field">
+                <h3>Emptying station ID</h3>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Packing machine ID" formControlName="idEmptyingStationBag" min="1" max="4" type="number">
+                  
+                </mat-form-field>
+              </div>
       
               <div class="order-form-field">
                 <h3>Operator</h3>
@@ -144,24 +151,17 @@
                   <input matInput placeholder="Operator" formControlName="operatorName" readonly>
                 </mat-form-field>
               </div>
-      
+              <div *ngIf="!isNew" class="order-time-container">
+                <div class="order-time">
+                  <h3>Created at</h3>
+                  <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
+                </div>
+                
+              </div>
             </fieldset>
           </form>
       
-          <div *ngIf="!isNew" class="order-time-container">
-            <div class="order-time">
-              <h3>Created at</h3>
-              <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
-            </div>
-            <div class="order-time">
-              <h3>Last update</h3>
-              <span>{{order?.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</span>
-            </div>
-            <div *ngIf="order?.completedAt" class="order-time">
-              <h3>Completed at</h3>
-              <span>{{order?.completedAt | date: 'dd/MM/yyyy HH:mm'}}</span>
-            </div>
-          </div>
+          
         </mat-card-content>
       </mat-card>
   

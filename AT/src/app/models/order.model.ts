@@ -12,6 +12,7 @@ export interface OrderModel {
   idMixer: number;
   mixingTime: number;
   idPackingMachine: number;
+  idEmptyingStationBag: number;
   createdAt: string;
   lastUpdate: string;
   completedAt: string | null;

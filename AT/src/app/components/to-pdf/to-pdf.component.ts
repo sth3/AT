@@ -144,9 +144,9 @@ export class ToPDFComponent implements OnInit {
     html2canvas(this.invoiceElement.nativeElement, { scale: 3 }).then((canvas) => {
       const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
       const fileWidth = 200;
-      const generatedImageHeight = (canvas.height * fileWidth) / canvas.width;
+      const generatedImageHeight =  (canvas.height * fileWidth) / canvas.width;
       let PDF = new jsPDF('p', 'mm', 'a4',);
-      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 5, fileWidth, generatedImageHeight,);
+      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 0, fileWidth, generatedImageHeight,);
       PDF.html(this.invoiceElement.nativeElement.innerHTML)
       PDF.save('Orders.pdf');
     });
@@ -165,6 +165,7 @@ export class ToPDFComponent implements OnInit {
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
+      idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
       operatorId: new FormControl(this.order?.operator.id || '001'),
       // todo get real used id/name here
       operatorName: new FormControl(this.order?.operator.username || 'admin')

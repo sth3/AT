@@ -115,6 +115,10 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('idPackingMachine') as FormControl;
   }
 
+  get idEmptyingStationBag() {
+    return this.form.get('idEmptyingStationBag') as FormControl;
+  }
+
   get idMixer() {
     return this.form.get('idMixer') as FormControl;
   }
@@ -132,6 +136,7 @@ export class OrderDetailComponent implements OnInit {
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
+      idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
       operatorId: new FormControl(this.order?.operator.id || null),
       operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null)
     })

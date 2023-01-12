@@ -16,7 +16,7 @@ import { ComponentModel } from '../../models/component.model';
           <mat-error *ngIf="name!.hasError('required')">Component name is required.</mat-error>
           <mat-error *ngIf="name!.hasError('minlength')">Component name must be at least 3 characters long.
           </mat-error>
-          <mat-error *ngIf="name!.hasError('maxlength')">Component name must have no more than 10 characters.
+          <mat-error *ngIf="name!.hasError('maxlength')">Component name must have no more than 30 characters.
           </mat-error>
           <mat-error *ngIf="name!.hasError('invalidComponentName')">This component name is already in use.
           </mat-error>
