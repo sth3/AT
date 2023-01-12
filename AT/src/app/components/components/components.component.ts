@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { ExportService } from '../../services/export.service';
 import { NotifierService } from '../../services/notifier.service';
 import { ComponentChangeModel, ComponentModel } from '../../models/component.model';
-import { UserModel , UserRole  } from '../../models/user.model';
+import { UserModel, UserRole } from '../../models/user.model';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -64,74 +64,97 @@ export class ComponentsComponent implements OnInit {
   }
 
   onDeleteClick(data: any) {
-    this.dialogService.confirmDialog('Are you sure you want to delete this component?')
-      .subscribe(result => {
-        if (result) {
-          console.log('delete clicked: ', data);
-          this.componentService.deleteComponent(data.no)
-            .subscribe(response => {
-              console.log('component deleted: ', response);
-              this.notifierService.showDefaultNotification('Component deleted');
-              this.data = this.data.filter(u => u.no !== data.no);
-              this.dataSource.data = this.data;
-            })
-        }
-      })
-  }
-
-  onEditClick(data: any) {
-    this.dialogService.customDialog(EditComponentDialogComponent,
-      { component: data, allComponents: this.data, editMode: true })
-      .subscribe(result => {
-        if (result) {
-          this.dialogService.confirmDialog('Are you sure you want to update this component?')
-            .subscribe(resultS => {
-              if (resultS) {
-                console.log('edit clicked: ', data, result);
-                this.componentService.updateComponent(data.no, result)
+    this.authService.getCurrentUser().subscribe(dataUser => {
+      this.currentUser = dataUser;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' ) {
+          this.dialogService.confirmDialog('Are you sure you want to delete this component?')
+            .subscribe(result => {
+              if (result) {
+                console.log('delete clicked: ', data);
+                this.componentService.deleteComponent(data.no)
                   .subscribe(response => {
-                    console.log('component updated: ', response);
-                    this.notifierService.showDefaultNotification('Component updated');
-                    this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                    console.log('component deleted: ', response);
+                    this.notifierService.showDefaultNotification('Component deleted');
+                    this.data = this.data.filter(u => u.no !== data.no);
                     this.dataSource.data = this.data;
                   })
               }
             })
+        } else {
+          this.authService.promptLogin('Login');
+          return;
         }
-      })
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
+  }
+
+  onEditClick(data: any) {
+    this.authService.getCurrentUser().subscribe(dataUser => {
+      this.currentUser = dataUser;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.dialogService.customDialog(EditComponentDialogComponent,
+            { component: data, allComponents: this.data, editMode: true })
+            .subscribe(result => {
+              if (result) {
+                this.dialogService.confirmDialog('Are you sure you want to update this component?')
+                  .subscribe(resultS => {
+                    if (resultS) {
+                      console.log('edit clicked: ', data, result);
+                      this.componentService.updateComponent(data.no, result)
+                        .subscribe(response => {
+                          console.log('component updated: ', response);
+                          this.notifierService.showDefaultNotification('Component updated');
+                          this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                          this.dataSource.data = this.data;
+                        })
+                    }
+                  })
+              }
+            })
+        } else {
+          this.authService.promptLogin('Login');
+          return;
+        }
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
   }
 
   createComponent() {
     this.authService.getCurrentUser().subscribe(data => {
-     
-     this.currentUser = data;
-     console.log('current user: ', data)
-     if (this.currentUser !== null ) {
-      console.log('tuuu current user: ', this.currentUser.role)
-      if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG' ){
-        this.dialogService.customDialog(EditComponentDialogComponent,
-          { component: null, allComponents: this.data, editMode: false })
-          .subscribe(result => {
-            if (result) {
-              console.log('create clicked: ', result);
-              this.componentService.addComponent(result)
-                .subscribe(response => {
-                  const component = { ...response, ...result };
-                  console.log('component created: ', component);
-                  this.notifierService.showDefaultNotification('New component created');
-                  this.data.push(component);
-                  this.dataSource.data = this.data;
-                })
-            }
-          })        
+      this.currentUser = data;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.dialogService.customDialog(EditComponentDialogComponent,
+            { component: null, allComponents: this.data, editMode: false })
+            .subscribe(result => {
+              if (result) {
+                console.log('create clicked: ', result);
+                this.componentService.addComponent(result)
+                  .subscribe(response => {
+                    const component = { ...response, ...result };
+                    console.log('component created: ', component);
+                    this.notifierService.showDefaultNotification('New component created');
+                    this.data.push(component);
+                    this.dataSource.data = this.data;
+                  })
+              }
+            })
+        } else {
+          this.authService.promptLogin('Login');
+          return;
+        }
       } else {
-        this.authService.promptLogin('Login');         
+        this.authService.promptLogin('Login');
         return;
       }
-    }else {
-      this.authService.promptLogin('Login');      
-      return;
-    }
     })
   }
 
@@ -173,7 +196,7 @@ export class ComponentsComponent implements OnInit {
         this.archivedData = data.archived;
       })
 
-    
+
   }
 
   exportCSV(visibleDataOnly: boolean) {
