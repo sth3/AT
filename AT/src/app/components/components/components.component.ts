@@ -37,6 +37,7 @@ export class ComponentsComponent implements OnInit {
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Component name', width: '40%' },
     { field: 'packing', header: 'Packing' },
+    { field: 'specificBulkWeight', header: 'Specific bulk weight' },
     { field: 'lastUpdate', header: 'Last update' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field), 'actions'];
