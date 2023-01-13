@@ -37,56 +37,56 @@
           </mat-form-field>
         </div>
 
-<!--        <ng-container *ngIf="order?.recipe; else selectRecipe">-->
-<!--          <div class="order-form-field">-->
-<!--            <h3>Recipe ID</h3>-->
-<!--            <mat-form-field appearance="outline">-->
-<!--              <input matInput placeholder="Recipe ID" formControlName="customerName">-->
-<!--            </mat-form-field>-->
-<!--          </div>-->
+        <!--        <ng-container *ngIf="order?.recipe; else selectRecipe">-->
+        <!--          <div class="order-form-field">-->
+        <!--            <h3>Recipe ID</h3>-->
+        <!--            <mat-form-field appearance="outline">-->
+        <!--              <input matInput placeholder="Recipe ID" formControlName="customerName">-->
+        <!--            </mat-form-field>-->
+        <!--          </div>-->
 
-<!--        </ng-container>-->
-<!--        <ng-template #selectRecipe>-->
-          <div class="order-form-field">
-            <h3>Recipe</h3>
-            <mat-form-field appearance="outline">
-              <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
-                          [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
-                <mat-select-trigger>
-                  <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
-                </mat-select-trigger>
-                <ng-container *ngFor="let recipe of recipes">
-                  <mat-option [value]="recipe">
-                    {{ recipe.id }} - {{recipe.name}}
-                    <button mat-icon-button [matMenuTriggerFor]="menu" style="float: right"
-                            (click)="$event.stopPropagation()">
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-                  </mat-option>
-                  <mat-menu #menu="matMenu">
-                    <mat-list>
-                      <h3>Components</h3>
-                      <ng-container *ngFor="let component of recipe.components; let i = index">
-                        <mat-list-item>
-                          <div matLine>
-                            <p style="float:left">
-                              <span class="light note">{{component.id}}</span>
-                              {{component.name}}
-                            </p>
-                            <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
-                          </div>
-                        </mat-list-item>
-                        <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
-                      </ng-container>
-                      <span style="margin: auto"
-                            *ngIf="recipe?.components?.length === 0">No components in this recipe.</span>
-                    </mat-list>
-                  </mat-menu>
-                </ng-container>
-              </mat-select>
-            </mat-form-field>
-          </div>
-<!--        </ng-template>-->
+        <!--        </ng-container>-->
+        <!--        <ng-template #selectRecipe>-->
+        <div class="order-form-field">
+          <h3>Recipe</h3>
+          <mat-form-field appearance="outline">
+            <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
+              [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
+              <mat-select-trigger>
+                <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
+              </mat-select-trigger>
+              <ng-container *ngFor="let recipe of recipes">
+                <mat-option [value]="recipe">
+                  {{ recipe.id }} - {{recipe.name}}
+                  <button mat-icon-button [matMenuTriggerFor]="menu" style="float: right"
+                    (click)="$event.stopPropagation()">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-option>
+                <mat-menu #menu="matMenu">
+                  <mat-list>
+                    <h3>Components</h3>
+                    <ng-container *ngFor="let component of recipe.components; let i = index">
+                      <mat-list-item>
+                        <div matLine>
+                          <p style="float:left">
+                            <span class="light note">{{component.id}}</span>
+                            {{component.name}}
+                          </p>
+                          <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
+                        </div>
+                      </mat-list-item>
+                      <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
+                    </ng-container>
+                    <span style="margin: auto" *ngIf="recipe?.components?.length === 0">No components in this
+                      recipe.</span>
+                  </mat-list>
+                </mat-menu>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--        </ng-template>-->
         <div class="order-form-field">
           <h3>Quantity</h3>
           <mat-form-field appearance="outline">
@@ -96,23 +96,42 @@
         </div>
 
         <div style="flex-direction: column; width: 100%; margin-bottom: 20px" *ngIf="selectedRecipe?.components"
-             [@grow]>
+          [@grow]>
           <mat-list>
-            <h2>Components</h2>
+            <div style="width: 100%; display: flex;">
+              <div style="width: 50%; height: auto;">
+                <h2>Components/Recipe</h2>
+              </div>
+              <div style="width: 50%; height: auto;">
+                <h2>Components/Order</h2>
+              </div>
+            </div>
             <ng-container *ngFor="let component of selectedRecipe?.components; let i = index">
               <mat-list-item>
                 <div matLine>
-                  <p style="float:left">
-                    <span class="light note">{{component.id}}</span>
-                    {{component.name}}
-                  </p>
-                  <p style="float:right">{{component.componentSP}} kg</p>
+                  <div style="width: 100%; display: flex;">
+                    <div style="width: 50%; height: auto;">
+                      <p style="float:left">
+                        <span class="light note">{{component.id}}</span>
+                        {{component.name}}
+                      </p>
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
+                    </div>
+                    <div style="width: 50%; height: auto; ">
+                      <p style="float:left">
+                        <span class="light note">{{component.id}}</span>
+                        {{component.name}}
+                      </p>
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP * this.form.value.quantity|number :'1.3-3'      }} kg
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </mat-list-item>
               <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider>
             </ng-container>
-            <span style="margin: auto"
-                  *ngIf="selectedRecipe!.components?.length === 0">No components in this recipe.</span>
+            <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">No components in this
+              recipe.</span>
           </mat-list>
         </div>
 
@@ -135,7 +154,8 @@
         <div class="order-form-field">
           <h3>Packing machine ID</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8" type="number">
+            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8"
+              type="number">
             <mat-error *ngIf="idPackingMachine!.invalid">Valid packing machine IDs are 1-8.</mat-error>
           </mat-form-field>
         </div>
@@ -143,7 +163,8 @@
         <div class="order-form-field">
           <h3>Emptying station ID</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Emptying station ID" formControlName="idEmptyingStationBag" min="1" max="4" type="number">
+            <input matInput placeholder="Emptying station ID" formControlName="idEmptyingStationBag" min="1" max="4"
+              type="number">
             <mat-error *ngIf="idEmptyingStationBag!.invalid">Valid packing machine IDs are 1-4.</mat-error>
           </mat-form-field>
         </div>
@@ -176,22 +197,17 @@
   <mat-card-actions>
     <button mat-button color="primary" (click)="backToOrder();">
       <mat-icon>arrow_back</mat-icon>
-      Back to order      
+      Back to order
     </button>
-    <button mat-icon-button color="primary"
-            aria-label="Edit item" (click)="onEditClick()"
-            *ngIf="!editable">
+    <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick()" *ngIf="!editable">
       <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button mat-icon-button color="primary"
-            aria-label="Save item" (click)="saveOrder()"
-            *ngIf="editable">
+    <button mat-icon-button color="primary" aria-label="Save item" (click)="saveOrder()" *ngIf="editable">
       <mat-icon>save</mat-icon>
       Save
     </button>
-    <button mat-icon-button color="danger"
-            aria-label="Delete item" (click)="onDeleteClick()">
+    <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick()">
       <mat-icon>delete_forever</mat-icon>
       Delete
     </button>

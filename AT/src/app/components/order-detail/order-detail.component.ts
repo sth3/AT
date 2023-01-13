@@ -13,6 +13,10 @@ import { DateAdapter } from '@angular/material/core';
 import { AuthService } from '../../services/auth.service';
 import { UserModel } from '../../models/user.model';
 
+
+
+
+
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -29,6 +33,8 @@ import { UserModel } from '../../models/user.model';
     ])
   ]
 })
+
+
 export class OrderDetailComponent implements OnInit {
 
   editable = true;
@@ -53,16 +59,17 @@ export class OrderDetailComponent implements OnInit {
               private dialogService: DialogService,
               private notifier: NotifierService,
               private dateAdapter: DateAdapter<Date>,
-              private auth: AuthService) {
+              private auth: AuthService
+              ) {
     this.prepareForm();
-    this.dateAdapter.setLocale('en-GB');
+    this.dateAdapter.setLocale('sk-SK');
     this.auth.user$.subscribe(user => {
       this.operator = user;
       this.form.patchValue({
         operatorId: user?.id || null,
         operatorName: this.ordersService.showFullUserName(user as UserModel)
       })
-    });
+    });   
   }
 
   ngOnInit(): void {
@@ -214,4 +221,12 @@ export class OrderDetailComponent implements OnInit {
   backToOrder() {
     this.router.navigate(['../../orders'], { relativeTo: this.r })
   }
+
+
+  
 }
+
+
+
+
+
