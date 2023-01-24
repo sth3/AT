@@ -44,7 +44,7 @@
       </mat-chip-list>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
         <mat-option *ngFor="let component of filteredComponents | async" [value]="component">
-dd          <span class="light note">{{component.id}}</span>{{component.name}} | P:{{component.packing.toFixed(1)}}kg
+         <span class="light note">{{component.id}}</span>{{component.name}} | P:{{component.packing.toFixed(1)}}kg
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -9,10 +9,10 @@ const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     '   (id, name, customerName, dueDate, recipeNo, operatorId, quantity, ' +
-    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, createdAt, lastUpdate) ' +
+    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, createdAt, lastUpdate) ' +
     'VALUES (' +
     '   @id, @name, @customerName, @dueDate, @recipeNo, @operatorId, @quantity, ' +
-    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, GETDATE(), GETDATE() ' +
+    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, GETDATE(), GETDATE() ' +
     ') SELECT SCOPE_IDENTITY() as no';
 const DELETE_ORDER_BY_NO = 'DELETE FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
@@ -28,6 +28,7 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   mixingTime = @mixingTime, ' +
     '   idPackingMachine = @idPackingMachine, ' +
     '   idEmptyingStationBag = @idEmptyingStationBag, ' +
+    '   volumePerDose = @volumePerDose, ' +
     '   lastUpdate = GETDATE() ' +
     'WHERE no = @no';
 
@@ -88,6 +89,7 @@ const addOrder = async (order) => {
         .input('mixingTime', sql.Int, order.mixingTime)
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
+        .input('volumePerDose', sql.Int, order.volumePerDose)
         .query(ADD_ORDER);
     return recordset[0];
 }
@@ -114,6 +116,7 @@ const updateOrder = async (no, order) => {
         .input('mixingTime', sql.Int, order.mixingTime)
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
+        .input('volumePerDose', sql.Int, order.volumePerDose)
         .query(UPDATE_ORDER)
     return getOrderByNo(no);
 }

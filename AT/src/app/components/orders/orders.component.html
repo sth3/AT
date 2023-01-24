@@ -104,6 +104,7 @@
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Quantity</mat-label>
               <input matInput placeholder="250" readonly [value]="element.quantity">
+              
             </mat-form-field>
           </div>
           <div style="flex-direction: row; flex: 1 0 30%">
@@ -176,6 +177,11 @@
             </mat-form-field>
           </div>
           <div style="flex-grow: 1">
+            <mat-form-field appearance="outline" style="width: 20%">
+              <mat-label>Volume per Dose</mat-label>
+              <input matInput placeholder="700.0" readonly [value]="element.volumePerDose">
+              <span matSuffix>L</span>
+            </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Operator</mat-label>
               <input matInput placeholder="John" readonly

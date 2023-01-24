@@ -92,7 +92,7 @@
           <h3>Quantity</h3>
           <mat-form-field appearance="outline">
             <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity">
-            <span matSuffix>kg</span>
+           
           </mat-form-field>
         </div>
 
@@ -168,6 +168,15 @@
             <input matInput placeholder="Emptying station ID" formControlName="idEmptyingStationBag" min="1" max="4"
               type="number">
             <mat-error *ngIf="idEmptyingStationBag!.invalid">Valid packing machine IDs are 1-4.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="order-form-field">
+          <h3>Volume per dose</h3>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Quantity" type="number" min="0" formControlName="volumePerDose">
+            <mat-error *ngIf="volumePerDose!.hasError('required')">Volume per dose is required.</mat-error>
+            <span matSuffix>L</span>
           </mat-form-field>
         </div>
 
