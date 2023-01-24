@@ -27,7 +27,9 @@ const GET_RECIPE_BY_NO = 'SELECT DISTINCT R.no no, ' +
     '   C.id id,' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
-    '   M.componentSP componentSP' +
+    '   M.componentSP componentSP,' +
+    '   C.packing packing,' +
+    '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
     '   WHERE M.recipeNo = R.no ' +
@@ -65,7 +67,9 @@ const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   C.id id,' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
-    '   M.componentSP componentSP' +
+    '   M.componentSP componentSP,' +
+    '   C.packing packing,' +
+    '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
     '   WHERE M.recipeNo = R.no ' +
