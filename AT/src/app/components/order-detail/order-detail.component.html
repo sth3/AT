@@ -63,17 +63,18 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-option>
-                <mat-menu #menu="matMenu">
-                  <mat-list>
-                    <h3>Components</h3>
+                <mat-menu #menu="matMenu" class="recipeList" >
+                  <mat-list style="width: 500px;">
+                    <h3 style="text-align: center;">Components</h3>
                     <ng-container *ngFor="let component of recipe.components; let i = index">
                       <mat-list-item>
                         <div matLine>
-                          <p style="float:left">
+                          <p style="float:left; width: 330px;">
                             <span class="light note">{{component.id}}</span>
                             {{component.name}}
-                          </p>
-                          <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
+                            
+                          </p> 
+                          <p>| W:{{component.componentSP |number :'1.3-3'}} kg</p>
                         </div>
                       </mat-list-item>
                       <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
@@ -115,14 +116,15 @@
                         <span class="light note">{{component.id}}</span>
                         {{component.name}}
                       </p>
-                      <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP |number :'1.3-3'}} kg</p>
                     </div>
                     <div style="width: 50%; height: auto; ">
                       <p style="float:left">
                         <span class="light note">{{component.id}}</span>
                         {{component.name}}
                       </p>
-                      <p style="margin: 0 0 0 400px;">{{component.componentSP * this.form.value.quantity|number :'1.3-3'      }} kg
+                      <p style="margin: 0 0 0 400px;">{{component.componentSP * this.form.value.quantity|number :'1.3-3'
+                        }} kg
                       </p>
                     </div>
                   </div>

@@ -1,0 +1,4 @@
+  ::ng-deep.mat-menu-panel.recipeList {
+    width: 500px !important;
+    max-width: 500px !important;
+  }
