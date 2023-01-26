@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { OrderListModel, OrderModel } from '../../models/order.model';
+import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking } from '../../models/order.model';
+import { ComponentModel } from '../../models/component.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { RecipeModel } from '../../models/recipe.model';
@@ -12,9 +13,14 @@ import { MatSelect } from '@angular/material/select';
 import { DateAdapter } from '@angular/material/core';
 import { AuthService } from '../../services/auth.service';
 import { UserModel } from '../../models/user.model';
+import { RecalculateRecipeComponent } from '../recalculate-recipe/recalculate-recipe.component';
+import { ComponentItemModel } from 'src/app/models/component.model';
 
 
-
+interface packingOrders {
+  value: number;
+  viewValue: string;
+}
 
 
 @Component({
@@ -46,21 +52,32 @@ export class OrderDetailComponent implements OnInit {
   allOrders: OrderListModel[] = [];
   isNew!: boolean;
   now = new Date();
+  packingOrderValue: number[] = [];
+  packingOrder: number[] = [];
   operator: UserModel | null = null;
+  orderComponent: ComponentModel[] = [];
+  selectedValue: number = 0;
+  componentNo: number[] = [];
+  test?: OrderModelPacking ;
+  packingOrderDetail?: OrderPacking ;
+  packingOrders: packingOrders[] = [
+    { value: 0, viewValue: 'Bag' },
+    { value: 1, viewValue: 'Big Bag' },
+  ];
 
   @ViewChild('recipeSelect')
   recipeSelect!: MatSelect;
 
   constructor(private r: ActivatedRoute,
-              private router: Router,
-              private ordersService: OrdersService,
-              private recipeService: RecipeService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private dialogService: DialogService,
-              private notifier: NotifierService,
-              private dateAdapter: DateAdapter<Date>,
-              private auth: AuthService
-              ) {
+    private router: Router,
+    private ordersService: OrdersService,
+    private recipeService: RecipeService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private dialogService: DialogService,
+    private notifier: NotifierService,
+    private dateAdapter: DateAdapter<Date>,
+    private auth: AuthService
+  ) {
     this.prepareForm();
     this.dateAdapter.setLocale('sk-SK');
     this.auth.user$.subscribe(user => {
@@ -69,7 +86,7 @@ export class OrderDetailComponent implements OnInit {
         operatorId: user?.id || null,
         operatorName: this.ordersService.showFullUserName(user as UserModel)
       })
-    });   
+    });
   }
 
   ngOnInit(): void {
@@ -82,10 +99,15 @@ export class OrderDetailComponent implements OnInit {
       }
       this.ordersService.getOrderByNo(no)
         .subscribe(order => {
-          console.log('this order: ', order);
+          console.log('order: ', order);
           this.editable = false;
           this.isNew = false;
           this.order = order;
+          console.log('this order: ', this.order);
+          this.orderComponent = order.recipe.components;
+
+
+          console.log('this this.orderComponent: ', this.orderComponent);
           this.prepareForm();
 
           this.recipeService.getRecipes()
@@ -93,7 +115,7 @@ export class OrderDetailComponent implements OnInit {
               console.log('recipes: ', recipes);
               this.recipes = recipes;
               this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
-              console.log('selected recipe: ', this.selectedRecipe);
+              console.log('selected recipe 1: ', this.selectedRecipe);
               this.changeDetectorRef.detectChanges();
             })
         })
@@ -103,12 +125,15 @@ export class OrderDetailComponent implements OnInit {
         console.log('recipes: ', recipes);
         this.recipes = recipes;
         this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
-        console.log('selected recipe: ', this.selectedRecipe);
+        console.log('selected recipe 2: ', this.selectedRecipe);
         this.changeDetectorRef.detectChanges();
       })
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
+
   }
+
+
 
   get id() {
     return this.form.get('id') as FormControl;
@@ -125,7 +150,7 @@ export class OrderDetailComponent implements OnInit {
   get idEmptyingStationBag() {
     return this.form.get('idEmptyingStationBag') as FormControl;
   }
-  
+
   get idMixer() {
     return this.form.get('idMixer') as FormControl;
   }
@@ -133,13 +158,13 @@ export class OrderDetailComponent implements OnInit {
   get volumePerDose() {
     return this.form.get('volumePerDose') as FormControl;
   }
-  
+
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [Validators.required,
-        Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
+      Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
       name: new FormControl(this.order?.name || '', [Validators.required,
-        Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
+      Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
       customerName: new FormControl(this.order?.customerName || '', Validators.required),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
@@ -184,7 +209,24 @@ export class OrderDetailComponent implements OnInit {
     if (this.form.pristine) {
       return;
     }
+
     console.log('save me ', this.form.value);
+
+    // const packingOrderDetail = {
+    //   packingOrder: this.myValuee,
+    //   recipeNo: this.form.value.recipeNo,
+    //   orderNo: this.order!.no,
+    //   componentNo: this.selectedRecipe?.components
+    // }
+    // console.log(packingOrderDetail);   
+    this.componentNo = [];
+    this.packingOrder = [];
+    
+    this.selectedRecipe?.components.forEach((component, index) => {
+      this.componentNo.push(component.no);
+      this.packingOrder.push(this.packingOrderValue[index]);      
+    })
+
     this.dialogService.confirmDialog('Are you sure you want to save this order?').subscribe(
       (result) => {
         if (result) {
@@ -193,10 +235,29 @@ export class OrderDetailComponent implements OnInit {
               console.log('new order: ', order);
               this.router.navigate(['/orders', order.no]);
             })
+            
+            this.test = this.form.value;
+            
+             this.packingOrderDetail = {
+              packingOrder: this.packingOrder,
+              recipeNo: this.form.value.recipeNo,
+              orderNo: 0,
+              componentNo: this.componentNo
+            }
+            //this.test?.packing = this.packingOrderDetail;
+            console.log(this.packingOrderDetail);
+            console.log('test',this.test);
+            this.ordersService.addOrderPacking(this.packingOrderDetail).subscribe(packingOrder => {
+              console.log('new packingOrder: ', packingOrder);
+
+            })
           } else {
+
+            //orderNo: this.order!.no,
             this.ordersService.updateOrder(this.order!.no, this.form.value).subscribe(order => {
               console.log('updated order: ', order);
             })
+
           }
         }
       }
@@ -205,8 +266,34 @@ export class OrderDetailComponent implements OnInit {
 
   recipeSelected() {
     console.log('selected recipe: ', this.selectedRecipe);
+
+    console.log('this.order', this.packingOrderValue);
+
     this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
   }
+
+
+  recalculateRecipe() {
+    console.log('Recalculate recipe: ', this.selectedRecipe);
+    console.log('Recalculate order: ', this.order);
+    this.dialogService.customDialog(RecalculateRecipeComponent,
+      { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder: this.order, editMode: false },
+      { width: '700px', height: '700px' })
+      .subscribe(result => {
+        if (result) {
+          // this.recipeService.addRecipe(result)
+          //   .subscribe(response => {
+          //     const recipe = { ...response, ...result };
+          //     console.log('recipe created: ', recipe);
+          //     this.notifierService.showDefaultNotification('New recipe created');
+          //     this.data.push(recipe);
+          //     this.dataSource.data = this.data;
+          //   })
+        }
+      })
+  }
+
+
 
   validOrderNameValidator(control: FormControl) {
     const value = control.value;
@@ -228,5 +315,5 @@ export class OrderDetailComponent implements OnInit {
   }
 
 
-  
+
 }
