@@ -9,7 +9,8 @@ const {
     getOrderByNo,
     addOrder,
     updateOrder,
-    deleteOrder
+    deleteOrder,
+    addOrderPacking
 } = require('../services/order-service');
 
 router.use(express.json());
@@ -28,6 +29,11 @@ router.post('/orders', authorizationCheck(roles.OPERATOR), async (req, res) => {
     const order = await addOrder(req.body);
     const response = await getOrderByNo(order.no);
     res.status(201).json(response);
+});
+router.post('/packingOrderDetail', async (req, res) => {
+    await addOrderPacking(req.body);
+    // const response = await getOrderByNo(order.no);
+    // res.status(201).json(response);
 });
 
 router.put('/orders/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {

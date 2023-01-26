@@ -37,6 +37,27 @@ const GET_RECIPE_BY_NO = 'SELECT DISTINCT R.no no, ' +
     'FROM [AT].[dbo].[RECIPE_H] R ' +
     'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ' +
     'WHERE R.no = @no';
+const GET_RECIPE_BY_NO_FOR_ORDER = 'SELECT DISTINCT R.no no, ' +
+    '   R.id id,' +
+    '   R.name name,' +
+    '   R.lastUpdate lastUpdate,' +
+    '   (SELECT C.no no,' +
+    '   C.id id,' +
+    '   C.name name,' +
+    '   C.lastUpdate lastUpdate,' +
+    '   M.componentSP componentSP,' +
+    '   C.packing packing,' +
+    '   P.packing packingOrder,' +
+    '   C.specificBulkWeight specificBulkWeight' +
+    '   FROM [AT].[dbo].[RECIPE_B] M ' +
+    '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
+    '   INNER JOIN [AT].[dbo].[PACKING_ORDERS] P ON C.no = P.componentNo' +
+    '   WHERE M.recipeNo = R.no AND P.orderNo = O.no AND P.recipeNo = R.no ' +
+    '   FOR JSON PATH) components ' +
+    'FROM [AT].[dbo].[ORDERS] O ' +
+    'LEFT JOIN [AT].[dbo].[RECIPE_H] R ON O.recipeNo = R.no ' +
+    'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ' +
+    'WHERE R.no = @no';
 const ADD_RECIPE = 'INSERT INTO [AT].[dbo].[RECIPE_H] ' +
     '(id, name) ' +
     'VALUES (@id, @name) ' +
@@ -79,6 +100,7 @@ const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
     'WHERE R.no NOT IN ' +
     '   (SELECT CH.oldRecipeNo ' +
     '   FROM [AT].[dbo].[RECIPES_CHANGES] CH)';
+
 const GET_CHANGES_FOR_RECIPE = 'SELECT CH.id, CH.change, CH.date, ' +
     'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +
     'CH.oldRecipeNo, CH.newRecipeNo ' +
@@ -122,6 +144,19 @@ const getRecipeByNo = async (no) => {
         return null;
     }
     const recipe = parseComponentsAndCheckValidity(recordset[0]);
+   
+    return trimTrailingWhitespace(recipe);
+}
+const getRecipeByNoForOrder = async (no) => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .input('no', sql.Int, no)
+        .query(GET_RECIPE_BY_NO_FOR_ORDER);
+    if (recordset.length < 0) {
+        return null;
+    }
+    const recipe = parseComponentsAndCheckValidity(recordset[0]);
+   
     return trimTrailingWhitespace(recipe);
 }
 
@@ -284,5 +319,6 @@ module.exports = {
     updateLastUpdate,
     updateRecipe,
     getChangesForRecipe,
-    getComponentsChangesForRecipe
+    getComponentsChangesForRecipe,
+    getRecipeByNoForOrder
 }

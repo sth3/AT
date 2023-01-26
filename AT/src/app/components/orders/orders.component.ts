@@ -14,6 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
+interface packingOrders {
+  value: number;
+  viewValue: string;
+}
+
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -42,6 +48,13 @@ export class OrdersComponent implements OnInit {
     { field: 'customerName', header: 'Customer name' },
     { field: 'dueDate', header: 'Due date', width: '20%' },
   ];
+  selectedValue: number = 0;
+
+  packingOrders: packingOrders[] = [
+    {value: 0, viewValue: 'Bag'},
+    {value: 1, viewValue: 'Big Bag'},    
+  ];
+
   isLoading = true;
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field), 'actions'];
   expandedOrder: OrderModel | null = null;

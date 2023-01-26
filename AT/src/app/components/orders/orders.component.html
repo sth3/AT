@@ -104,7 +104,7 @@
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Quantity</mat-label>
               <input matInput placeholder="250" readonly [value]="element.quantity">
-              
+
             </mat-form-field>
           </div>
           <div style="flex-direction: row; flex: 1 0 30%">
@@ -123,24 +123,76 @@
                     <div style="width: 100%; display: flex;">
                       <div style="width: 50%; height: auto;">
 
-                        <p style="float:left">
-                          <span class="light note">{{component.id}}</span>
-                          {{component.name}}
+                        <p style="float:left; ">
+                          <mat-form-field appearance="outline" style="width: 20%" class="light note">
+                            <mat-label>ID</mat-label>
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.id">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" style="width: 250px" class="note">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.name">
+                          </mat-form-field>                          
+                          <mat-form-field appearance="outline" style="width: 10%" class="note">
+                           <mat-label>Weight</mat-label>
+                           <input matInput placeholder="0000000001" readonly
+                             [value]="component.componentSP.toFixed(3)">
+                             <span matSuffix>KG</span>
+                         </mat-form-field>
+                         <mat-form-field appearance="outline" style="width: 10%" class="note">
+                           <mat-label>Packing</mat-label>
+                           <input matInput placeholder="0000000001" readonly
+                             [value]="component.packing.toFixed(1)">
+                             <span matSuffix>KG</span>
+                         </mat-form-field>
+                         <mat-form-field appearance="outline" style="width: 12%" class="note">
+                           <mat-label>Specific bulk weight</mat-label>
+                           <input matInput placeholder="0000000001" readonly
+                             [value]="component.specificBulkWeight.toFixed(3)">
+                             <span matSuffix>KG/L</span>
+                         </mat-form-field>
+                         <mat-form-field appearance="outline" style="width: 10%" class="note">
+                           <mat-label>Packing</mat-label>
+                           <mat-select [(ngModel)]="component.packingOrder" [disabled]="component.packingOrder"
+                             name="packingOrders">
+                             <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
+                               {{packingOrder.viewValue}}
+                             </mat-option>
+                           </mat-select>
+                         </mat-form-field>
                         </p>
-                        <p style="margin: 0 0 0 400px;">W:{{component.componentSP.toFixed(3)}} kg | P:{{component.packing.toFixed(1)}} | SBW:{{component.specificBulkWeight.toFixed(3)}} kg</p>
-                        
-                        
+                        <!-- <p style="margin: 0 0 0 1px;">W:{{component.componentSP.toFixed(3)}} kg |
+                           P:{{component.packing.toFixed(1)}} |
+                           SBW:{{component.specificBulkWeight.toFixed(3)}} kg/l 
+                        </p> -->
+
+
 
 
                       </div>
                       <div style="width: 50%; height: auto; ">
 
                         <p style="float:left">
-                          <span class="light note">{{component.id }}</span>
-                          {{component.name}}
+                          <mat-form-field appearance="outline" style="width: 20%" class="light note">
+                            <mat-label>ID</mat-label>
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.id">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline" style="width: 250px" class="note">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.name">
+                          </mat-form-field> 
+                          <mat-form-field appearance="outline" style="width: 20%" class="note">
+                            <mat-label>Weight</mat-label>
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.componentSP.toFixed(3) * element.quantity.toFixed(3)
+                              | number ">
+                              <span matSuffix>KG</span>
+                          </mat-form-field>
                         </p>
-                        <p style="margin: 0 0 0 400px;">{{component.componentSP.toFixed(3) * element.quantity.toFixed(3)
-                          | number }} kg</p>
+                        
                       </div>
 
                     </div>

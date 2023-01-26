@@ -96,6 +96,8 @@ export class RecipesComponent implements OnInit {
       { width: '700px', height: '700px' })
       .subscribe(result => {
         if (result) {
+          console.log('result',result);
+          
           this.recipeService.addRecipe(result)
             .subscribe(response => {
               const recipe = { ...response, ...result };
@@ -103,6 +105,7 @@ export class RecipesComponent implements OnInit {
               this.notifierService.showDefaultNotification('New recipe created');
               this.data.push(recipe);
               this.dataSource.data = this.data;
+              console.log('this.dataSource.data: ', this.dataSource.data);
             })
         }
       })
