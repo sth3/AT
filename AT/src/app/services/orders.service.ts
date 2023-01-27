@@ -26,9 +26,7 @@ export class OrdersService {
     order.dueDate = formatDate(new Date(order.dueDate), 'yyyy-MM-dd', 'en-GB');
     return this.http.post<OrderModel>(`${environment.apiUrl}/orders`, order,  { withCredentials: true });
   }
-  addOrderPacking(packingOrderDetail: OrderPacking) {    
-    return this.http.post<OrderModel>(`${environment.apiUrl}/packingOrderDetail`, packingOrderDetail,  { withCredentials: true });
-  }
+ 
 
   updateOrder(no: number, order: OrderModel) {
     order.dueDate = formatDate(new Date(order.dueDate), 'yyyy-MM-dd', 'en-GB');

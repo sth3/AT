@@ -9,8 +9,8 @@ const {
     getOrderByNo,
     addOrder,
     updateOrder,
-    deleteOrder,
-    addOrderPacking
+    deleteOrder
+    
 } = require('../services/order-service');
 
 router.use(express.json());
@@ -30,11 +30,7 @@ router.post('/orders', authorizationCheck(roles.OPERATOR), async (req, res) => {
     const response = await getOrderByNo(order.no);
     res.status(201).json(response);
 });
-router.post('/packingOrderDetail', async (req, res) => {
-    await addOrderPacking(req.body);
-    // const response = await getOrderByNo(order.no);
-    // res.status(201).json(response);
-});
+
 
 router.put('/orders/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {
     const response = await updateOrder(+req.params.no, req.body);

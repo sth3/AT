@@ -31,7 +31,9 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   volumePerDose = @volumePerDose, ' +
     '   lastUpdate = GETDATE() ' +
     'WHERE no = @no';
-
+const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
+    '(recipeNo, componentNo, orderNo, packing) ' +
+    'VALUES ';
 const getOrders = async () => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
@@ -40,7 +42,7 @@ const getOrders = async () => {
         order = trimTrailingWhitespace(order);
         if (order.recipeNo) {
             order.recipe = await getRecipeByNoForOrder(order.recipeNo);
-            console.log('getOrders ' + JSON.stringify(order)  );
+            console.log('getOrders ' + JSON.stringify(order));
         }
         if (order.operatorId) {
             order.operator = await getUserById(order.operatorId);
@@ -77,42 +79,38 @@ const getOrderByNo = async (no) => {
 }
 
 const addOrder = async (order) => {
-    console.log('order',order)
-    // const pool = await poolPromise;
-    // const { recordset } = await pool.request()
-    //     .input('id', order.id)
-    //     .input('name', order.name)
-    //     .input('customerName', order.customerName)
-    //     .input('dueDate', order.dueDate)
-    //     .input('recipeNo', sql.Int, order.recipeNo)
-    //     .input('operatorId', sql.Int, order.operatorId)
-    //     .input('quantity', sql.Real, order.quantity)
-    //     .input('idMixer', sql.Int, order.idMixer)
-    //     .input('mixingTime', sql.Int, order.mixingTime)
-    //     .input('idPackingMachine', sql.Int, order.idPackingMachine)
-    //     .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
-    //     .input('volumePerDose', sql.Int, order.volumePerDose)
-    //     .query(ADD_ORDER);
-    // return recordset[0];
+    console.log('order', order)
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .input('id', order.id)
+        .input('name', order.name)
+        .input('customerName', order.customerName)
+        .input('dueDate', order.dueDate)
+        .input('recipeNo', sql.Int, order.recipeNo)
+        .input('operatorId', sql.Int, order.operatorId)
+        .input('quantity', sql.Real, order.quantity)
+        .input('idMixer', sql.Int, order.idMixer)
+        .input('mixingTime', sql.Int, order.mixingTime)
+        .input('idPackingMachine', sql.Int, order.idPackingMachine)
+        .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
+        .input('volumePerDose', sql.Int, order.volumePerDose)
+        .query(ADD_ORDER);
+        const orderNo = recordset[0].no;
+        await addPacking(orderNo, order.packing);
+    return recordset[0];
 }
-const addOrderPacking = async (packingOrderDetail) => {
-    console.log('packingOrderDetail',packingOrderDetail);
-    // const pool = await poolPromise;
-    // const { recordset } = await pool.request()
-    //     .input('id', order.id)
-    //     .input('name', order.name)
-    //     .input('customerName', order.customerName)
-    //     .input('dueDate', order.dueDate)
-    //     .input('recipeNo', sql.Int, order.recipeNo)
-    //     .input('operatorId', sql.Int, order.operatorId)
-    //     .input('quantity', sql.Real, order.quantity)
-    //     .input('idMixer', sql.Int, order.idMixer)
-    //     .input('mixingTime', sql.Int, order.mixingTime)
-    //     .input('idPackingMachine', sql.Int, order.idPackingMachine)
-    //     .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
-    //     .input('volumePerDose', sql.Int, order.volumePerDose)
-    //     .query(ADD_ORDER);
-    // return recordset[0];
+const addPacking = async (orderNo, packing) => {
+    let query = ADD_PACKING;
+    packing.packingOrder.forEach((value, index) => {
+        query += `(${packing.recipeNo}, ${packing.componentNo[index]}, ${orderNo},${packing.packingOrder[index]})`;
+        if (index < packing.packingOrder.length - 1) {
+            query += ', ';
+        }
+    })
+    console.log('query',query);
+    const pool = await poolPromise;
+    return pool.request()
+        .query(query);
 }
 
 const deleteOrder = async (no) => {
@@ -125,7 +123,7 @@ const deleteOrder = async (no) => {
 const updateOrder = async (no, order) => {
     console.log('no', no);
     console.log('order', order);
-    
+
     const pool = await poolPromise;
     await pool.request()
         .input('no', sql.Int, no)
@@ -151,6 +149,5 @@ module.exports = {
     getOrderByNo,
     addOrder,
     deleteOrder,
-    updateOrder,
-    addOrderPacking
+    updateOrder
 };

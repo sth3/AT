@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking } from '../../models/order.model';
 import { ComponentModel } from '../../models/component.model';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { RecipeModel } from '../../models/recipe.model';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -58,7 +58,7 @@ export class OrderDetailComponent implements OnInit {
   orderComponent: ComponentModel[] = [];
   selectedValue: number = 0;
   componentNo: number[] = [];
-  test?: OrderModelPacking ;
+  allOrderPacking?: OrderModelPacking ;
   packingOrderDetail?: OrderPacking ;
   packingOrders: packingOrders[] = [
     { value: 0, viewValue: 'Bag' },
@@ -159,6 +159,10 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('volumePerDose') as FormControl;
   }
 
+  get PackingOrders(): FormArray {
+    return this.form.controls["packingOrders"] as FormArray;
+  }
+
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [Validators.required,
@@ -175,7 +179,8 @@ export class OrderDetailComponent implements OnInit {
       idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
       volumePerDose: new FormControl(this.order?.volumePerDose, Validators.required),
       operatorId: new FormControl(this.order?.operator.id || null),
-      operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null)
+      operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null),
+      packingOrders: new FormArray([ ])
     })
   }
 
@@ -211,7 +216,8 @@ export class OrderDetailComponent implements OnInit {
     }
 
     console.log('save me ', this.form.value);
-
+    console.log('packingOrders',this.packingOrders);
+    
     // const packingOrderDetail = {
     //   packingOrder: this.myValuee,
     //   recipeNo: this.form.value.recipeNo,
@@ -226,17 +232,18 @@ export class OrderDetailComponent implements OnInit {
       this.componentNo.push(component.no);
       this.packingOrder.push(this.packingOrderValue[index]);      
     })
-
+    console.log('this.packingOrder',this.packingOrder);
+    
     this.dialogService.confirmDialog('Are you sure you want to save this order?').subscribe(
       (result) => {
         if (result) {
           if (this.isNew) {
-            this.ordersService.addOrder(this.form.value).subscribe(order => {
-              console.log('new order: ', order);
-              this.router.navigate(['/orders', order.no]);
-            })
+            // this.ordersService.addOrder(this.form.value).subscribe(order => {
+            //   console.log('new order: ', order);
+            //   this.router.navigate(['/orders', order.no]);
+            // })
             
-            this.test = this.form.value;
+            this.allOrderPacking = this.form.value;
             
              this.packingOrderDetail = {
               packingOrder: this.packingOrder,
@@ -244,13 +251,18 @@ export class OrderDetailComponent implements OnInit {
               orderNo: 0,
               componentNo: this.componentNo
             }
-            //this.test?.packing = this.packingOrderDetail;
+            if(this.allOrderPacking ==null){
+              return;
+            }
+            this.allOrderPacking.packing = this.packingOrderDetail;
             console.log(this.packingOrderDetail);
-            console.log('test',this.test);
-            this.ordersService.addOrderPacking(this.packingOrderDetail).subscribe(packingOrder => {
-              console.log('new packingOrder: ', packingOrder);
+            console.log('allOrderPacking',this.allOrderPacking);
 
+            this.ordersService.addOrder(this.allOrderPacking).subscribe(order => {
+              console.log('new order: ', order);
+              this.router.navigate(['/orders', order.no]);
             })
+            
           } else {
 
             //orderNo: this.order!.no,
