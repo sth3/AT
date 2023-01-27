@@ -63,7 +63,7 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-option>
-                <mat-menu #menu="matMenu" class="recipeList" >
+                <mat-menu #menu="matMenu" class="recipeList">
                   <mat-list style="width: 500px;">
                     <h3 style="text-align: center;">Components</h3>
                     <ng-container *ngFor="let component of recipe.components; let i = index">
@@ -72,8 +72,8 @@
                           <p style="float:left; width: 330px;">
                             <span class="light note">{{component.id}}</span>
                             {{component.name}}
-                            
-                          </p> 
+
+                          </p>
                           <p>| W:{{component.componentSP |number :'1.3-3'}} kg</p>
                         </div>
                       </mat-list-item>
@@ -92,7 +92,7 @@
           <h3>Quantity</h3>
           <mat-form-field appearance="outline">
             <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity">
-           
+
           </mat-form-field>
         </div>
 
@@ -107,8 +107,8 @@
                 <h2>Components/Order</h2>
               </div>
             </div>
-            <ng-container *ngFor="let component of selectedRecipe?.components; let i = index";>
-             
+            <ng-container *ngFor="let component of selectedRecipe?.components; let i = index" ;>
+
               <mat-list-item>
                 <div matLine>
                   <div style="width: 100%; display: flex;">
@@ -116,73 +116,69 @@
                       <p style="float:left; ">
                         <mat-form-field appearance="outline" style="width: 20%" class="light note">
                           <mat-label>ID</mat-label>
-                          <input matInput placeholder="0000000001" readonly
-                            [value]=" component.id">
+                          <input matInput placeholder="0000000001" readonly [value]=" component.id">
                         </mat-form-field>
                         <mat-form-field appearance="outline" style="width: 250px" class="note">
                           <mat-label>Name</mat-label>
-                          <input matInput placeholder="0000000001" readonly
-                            [value]="component.name">
-                        </mat-form-field>                          
+                          <input matInput placeholder="0000000001" readonly [value]="component.name">
+                        </mat-form-field>
                         <mat-form-field appearance="outline" style="width: 10%" class="note">
-                         <mat-label>Weight</mat-label>
-                         <input matInput placeholder="0000000001" readonly
-                           [value]="component.componentSP.toFixed(3)">
-                           <span matSuffix>KG</span>
-                       </mat-form-field>
-                       <mat-form-field appearance="outline" style="width: 10%" class="note">
-                         <mat-label>Packing</mat-label>
-                         <input matInput placeholder="0000000001" readonly
-                           [value]="component.packing.toFixed(1)">
-                           <span matSuffix>KG</span>
-                       </mat-form-field>
-                       <mat-form-field appearance="outline" style="width: 12%" class="note">
-                         <mat-label>Specific bulk weight</mat-label>
-                         <input matInput placeholder="0000000001" readonly
-                           [value]="component.specificBulkWeight.toFixed(3)">
-                           <span matSuffix>KG/L</span>
-                       </mat-form-field>
-                       <mat-form-field appearance="outline" style="width: 10%; " class="note">
-                         <mat-label  >Packing</mat-label>
-                         <mat-select   [ngModel]="this.orderComponent.length <= i || this.order?.recipeNo != selectedRecipe?.no  ? this.packingOrderValue[i] = 0 : this.packingOrderValue[i] = this.orderComponent[i].packingOrder "                     
-                          [ngModelOptions]="{standalone: true}"  [disabled]="!editable"       name="packingOrders">
-                           <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
-                              {{packingOrder.viewValue}}
-                            
-                          </mat-option>
-                         </mat-select>
-                       </mat-form-field>
+                          <mat-label>Weight</mat-label>
+                          <input matInput placeholder="0000000001" readonly [value]="component.componentSP.toFixed(3)">
+                          <span matSuffix>KG</span>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="width: 10%" class="note">
+                          <mat-label>Packing</mat-label>
+                          <input matInput placeholder="0000000001" readonly [value]="component.packing.toFixed(1)">
+                          <span matSuffix>KG</span>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="width: 12%" class="note">
+                          <mat-label>Specific bulk weight</mat-label>
+                          <input matInput placeholder="0000000001" readonly
+                            [value]="component.specificBulkWeight.toFixed(3)">
+                          <span matSuffix>KG/L</span>
+                        </mat-form-field>
 
-                      
+                        <ng-container formArrayName="packingOrders">
+                          <mat-form-field appearance="outline" style="width: 10%; " class="note">
+                            <mat-label>Packing</mat-label>
+                            <mat-select [disabled]="!editable" formControlName="packingOrders">
+                              <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
+                                {{packingOrder.viewValue}}
+
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </ng-container>
+
+                        <!-- [(ngModel)]="this.orderComponent.length <= i   ? this.packingOrderValue[i] = 0: this.packingOrderValue[i] = this.orderComponent[i].packingOrder "      -->
                       </p>
                     </div>
                     <div style="width: 50%; height: auto; ">
                       <p style="float:left">
                         <mat-form-field appearance="outline" style="width: 20%" class="light note">
                           <mat-label>ID</mat-label>
-                          <input matInput placeholder="0000000001" readonly
-                            [value]="component.id">
+                          <input matInput placeholder="0000000001" readonly [value]="component.id">
                         </mat-form-field>
                         <mat-form-field appearance="outline" style="width: 250px" class="note">
                           <mat-label>Name</mat-label>
-                          <input matInput placeholder="0000000001" readonly
-                            [value]="component.name">
-                        </mat-form-field> 
+                          <input matInput placeholder="0000000001" readonly [value]="component.name">
+                        </mat-form-field>
                         <mat-form-field appearance="outline" style="width: 20%" class="note">
                           <mat-label>Weight</mat-label>
-                          <input matInput placeholder="0000000001" 
+                          <input matInput placeholder="0000000001"
                             [value]="component.componentSP * this.form.value.quantity|number :'1.3-3'">
-                            <span matSuffix>KG</span>
+                          <span matSuffix>KG</span>
                         </mat-form-field>
                       </p>
-                      
+
                     </div>
                   </div>
                 </div>
               </mat-list-item>
               <!-- <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider> -->
             </ng-container>
-            
+
             <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">No components in this
               recipe.</span>
           </mat-list>
