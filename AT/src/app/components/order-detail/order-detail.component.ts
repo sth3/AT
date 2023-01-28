@@ -320,7 +320,7 @@ export class OrderDetailComponent implements OnInit {
     console.log('Recalculate order: ', this.order);
     this.dialogService.customDialog(RecalculateRecipeComponent,
       { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder: this.order, editMode: false },
-      { width: '700px', height: '700px' })
+      { width: '1500px', height: '700px' })
       .subscribe(result => {
         if (result) {
           // this.recipeService.addRecipe(result)
