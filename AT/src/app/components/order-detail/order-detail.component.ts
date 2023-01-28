@@ -53,8 +53,7 @@ export class OrderDetailComponent implements OnInit {
   allOrders: OrderListModel[] = [];
   isNew!: boolean;
   now = new Date();
-  packingOrderValue: number[] = [];
-  packingOrder: number[] = [];
+  packingOrderValue: number[] = []; 
   operator: UserModel | null = null;
   orderComponent: ComponentModel[] = [];
   selectedValue: number = 0;
@@ -214,10 +213,7 @@ export class OrderDetailComponent implements OnInit {
       })
   }
 
-  saveOrder() {
-    console.log('this.form.invalid', this.form.invalid);
-    console.log('this.form', this.form);
-
+  saveOrder() {    
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -229,34 +225,17 @@ export class OrderDetailComponent implements OnInit {
     if (this.form.pristine) {
       return;
     }
+    console.log('save me ', this.form.value);   
 
-    console.log('save me ', this.form.value);
-    console.log('packingOrders', this.packingOrders);
-
-    // const packingOrderDetail = {
-    //   packingOrder: this.myValuee,
-    //   recipeNo: this.form.value.recipeNo,
-    //   orderNo: this.order!.no,
-    //   componentNo: this.selectedRecipe?.components
-    // }
-    // console.log(packingOrderDetail);   
-    this.componentNo = [];
-    this.packingOrder = [];
-
+    this.componentNo = [];    
     this.selectedRecipe?.components.forEach((component, index) => {
-      this.componentNo.push(component.no);
-      this.packingOrder.push(this.packingOrderValue[index]);
-    })
-    console.log('this.packingOrder', this.packingOrder);
+      this.componentNo.push(component.no);      
+    })    
 
     this.dialogService.confirmDialog('Are you sure you want to save this order?').subscribe(
       (result) => {
         if (result) {
-          if (this.isNew) {
-            // this.ordersService.addOrder(this.form.value).subscribe(order => {
-            //   console.log('new order: ', order);
-            //   this.router.navigate(['/orders', order.no]);
-            // })
+          if (this.isNew) {            
 
             this.allOrderPacking = this.form.value;
 
@@ -269,9 +248,7 @@ export class OrderDetailComponent implements OnInit {
             if (this.allOrderPacking == null) {
               return;
             }
-            this.allOrderPacking.packing = this.packingOrderDetail;
-            console.log(this.packingOrderDetail);
-            console.log('allOrderPacking', this.allOrderPacking);
+            this.allOrderPacking.packing = this.packingOrderDetail;            
 
             this.ordersService.addOrder(this.allOrderPacking).subscribe(order => {
               console.log('new order: ', order);
