@@ -61,6 +61,7 @@ export class OrderDetailComponent implements OnInit {
   componentNo: number[] = [];
   allOrderPacking?: OrderModelPacking;
   packingOrderDetail?: OrderPacking;
+  recipeChanged = false;
   packingOrders: packingOrders[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -118,9 +119,9 @@ export class OrderDetailComponent implements OnInit {
               this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
               console.log('selected recipe 1: ', this.selectedRecipe);
               this.addRowFromArray();
-              
+
               this.changeDetectorRef.detectChanges();
-              
+
             })
         })
     })
@@ -130,10 +131,10 @@ export class OrderDetailComponent implements OnInit {
         this.recipes = recipes;
         this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
         this.addRowFromArray();
-        
+
         console.log('selected recipe 2: ', this.selectedRecipe);
         this.changeDetectorRef.detectChanges();
-        
+
       })
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
@@ -167,7 +168,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   get PackingOrders() {
-    return this.form.get("packingOrders") as FormArray ;
+    return this.form.get("packingOrders") as FormArray;
   }
 
   private prepareForm() {
@@ -214,10 +215,10 @@ export class OrderDetailComponent implements OnInit {
   }
 
   saveOrder() {
-    console.log('this.form.invalid',this.form.invalid);
-    console.log('this.form',this.form);
+    console.log('this.form.invalid', this.form.invalid);
+    console.log('this.form', this.form);
 
-    
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.recipeSelect?.ngControl?.control?.markAsTouched();
@@ -293,28 +294,29 @@ export class OrderDetailComponent implements OnInit {
   recipeSelected() {
     console.log('selected recipe: ', this.selectedRecipe);
     console.log('this.order', this.packingOrderValue);
+    this.recipeChanged = true;
     this.addRowFromArray();
     this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
   }
-  
-  addRowFromArray(){
+
+  addRowFromArray() {
     const arr = <FormArray>this.form.controls['packingOrders'];
     arr.controls = [];
-   
+
     if (this.selectedRecipe == null) {
-      console.log('this.formr', this.form);
       return;
     }
-    for(let index of this.selectedRecipe.components.keys()){     
-     
-        (<FormArray>this.form.get('packingOrders')).push(new FormControl(  this.order?.recipe.components[index].packingOrder , Validators.required));
-        
+    for (let index of this.selectedRecipe.components.keys()) {
+      if (!this.recipeChanged) {
+        (<FormArray>this.form.get('packingOrders')).push(new FormControl(this.order?.recipe.components[index].packingOrder, Validators.required));
         this.form.get('packingOrders')?.disable();
-        console.log('here', this.editable);      
+      } else {
+        (<FormArray>this.form.get('packingOrders')).push(new FormControl(null, Validators.required));
+      }
     };
-    
+
     console.log('this.formr', this.form);
-    
+    this.recipeChanged = false;
   }
 
   recalculateRecipe() {
