@@ -210,7 +210,12 @@
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Mixer ID</mat-label>
-              <input matInput placeholder="0000000001" readonly [value]="element.idMixer">
+              <!-- <input matInput placeholder="0000000001" readonly [value]="element.idMixer"> -->
+              <mat-select [(ngModel)]="element.idMixer" [disabled]="true"  >
+                <mat-option *ngFor="let slecetIdMixer of slecetIdMixers" [value]="slecetIdMixer.value"  >
+                  {{slecetIdMixer.viewValue}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Mixing time</mat-label>

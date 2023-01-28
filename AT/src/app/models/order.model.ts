@@ -55,3 +55,8 @@ export interface OrderPacking{
     packing: OrderPacking;
   }
 
+  export interface selectList {
+    value: number;
+    viewValue: string;
+  }
+

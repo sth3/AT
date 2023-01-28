@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrdersService } from '../../services/orders.service';
-import { OrderModel } from '../../models/order.model';
+import { OrderModel, selectList } from '../../models/order.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -47,6 +47,13 @@ export class OrdersComponent implements OnInit {
     { field: 'name', header: 'Order name' },
     { field: 'customerName', header: 'Customer name' },
     { field: 'dueDate', header: 'Due date', width: '20%' },
+  ];
+
+  slecetIdMixers: selectList[] = [
+    
+    { value: 1, viewValue: 'Vertical mixer' },
+    { value: 2, viewValue: 'Horizontal mixer' },
+    { value: 3, viewValue: 'External mixer' },
   ];
   selectedValue: number = 0;
 

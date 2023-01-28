@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking } from '../../models/order.model';
+import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking, selectList } from '../../models/order.model';
 import { ComponentModel } from '../../models/component.model';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
@@ -18,10 +18,7 @@ import { ComponentItemModel } from 'src/app/models/component.model';
 import { FocusTrapManager } from '@angular/cdk/a11y/focus-trap/focus-trap-manager';
 
 
-interface packingOrders {
-  value: number;
-  viewValue: string;
-}
+
 
 
 @Component({
@@ -61,9 +58,15 @@ export class OrderDetailComponent implements OnInit {
   allOrderPacking?: OrderModelPacking;
   packingOrderDetail?: OrderPacking;
   recipeChanged = false;
-  packingOrders: packingOrders[] = [
+  packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
+  ];
+  slecetIdMixers: selectList[] = [
+    
+    { value: 1, viewValue: 'Vertical mixer' },
+    { value: 2, viewValue: 'Horizontal mixer' },
+    { value: 3, viewValue: 'External mixer' },
   ];
 
   @ViewChild('recipeSelect')
@@ -110,7 +113,7 @@ export class OrderDetailComponent implements OnInit {
 
           console.log('this this.orderComponent: ', this.orderComponent);
           this.prepareForm();
-
+          this.form.get('idMixer')?.disable({onlySelf:true});
           this.recipeService.getRecipes()
             .subscribe(recipes => {
               console.log('recipes: ', recipes);
@@ -137,6 +140,8 @@ export class OrderDetailComponent implements OnInit {
       })
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
+
+      
 
   }
 
@@ -180,7 +185,7 @@ export class OrderDetailComponent implements OnInit {
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
       quantity: new FormControl(this.order?.quantity || null, Validators.required),
-      idMixer: new FormControl(this.order?.idMixer, Validators.required),
+      idMixer: new FormControl(this.order?.idMixer , [Validators.required, Validators.min(1)]),
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
       idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
@@ -196,6 +201,7 @@ export class OrderDetailComponent implements OnInit {
   onEditClick() {
     this.editable = true;
     this.form.get('packingOrders')?.enable();
+    this.form.get('idMixer')?.enable();
   }
 
   onDeleteClick() {
