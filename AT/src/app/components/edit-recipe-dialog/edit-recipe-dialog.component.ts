@@ -8,7 +8,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable, startWith } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ComponentModel } from '../../models/component.model';
+import { ComponentItemModel, ComponentModel } from '../../models/component.model';
 
 @Component({
   selector: 'app-edit-recipe-dialog',
@@ -22,6 +22,8 @@ export class EditRecipeDialogComponent implements OnInit {
   newComponent: FormControl = new FormControl('');
   selectedComponents: ComponentModel[] = [];
   filteredComponents!: Observable<ComponentModel[]>;
+  currentWeight: number = 0;
+  targetWeight = 100;
 
   @ViewChild('componentInput', { static: false }) componentInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -48,7 +50,9 @@ export class EditRecipeDialogComponent implements OnInit {
       }) : []),
       // selectedComponents: new FormControl(data.recipe ? data.recipe.components!.map(component => component.componentName) : [])
     });
+    this.form.get('components')?.valueChanges.subscribe(change => this.calculateWeight(change));
   }
+
 
   ngOnInit(): void {
     this.componentService.getComponents()
@@ -188,6 +192,10 @@ export class EditRecipeDialogComponent implements OnInit {
     return this.allComponents
       .filter(c => !this.selectedComponents.includes(c))
       .filter(c => c.name.includes(filterValue));
+  }
+
+  calculateWeight(components: any[]): void {
+    this.currentWeight = components.reduce((acc, comp) => acc + comp.quantity, 0);
   }
 }
 
