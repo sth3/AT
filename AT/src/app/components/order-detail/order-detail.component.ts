@@ -257,8 +257,21 @@ export class OrderDetailComponent implements OnInit {
 
           } else {
 
+            this.allOrderPacking = this.form.value;
+
+            this.packingOrderDetail = {
+              packingOrder: this.form.value.packingOrders,
+              recipeNo: this.form.value.recipeNo,
+              orderNo: this.order!.no,
+              componentNo: this.componentNo
+            }
+            if (this.allOrderPacking == null) {
+              return;
+            }
+            this.allOrderPacking.packing = this.packingOrderDetail; 
+
             //orderNo: this.order!.no,
-            this.ordersService.updateOrder(this.order!.no, this.form.value).subscribe(order => {
+            this.ordersService.updateOrder(this.order!.no, this.allOrderPacking).subscribe(order => {
               console.log('updated order: ', order);
             })
 

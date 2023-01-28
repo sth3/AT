@@ -16,6 +16,7 @@ const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     ') SELECT SCOPE_IDENTITY() as no';
 const DELETE_ORDER_BY_NO = 'DELETE FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
+
 const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     'SET id = @id, ' +
     '   name = @name, ' +
@@ -34,6 +35,10 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
     '(recipeNo, componentNo, orderNo, packing) ' +
     'VALUES ';
+const DELETE_PACKING_ORDERS_BY_NO = 'DELETE FROM [AT].[dbo].[PACKING_ORDERS] ' +
+    'WHERE orderNo = @no';
+
+
 const getOrders = async () => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
@@ -95,8 +100,8 @@ const addOrder = async (order) => {
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
         .input('volumePerDose', sql.Int, order.volumePerDose)
         .query(ADD_ORDER);
-        const orderNo = recordset[0].no;
-        await addPacking(orderNo, order.packing);
+    const orderNo = recordset[0].no;
+    await addPacking(orderNo, order.packing);
     return recordset[0];
 }
 const addPacking = async (orderNo, packing) => {
@@ -107,23 +112,33 @@ const addPacking = async (orderNo, packing) => {
             query += ', ';
         }
     })
-    console.log('query',query);
+    console.log('query', query);
     const pool = await poolPromise;
     return pool.request()
         .query(query);
 }
 
 const deleteOrder = async (no) => {
+    await deletePacking(no);
     const pool = await poolPromise;
     return pool.request()
         .input('no', sql.Int, no)
         .query(DELETE_ORDER_BY_NO);
+        
+}
+
+const deletePacking = async (no) => {
+    const pool = await poolPromise;
+    return pool.request()
+        .input('no', sql.Int, no)
+        .query(DELETE_PACKING_ORDERS_BY_NO);
 }
 
 const updateOrder = async (no, order) => {
     console.log('no', no);
     console.log('order', order);
-
+    await deletePacking(no);
+    await addPacking(no, order.packing);
     const pool = await poolPromise;
     await pool.request()
         .input('no', sql.Int, no)
