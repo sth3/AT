@@ -15,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserModel } from '../../models/user.model';
 import { RecalculateRecipeComponent } from '../recalculate-recipe/recalculate-recipe.component';
 import { ComponentItemModel } from 'src/app/models/component.model';
+import { FocusTrapManager } from '@angular/cdk/a11y/focus-trap/focus-trap-manager';
 
 
 interface packingOrders {
@@ -58,8 +59,8 @@ export class OrderDetailComponent implements OnInit {
   orderComponent: ComponentModel[] = [];
   selectedValue: number = 0;
   componentNo: number[] = [];
-  allOrderPacking?: OrderModelPacking ;
-  packingOrderDetail?: OrderPacking ;
+  allOrderPacking?: OrderModelPacking;
+  packingOrderDetail?: OrderPacking;
   packingOrders: packingOrders[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -116,7 +117,10 @@ export class OrderDetailComponent implements OnInit {
               this.recipes = recipes;
               this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
               console.log('selected recipe 1: ', this.selectedRecipe);
+              this.addRowFromArray();
+              
               this.changeDetectorRef.detectChanges();
+              
             })
         })
     })
@@ -125,8 +129,11 @@ export class OrderDetailComponent implements OnInit {
         console.log('recipes: ', recipes);
         this.recipes = recipes;
         this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
+        this.addRowFromArray();
+        
         console.log('selected recipe 2: ', this.selectedRecipe);
         this.changeDetectorRef.detectChanges();
+        
       })
     this.ordersService.getOrdersList()
       .subscribe(orders => this.allOrders = orders)
@@ -159,8 +166,8 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('volumePerDose') as FormControl;
   }
 
-  get PackingOrders(): FormArray {
-    return this.form.controls["packingOrders"] as FormArray;
+  get PackingOrders() {
+    return this.form.get("packingOrders") as FormArray ;
   }
 
   private prepareForm() {
@@ -180,12 +187,15 @@ export class OrderDetailComponent implements OnInit {
       volumePerDose: new FormControl(this.order?.volumePerDose, Validators.required),
       operatorId: new FormControl(this.order?.operator.id || null),
       operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null),
-      packingOrders: new FormArray([ ])
+      packingOrders: new FormArray([])
     })
   }
 
+
+
   onEditClick() {
     this.editable = true;
+    this.form.get('packingOrders')?.enable();
   }
 
   onDeleteClick() {
@@ -204,6 +214,10 @@ export class OrderDetailComponent implements OnInit {
   }
 
   saveOrder() {
+    console.log('this.form.invalid',this.form.invalid);
+    console.log('this.form',this.form);
+
+    
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.recipeSelect?.ngControl?.control?.markAsTouched();
@@ -216,8 +230,8 @@ export class OrderDetailComponent implements OnInit {
     }
 
     console.log('save me ', this.form.value);
-    console.log('packingOrders',this.packingOrders);
-    
+    console.log('packingOrders', this.packingOrders);
+
     // const packingOrderDetail = {
     //   packingOrder: this.myValuee,
     //   recipeNo: this.form.value.recipeNo,
@@ -227,13 +241,13 @@ export class OrderDetailComponent implements OnInit {
     // console.log(packingOrderDetail);   
     this.componentNo = [];
     this.packingOrder = [];
-    
+
     this.selectedRecipe?.components.forEach((component, index) => {
       this.componentNo.push(component.no);
-      this.packingOrder.push(this.packingOrderValue[index]);      
+      this.packingOrder.push(this.packingOrderValue[index]);
     })
-    console.log('this.packingOrder',this.packingOrder);
-    
+    console.log('this.packingOrder', this.packingOrder);
+
     this.dialogService.confirmDialog('Are you sure you want to save this order?').subscribe(
       (result) => {
         if (result) {
@@ -242,27 +256,27 @@ export class OrderDetailComponent implements OnInit {
             //   console.log('new order: ', order);
             //   this.router.navigate(['/orders', order.no]);
             // })
-            
+
             this.allOrderPacking = this.form.value;
-            
-             this.packingOrderDetail = {
-              packingOrder: this.packingOrder,
+
+            this.packingOrderDetail = {
+              packingOrder: this.form.value.packingOrders,
               recipeNo: this.form.value.recipeNo,
               orderNo: 0,
               componentNo: this.componentNo
             }
-            if(this.allOrderPacking ==null){
+            if (this.allOrderPacking == null) {
               return;
             }
             this.allOrderPacking.packing = this.packingOrderDetail;
             console.log(this.packingOrderDetail);
-            console.log('allOrderPacking',this.allOrderPacking);
+            console.log('allOrderPacking', this.allOrderPacking);
 
             this.ordersService.addOrder(this.allOrderPacking).subscribe(order => {
               console.log('new order: ', order);
               this.router.navigate(['/orders', order.no]);
             })
-            
+
           } else {
 
             //orderNo: this.order!.no,
@@ -278,12 +292,30 @@ export class OrderDetailComponent implements OnInit {
 
   recipeSelected() {
     console.log('selected recipe: ', this.selectedRecipe);
-
     console.log('this.order', this.packingOrderValue);
-
+    this.addRowFromArray();
     this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
   }
-
+  
+  addRowFromArray(){
+    const arr = <FormArray>this.form.controls['packingOrders'];
+    arr.controls = [];
+   
+    if (this.selectedRecipe == null) {
+      console.log('this.formr', this.form);
+      return;
+    }
+    for(let index of this.selectedRecipe.components.keys()){     
+     
+        (<FormArray>this.form.get('packingOrders')).push(new FormControl(  this.order?.recipe.components[index].packingOrder , Validators.required));
+        
+        this.form.get('packingOrders')?.disable();
+        console.log('here', this.editable);      
+    };
+    
+    console.log('this.formr', this.form);
+    
+  }
 
   recalculateRecipe() {
     console.log('Recalculate recipe: ', this.selectedRecipe);
