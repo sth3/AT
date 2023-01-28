@@ -139,11 +139,11 @@
                           <span matSuffix>KG/L</span>
                         </mat-form-field>
 
-                        <ng-container formArrayName="packingOrders">
-                          <mat-form-field appearance="outline" style="width: 10%; " class="note">
+                        <ng-container formArrayName="packingOrders" >
+                          <mat-form-field appearance="outline" style="width: 10%; " class="note"  >
                             <mat-label>Packing</mat-label>
-                            <mat-select [disabled]="!editable" formControlName="packingOrders">
-                              <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
+                            <mat-select formControlName="{{i}}"   >
+                              <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value"  >
                                 {{packingOrder.viewValue}}
 
                               </mat-option>
@@ -187,7 +187,7 @@
         <div class="order-form-field">
           <h3>Mixer ID</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Mixer ID" formControlName="idMixer" min="1" max="4" type="number">
+            <input matInput placeholder="Mixer ID"c min="1" max="4" type="number" formControlName="idMixer">
             <mat-error *ngIf="idMixer!.invalid">Valid mixer IDs are 1-4.</mat-error>
           </mat-form-field>
         </div>
