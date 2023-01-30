@@ -269,14 +269,14 @@
       <mat-icon>arrow_back</mat-icon>
       Back to order
     </button>
-    <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick()" *ngIf="!editable">
+    <button mat-icon-button color="danger" aria-label="Edit item" (click)="onEditClick()" *ngIf="!editable" > 
       <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button mat-icon-button color="primary" aria-label="Save item" (click)="saveOrder()" *ngIf="editable">
-      <mat-icon>save</mat-icon>
-      Save
-    </button>
+    <button mat-icon-button color="primary" aria-label="Edit item" (click)="offEditClick()" *ngIf="editable">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button> 
     <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick()">
       <mat-icon>delete_forever</mat-icon>
       Delete

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking, selectList } from '../../models/order.model';
+import { OrderListModel, OrderModel, OrderModelPacking, OrderPacking, selectList, RecalculateOrder } from '../../models/order.model';
 import { ComponentModel } from '../../models/component.model';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
@@ -58,6 +58,7 @@ export class OrderDetailComponent implements OnInit {
   allOrderPacking?: OrderModelPacking;
   packingOrderDetail?: OrderPacking;
   recipeChanged = false;
+  dosePerOrder?: RecalculateOrder | undefined;
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -204,6 +205,12 @@ export class OrderDetailComponent implements OnInit {
     this.form.get('idMixer')?.enable();
   }
 
+  offEditClick() {
+    this.editable = false;
+    this.form.get('packingOrders')?.disable();
+    this.form.get('idMixer')?.disable();
+  }
+
   onDeleteClick() {
     this.dialogService.confirmDialog('Are you sure you want to delete this order?')
       .subscribe(result => {
@@ -236,8 +243,10 @@ export class OrderDetailComponent implements OnInit {
     this.componentNo = [];    
     this.selectedRecipe?.components.forEach((component, index) => {
       this.componentNo.push(component.no);      
-    })    
-
+    })   
+    console.log(this.allOrderPacking);
+    
+    
     this.dialogService.confirmDialog('Are you sure you want to save this order?').subscribe(
       (result) => {
         if (result) {
@@ -251,9 +260,10 @@ export class OrderDetailComponent implements OnInit {
               orderNo: 0,
               componentNo: this.componentNo
             }
-            if (this.allOrderPacking == null) {
+            if (this.allOrderPacking == null || this.dosePerOrder == null ) {
               return;
-            }
+            } 
+            this.allOrderPacking.doses = this.dosePerOrder;
             this.allOrderPacking.packing = this.packingOrderDetail;            
 
             this.ordersService.addOrder(this.allOrderPacking).subscribe(order => {
@@ -271,15 +281,17 @@ export class OrderDetailComponent implements OnInit {
               orderNo: this.order!.no,
               componentNo: this.componentNo
             }
-            if (this.allOrderPacking == null) {
+            if (this.allOrderPacking == null || this.dosePerOrder == null ) {
               return;
-            }
+            } 
+            this.allOrderPacking.doses = this.dosePerOrder;            
             this.allOrderPacking.packing = this.packingOrderDetail; 
-
+            
             //orderNo: this.order!.no,
             this.ordersService.updateOrder(this.order!.no, this.allOrderPacking).subscribe(order => {
               console.log('updated order: ', order);
             })
+            
 
           }
         }
@@ -319,18 +331,18 @@ export class OrderDetailComponent implements OnInit {
     console.log('Recalculate recipe: ', this.selectedRecipe);
     console.log('Recalculate order: ', this.order);
     this.dialogService.customDialog(RecalculateRecipeComponent,
-      { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder: this.order, editMode: false },
+      { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder: this.order, editMode: this.editable },
       { width: '1500px', height: '700px' })
       .subscribe(result => {
-        if (result) {
-          // this.recipeService.addRecipe(result)
-          //   .subscribe(response => {
-          //     const recipe = { ...response, ...result };
-          //     console.log('recipe created: ', recipe);
-          //     this.notifierService.showDefaultNotification('New recipe created');
-          //     this.data.push(recipe);
-          //     this.dataSource.data = this.data;
-          //   })
+        
+        if (result == null) {
+          return;
+        }
+        if (result.edit) {
+         this.dosePerOrder = result.data;
+         console.log('this.dosePerOrder',this.dosePerOrder );
+                  
+         this.saveOrder()
         }
       })
   }

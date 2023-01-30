@@ -34,6 +34,17 @@ export interface OrderPacking{
   orderNo: number ;
   componentNo:number[]; }
 
+
+export interface RecalculateOrder{
+  orderNo: number;
+  recipeNo: number;  
+  componentNo:number;
+  quantityDose: number ; 
+  quantityBag: number ; 
+  quantityBigBag: number ; 
+  quantityADS: number ; 
+  quantityLiquid: number ; }
+
   export interface OrderModelPacking {
     no: number;
     id: string;
@@ -53,6 +64,7 @@ export interface OrderPacking{
     completedAt: string | null;
     operator: UserModel;
     packing: OrderPacking;
+    doses:RecalculateOrder;
   }
 
   export interface selectList {

@@ -35,7 +35,12 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
     '(recipeNo, componentNo, orderNo, packing) ' +
     'VALUES ';
+const ADD_DOSE = 'INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE] ' +
+    '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid) ' +
+    'VALUES ';
 const DELETE_PACKING_ORDERS_BY_NO = 'DELETE FROM [AT].[dbo].[PACKING_ORDERS] ' +
+    'WHERE orderNo = @no';
+const DELETE_DOSES= 'DELETE FROM [AT].[dbo].[QUANTITY_PER_DOSE] ' +
     'WHERE orderNo = @no';
 
 
@@ -102,6 +107,7 @@ const addOrder = async (order) => {
         .query(ADD_ORDER);
     const orderNo = recordset[0].no;
     await addPacking(orderNo, order.packing);
+    await addOrderDose(orderNo, order.doses);
     return recordset[0];
 }
 const addPacking = async (orderNo, packing) => {
@@ -117,14 +123,28 @@ const addPacking = async (orderNo, packing) => {
     return pool.request()
         .query(query);
 }
+const addOrderDose = async (orderNo, doses) => {
+    let query = ADD_DOSE;
+    doses.forEach((value, index) => {
+        query += `(${orderNo},${value.recipeNo}, ${value.componentNo}, ${value.quantityDose},${value.quantityBag},${value.quantityBigBag.toFixed(3)},${value.quantityADS.toFixed(3)},${value.quantityLiquid.toFixed(3)})`;
+        if (index < doses.length - 1) {
+            query += ', ';
+        }
+    })
+    console.log('query', query);
+    const pool = await poolPromise;
+    return pool.request()
+        .query(query);
+}
 
 const deleteOrder = async (no) => {
     await deletePacking(no);
+    await deleteDoses(no);
     const pool = await poolPromise;
     return pool.request()
         .input('no', sql.Int, no)
         .query(DELETE_ORDER_BY_NO);
-        
+
 }
 
 const deletePacking = async (no) => {
@@ -133,12 +153,21 @@ const deletePacking = async (no) => {
         .input('no', sql.Int, no)
         .query(DELETE_PACKING_ORDERS_BY_NO);
 }
+const deleteDoses = async (no) => {
+    const pool = await poolPromise;
+    return pool.request()
+        .input('no', sql.Int, no)
+        .query(DELETE_DOSES);
+}
 
 const updateOrder = async (no, order) => {
     console.log('no', no);
     console.log('order', order);
     await deletePacking(no);
     await addPacking(no, order.packing);
+    await deleteDoses(no);
+    await addOrderDose(no, order.doses);
+
     const pool = await poolPromise;
     await pool.request()
         .input('no', sql.Int, no)

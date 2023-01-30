@@ -4,7 +4,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentService } from '../../services/component.service';
 
 import { RecipeModel } from '../../models/recipe.model';
-import { OrderModelPacking, selectList } from '../../models/order.model';
+import { OrderModelPacking, selectList, RecalculateOrder } from '../../models/order.model';
+import { RecipeService } from 'src/app/services/recipe.service';
 @Component({
   selector: 'app-recalculate-recipe',
   templateUrl: './recalculate-recipe.component.html',
@@ -18,6 +19,7 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityLiquid: number[] = [];
   volumeComponent: number[] = [];
   quantityComponentPerOrder: number[] = [];
+  //recipeRecalculate: RecalculateOrder[]  = [];
   volumeSum: number = 0;
   quntitySum: number = 0;
   packingOrders: selectList[] = [
@@ -29,12 +31,15 @@ export class RecalculateRecipeComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     recipe: RecipeModel,
     selectedRecipe: RecipeModel | undefined,
-    selectedorder: OrderModelPacking;
-    editMode: boolean
+    selectedorder: OrderModelPacking,
+    editMode: boolean,
+    recipeRecalculate : RecalculateOrder[]        
   },
     private componentService: ComponentService) {
     console.log('allRecipes components: ', data.selectedRecipe);
     console.log('allOrder components: ', data.selectedorder);
+    this.data.recipeRecalculate
+    
   }
 
   ngOnInit(): void {
@@ -75,7 +80,7 @@ export class RecalculateRecipeComponent implements OnInit {
     this.quantityBigBag = [];
     this.quantityADS = [];
     this.quantityLiquid = [];
-
+    this.data.recipeRecalculate = [];
     for (let [index, volumeComponents] of this.data.selectedorder.recipe.components.entries()) {
       this.quantityBigBag[index] = 0; 
       this.quantityADS[index] = 0; 
@@ -87,8 +92,25 @@ export class RecalculateRecipeComponent implements OnInit {
         this.quantityADS[index] = 0; 
         this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing ;      
       }
+      this.data.recipeRecalculate.push({
+        orderNo : this.data.selectedorder.no, 
+        recipeNo:this.data.selectedorder.recipeNo, 
+        componentNo: volumeComponents.no, 
+        quantityDose:this.quantityPallete,
+        quantityBag:this.quantityBag[index], 
+        quantityBigBag:this.quantityBigBag[index], 
+        quantityADS:this.quantityADS[index], 
+        quantityLiquid:this.quantityLiquid[index]      
+      })
+
     }
 
   }
 
+  saveOrder(){
+    console.log('this.recipeRecalculate',this.data.recipeRecalculate);
+    return {data: this.data.recipeRecalculate ,edit: true}
+}
+  
+  
 }
