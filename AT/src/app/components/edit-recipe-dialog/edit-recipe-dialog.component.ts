@@ -23,6 +23,7 @@ export class EditRecipeDialogComponent implements OnInit {
   selectedComponents: ComponentModel[] = [];
   filteredComponents!: Observable<ComponentModel[]>;
   currentWeight: number = 0;
+  cWeight: number = 0;
   targetWeight = 100;
 
   @ViewChild('componentInput', { static: false }) componentInput: ElementRef<HTMLInputElement> | undefined;
@@ -36,9 +37,9 @@ export class EditRecipeDialogComponent implements OnInit {
     console.log('recipe components: ', data.recipe?.components);
     this.form = new FormGroup({
       name: new FormControl(data.recipe ? data.recipe.name : '',
-        [Validators.required, Validators.minLength(3), this.validRecipeNameValidator.bind(this)]),
+        [Validators.required, Validators.minLength(3), Validators.maxLength(30), this.validRecipeNameValidator.bind(this)]),
       id: new FormControl(data.recipe ? data.recipe.id : this.getNewId(data.allRecipes),
-        [Validators.required, Validators.minLength(10), Validators.maxLength(10),
+        [Validators.required, Validators.minLength(6), Validators.maxLength(6),
           this.validRecipeIdValidator.bind(this)]),
       components: new FormArray(data.recipe ? data.recipe?.components!.map(component => {
         return new FormGroup({
@@ -195,7 +196,10 @@ export class EditRecipeDialogComponent implements OnInit {
   }
 
   calculateWeight(components: any[]): void {
-    this.currentWeight = components.reduce((acc, comp) => acc + comp.quantity, 0);
+    this.cWeight = components.reduce((acc, comp) => acc + comp.quantity, 0);
+    this.currentWeight = Number(this.cWeight.toFixed(3));
+    console.log('this.currentWeight',this.currentWeight);
+    
   }
 }
 

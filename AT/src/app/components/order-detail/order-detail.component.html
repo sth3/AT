@@ -166,7 +166,7 @@
                         <mat-form-field appearance="outline" style="width: 20%" class="note">
                           <mat-label>Weight</mat-label>
                           <input matInput placeholder="0000000001"
-                            [value]="component.componentSP * this.form.value.quantity|number :'1.3-3'">
+                            [value]="component.componentSP * (this.form.value.quantity/100) |number :'1.3-3'">
                           <span matSuffix>KG</span>
                         </mat-form-field>
                       </p>
@@ -283,8 +283,8 @@
     </button>
 
     <button mat-button (click)="recalculateRecipe()">
-      <mat-icon>store</mat-icon>
-      Recalculate the recipe
+      <mat-icon>save</mat-icon>
+      Save
     </button>
   </mat-card-actions>
 </mat-card>

@@ -328,10 +328,20 @@ export class OrderDetailComponent implements OnInit {
   }
 
   recalculateRecipe() {
+      
+      
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.recipeSelect?.ngControl?.control?.markAsTouched();
+      this.notifier.showNotification('Please fill out all fields correctly.', 'Close', 'error');
+      return;
+    }
+    
+    console.log('save me ', this.form.value);   
     console.log('Recalculate recipe: ', this.selectedRecipe);
     console.log('Recalculate order: ', this.order);
     this.dialogService.customDialog(RecalculateRecipeComponent,
-      { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder: this.order, editMode: this.editable },
+      { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder:  this.form.value, editMode: this.editable },
       { width: '1500px', height: '700px' })
       .subscribe(result => {
         
@@ -341,7 +351,10 @@ export class OrderDetailComponent implements OnInit {
         if (result.edit) {
          this.dosePerOrder = result.data;
          console.log('this.dosePerOrder',this.dosePerOrder );
-                  
+         if (this.form.pristine) {
+         
+          return;
+        }         
          this.saveOrder()
         }
       })

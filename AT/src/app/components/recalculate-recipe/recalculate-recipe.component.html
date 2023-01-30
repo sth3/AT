@@ -10,7 +10,7 @@
         <input matInput placeholder="0000000001" readonly [value]="this.quantityPallete">
         <span matSuffix>x</span>
       </mat-form-field>
-      <ng-container *ngFor="let component of data.selectedorder?.recipe?.components; let i = index">
+      <ng-container *ngFor="let component of data.selectedRecipe?.components; let i = index">
         <mat-list-item>
           <div matLine>
 

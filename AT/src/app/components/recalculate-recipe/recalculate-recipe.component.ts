@@ -47,11 +47,11 @@ export class RecalculateRecipeComponent implements OnInit {
     
   }
   quantityComponentsPerOrder() {
-    if (this.data.selectedorder.recipe == null) {
+    if (this.data.selectedRecipe == null) {
       return;
     }
     this.quntitySum = 0;
-    for (let [index, components] of this.data.selectedorder.recipe.components.entries()) {
+    for (let [index, components] of this.data.selectedRecipe.components.entries()) {
       this.quantityComponentPerOrder[index] = (Number(components.componentSP.toFixed(3)  ) * (  ((this.data.selectedorder.quantity/100)  ))) ;
       this.quntitySum += Number(this.quantityComponentPerOrder[index].toFixed(3));
     }
@@ -61,11 +61,11 @@ export class RecalculateRecipeComponent implements OnInit {
   }
 
   specificBulkWeight() {
-    if (this.data.selectedorder.recipe == null) {
+    if (this.data.selectedRecipe == null) {
       return;
     }
     this.volumeSum = 0;
-    for (let [index, components] of this.data.selectedorder.recipe.components.entries()) {
+    for (let [index, components] of this.data.selectedRecipe.components.entries()) {
       this.volumeComponent[index] = this.quantityComponentPerOrder[index] / Number(components.specificBulkWeight.toFixed(3));
       this.volumeSum += Number(this.volumeComponent[index].toFixed(3));
     }
@@ -81,7 +81,10 @@ export class RecalculateRecipeComponent implements OnInit {
     this.quantityADS = [];
     this.quantityLiquid = [];
     this.data.recipeRecalculate = [];
-    for (let [index, volumeComponents] of this.data.selectedorder.recipe.components.entries()) {
+    if (this.data.selectedRecipe == null) {
+      return;
+    }
+    for (let [index, volumeComponents] of this.data.selectedRecipe.components.entries()) {
       this.quantityBigBag[index] = 0; 
       this.quantityADS[index] = 0; 
       this.quantityLiquid[index] = 0; 

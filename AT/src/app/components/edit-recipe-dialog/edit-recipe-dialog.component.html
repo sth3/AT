@@ -109,7 +109,7 @@
       <span style="font-weight: bold">Weight check</span>
       <span class="spacer"></span>
       <span
-        >{{ currentWeight }}/{{ targetWeight }}
+        >{{ currentWeight.toFixed(3) }}/{{ targetWeight }}
         <mat-icon
           *ngIf="currentWeight === targetWeight; else crossIcon"
           style="color: green; vertical-align: sub"
