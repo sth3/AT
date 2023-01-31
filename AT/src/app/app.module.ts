@@ -44,7 +44,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
 import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
-import { LoadingInterceptor } from './interceptors/loading.interceptor';
+
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { UserControlComponent } from './components/user-control/user-control.component';
 import { EditUserComponent } from './components/user-control/edit-user/edit-user.component';
@@ -113,7 +113,7 @@ import { RecalculateRecipeComponent } from './components/recalculate-recipe/reca
         MatExpansionModule,
     ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
