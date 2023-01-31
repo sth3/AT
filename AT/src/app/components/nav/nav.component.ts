@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { LoaderService } from '../../services/loader.service';
+// import { LoaderService } from '../../services/loader.service';
 import { AuthService } from '../../services/auth.service';
 import { UserModel, UserRole } from '../../models/user.model';
 
@@ -24,7 +24,7 @@ export class NavComponent {
   isAdmin = false;
 
   constructor(private breakpointObserver: BreakpointObserver,
-              public loaderService: LoaderService,
+              // public loaderService: LoaderService,
               private authService: AuthService) {
     this.user = this.authService.user$;
     this.user.subscribe(user => {
