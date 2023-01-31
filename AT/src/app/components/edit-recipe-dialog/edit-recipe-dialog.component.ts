@@ -24,7 +24,9 @@ export class EditRecipeDialogComponent implements OnInit {
   filteredComponents!: Observable<ComponentModel[]>;
   currentWeight: number = 0;
   cWeight: number = 0;
+  cQunatity: number = 0;
   targetWeight = 100;
+  targetQunatity = 20;
 
   @ViewChild('componentInput', { static: false }) componentInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -52,6 +54,9 @@ export class EditRecipeDialogComponent implements OnInit {
       // selectedComponents: new FormControl(data.recipe ? data.recipe.components!.map(component => component.componentName) : [])
     });
     this.form.get('components')?.valueChanges.subscribe(change => this.calculateWeight(change));
+    
+   
+    
   }
 
 
@@ -106,7 +111,7 @@ export class EditRecipeDialogComponent implements OnInit {
     const maxId = allRecipes
       .filter(r => !isNaN(parseInt(r.id)))
       .reduce((max, recipe) => Math.max(max, parseInt(recipe.id)), 0);
-    return (maxId + 1).toString().padStart(10, '0');
+    return (maxId + 1).toString().padStart(6, '0');
   }
 
   setComponents() {
@@ -197,8 +202,9 @@ export class EditRecipeDialogComponent implements OnInit {
 
   calculateWeight(components: any[]): void {
     this.cWeight = components.reduce((acc, comp) => acc + comp.quantity, 0);
+    this.cQunatity = this.form.get('components')?.value.length;
     this.currentWeight = Number(this.cWeight.toFixed(3));
-    console.log('this.currentWeight',this.currentWeight);
+   
     
   }
 }

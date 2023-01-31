@@ -24,7 +24,7 @@
         >Recipe ID is required.</mat-error
       >
       <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')"
-        >Recipe ID must be exactly 10 characters long.
+        >Recipe ID must be exactly 6 characters long.
       </mat-error>
       <mat-error *ngIf="id!.hasError('invalidRecipeId')"
         >This ID is already in use.
@@ -120,6 +120,21 @@
         </ng-template>
       </span>
     </mat-toolbar>
+    <mat-toolbar style="height: 30px">
+      <span style="font-weight: bold">Number of Compoents</span>
+      <span class="spacer"></span>
+      <span
+        >{{ cQunatity }}/{{ targetQunatity }}
+        <mat-icon
+          *ngIf="cQunatity <= targetQunatity && cQunatity > 0 ; else crossIcon"
+          style="color: green; vertical-align: sub"
+          >done</mat-icon
+        >
+        <ng-template #crossIcon>
+          <mat-icon style="color: darkred; vertical-align: sub;">close</mat-icon>
+        </ng-template>
+      </span>
+    </mat-toolbar>
   </form>
 </div>
 <div mat-dialog-actions>
@@ -127,7 +142,7 @@
   <button
     mat-button
     [mat-dialog-close]="getFormValue()"
-    [disabled]="!form.valid || !form.dirty || currentWeight !== targetWeight"
+    [disabled]="!form.valid || !form.dirty || currentWeight !== targetWeight || cQunatity > targetQunatity || cQunatity === 0 "
   >
     Save
   </button>
