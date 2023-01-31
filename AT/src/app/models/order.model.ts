@@ -43,7 +43,8 @@ export interface RecalculateOrder{
   quantityBag: number ; 
   quantityBigBag: number ; 
   quantityADS: number ; 
-  quantityLiquid: number ; }
+  quantityLiquid: number ; 
+  quantityMicro: number ; }
 
   export interface OrderModelPacking {
     no: number;
@@ -63,6 +64,7 @@ export interface RecalculateOrder{
     lastUpdate: string;
     completedAt: string | null;
     operator: UserModel;
+    packingOrders: number[];
     packing: OrderPacking;
     doses:RecalculateOrder;
   }

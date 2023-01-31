@@ -59,7 +59,9 @@ export class OrdersComponent implements OnInit {
 
   packingOrders: packingOrders[] = [
     {value: 0, viewValue: 'Bag'},
-    {value: 1, viewValue: 'Big Bag'},    
+    {value: 1, viewValue: 'Big Bag'},  
+    { value: 2, viewValue: 'Liquid' },
+    { value: 3, viewValue: 'Micro' },  
   ];
 
   isLoading = true;

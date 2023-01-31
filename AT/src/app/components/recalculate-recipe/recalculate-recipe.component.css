@@ -1,0 +1,15 @@
+:host ::ng-deep .mat-list-item.lineL.line {
+    height: 350px !important;
+    border-left: 2px solid green
+  }
+
+  .lineL.line {
+    height: 200px !important;
+    border-left: 2px solid green
+  }
+
+  .mat-divider-vertical{
+    height: 100%;
+    width: 0px !important;
+    position: inherit !important;
+  }

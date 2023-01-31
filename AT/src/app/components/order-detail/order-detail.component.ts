@@ -62,6 +62,8 @@ export class OrderDetailComponent implements OnInit {
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
+    { value: 2, viewValue: 'Liquid' },
+    { value: 3, viewValue: 'Micro' },
   ];
   slecetIdMixers: selectList[] = [
     
@@ -190,7 +192,7 @@ export class OrderDetailComponent implements OnInit {
       mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
       idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
       idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
-      volumePerDose: new FormControl(this.order?.volumePerDose, Validators.required),
+      volumePerDose: new FormControl(this.order?.volumePerDose, [Validators.required, Validators.min(50),Validators.max(700)]),
       operatorId: new FormControl(this.order?.operator.id || null),
       operatorName: new FormControl(this.ordersService.showFullUserName(this.order?.operator as UserModel) || null),
       packingOrders: new FormArray([])
@@ -328,7 +330,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   recalculateRecipe() {
-      
+    this.form.get('packingOrders')?.enable(); 
       
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -339,15 +341,18 @@ export class OrderDetailComponent implements OnInit {
     
     console.log('save me ', this.form.value);   
     console.log('Recalculate recipe: ', this.selectedRecipe);
-    console.log('Recalculate order: ', this.order);
+   
     this.dialogService.customDialog(RecalculateRecipeComponent,
       { recipe: null, selectedRecipe: this.selectedRecipe, selectedorder:  this.form.value, editMode: this.editable },
-      { width: '1500px', height: '700px' })
+      { width: '1455px', height: 'auto' })
       .subscribe(result => {
-        
+        if (!this.editable ){
+          this.offEditClick()
+        }
         if (result == null) {
           return;
         }
+       
         if (result.edit) {
          this.dosePerOrder = result.data;
          console.log('this.dosePerOrder',this.dosePerOrder );

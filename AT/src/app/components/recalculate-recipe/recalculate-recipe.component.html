@@ -4,79 +4,128 @@
     <div style="flex: 1 1 0;">
 
 
-
-      <mat-form-field appearance="outline" style="width: 10%" class="note">
-        <mat-label>Number of doses</mat-label>
-        <input matInput placeholder="0000000001" readonly [value]="this.quantityPallete">
-        <span matSuffix>x</span>
-      </mat-form-field>
-      <ng-container *ngFor="let component of data.selectedRecipe?.components; let i = index">
+      <mat-list>
         <mat-list-item>
-          <div matLine>
-
-            <p style="float:left; ">
-              <mat-form-field appearance="outline" style="width: 10%" class="light note">
-                <mat-label>ID</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="component.id">
-              </mat-form-field>
-              <mat-form-field appearance="outline" style="width: 250px" class="note">
-                <mat-label>Name</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="component.name">
-              </mat-form-field>
-              Palette
-              <mat-form-field appearance="outline" style="width: 10%" class="note">
-                <mat-label>Packing</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="component.packing.toFixed(1)">
-                <span matSuffix>kg</span>
-              </mat-form-field>
-              <mat-form-field appearance="outline" style="width: 10%" class="note">
-                <mat-label>Quantity</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="this.quantityBag[i]">
-                <span matSuffix>x</span>
-              </mat-form-field>
-
-              BigBag line
-              <mat-form-field appearance="outline" style="width: 10%" class="note">
-                <mat-label>Quantity</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="this.quantityBigBag[i].toFixed(3)">
-                <span matSuffix>kg</span>
-              </mat-form-field>
-
-              ADS line
-              <mat-form-field appearance="outline" style="width: 10%" class="note">
-                <mat-label>Quantity</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="this.quantityADS[i].toFixed(3)">
-                <span matSuffix>kg</span>
-              </mat-form-field>
-
-              Liquid
-              <mat-form-field appearance="outline" style="width: 10%" class="note">
-                <mat-label>Quantity</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="this.quantityLiquid[i].toFixed(3)">
-                <span matSuffix>kg</span>
-              </mat-form-field>
-
-            </p>
-
-          </div>
+          <mat-form-field appearance="outline" style="width: 10%" class="note">
+            <mat-label>Number of doses</mat-label>
+            <input matInput placeholder="0001" readonly [value]="this.quantityPallete">
+            <span matSuffix>x</span>
+          </mat-form-field>
         </mat-list-item>
+      </mat-list>
+      <div style="flex-direction: column; width: 100%; margin-bottom: 20px " *ngIf="data.selectedRecipe?.components">
+        <mat-list>
 
-      </ng-container>
+          <!-- <span >Palette</span>  <span >BigBag line</span> <span> ADS line</span>  <span >Liquide</span> <span >Micro</span>  -->
+          <ng-container *ngFor="let component of data.selectedRecipe?.components; let i = index">
+            <div *ngIf="!i">
+              <mat-list-item>
+                <p style="float:left; " class="lineL">
+                  <mat-form-field appearance="fill" style="width: 405px" class="note">
+                    <input matInput placeholder="000001" readonly value="Components">
+                  </mat-form-field>
+                  <span class="line"></span>
+                  <mat-form-field appearance="fill" style="width: 305px" class="note">
+                    <mat-label>Station</mat-label>
+                    <input matInput placeholder="000001" readonly value="Palette">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width: 150px" class="note">
+                    <mat-label>Station</mat-label>
+                    <input matInput placeholder="000001" readonly value="BigBag line">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width: 150px" class="note">
+                    <mat-label>Station</mat-label>
+                    <input matInput placeholder="000001" readonly value="ADS line">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width: 150px" class="note">
+                    <mat-label>Station</mat-label>
+                    <input matInput placeholder="000001" readonly value="Liquide">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width: 150px" class="note">
+                    <mat-label>Station</mat-label>
+                    <input matInput placeholder="000001" readonly value="Micro">
+                  </mat-form-field>
+                </p>
+              </mat-list-item>
+            </div>
+
+            <mat-list-item>
+              <div matLine>
+
+                <p style="float:left; ">
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="light note">
+                    <mat-label>ID</mat-label>
+                    <input matInput placeholder="000001" readonly [value]="component.id">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" style="width: 250px" class="note">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Paprika" readonly [value]="component.name">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Packing</mat-label>
+                    <input matInput placeholder="1" readonly [value]="component.packing.toFixed(1)">
+                    <span matSuffix>kg</span>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
+                    <span matSuffix>x</span>
+                  </mat-form-field>
+
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
+                    <span matSuffix>kg</span>
+                  </mat-form-field>
+
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
+                    <span matSuffix>kg</span>
+                  </mat-form-field>
+
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
+                    <span matSuffix>kg</span>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">
+                    <span matSuffix>kg</span>
+                  </mat-form-field>
+
+                </p>
+
+              </div>
+            </mat-list-item>
+
+          </ng-container>
+          <span style="margin: auto" *ngIf="data.selectedRecipe!.components?.length === 0">No components in this
+            recipe.</span>
+        </mat-list>
+      </div>
     </div>
   </mat-card-content>
   <mat-card-actions>
 
 
-    
-      <button mat-button [mat-dialog-close]="false">Cancel</button>
-      <button
-        mat-button
-        [mat-dialog-close]="saveOrder()" *ngIf="data.editMode"
-        
-      >
-        Save
-      </button>
-    
+
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button [mat-dialog-close]="saveOrder()" *ngIf="data.editMode">
+      Save
+    </button>
+
 
 
   </mat-card-actions>

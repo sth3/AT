@@ -17,9 +17,10 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityBigBag: number[] = [];
   quantityADS: number[] = [];
   quantityLiquid: number[] = [];
+  quantityMicro: number[] = [];
   volumeComponent: number[] = [];
   quantityComponentPerOrder: number[] = [];
-  //recipeRecalculate: RecalculateOrder[]  = [];
+  recipeRecalculate: RecalculateOrder[]  = [];
   volumeSum: number = 0;
   quntitySum: number = 0;
   packingOrders: selectList[] = [
@@ -32,19 +33,17 @@ export class RecalculateRecipeComponent implements OnInit {
     recipe: RecipeModel,
     selectedRecipe: RecipeModel | undefined,
     selectedorder: OrderModelPacking,
-    editMode: boolean,
-    recipeRecalculate : RecalculateOrder[]        
+    editMode: boolean
   },
     private componentService: ComponentService) {
     console.log('allRecipes components: ', data.selectedRecipe);
-    console.log('allOrder components: ', data.selectedorder);
-    this.data.recipeRecalculate
-    
+    console.log('allOrder components: ', data.selectedorder);   
+
   }
 
   ngOnInit(): void {
     this.quantityComponentsPerOrder();
-    
+
   }
   quantityComponentsPerOrder() {
     if (this.data.selectedRecipe == null) {
@@ -52,7 +51,7 @@ export class RecalculateRecipeComponent implements OnInit {
     }
     this.quntitySum = 0;
     for (let [index, components] of this.data.selectedRecipe.components.entries()) {
-      this.quantityComponentPerOrder[index] = (Number(components.componentSP.toFixed(3)  ) * (  ((this.data.selectedorder.quantity/100)  ))) ;
+      this.quantityComponentPerOrder[index] = (Number(components.componentSP.toFixed(3)) * (((this.data.selectedorder.quantity / 100))));
       this.quntitySum += Number(this.quantityComponentPerOrder[index].toFixed(3));
     }
     console.log('quantityComponentPerOrder', this.quantityComponentPerOrder);
@@ -74,46 +73,78 @@ export class RecalculateRecipeComponent implements OnInit {
     this.recalculateDose()
   }
 
-  recalculateDose(){
+  recalculateDose() {
     this.quantityPallete = Math.ceil(this.volumeSum / Number(this.data.selectedorder.volumePerDose))
     this.quantityBag = [];
     this.quantityBigBag = [];
     this.quantityADS = [];
     this.quantityLiquid = [];
-    this.data.recipeRecalculate = [];
+    this.quantityMicro = [];
+    this.recipeRecalculate = [];
     if (this.data.selectedRecipe == null) {
       return;
     }
     for (let [index, volumeComponents] of this.data.selectedRecipe.components.entries()) {
-      this.quantityBigBag[index] = 0; 
-      this.quantityADS[index] = 0; 
-      this.quantityLiquid[index] = 0; 
-      this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing) ;  
-      this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete ) - (volumeComponents.packing * this.quantityBag[index]);     
-      if(volumeComponents.packingOrder){
-        this.quantityBag[index] = 0;  
-        this.quantityADS[index] = 0; 
-        this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing ;      
+      this.quantityBigBag[index] = 0;
+      this.quantityADS[index] = 0;
+      this.quantityBag[index] = 0;
+      this.quantityMicro[index] = 0;
+      this.quantityLiquid[index] = 0;
+      // this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
+      // this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
+      // if (volumeComponents.packingOrder = 1) {
+      //   this.quantityBag[index] = 0;
+      //   this.quantityADS[index] = 0;
+      //   this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+      // }
+      
+      switch (this.data.selectedorder.packingOrders[index]) {
+        case 0:                
+          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
+          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
+          break;
+        case 1:
+          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
+        case 2:
+          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
+        case 3:
+          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
       }
-      this.data.recipeRecalculate.push({
-        orderNo : this.data.selectedorder.no, 
-        recipeNo:this.data.selectedorder.recipeNo, 
-        componentNo: volumeComponents.no, 
-        quantityDose:this.quantityPallete,
-        quantityBag:this.quantityBag[index], 
-        quantityBigBag:this.quantityBigBag[index], 
-        quantityADS:this.quantityADS[index], 
-        quantityLiquid:this.quantityLiquid[index]      
+
+
+
+
+
+
+      this.recipeRecalculate.push({
+        orderNo: this.data.selectedorder.no,
+        recipeNo: this.data.selectedorder.recipeNo,
+        componentNo: volumeComponents.no,
+        quantityDose: this.quantityPallete,
+        quantityBag: this.quantityBag[index],
+        quantityBigBag: this.quantityBigBag[index],
+        quantityADS: this.quantityADS[index],
+        quantityLiquid: this.quantityLiquid[index],
+        quantityMicro: this.quantityMicro[index],
       })
 
     }
+    console.log('quantityBag',this.quantityBag);
+    console.log('quantityADS',this.quantityADS);
+    console.log('quantityBigBag',this.quantityBigBag);
+    console.log('quantityLiquid',this.quantityLiquid);
+    console.log('quantityMicro',this.quantityMicro);
+    
 
   }
 
-  saveOrder(){
-    console.log('this.recipeRecalculate',this.data.recipeRecalculate);
-    return {data: this.data.recipeRecalculate ,edit: true}
-}
-  
-  
+  saveOrder() {
+    console.log('this.recipeRecalculate', this.recipeRecalculate);
+    return { data: this.recipeRecalculate, edit: true }
+  }
+
+
 }

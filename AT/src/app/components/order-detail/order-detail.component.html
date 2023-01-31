@@ -233,8 +233,8 @@
         <div class="order-form-field">
           <h3>Volume per dose</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Quantity" type="number" min="0" formControlName="volumePerDose">
-            <mat-error *ngIf="volumePerDose!.hasError('required')">Volume per dose is required.</mat-error>
+            <input matInput placeholder="Volume" type="number" min="50" max="700" formControlName="volumePerDose">
+            <mat-error *ngIf="volumePerDose!.invalid">Valid volumes are 50-700.</mat-error>
             <span matSuffix>L</span>
           </mat-form-field>
         </div>

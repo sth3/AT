@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild } from '@an
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { OrdersService } from '../../services/orders.service';
 import { RecipeService } from '../../services/recipe.service';
-import { OrderListModel, OrderModel } from '../../models/order.model';
+import { OrderListModel, OrderModel , selectList, OrderModelPacking } from '../../models/order.model';
 import { RecipeModel } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -41,10 +41,15 @@ export class ToPDFComponent implements OnInit {
   allOrders: OrderListModel[] = [];
   selectedRecipe: RecipeModel | undefined;
   orderDueDate:string | undefined;
-
+  orderComponent?:RecipeModel;
   form!: FormGroup;
 
-
+ packingOrders: selectList[] = [
+    { value: 0, viewValue: 'Bag' },
+    { value: 1, viewValue: 'Big Bag' },
+    { value: 2, viewValue: 'Liquid' },
+    { value: 3, viewValue: 'Micro' },
+  ];
 
   constructor(private router: Router, private r: ActivatedRoute,
     private ordersService: OrdersService,
@@ -63,6 +68,7 @@ export class ToPDFComponent implements OnInit {
           this.editable = false;
           this.isNew = false;
           this.order = order;
+          this.orderComponent = this.order.recipe;
           this.prepareForm();
 
           this.recipeService.getRecipes()
@@ -75,14 +81,11 @@ export class ToPDFComponent implements OnInit {
             })
         })
     })
-    this.ordersService.getOrdersList()
-      .subscribe(orders => this.allOrders = orders)
+    // this.ordersService.getOrdersList()
+    //   .subscribe(orders => this.allOrders = orders)
   }
 
-  recipeSelected() {
-    console.log('selected recipe: ', this.selectedRecipe);
-    this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
-  }
+ 
 
 
 
@@ -141,9 +144,9 @@ export class ToPDFComponent implements OnInit {
 
   //     })}
   public openPDF(): void {
-    html2canvas(this.invoiceElement.nativeElement, { scale: 3 }).then((canvas) => {
+    html2canvas(this.invoiceElement.nativeElement, { scale: 2}).then((canvas) => {
       const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
-      const fileWidth = 200;
+      const fileWidth = 370;
       const generatedImageHeight =  (canvas.height * fileWidth) / canvas.width;
       let PDF = new jsPDF('p', 'mm', 'a4',);
       PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 0, fileWidth, generatedImageHeight,);

@@ -36,7 +36,7 @@ const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
     '(recipeNo, componentNo, orderNo, packing) ' +
     'VALUES ';
 const ADD_DOSE = 'INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE] ' +
-    '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid) ' +
+    '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid, quantityMicro) ' +
     'VALUES ';
 const DELETE_PACKING_ORDERS_BY_NO = 'DELETE FROM [AT].[dbo].[PACKING_ORDERS] ' +
     'WHERE orderNo = @no';
@@ -126,7 +126,7 @@ const addPacking = async (orderNo, packing) => {
 const addOrderDose = async (orderNo, doses) => {
     let query = ADD_DOSE;
     doses.forEach((value, index) => {
-        query += `(${orderNo},${value.recipeNo}, ${value.componentNo}, ${value.quantityDose},${value.quantityBag},${value.quantityBigBag.toFixed(3)},${value.quantityADS.toFixed(3)},${value.quantityLiquid.toFixed(3)})`;
+        query += `(${orderNo},${value.recipeNo}, ${value.componentNo}, ${value.quantityDose},${value.quantityBag},${value.quantityBigBag.toFixed(3)},${value.quantityADS.toFixed(3)},${value.quantityLiquid.toFixed(3)},${value.quantityMicro.toFixed(3)})`;
         if (index < doses.length - 1) {
             query += ', ';
         }

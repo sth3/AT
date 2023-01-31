@@ -3,32 +3,32 @@
      
     
       <mat-card style="padding: 10px">
-        <mat-card-title>Order detail</mat-card-title>
+        <mat-card-title >Order detail</mat-card-title>
         <mat-card-content >
           <form [formGroup]="form" >
             <fieldset [disabled]="!editable" class="order-form-container">
-              <div class="order-form-field">
-                <h3>Order ID</h3>
-                <mat-form-field appearance="outline" >
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Order ID</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="ID" formControlName="id" >                  
                 </mat-form-field>
               </div>
-              <div class="order-form-field">
-                <h3>Order name</h3>
-                <mat-form-field appearance="outline" >
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Order name</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Name" formControlName="name" >
                   
                 </mat-form-field>
               </div>
-              <div class="order-form-field">
-                <h3>Customer name</h3>
-                <mat-form-field appearance="outline" >
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Customer name</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Customer name" formControlName="customerName" >
                 </mat-form-field>
               </div>
-              <div class="order-form-field">
-                <h3>Due date</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Due date</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput value="{{this.orderDueDate | date : 'd.M.y'}}"  >                 
                   
                 </mat-form-field>
@@ -44,10 +44,10 @@
       
       <!--        </ng-container>-->
       <!--        <ng-template #selectRecipe>-->
-                <div class="order-form-field">
-                  <h3>Recipe</h3>
-                  <mat-form-field appearance="outline">
-                    <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
+                <div class="order-form-field-pdf">
+                  <h3 class="order-pdf-h3">Recipe</h3>
+                  <mat-form-field appearance="outline" style="width: 67%">
+                    <mat-select  placeholder="Recipe" [(ngModel)]="selectedRecipe"
                                 [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
                       <mat-select-trigger>
                         <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
@@ -84,9 +84,9 @@
                   </mat-form-field>
                 </div>
       <!--        </ng-template>-->
-              <div class="order-form-field">
-                <h3>Quantity</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Quantity</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity">
                   <span matSuffix>kg</span>
                 </mat-form-field>
@@ -94,66 +94,132 @@
       
               <div style="flex-direction: column; width: 100%; margin-bottom: 20px" *ngIf="selectedRecipe?.components"
                    [@grow]>
-                <mat-list>
-                  <h2>Components</h2>
-                  <ng-container *ngFor="let component of selectedRecipe?.components; let i = index">
-                    <mat-list-item>
-                      <div matLine>
-                        <p style="float:left">
-                          <span class="light note">{{component.id}}</span>
-                          {{component.name}}
-                        </p>
-                        <p style="margin: 0 0 0 400px;">{{component.componentSP}} kg</p>
+                   <mat-list>
+                    <div style="width: 100%; display: flex;">
+                      <div style="width: 35%; height: auto;">
+                        <h2>Components/Recipe</h2>
                       </div>
-                    </mat-list-item>
-                    <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider>
-                  </ng-container>
-                  <span style="margin: auto"
-                        *ngIf="selectedRecipe!.components?.length === 0">No components in this recipe.</span>
-                </mat-list>
-              </div>
+                      <div style="width: 65%; height: auto;">
+                        <h2>Components/Order</h2>
+                      </div>
+                    </div>
+                    <ng-container *ngFor="let component of orderComponent?.components; let i = index" ;>
+        
+                      <mat-list-item>
+                        <div matLine>
+                          <div style="width: 100%; display: flex;">
+                            <div style="width: 35%; height: auto;">
+                              <p style="float:left; ">
+                                <mat-form-field appearance="outline" style="width: 100px" class="light note">
+                                  <mat-label>ID</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]=" component.id">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 250px" class="note">
+                                  <mat-label>Name</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]="component.name">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 100px" class="note">
+                                  <mat-label>Weight</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]="component.componentSP.toFixed(3)">
+                                  <span matSuffix>KG</span>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 100px" class="note">
+                                  <mat-label>Packing</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]="component.packing.toFixed(1)">
+                                  <span matSuffix>KG</span>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 100px" class="note">
+                                  <mat-label>Specific bulk weight</mat-label>
+                                  <input matInput placeholder="0000000001" readonly
+                                    [value]="component.specificBulkWeight.toFixed(3)">
+                                  <span matSuffix>KG/L</span>
+                                </mat-form-field>
+        
+                                <ng-container  >
+                                  <mat-form-field appearance="outline" style="width: 100px; " class="note"  >
+                                    <mat-label>Packing</mat-label>
+                                    <mat-select  [ngModel]="component.packingOrder"  [ngModelOptions]="{ standalone: true }" >
+                                      <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value"  [disabled]="!editable">
+                                        {{packingOrder.viewValue}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </ng-container>
+        
+                                <!-- [(ngModel)]="this.orderComponent.length <= i   ? this.packingOrderValue[i] = 0: this.packingOrderValue[i] = this.orderComponent[i].packingOrder "      -->
+                              </p>
+                            </div>
+                            <div style="width: 65%; height: auto; ">
+                              <p style="float:left">
+                                <mat-form-field appearance="outline" style="width:100px" class="light note">
+                                  <mat-label>ID</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]="component.id">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 250px" class="note">
+                                  <mat-label>Name</mat-label>
+                                  <input matInput placeholder="0000000001" readonly [value]="component.name">
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="width: 100px" class="note">
+                                  <mat-label>Weight</mat-label>
+                                  <input matInput placeholder="0000000001"
+                                    [value]="component.componentSP * (this.form.value.quantity/100) |number :'1.3-3'">
+                                  <span matSuffix>KG</span>
+                                </mat-form-field>
+                              </p>
+        
+                            </div>
+                          </div>
+                        </div>
+                      </mat-list-item>
+                      <!-- <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider> -->
+                    </ng-container>
+        
+                    <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">No components in this
+                      recipe.</span>
+                  </mat-list>
+                </div>
       
-              <div class="order-form-field">
-                <h3>Mixer ID</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Mixer ID</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Mixer ID" formControlName="idMixer" min="1" max="4" type="number">
                   
                 </mat-form-field>
               </div>
       
-              <div class="order-form-field">
-                <h3>Mixing time</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Mixing time</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Mixing time" type="number" min="1" formControlName="mixingTime">
                   <span matSuffix>min</span>
                 </mat-form-field>
               </div>
       
-              <div class="order-form-field">
-                <h3>Packing machine ID</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Packing machine ID</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8" type="number">
                   
                 </mat-form-field>
               </div>
 
-              <div class="order-form-field">
-                <h3>Emptying station ID</h3>
-                <mat-form-field appearance="outline">
+              <div class="order-form-field-pdf">
+                <h3 class="order-pdf-h3">Emptying station ID</h3>
+                <mat-form-field appearance="outline" style="width: 67%">
                   <input matInput placeholder="Packing machine ID" formControlName="idEmptyingStationBag" min="1" max="4" type="number">
                   
                 </mat-form-field>
               </div>
       
               <div class="order-form-field">
-                <h3>Operator</h3>
-                <mat-form-field appearance="outline">
+                <h3 class="order-pdf-h3">Operator</h3>
+                <mat-form-field appearance="outline" style="width: 22%">
                   <input matInput placeholder="Operator" formControlName="operatorName" readonly>
                 </mat-form-field>
               </div>
               <div *ngIf="!isNew" class="order-time-container">
                 <div class="order-time">
-                  <h3>Created at</h3>
+                  <h3 class="order-pdf-h3">Created at</h3>
                   <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
                 </div>
                 
