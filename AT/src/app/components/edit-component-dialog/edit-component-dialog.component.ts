@@ -45,7 +45,7 @@ import { ComponentModel } from '../../models/component.model';
           <input matInput placeholder="Specific bulk weight" formControlName="specificBulkWeight" type="number" min="0" >
           <mat-error *ngIf="specificBulkWeight!.hasError('required')">Specific bulk weight is required.</mat-error>
                     
-          <span matSuffix>kg/m3</span>
+          <span matSuffix>kg/l</span>
         </mat-form-field>
 
     
