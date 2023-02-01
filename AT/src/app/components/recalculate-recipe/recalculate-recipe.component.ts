@@ -1,11 +1,19 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { ComponentService } from '../../services/component.service';
 
 import { RecipeModel } from '../../models/recipe.model';
 import { OrderModelPacking, selectList, RecalculateOrder } from '../../models/order.model';
 import { RecipeService } from 'src/app/services/recipe.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
+
+import { ComponentItemModel } from 'src/app/models/component.model';
+
 @Component({
   selector: 'app-recalculate-recipe',
   templateUrl: './recalculate-recipe.component.html',
@@ -20,31 +28,54 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityMicro: number[] = [];
   volumeComponent: number[] = [];
   quantityComponentPerOrder: number[] = [];
-  recipeRecalculate: RecalculateOrder[]  = [];
+  recipeRecalculate: RecalculateOrder[] = [];
   volumeSum: number = 0;
   quntitySum: number = 0;
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
   ];
+//   dataSource: MatTableDataSource<ComponentItemModel> = new MatTableDataSource<ComponentItemModel>([]);
+//  // new MatTableDataSource(    this.data.selectedRecipe );
+//   displayedColumns: string[] = [];
+//   recipeTest: ComponentItemModel[] = [];
+
+//   tables = [0];
+
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     recipe: RecipeModel,
-    selectedRecipe: RecipeModel | undefined,
+    selectedRecipe: RecipeModel ,
     selectedorder: OrderModelPacking,
     editMode: boolean
   },
     private componentService: ComponentService) {
     console.log('allRecipes components: ', data.selectedRecipe);
-    console.log('allOrder components: ', data.selectedorder);   
+    console.log('allOrder components: ', data.selectedorder);
+   // this.dataSource = data.selectedRecipe;
+    // this.displayedColumns.length = 24;
+    // this.displayedColumns.fill('filler');
 
+    // // The first two columns should be position and name; the last two columns: weight, symbol
+    // this.displayedColumns[0] = 'position';
+    // this.displayedColumns[1] = 'name';
+    // this.displayedColumns[22] = 'weight';
+    // this.displayedColumns[23] = 'symbol';
+    // this.recipeTest = data.selectedRecipe.components
   }
+
+
 
   ngOnInit(): void {
     this.quantityComponentsPerOrder();
-
+    // this.dataSource = new MatTableDataSource<ComponentItemModel>(this.recipeTest);
   }
+
+  isSticky(buttonToggleGroup: MatButtonToggleGroup, id: string) {
+    return (buttonToggleGroup.value || []).indexOf(id) !== -1;
+  }
+  
   quantityComponentsPerOrder() {
     if (this.data.selectedRecipe == null) {
       return;
@@ -97,9 +128,9 @@ export class RecalculateRecipeComponent implements OnInit {
       //   this.quantityADS[index] = 0;
       //   this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
       // }
-      
+
       switch (this.data.selectedorder.packingOrders[index]) {
-        case 0:                
+        case 0:
           this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
           this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
           break;
@@ -132,12 +163,12 @@ export class RecalculateRecipeComponent implements OnInit {
       })
 
     }
-    console.log('quantityBag',this.quantityBag);
-    console.log('quantityADS',this.quantityADS);
-    console.log('quantityBigBag',this.quantityBigBag);
-    console.log('quantityLiquid',this.quantityLiquid);
-    console.log('quantityMicro',this.quantityMicro);
-    
+    console.log('quantityBag', this.quantityBag);
+    console.log('quantityADS', this.quantityADS);
+    console.log('quantityBigBag', this.quantityBigBag);
+    console.log('quantityLiquid', this.quantityLiquid);
+    console.log('quantityMicro', this.quantityMicro);
+
 
   }
 
@@ -145,6 +176,25 @@ export class RecalculateRecipeComponent implements OnInit {
     console.log('this.recipeRecalculate', this.recipeRecalculate);
     return { data: this.recipeRecalculate, edit: true }
   }
+  @ViewChild('invoice') invoiceElement!: ElementRef;
+  public openPDF(): void {
+    html2canvas(this.invoiceElement.nativeElement, { scale: 2 }).then((canvas) => {
+      const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
+      const fileWidth = 250;
+      const generatedImageHeight = (canvas.height) / canvas.width * fileWidth;
+      let PDF = new jsPDF('l', 'mm', 'a4',);
+      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 0, fileWidth, generatedImageHeight,);
+      PDF.html(this.invoiceElement.nativeElement.innerHTML)
+      PDF.save('Orders.pdf');
+    });
+  }
+
+  
+
+
+
 
 
 }
+
+
