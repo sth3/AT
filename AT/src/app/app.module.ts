@@ -53,6 +53,7 @@ import { ArchivedComponentsTableComponent } from './components/components/archiv
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ArchivedRecipesTableComponent } from './components/recipes/archived-recipes-table/archived-recipes-table.component';
 import { RecalculateRecipeComponent } from './components/recalculate-recipe/recalculate-recipe.component';
+import { AggregateComponent } from './components/aggregate/aggregate.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
@@ -78,6 +79,7 @@ import { RecalculateRecipeComponent } from './components/recalculate-recipe/reca
     ArchivedComponentsTableComponent,
     ArchivedRecipesTableComponent,
     RecalculateRecipeComponent,
+    AggregateComponent,
   ],
     imports: [
         BrowserModule,

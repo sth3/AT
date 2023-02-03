@@ -12,7 +12,7 @@ import html2canvas from 'html2canvas';
 
 import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 
-import { ComponentItemModel } from 'src/app/models/component.model';
+import { ComponentItemModel, ComponentModelSP } from 'src/app/models/component.model';
 
 @Component({
   selector: 'app-recalculate-recipe',
@@ -25,35 +25,34 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityBigBag: number[] = [];
   quantityADS: number[] = [];
   quantityLiquid: number[] = [];
-  quantityMicro: number[] = [];
-  volumeComponent: number[] = [];
+  quantityMicro: number[] = []; 
   quantityComponentPerOrder: number[] = [];
-  recipeRecalculate: RecalculateOrder[] = [];
-  volumeSum: number = 0;
-  quntitySum: number = 0;
+  recipeRecalculate: RecalculateOrder[] = [];  
+  doneDose:number [] = [];
+
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
   ];
-//   dataSource: MatTableDataSource<ComponentItemModel> = new MatTableDataSource<ComponentItemModel>([]);
-//  // new MatTableDataSource(    this.data.selectedRecipe );
-//   displayedColumns: string[] = [];
-//   recipeTest: ComponentItemModel[] = [];
+  //   dataSource: MatTableDataSource<ComponentItemModel> = new MatTableDataSource<ComponentItemModel>([]);
+  //  // new MatTableDataSource(    this.data.selectedRecipe );
+  //   displayedColumns: string[] = [];
+  //   recipeTest: ComponentItemModel[] = [];
 
-//   tables = [0];
+  //   tables = [0];
 
-
+  
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     recipe: RecipeModel,
-    selectedRecipe: RecipeModel ,
+    selectedRecipe: RecipeModel,
     selectedorder: OrderModelPacking,
     editMode: boolean
   },
     private componentService: ComponentService) {
     console.log('allRecipes components: ', data.selectedRecipe);
     console.log('allOrder components: ', data.selectedorder);
-   // this.dataSource = data.selectedRecipe;
+    // this.dataSource = data.selectedRecipe;
     // this.displayedColumns.length = 24;
     // this.displayedColumns.fill('filler');
 
@@ -68,44 +67,17 @@ export class RecalculateRecipeComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.quantityComponentsPerOrder();
+    this.quantityComponents(this.data.selectedRecipe.components);
     // this.dataSource = new MatTableDataSource<ComponentItemModel>(this.recipeTest);
   }
 
-  isSticky(buttonToggleGroup: MatButtonToggleGroup, id: string) {
-    return (buttonToggleGroup.value || []).indexOf(id) !== -1;
-  }
-  
-  quantityComponentsPerOrder() {
-    if (this.data.selectedRecipe == null) {
-      return;
-    }
-    this.quntitySum = 0;
-    for (let [index, components] of this.data.selectedRecipe.components.entries()) {
-      this.quantityComponentPerOrder[index] = (Number(components.componentSP.toFixed(3)) * (((this.data.selectedorder.quantity / 100))));
-      this.quntitySum += Number(this.quantityComponentPerOrder[index].toFixed(3));
-    }
-    console.log('quantityComponentPerOrder', this.quantityComponentPerOrder);
-    console.log('quntitySum', Number(this.quntitySum).toFixed(3));
-    this.specificBulkWeight()
+  quantityComponents(components: ComponentModelSP[]) {  
+    this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (this.data.selectedorder.quantity / 100)) / comp.specificBulkWeight), 0) / Number(this.data.selectedorder.volumePerDose));  
+    this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (this.data.selectedorder.quantity / 100)));
+       this.recalculateDose()
   }
 
-  specificBulkWeight() {
-    if (this.data.selectedRecipe == null) {
-      return;
-    }
-    this.volumeSum = 0;
-    for (let [index, components] of this.data.selectedRecipe.components.entries()) {
-      this.volumeComponent[index] = this.quantityComponentPerOrder[index] / Number(components.specificBulkWeight.toFixed(3));
-      this.volumeSum += Number(this.volumeComponent[index].toFixed(3));
-    }
-    console.log('volumeComponent', this.volumeComponent);
-    console.log('volumeSum', this.volumeSum);
-    this.recalculateDose()
-  }
-
-  recalculateDose() {
-    this.quantityPallete = Math.ceil(this.volumeSum / Number(this.data.selectedorder.volumePerDose))
+  recalculateDose() {    
     this.quantityBag = [];
     this.quantityBigBag = [];
     this.quantityADS = [];
@@ -120,14 +92,7 @@ export class RecalculateRecipeComponent implements OnInit {
       this.quantityADS[index] = 0;
       this.quantityBag[index] = 0;
       this.quantityMicro[index] = 0;
-      this.quantityLiquid[index] = 0;
-      // this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
-      // this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
-      // if (volumeComponents.packingOrder = 1) {
-      //   this.quantityBag[index] = 0;
-      //   this.quantityADS[index] = 0;
-      //   this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
-      // }
+      this.quantityLiquid[index] = 0;   
 
       switch (this.data.selectedorder.packingOrders[index]) {
         case 0:
@@ -145,11 +110,6 @@ export class RecalculateRecipeComponent implements OnInit {
           break;
       }
 
-
-
-
-
-
       this.recipeRecalculate.push({
         orderNo: this.data.selectedorder.no,
         recipeNo: this.data.selectedorder.recipeNo,
@@ -160,6 +120,8 @@ export class RecalculateRecipeComponent implements OnInit {
         quantityADS: this.quantityADS[index],
         quantityLiquid: this.quantityLiquid[index],
         quantityMicro: this.quantityMicro[index],
+
+        
       })
 
     }
@@ -168,7 +130,14 @@ export class RecalculateRecipeComponent implements OnInit {
     console.log('quantityBigBag', this.quantityBigBag);
     console.log('quantityLiquid', this.quantityLiquid);
     console.log('quantityMicro', this.quantityMicro);
+    this.doneDose[0] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityBigBag,0) > 0 ? 0 :5;
+    this.doneDose[1] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityLiquid,0) > 0 ? 0 :5;
+    this.doneDose[2] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityADS,0) > 0 ? 0 :5;
+    this.doneDose[3] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityMicro,0) > 0 ? 0 :5;
 
+    console.log('doneDose',this.doneDose);
+
+    
 
   }
 
@@ -176,6 +145,8 @@ export class RecalculateRecipeComponent implements OnInit {
     console.log('this.recipeRecalculate', this.recipeRecalculate);
     return { data: this.recipeRecalculate, edit: true }
   }
+
+
   @ViewChild('invoice') invoiceElement!: ElementRef;
   public openPDF(): void {
     html2canvas(this.invoiceElement.nativeElement, { scale: 2 }).then((canvas) => {
@@ -189,7 +160,7 @@ export class RecalculateRecipeComponent implements OnInit {
     });
   }
 
-  
+
 
 
 

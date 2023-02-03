@@ -21,3 +21,15 @@ export interface ComponentChangeModel {
   date: string;
   change: string;
 }
+
+
+export interface ComponentModelSP {
+  no: number;
+  id: string;
+  name: string;
+  packing:number;
+  packingOrder:number;
+  specificBulkWeight:number;
+  lastUpdate: string;
+  componentSP: number;
+}
