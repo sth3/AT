@@ -143,7 +143,7 @@ export class RecalculateRecipeComponent implements OnInit {
 
   saveOrder() {
     console.log('this.recipeRecalculate', this.recipeRecalculate);
-    return { data: this.recipeRecalculate, edit: true }
+    return { data: this.recipeRecalculate, edit: true, done:this.doneDose }
   }
 
 

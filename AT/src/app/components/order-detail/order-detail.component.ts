@@ -59,6 +59,7 @@ export class OrderDetailComponent implements OnInit {
   packingOrderDetail?: OrderPacking;
   recipeChanged = false;
   dosePerOrder?: RecalculateOrder | undefined;
+  donePerStation:number[] = [];
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -266,7 +267,11 @@ export class OrderDetailComponent implements OnInit {
               return;
             } 
             this.allOrderPacking.doses = this.dosePerOrder;
-            this.allOrderPacking.packing = this.packingOrderDetail;            
+            this.allOrderPacking.packing = this.packingOrderDetail;
+            this.allOrderPacking.BigBagDone = this.donePerStation[0];
+            this.allOrderPacking.LiquidDone = this.donePerStation[1];
+            this.allOrderPacking.ADSDone = this.donePerStation[2];
+            this.allOrderPacking.MicroDone = this.donePerStation[3];            
 
             this.ordersService.addOrder(this.allOrderPacking).subscribe(order => {
               console.log('new order: ', order);
@@ -288,7 +293,10 @@ export class OrderDetailComponent implements OnInit {
             } 
             this.allOrderPacking.doses = this.dosePerOrder;            
             this.allOrderPacking.packing = this.packingOrderDetail; 
-            
+            this.allOrderPacking.BigBagDone = this.donePerStation[0];
+            this.allOrderPacking.LiquidDone = this.donePerStation[1];
+            this.allOrderPacking.ADSDone = this.donePerStation[2];
+            this.allOrderPacking.MicroDone = this.donePerStation[3];
             //orderNo: this.order!.no,
             this.ordersService.updateOrder(this.order!.no, this.allOrderPacking).subscribe(order => {
               console.log('updated order: ', order);
@@ -355,6 +363,7 @@ export class OrderDetailComponent implements OnInit {
        
         if (result.edit) {
          this.dosePerOrder = result.data;
+         this.donePerStation = result.done;
          console.log('this.dosePerOrder',this.dosePerOrder );
          if (this.form.pristine) {
          

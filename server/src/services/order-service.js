@@ -9,10 +9,10 @@ const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     '   (id, name, customerName, dueDate, recipeNo, operatorId, quantity, ' +
-    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, createdAt, lastUpdate) ' +
+    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
     'VALUES (' +
     '   @id, @name, @customerName, @dueDate, @recipeNo, @operatorId, @quantity, ' +
-    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, GETDATE(), GETDATE() ' +
+    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, @BigBagDone, @LiquidDone, @ADSDone, @MicroDone, GETDATE(), GETDATE() ' +
     ') SELECT SCOPE_IDENTITY() as no';
 const DELETE_ORDER_BY_NO = 'DELETE FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
@@ -30,6 +30,10 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   idPackingMachine = @idPackingMachine, ' +
     '   idEmptyingStationBag = @idEmptyingStationBag, ' +
     '   volumePerDose = @volumePerDose, ' +
+    '   BigBagDone = @BigBagDone, ' +
+    '   LiquidDone = @LiquidDone, ' +
+    '   ADSDone = @ADSDone, ' +
+    '   MicroDone = @MicroDone, ' +
     '   lastUpdate = GETDATE() ' +
     'WHERE no = @no';
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
@@ -104,6 +108,10 @@ const addOrder = async (order) => {
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
         .input('volumePerDose', sql.Int, order.volumePerDose)
+        .input('BigBagDone', sql.Int, order.BigBagDone)
+        .input('LiquidDone', sql.Int, order.LiquidDone)
+        .input('ADSDone', sql.Int, order.ADSDone)
+        .input('MicroDone', sql.Int, order.MicroDone)
         .query(ADD_ORDER);
     const orderNo = recordset[0].no;
     await addPacking(orderNo, order.packing);
@@ -183,6 +191,10 @@ const updateOrder = async (no, order) => {
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
         .input('volumePerDose', sql.Int, order.volumePerDose)
+        .input('BigBagDone', sql.Int, order.BigBagDone)
+        .input('LiquidDone', sql.Int, order.LiquidDone)
+        .input('ADSDone', sql.Int, order.ADSDone)
+        .input('MicroDone', sql.Int, order.MicroDone)
         .query(UPDATE_ORDER)
     return getOrderByNo(no);
 }
