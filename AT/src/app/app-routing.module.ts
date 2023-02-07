@@ -11,8 +11,8 @@ import { UserControlComponent } from './components/user-control/user-control.com
 import { AdminGuard } from './interceptors/admin.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: 'components', pathMatch: 'full' },
+  //{ path: 'home', component: HomeComponent },
   { path: 'components', component: ComponentsComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'orders', component: OrdersComponent },
