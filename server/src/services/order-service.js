@@ -10,10 +10,10 @@ const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     '   (id, name, customerName, dueDate, recipeNo, operatorId, quantity, ' +
-    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
+    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, done, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
     'VALUES (' +
     '   @id, @name, @customerName, @dueDate, @recipeNo, @operatorId, @quantity, ' +
-    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, @BigBagDone, @LiquidDone, @ADSDone, @MicroDone, GETDATE(), GETDATE() ' +
+    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, @done, @BigBagDone, @LiquidDone, @ADSDone, @MicroDone, GETDATE(), GETDATE() ' +
     ') SELECT SCOPE_IDENTITY() as no';
 const DELETE_ORDER_BY_NO = 'DELETE FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
@@ -112,6 +112,7 @@ const addOrder = async (order) => {
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
         .input('volumePerDose', sql.Int, order.volumePerDose)
+        .input('done', sql.Int, 0)
         .input('BigBagDone', sql.Int, order.BigBagDone)
         .input('LiquidDone', sql.Int, order.LiquidDone)
         .input('ADSDone', sql.Int, order.ADSDone)
