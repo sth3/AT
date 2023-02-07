@@ -80,6 +80,8 @@ export class RecipesComponent implements OnInit {
   }
 
   onEditClick(data: any) {
+    console.log(data);
+    
     this.dialogService.customDialog(EditRecipeDialogComponent,
       { recipe: data, allRecipes: this.data, editMode: true },
       { width: '700px', height: '700px' })

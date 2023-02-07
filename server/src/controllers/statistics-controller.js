@@ -1,15 +1,11 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const sql = require("../data/events/dbIndexComponents");
+const {getStat} = require("../services/statistic-service");
 
-router.get('/dose-statistics', (req, res) => {
-    sql.getStatDose().then((result) => {       // Select all from table statDose  
-        console.log(result[0]);
-        res.json(result[0]);
-    }).catch((error) => {
-        console.error(error);
-    });
+router.get('/dose-statistics', async (req, res) => {    
+    const response = await getStat();    
+    res.json(response);
 })
 
 router.use(express.json());

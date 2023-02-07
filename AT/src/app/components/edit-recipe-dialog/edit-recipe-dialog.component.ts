@@ -61,9 +61,16 @@ export class EditRecipeDialogComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
+    this.calculateWeight(this.form.value.components);
+     
+    
     this.componentService.getComponents()
       .subscribe(response => {
         this.allComponents = response;
+        
+       
+        (response);
         this.selectedComponents = this.allComponents
           .filter(component => this.data.recipe?.components?.find(recipeComponent => recipeComponent.id === component.id));
         this.filteredComponents = this.newComponent.valueChanges.pipe(
@@ -75,6 +82,8 @@ export class EditRecipeDialogComponent implements OnInit {
           }),
         );
       })
+
+      
   }
 
   get name() {

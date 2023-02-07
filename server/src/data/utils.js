@@ -27,6 +27,9 @@ const trimTrailingWhitespace = recordSet => {
             if (row.hasOwnProperty(column) && row[column] !== null && typeof row[column] === 'string') {
                 row[column] = row[column].trim();
             }
+            else if (row.hasOwnProperty(column) && row[column] !== null && typeof row[column] === 'number') {
+                row[column] = Number(row[column].toFixed(3));
+            }
         }
     }
     return recordSet;
