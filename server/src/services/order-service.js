@@ -4,7 +4,8 @@ const { trimTrailingWhitespace } = require('../data/utils');
 const { getRecipeByNoForOrder } = require('./recipe-service');
 const { getUserById } = require('./user-service');
 
-const GET_ORDERS = 'SELECT * FROM [AT].[dbo].[ORDERS] ';
+const GET_ORDERS = 'SELECT * FROM [AT].[dbo].[ORDERS] WHERE [done] = @done ';
+
 const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
@@ -30,6 +31,7 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   idPackingMachine = @idPackingMachine, ' +
     '   idEmptyingStationBag = @idEmptyingStationBag, ' +
     '   volumePerDose = @volumePerDose, ' +
+    '   done = 0, ' +
     '   BigBagDone = @BigBagDone, ' +
     '   LiquidDone = @LiquidDone, ' +
     '   ADSDone = @ADSDone, ' +
@@ -48,9 +50,10 @@ const DELETE_DOSES= 'DELETE FROM [AT].[dbo].[QUANTITY_PER_DOSE] ' +
     'WHERE orderNo = @no';
 
 
-const getOrders = async () => {
+const getOrders = async (done) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
+        .input('done', sql.Int, done)
         .query(GET_ORDERS);
     for (let order of recordset) {
         order = trimTrailingWhitespace(order);

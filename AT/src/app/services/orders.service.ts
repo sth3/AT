@@ -14,8 +14,8 @@ export class OrdersService {
   constructor(private http: HttpClient) {
   }
 
-  getOrders(): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders`);
+  getOrders(done: number): Observable<OrderModel[]> {
+    return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders/${done}`);
   }
 
   deleteOrder(no: number) {

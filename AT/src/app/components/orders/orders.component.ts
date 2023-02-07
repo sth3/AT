@@ -14,11 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-interface packingOrders {
-  value: number;
-  viewValue: string;
-}
-
 
 @Component({
   selector: 'app-orders',
@@ -49,15 +44,13 @@ export class OrdersComponent implements OnInit {
     { field: 'dueDate', header: 'Due date', width: '20%' },
   ];
 
-  slecetIdMixers: selectList[] = [
-    
+  slecetIdMixers: selectList[] = [    
     { value: 1, viewValue: 'Vertical mixer' },
     { value: 2, viewValue: 'Horizontal mixer' },
     { value: 3, viewValue: 'External mixer' },
-  ];
-  selectedValue: number = 0;
+  ];  
 
-  packingOrders: packingOrders[] = [
+  packingOrders: selectList[] = [
     {value: 0, viewValue: 'Bag'},
     {value: 1, viewValue: 'Big Bag'},  
     { value: 2, viewValue: 'Liquid' },
@@ -85,7 +78,7 @@ export class OrdersComponent implements OnInit {
 
   getOrders() {
     this.isLoading = true;
-    this.ordersService.getOrders()
+    this.ordersService.getOrders(0)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
       (data: OrderModel[]) => {

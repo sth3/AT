@@ -5,6 +5,7 @@ import { RecipesComponent } from './components/recipes/recipes.component';
 import { ComponentsComponent } from './components/components/components.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
+import { OrdersArchiveComponent } from './components/orders-archive/orders-archive.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
 import { UserControlComponent } from './components/user-control/user-control.component';
@@ -16,7 +17,9 @@ const routes: Routes = [
   { path: 'components', component: ComponentsComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'orders', component: OrdersComponent },
+  { path: 'orders', component: OrdersComponent },
   { path: 'orders/:id', component: OrderDetailComponent },
+  { path: 'orders-archive', component: OrdersArchiveComponent },
   { path: 'statistics', component: StatisticsComponent },
   { path: 'users', component: UserControlComponent, canActivate: [AdminGuard] },
   { path: 'pdf/:id', component: ToPDFComponent },

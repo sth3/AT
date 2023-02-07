@@ -15,8 +15,10 @@ const {
 
 router.use(express.json());
 
-router.get('/orders', async (req, res) => {
-    const response = await getOrders();
+router.get('/orders/:done', async (req, res) => {
+    console.log(+req.params.done);
+    const response = await getOrders(+req.params.done);
+    
     res.json(response);
 });
 
