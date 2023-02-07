@@ -68,9 +68,10 @@ const getOrders = async (done) => {
     return recordset;
 };
 
-const getOrdersList = async () => {
+const getOrdersList = async (done) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
+    .input('done', sql.Int, done)
         .query(GET_ORDERS);
     return trimTrailingWhitespace(recordset);
 }

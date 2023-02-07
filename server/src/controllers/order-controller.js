@@ -22,29 +22,29 @@ router.get('/orders/:done', async (req, res) => {
     res.json(response);
 });
 
-router.get('/orders/list', async (req, res) => {
-    const response = await getOrdersList();
+router.get('/orders/0/list', async (req, res) => {
+    const response = await getOrdersList(0);
     res.json(response);
 });
 
-router.post('/orders', authorizationCheck(roles.OPERATOR), async (req, res) => {
+router.post('/orders/0', authorizationCheck(roles.OPERATOR), async (req, res) => {
     const order = await addOrder(req.body);
     const response = await getOrderByNo(order.no);
     res.status(201).json(response);
 });
 
 
-router.put('/orders/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {
+router.put('/orders/0/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {
     const response = await updateOrder(+req.params.no, req.body);
     res.json(response);
 });
 
-router.delete('/orders/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {
+router.delete('/orders/0/:no', authorizationCheck(roles.OPERATOR), async (req, res) => {
     await deleteOrder(+req.params.no);
     res.status(204).end();
 });
 
-router.get('/orders/:no', async (req, res) => {
+router.get('/orders/0/:no', async (req, res) => {
     const response = await getOrderByNo(+req.params.no);
     res.json(response);
 });
