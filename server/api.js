@@ -3,12 +3,13 @@ const express = require('express');
 const router = express.Router();
 require('express-async-errors');
 const bodyParser = require('body-parser');
-const sql = require("./src/data/events/dbIndexComponents");
+
 const { login, authorizationCheck, logout } = require("./src/auth");
 const userController = require('./src/controllers/user-controller');
 const componentController = require('./src/controllers/component-controller');
 const recipeController = require('./src/controllers/recipe-controller');
 const orderController = require('./src/controllers/order-controller');
+const statisticsController = require('./src/controllers/statistics-controller');
 const { roles } = require("./src/services/user-service");
 
 
@@ -21,16 +22,10 @@ router.use(userController);
 router.use(componentController);
 router.use(recipeController);
 router.use(orderController);
+router.use(statisticsController);
 
 
-router.get('/dose-statistics', (req, res) => {
-    sql.getStatDose().then((result) => {       // Select all from table statDose  
-        console.log(result[0]);
-        res.json(result[0]);
-    }).catch((error) => {
-        console.error(error);
-    });
-})
+
 
 // 2 metody na test auth zatial, nedaval som este vsade aby sa ti s tym dalo robit
 router.get('/testAuthAdmin', authorizationCheck(roles.ADMIN), (req, res) => {
