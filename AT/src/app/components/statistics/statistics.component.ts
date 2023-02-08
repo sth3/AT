@@ -31,8 +31,8 @@ export class StatisticsComponent implements OnInit {
     { field: 'name', header: 'Meno Komponentu', width: '40%' },
     { field: 'componentSP', header: 'Žiadaná Hodnota' },
     { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
-    { field: 'idContainer', header: 'ID Kontajnera' },
-    { field: 'idOrder', header: 'ID Zákazky' },
+    { field: 'noContainer', header: 'Number of Dose' },
+    { field: 'noOrder', header: 'ID Zákazky' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<DoseModel> = new MatTableDataSource<DoseModel>([]);

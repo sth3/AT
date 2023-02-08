@@ -1,5 +1,7 @@
+
 <mat-card>
-  <div id="invoice" #invoice>
+  <div id="section">
+  
     <mat-card-title>Order detail/Recalculate</mat-card-title>
     <mat-card-content>
 
@@ -83,11 +85,11 @@
           <mat-list>
 
 
-            <ng-container *ngFor="let component of data.selectedRecipe?.components; let i = index">
+            <ng-container *ngFor="let component of data.selectedRecipe?.components; let i = index" >
               <div *ngIf="!i">
                 <mat-list-item>
                   <p style="float:left; " class="lineL">
-                    <mat-form-field appearance="fill" style="width: 405px" class="note">
+                    <mat-form-field appearance="fill" style="width: 405px" class="note ">
                       <input matInput placeholder="000001" readonly value="Components">
                     </mat-form-field>
                     <span class="line"></span>
@@ -122,13 +124,13 @@
               <mat-list-item>
                 <div matLine>
 
-                  <p style="float:left; ">
+                  <p style="float:left; " class="inputSize">
 
                     <mat-form-field appearance="outline" style="width: 150px" class="light note">
                       <mat-label>ID</mat-label>
                       <input matInput placeholder="000001" readonly [value]="component.id">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" style="width: 250px" class="note">
+                    <mat-form-field appearance="outline" style="width: 250px" class="note inputSize">
                       <mat-label>Name</mat-label>
                       <input matInput placeholder="Paprika" readonly [value]="component.name">
                     </mat-form-field>
@@ -184,18 +186,15 @@
       </div>
     </mat-card-content>
   </div>
-  <mat-card-actions>
 
+  <mat-card-actions>
+  
 
 
     <button mat-button [mat-dialog-close]="false">Cancel</button>
     <button mat-button [mat-dialog-close]="saveOrder()" *ngIf="data.editMode">
       Save
-    </button>
-    <button mat-button color="primary" (click)="openPDF();">
-      <mat-icon>file_download</mat-icon>
-      Export To PDF
-    </button>
+    </button>   
 
 
   </mat-card-actions>

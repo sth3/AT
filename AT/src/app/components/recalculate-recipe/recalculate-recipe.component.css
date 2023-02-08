@@ -13,3 +13,7 @@
     width: 0px !important;
     position: inherit !important;
   }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix .inputSize{
+    padding: 0 !important;
+}

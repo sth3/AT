@@ -56,6 +56,7 @@ import { RecalculateRecipeComponent } from './components/recalculate-recipe/reca
 import { AggregateComponent } from './components/aggregate/aggregate.component';
 import { OrdersArchiveComponent } from './components/orders-archive/orders-archive.component';
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {NgxPrintModule} from 'ngx-print';
 
 
 @NgModule({
@@ -115,6 +116,7 @@ import { OrdersArchiveComponent } from './components/orders-archive/orders-archi
         MatNativeDateModule,
         MatDatepickerModule,
         MatExpansionModule,
+        NgxPrintModule
     ],
   providers: [
     

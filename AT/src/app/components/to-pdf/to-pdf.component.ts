@@ -1,11 +1,22 @@
-import { ChangeDetectorRef, Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  NgModule,
+} from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { OrdersService } from '../../services/orders.service';
 import { RecipeService } from '../../services/recipe.service';
-import { OrderListModel, OrderModel , selectList, OrderModelPacking } from '../../models/order.model';
+import {
+  OrderListModel,
+  OrderModel,
+  selectList,
+  OrderModelPacking,
+} from '../../models/order.model';
 import { RecipeModel } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
-
 
 import { animate, style, transition, trigger } from '@angular/animations';
 // declare var require: any;
@@ -14,7 +25,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 // const htmlToPdfmake = require("html-to-pdfmake");
 // (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
-import  jsPDF from 'jspdf';
+import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 @Component({
@@ -22,16 +33,17 @@ import html2canvas from 'html2canvas';
   templateUrl: './to-pdf.component.html',
   styleUrls: ['./to-pdf.component.css'],
   animations: [
-    trigger('grow', [ // Note the trigger name
+    trigger('grow', [
+      // Note the trigger name
       transition(':enter', [
         style({ height: '0', overflow: 'hidden' }),
-        animate(500, style({ height: '*' }))
+        animate(500, style({ height: '*' })),
       ]),
       transition(':leave', [
-        animate(500, style({ height: 0, overflow: 'hidden' }))
-      ])
-    ])
-  ]
+        animate(500, style({ height: 0, overflow: 'hidden' })),
+      ]),
+    ]),
+  ],
 })
 export class ToPDFComponent implements OnInit {
   editable = true;
@@ -40,54 +52,61 @@ export class ToPDFComponent implements OnInit {
   recipes: RecipeModel[] = [];
   allOrders: OrderListModel[] = [];
   selectedRecipe: RecipeModel | undefined;
-  orderDueDate:string | undefined;
-  orderComponent?:RecipeModel;
+  orderDueDate: string | undefined;
+  orderComponent?: RecipeModel;
   form!: FormGroup;
 
- packingOrders: selectList[] = [
+  slecetIdMixers: selectList[] = [
+    { value: 1, viewValue: 'Vertical mixer' },
+    { value: 2, viewValue: 'Horizontal mixer' },
+    { value: 3, viewValue: 'External mixer' },
+  ];
+
+  packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
     { value: 2, viewValue: 'Liquid' },
     { value: 3, viewValue: 'Micro' },
   ];
 
-  constructor(private router: Router, private r: ActivatedRoute,
+  constructor(
+    private router: Router,
+    private r: ActivatedRoute,
     private ordersService: OrdersService,
     private recipeService: RecipeService,
-    private changeDetectorRef: ChangeDetectorRef) { this.prepareForm(); }
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.prepareForm();
+  }
 
   ngOnInit(): void {
-    this.r.params.subscribe(params => {
+    this.r.params.subscribe((params) => {
       const no = params['id'];
 
-      this.ordersService.getOrderByNo(no)
-        .subscribe(order => {
-          console.log('this order: ', order);
-          console.log('this order: ', order['no']);
-          this.orderDueDate = order['dueDate'];
-          this.editable = false;
-          this.isNew = false;
-          this.order = order;
-          this.orderComponent = this.order.recipe;
-          this.prepareForm();
+      this.ordersService.getOrderByNo(no).subscribe((order) => {
+        console.log('this order: ', order);
+        console.log('this order: ', order['no']);
+        this.orderDueDate = order['dueDate'];
+        this.editable = false;
+        this.isNew = false;
+        this.order = order;
+        this.orderComponent = this.order.recipe;
+        this.prepareForm();
 
-          this.recipeService.getRecipes()
-            .subscribe(recipes => {
-              console.log('recipes: ', recipes);
-              this.recipes = recipes;
-              this.selectedRecipe = this.recipes.find(r => r.no === this.order?.recipe.no);
-              console.log('selected recipe: ', this.selectedRecipe);
-              this.changeDetectorRef.detectChanges();
-            })
-        })
-    })
+        this.recipeService.getRecipes().subscribe((recipes) => {
+          console.log('recipes: ', recipes);
+          this.recipes = recipes;
+          this.selectedRecipe = this.recipes.find(
+            (r) => r.no === this.order?.recipe.no
+          );
+          console.log('selected recipe: ', this.selectedRecipe);
+          this.changeDetectorRef.detectChanges();
+        });
+      });
+    });
     // this.ordersService.getOrdersList()
     //   .subscribe(orders => this.allOrders = orders)
   }
-
- 
-
-
 
   //@ViewChild('pdfTable')
   //pdfTable!: ElementRef;
@@ -102,7 +121,6 @@ export class ToPDFComponent implements OnInit {
   //   var img:any;
   //   var filename;
   //   var newImage:any;
-
 
   //   domtoimage.toPng(div, { bgcolor: '#fff' })
 
@@ -130,10 +148,8 @@ export class ToPDFComponent implements OnInit {
   //           doc = new jsPDF('p', 'px', [pdfWidth , pdfHeight]);
   //         }
 
-
   //         var width = doc.internal.pageSize.getWidth();
   //         var height = doc.internal.pageSize.getHeight();
-
 
   //         doc.addImage(newImage, 'PNG',  10, 10, width, height);
   //         filename = 'mypdf_' + '.pdf';
@@ -141,57 +157,93 @@ export class ToPDFComponent implements OnInit {
 
   //       };
 
-
   //     })}
   public openPDF(): void {
-    html2canvas(this.invoiceElement.nativeElement, { scale: 2}).then((canvas) => {
-      const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
-      const fileWidth = 370;
-      const generatedImageHeight =  (canvas.height * fileWidth) / canvas.width;
-      let PDF = new jsPDF('p', 'mm', 'a4',);
-      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 0, 0, fileWidth, generatedImageHeight,);
-      PDF.html(this.invoiceElement.nativeElement.innerHTML)
-      PDF.save('Orders.pdf');
-    });
+    html2canvas(this.invoiceElement.nativeElement, { scale: 4 }).then(
+      (canvas) => {
+        const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
+        const fileWidth = 360;
+        const generatedImageHeight = (canvas.height * fileWidth) / canvas.width;
+        let PDF = new jsPDF('p', 'mm', 'a4');
+        PDF.addImage(
+          imageGeneratedFromTemplate,
+          'PNG',
+          4,
+          4,
+          fileWidth,
+          generatedImageHeight
+        );
+        PDF.html(this.invoiceElement.nativeElement.innerHTML);
+        PDF.save('Orders.pdf');
+      }
+    );
   }
 
   private prepareForm() {
     this.form = new FormGroup({
-      id: new FormControl(this.order?.id || '', [Validators.required,
-      Validators.minLength(10), Validators.maxLength(10), this.validOrderIdValidator.bind(this)]),
-      name: new FormControl(this.order?.name || '', [Validators.required,
-      Validators.minLength(3), this.validOrderNameValidator.bind(this)]),
-      customerName: new FormControl(this.order?.customerName || '', Validators.required),
+      id: new FormControl(this.order?.id || '', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        this.validOrderIdValidator.bind(this),
+      ]),
+      name: new FormControl(this.order?.name || '', [
+        Validators.required,
+        Validators.minLength(3),
+        this.validOrderNameValidator.bind(this),
+      ]),
+      customerName: new FormControl(
+        this.order?.customerName || '',
+        Validators.required
+      ),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
-      recipeNo: new FormControl(this.order?.recipe.no || '', Validators.required),
-      quantity: new FormControl(this.order?.quantity || null, Validators.required),
+      recipeNo: new FormControl(
+        this.order?.recipe.no || '',
+        Validators.required
+      ),
+      quantity: new FormControl(
+        this.order?.quantity || null,
+        Validators.required
+      ),
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
-      mixingTime: new FormControl(this.order?.mixingTime || null, Validators.required),
-      idPackingMachine: new FormControl(this.order?.idPackingMachine, Validators.required),
-      idEmptyingStationBag: new FormControl(this.order?.idEmptyingStationBag, Validators.required),
+      mixingTime: new FormControl(
+        this.order?.mixingTime || null,
+        Validators.required
+      ),
+      idPackingMachine: new FormControl(
+        this.order?.idPackingMachine,
+        Validators.required
+      ),
+      idEmptyingStationBag: new FormControl(
+        this.order?.idEmptyingStationBag,
+        Validators.required
+      ),
+      volumePerDose: new FormControl(this.order?.volumePerDose, Validators.required),
       operatorId: new FormControl(this.order?.operator.id || '001'),
       // todo get real used id/name here
-      operatorName: new FormControl(this.order?.operator.username || 'admin')
-    })
+      operatorName: new FormControl(this.order?.operator.username || 'admin'),
+    });
   }
 
   validOrderNameValidator(control: FormControl) {
     const value = control.value;
-    const isValid = this.allOrders.every(o => o.name !== value
-      || (this.order !== null && o.no === this.order?.no));
+    const isValid = this.allOrders.every(
+      (o) =>
+        o.name !== value || (this.order !== null && o.no === this.order?.no)
+    );
     console.log('is valid messsing me? ', isValid);
     return isValid ? null : { invalidOrderName: true };
   }
 
   validOrderIdValidator(control: FormControl) {
     const value = control.value;
-    const isValid = this.allOrders.every(o => o.id !== value
-      || (this.order !== null && o.no === this.order?.no));
+    const isValid = this.allOrders.every(
+      (o) => o.id !== value || (this.order !== null && o.no === this.order?.no)
+    );
     return isValid ? null : { invalidOrderId: true };
   }
 
   backToOrder() {
-    this.router.navigate(['../../orders'], { relativeTo: this.r })
+    this.router.navigate(['../../orders'], { relativeTo: this.r });
   }
-
 }
