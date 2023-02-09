@@ -29,13 +29,15 @@ export class AggregateComponent implements OnInit {
     end: new FormControl(),
   });
   columnsToDisplay = [    
-    { field: 'id', header: 'ID' },
+    { field: 'aNo', header: 'NO' },
+    { field: 'aID', header: 'Aggregate ID' },
+    { field: 'id', header: 'Component ID' },
     { field: 'name', header: 'Component Name' },
     { field: 'lastUpdate', header: 'Last update', width: '20%' },
     { field: 'user', header: 'User Name', width: '20%' },
   ];
   isLoading = true;
- 
+  allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<AggregateModel> = new MatTableDataSource<AggregateModel>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -57,6 +59,10 @@ export class AggregateComponent implements OnInit {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
+  changeDate() {
+    this.loadAggregate();  
+  }
+
   loadAggregate() {
     this.isLoading = true;
     this.aggregateService.getAggregates()
@@ -64,8 +70,22 @@ export class AggregateComponent implements OnInit {
       .subscribe((response:AggregateModel[]) => {
         console.log('data: ', response);
         this.data = response;
-
-        
+        if (this.range.value.start !== null && this.range.value.end !== null) {
+          this.data = response.filter((item: AggregateModel) => {
+            // console.log('new Date(item.datetime)',new Date(item.datetime));
+            // console.log('range start', this.range.value.start);
+            return new Date(item.lastUpdate) >= this.range.value.start &&
+              new Date(item.lastUpdate) <= this.range.value.end;
+          });
+        } else if (this.range.value.start !== null) {
+          this.data = response.filter((item: AggregateModel) => {
+            return new Date(item.lastUpdate) >= this.range.value.start ;
+          });
+        } else if (this.range.value.end !== null) {
+          this.data = response.filter((item: AggregateModel) => {
+            return new Date(item.lastUpdate) <= this.range.value.end ;
+          });
+        }
         this.dataSource = new MatTableDataSource<AggregateModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -73,4 +93,14 @@ export class AggregateComponent implements OnInit {
       })
    }
 
+
+   exportCSV(visibleDataOnly: boolean) {
+    const headerList = ['aNo', 'aID', 'id', 'name', 'lastUpdate', 'user'];
+    if (visibleDataOnly) {
+      // @ts-ignore
+      this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'Aggregate');
+    } else {
+      this.exportService.downloadFile(this.data, headerList, 'Aggregate');
+    }
+  }
 }

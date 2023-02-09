@@ -1,6 +1,8 @@
 export interface AggregateModel {    
-    id: string;
-    name: string;    
+    aNo: number;
+    aId: string;
+    cId: string;
+    nameC: string;    
     user:number;    
     lastUpdate: string;
   }
