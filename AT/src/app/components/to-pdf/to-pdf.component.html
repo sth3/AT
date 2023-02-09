@@ -38,16 +38,7 @@
                 </mat-form-field>
               </div>
 
-              <!--        <ng-container *ngIf="order?.recipe; else selectRecipe">-->
-              <!--          <div class="order-form-field">-->
-              <!--            <h3>Recipe ID</h3>-->
-              <!--            <mat-form-field appearance="outline">-->
-              <!--              <input matInput placeholder="Recipe ID" formControlName="customerName">-->
-              <!--            </mat-form-field>-->
-              <!--          </div>-->
-
-              <!--        </ng-container>-->
-              <!--        <ng-template #selectRecipe>-->
+              
               <div class="order-form-field-pdf">
                 <h3 class="order-pdf-h3">Recipe</h3>
                 <mat-form-field appearance="outline" style="width: 300px">
@@ -67,49 +58,8 @@
                     </mat-select-trigger>
                     <ng-container *ngFor="let recipe of recipes">
                       <mat-option [value]="recipe">
-                        {{ recipe.id }} - {{ recipe.name }}
-                        <button
-                          mat-icon-button
-                          [matMenuTriggerFor]="menu"
-                          style="float: right"
-                          (click)="$event.stopPropagation()"
-                        >
-                          <mat-icon>more_vert</mat-icon>
-                        </button>
-                      </mat-option>
-                      <mat-menu #menu="matMenu">
-                        <mat-list>
-                          <h3>Components</h3>
-                          <ng-container
-                            *ngFor="
-                              let component of recipe.components;
-                              let i = index
-                            "
-                          >
-                            <mat-list-item>
-                              <div matLine>
-                                <p style="float: left">
-                                  <span class="light note">{{
-                                    component.id
-                                  }}</span>
-                                  {{ component.name }}
-                                </p>
-                                <p style="float: right">
-                                  {{ component.componentSP }} kg
-                                </p>
-                              </div>
-                            </mat-list-item>
-                            <mat-divider
-                              *ngIf="i !== recipe!.components!.length! - 1"
-                            ></mat-divider>
-                          </ng-container>
-                          <span
-                            style="margin: auto"
-                            *ngIf="recipe?.components?.length === 0"
-                            >No components in this recipe.</span
-                          >
-                        </mat-list>
-                      </mat-menu>
+                        {{ recipe.id }} - {{ recipe.name }}                        
+                      </mat-option>                      
                     </ng-container>
                   </mat-select>
                 </mat-form-field>
@@ -260,13 +210,15 @@
                 </mat-list>
               </div>
 
+              
+
               <div class="order-form-field-pdf">
                 <h3 class="order-pdf-h3"> Mixer ID</h3>
                 <mat-form-field appearance="outline">
                   <mat-select
                     formControlName="idMixer"
                     placeholder="Mixer ID"
-                    c
+                 
                     min="1"
                     max="3"
                     type="number"
@@ -359,8 +311,118 @@
               </div>
             </fieldset>
           </form>
+          
+          <div style="flex: 1 1 0;"   *ngIf="this.selectComponents">
+            <mat-list >
+    
+    
+              <ng-container *ngFor="let component of this.selectComponents; let i = index" >
+                <div *ngIf="!i">
+                  <mat-list-item>
+                    
+                      <mat-form-field appearance="fill" style="width: 405px" class="note ">
+                        <input matInput placeholder="000001" readonly value="Components">
+                      </mat-form-field>
+                      <span class="line"></span>
+                      <mat-form-field appearance="fill" style="width: 305px" class="note">
+                        <mat-label>Station</mat-label>
+                        <input matInput placeholder="000001" readonly value="Palette">
+                      </mat-form-field>
+    
+                      <mat-form-field appearance="fill" style="width: 150px" class="note">
+                        <mat-label>Station</mat-label>
+                        <input matInput placeholder="000001" readonly value="BigBag line">
+                      </mat-form-field>
+    
+                      <mat-form-field appearance="fill" style="width: 150px" class="note">
+                        <mat-label>Station</mat-label>
+                        <input matInput placeholder="000001" readonly value="ADS line">
+                      </mat-form-field>
+    
+                      <mat-form-field appearance="fill" style="width: 150px" class="note">
+                        <mat-label>Station</mat-label>
+                        <input matInput placeholder="000001" readonly value="Liquide">
+                      </mat-form-field>
+    
+                      <mat-form-field appearance="fill" style="width: 150px" class="note">
+                        <mat-label>Station</mat-label>
+                        <input matInput placeholder="000001" readonly value="Micro">
+                      </mat-form-field>
+                    
+                  </mat-list-item>
+                </div>
+    
+                <mat-list-item>
+                  <div matLine>
+    
+                    
+    
+                    <mat-form-field appearance="outline" style="width: 150px" class=" note">
+                      <mat-label>ID</mat-label>
+                      <input matInput placeholder="000001" readonly [value]="component.id">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" style="width: 250px" class="note inputSize">
+                      <mat-label>Name</mat-label>
+                      <input matInput placeholder="Paprika" readonly [value]="component.name">
+                    </mat-form-field>
+  
+                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                      <mat-label>Packing</mat-label>
+                      <input matInput placeholder="1" readonly [value]="component.packing.toFixed(1)">
+                      <span matSuffix>kg</span>
+                    </mat-form-field>
+                      <mat-form-field appearance="outline" style="width: 150px" class="note">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
+                        <span matSuffix>x</span>
+                      </mat-form-field>
+    
+    
+                      <mat-form-field appearance="outline" style="width: 150px" class="note">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
+                        <span matSuffix>kg</span>
+                      </mat-form-field>
+    
+    
+                      <mat-form-field appearance="outline" style="width: 150px" class="note">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
+                        <span matSuffix>kg</span>
+                      </mat-form-field>
+    
+    
+                      <mat-form-field appearance="outline" style="width: 150px" class="note">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
+                        <span matSuffix>kg</span>
+                      </mat-form-field>
+    
+                      <mat-form-field appearance="outline" style="width: 150px" class="note">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">
+                        <span matSuffix>kg</span>
+                      </mat-form-field>
+    
+                   
+    
+                  </div>
+                </mat-list-item>
+    
+              </ng-container>
+              <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">No components in this
+                recipe.</span>
+            </mat-list>
+          </div>
+        
         </mat-card-content>
       </mat-card>
+
+
+
+
+
+
     </div>
       <br />
       <br />

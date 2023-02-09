@@ -7,26 +7,21 @@ import {
   NgModule,
 } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
-import { OrdersService } from '../../services/orders.service';
+import { OrdersService  } from '../../services/orders.service';
 import { RecipeService } from '../../services/recipe.service';
 import {
   OrderListModel,
   OrderModel,
   selectList,
   OrderModelPacking,
+  RecalculateOrder
 } from '../../models/order.model';
 import { RecipeModel } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { animate, style, transition, trigger } from '@angular/animations';
-// declare var require: any;
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "pdfmake/build/vfs_fonts";
-// const htmlToPdfmake = require("html-to-pdfmake");
-// (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import { ComponentItemModel, ComponentModelSP } from 'src/app/models/component.model';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-to-pdf',
@@ -55,6 +50,18 @@ export class ToPDFComponent implements OnInit {
   orderDueDate: string | undefined;
   orderComponent?: RecipeModel;
   form!: FormGroup;
+  selectComponents: ComponentModelSP[] = [];;
+
+
+  quantityPallete: number = 0;
+  quantityBag: number[] = [];
+  quantityBigBag: number[] = [];
+  quantityADS: number[] = [];
+  quantityLiquid: number[] = [];
+  quantityMicro: number[] = []; 
+  quantityComponentPerOrder: number[] = [];
+  recipeRecalculate: RecalculateOrder[] = [];  
+  doneDose:number [] = [];
 
   slecetIdMixers: selectList[] = [
     { value: 1, viewValue: 'Vertical mixer' },
@@ -99,98 +106,110 @@ export class ToPDFComponent implements OnInit {
           this.selectedRecipe = this.recipes.find(
             (r) => r.no === this.order?.recipe.no
           );
+          
           console.log('selected recipe: ', this.selectedRecipe);
-          this.changeDetectorRef.detectChanges();
+          if(this.selectedRecipe == null){           
+                       return
+          }
+          this.quantityComponents(this.selectedRecipe.components);
         });
+
+          this.changeDetectorRef.detectChanges();
       });
     });
-    // this.ordersService.getOrdersList()
-    //   .subscribe(orders => this.allOrders = orders)
+    
   }
 
-  //@ViewChild('pdfTable')
-  //pdfTable!: ElementRef;
-  @ViewChild('invoice') invoiceElement!: ElementRef;
-  // public downloadAsPDF() {
-  //   // const pdfTable = this.pdfTable.nativeElement;
-  //   // var html = htmlToPdfmake(pdfTable.innerHTML);
-  //   // const documentDefinition = { content: html };
-  //   // pdfMake.createPdf(documentDefinition).download();
-  //   let div = this.pdfTable.nativeElement;
+  quantityComponents(components: ComponentModelSP[]) {  
+    if(this.order == null){      
+      return
+    }
+    console.log('orderorderorder',this.order);
+    this.selectComponents = components;
+    console.log('selectComponents',this.selectComponents );
+    
+    this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
+    this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (Number(this.order?.quantity) / 100)));
+       this.recalculateDose()
+  }
 
-  //   var img:any;
-  //   var filename;
-  //   var newImage:any;
 
-  //   domtoimage.toPng(div, { bgcolor: '#fff' })
+  recalculateDose() {    
+    this.quantityBag = [];
+    this.quantityBigBag = [];
+    this.quantityADS = [];
+    this.quantityLiquid = [];
+    this.quantityMicro = [];
+    this.recipeRecalculate = [];
+    if (this.selectedRecipe == null) {
 
-  //     .then(function(dataUrl) {
+      return;
+    }
+    for (let [index, volumeComponents] of this.selectedRecipe.components.entries()) {
+      this.quantityBigBag[index] = 0;
+      this.quantityADS[index] = 0;
+      this.quantityBag[index] = 0;
+      this.quantityMicro[index] = 0;
+      this.quantityLiquid[index] = 0;   
 
-  //       img = new Image();
-  //       img.src = dataUrl;
-  //       newImage = img.src;
-
-  //       img.onload = function(){
-
-  //       var pdfWidth = img.width;
-  //       var pdfHeight = img.height;
-
-  //         // FileSaver.saveAs(dataUrl, 'my-pdfimage.png'); // Save as Image
-
-  //         var doc;
-
-  //         if(pdfWidth > pdfHeight)
-  //         {
-  //           doc = new jsPDF('l', 'px', [pdfWidth , pdfHeight]);
-  //         }
-  //         else
-  //         {
-  //           doc = new jsPDF('p', 'px', [pdfWidth , pdfHeight]);
-  //         }
-
-  //         var width = doc.internal.pageSize.getWidth();
-  //         var height = doc.internal.pageSize.getHeight();
-
-  //         doc.addImage(newImage, 'PNG',  10, 10, width, height);
-  //         filename = 'mypdf_' + '.pdf';
-  //         doc.save(filename);
-
-  //       };
-
-  //     })}
-  public openPDF(): void {
-    html2canvas(this.invoiceElement.nativeElement, { scale: 4 }).then(
-      (canvas) => {
-        const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
-        const fileWidth = 360;
-        const generatedImageHeight = (canvas.height * fileWidth) / canvas.width;
-        let PDF = new jsPDF('p', 'mm', 'a4');
-        PDF.addImage(
-          imageGeneratedFromTemplate,
-          'PNG',
-          4,
-          4,
-          fileWidth,
-          generatedImageHeight
-        );
-        PDF.html(this.invoiceElement.nativeElement.innerHTML);
-        PDF.save('Orders.pdf');
+      switch (this.order?.recipe.components[index].packingOrder) {
+        case 0:
+          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
+          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
+          break;
+        case 1:
+          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
+        case 2:
+          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
+        case 3:
+          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          break;
       }
-    );
+
+      this.recipeRecalculate.push({
+        orderNo: 0,
+        recipeNo: 0,
+        componentNo: volumeComponents.no,
+        quantityDose: this.quantityPallete,
+        quantityBag: this.quantityBag[index],
+        quantityBigBag: this.quantityBigBag[index],
+        quantityADS: this.quantityADS[index],
+        quantityLiquid: this.quantityLiquid[index],
+        quantityMicro: this.quantityMicro[index],
+
+        
+      })
+
+    }
+    console.log('quantityBag', this.quantityBag);
+    console.log('quantityADS', this.quantityADS);
+    console.log('quantityBigBag', this.quantityBigBag);
+    console.log('quantityLiquid', this.quantityLiquid);
+    console.log('quantityMicro', this.quantityMicro);
+    this.doneDose[0] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityBigBag,0) > 0 ? 0 :5;
+    this.doneDose[1] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityLiquid,0) > 0 ? 0 :5;
+    this.doneDose[2] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityADS,0) > 0 ? 0 :5;
+    this.doneDose[3] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityMicro,0) > 0 ? 0 :5;
+
+    console.log('doneDose',this.doneDose);
+
+    
+
   }
+
 
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [
         Validators.required,
         Validators.minLength(10),
-        Validators.maxLength(10),
-        this.validOrderIdValidator.bind(this),
+        Validators.maxLength(10)
       ]),
       name: new FormControl(this.order?.name || '', [
         Validators.required,
         Validators.minLength(3),
-        this.validOrderNameValidator.bind(this),
       ]),
       customerName: new FormControl(
         this.order?.customerName || '',
@@ -202,7 +221,7 @@ export class ToPDFComponent implements OnInit {
         Validators.required
       ),
       quantity: new FormControl(
-        this.order?.quantity || null,
+        this.order?.quantity.toFixed(3) || null ,
         Validators.required
       ),
       idMixer: new FormControl(this.order?.idMixer, Validators.required),
@@ -225,23 +244,7 @@ export class ToPDFComponent implements OnInit {
     });
   }
 
-  validOrderNameValidator(control: FormControl) {
-    const value = control.value;
-    const isValid = this.allOrders.every(
-      (o) =>
-        o.name !== value || (this.order !== null && o.no === this.order?.no)
-    );
-    console.log('is valid messsing me? ', isValid);
-    return isValid ? null : { invalidOrderName: true };
-  }
-
-  validOrderIdValidator(control: FormControl) {
-    const value = control.value;
-    const isValid = this.allOrders.every(
-      (o) => o.id !== value || (this.order !== null && o.no === this.order?.no)
-    );
-    return isValid ? null : { invalidOrderId: true };
-  }
+  
 
   backToOrder() {
     this.router.navigate(['../../orders'], { relativeTo: this.r });

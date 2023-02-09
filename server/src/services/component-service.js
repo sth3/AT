@@ -63,7 +63,7 @@ const addComponent = async (component) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
         .input('id', component.id)
-        .input('name', component.name)
+        .input('name', component.name.toUpperCase())
         .input('packing', component.packing)
         .input('specificBulkWeight', component.specificBulkWeight)
         .query(ADD_COMPONENT);

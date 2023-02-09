@@ -7,8 +7,7 @@ import { ComponentService } from '../../services/component.service';
 import { RecipeModel } from '../../models/recipe.model';
 import { OrderModelPacking, selectList, RecalculateOrder } from '../../models/order.model';
 import { RecipeService } from 'src/app/services/recipe.service';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+
 
 import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 
@@ -147,19 +146,7 @@ export class RecalculateRecipeComponent implements OnInit {
   }
 
 
-  @ViewChild('invoice') invoiceElement!: ElementRef;
-  public openPDF(): void {
-    html2canvas(this.invoiceElement.nativeElement, { scale: 3 }).then((canvas) => {
-      const imageGeneratedFromTemplate = canvas.toDataURL('image/png');
-      const fileWidth = 250;
-      const generatedImageHeight = (canvas.height) / canvas.width * fileWidth;
-      let PDF = new jsPDF('l', 'mm', 'a4',);
-      PDF.addImage(imageGeneratedFromTemplate, 'PNG', 10, 1, fileWidth, generatedImageHeight,);
-      PDF.html(this.invoiceElement.nativeElement.innerHTML)
-      PDF.save('Orders.pdf');
-    });
-  }
-
+ 
 
 
 
