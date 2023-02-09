@@ -10,6 +10,7 @@ const componentController = require('./src/controllers/component-controller');
 const recipeController = require('./src/controllers/recipe-controller');
 const orderController = require('./src/controllers/order-controller');
 const statisticsController = require('./src/controllers/statistics-controller');
+const aggregateController = require('./src/controllers/aggregate-controller');
 const { roles } = require("./src/services/user-service");
 
 
@@ -23,6 +24,7 @@ router.use(componentController);
 router.use(recipeController);
 router.use(orderController);
 router.use(statisticsController);
+router.use(aggregateController);
 
 
 

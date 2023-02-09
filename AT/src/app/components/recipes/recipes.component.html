@@ -197,7 +197,9 @@
                     <mat-form-field
                       appearance="outline"
                       style="width: 20%"
-                      class="light note"
+                      class=" note" [ngClass]="{
+                        gridC: i % 2 > 0
+                      }"
                     >
                       <mat-label>ID</mat-label>
                       <input
@@ -210,7 +212,9 @@
                     <mat-form-field
                       appearance="outline"
                       style="width: 250px"
-                      class="note"
+                      class="note" [ngClass]="{
+                        gridC: i % 2 > 0
+                      }"
                     >
                       <mat-label>Name</mat-label>
                       <input
@@ -223,7 +227,9 @@
                     <mat-form-field
                       appearance="outline"
                       style="width: 10%"
-                      class="note"
+                      class="note" [ngClass]="{
+                        gridC: i % 2 > 0
+                      }"
                     >
                       <mat-label>Weight</mat-label>
                       <input
@@ -237,7 +243,9 @@
                     <mat-form-field
                       appearance="outline"
                       style="width: 10%"
-                      class="note"
+                      class="note" [ngClass]="{
+                        gridC: i % 2 > 0
+                      }"
                     >
                       <mat-label>Packing</mat-label>
                       <input
@@ -251,7 +259,9 @@
                     <mat-form-field
                       appearance="outline"
                       style="width: 12%"
-                      class="note"
+                      class="note" [ngClass]="{
+                        gridC: i % 2 > 0
+                      }"
                     >
                       <mat-label>Specific bulk weight</mat-label>
                       <input

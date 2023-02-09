@@ -1,3 +1,12 @@
 .default-element-row td {
   border-bottom-width: 0 !important;
 }
+
+
+::ng-deep .gridC.mat-form-field-appearance-outline .mat-form-field-outline  {
+  background-color: rgb(240, 240, 240);
+  border-radius: 5px;
+}
+.mat-input-element {
+  font-weight: 500;
+}
