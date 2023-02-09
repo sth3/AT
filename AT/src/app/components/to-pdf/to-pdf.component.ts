@@ -47,10 +47,11 @@ export class ToPDFComponent implements OnInit {
   recipes: RecipeModel[] = [];
   allOrders: OrderListModel[] = [];
   selectedRecipe: RecipeModel | undefined;
+  recipe: string = '';
   orderDueDate: string | undefined;
-  orderComponent?: RecipeModel;
+  orderComponent: ComponentItemModel [] = [];
   form!: FormGroup;
-  selectComponents: ComponentModelSP[] = [];;
+  
 
 
   quantityPallete: number = 0;
@@ -62,6 +63,7 @@ export class ToPDFComponent implements OnInit {
   quantityComponentPerOrder: number[] = [];
   recipeRecalculate: RecalculateOrder[] = [];  
   doneDose:number [] = [];
+  weightPerDose: number = 0;
 
   slecetIdMixers: selectList[] = [
     { value: 1, viewValue: 'Vertical mixer' },
@@ -91,30 +93,18 @@ export class ToPDFComponent implements OnInit {
       const no = params['id'];
 
       this.ordersService.getOrderByNo(no).subscribe((order) => {
-        console.log('this order: ', order);
-        console.log('this order: ', order['no']);
+        
         this.orderDueDate = order['dueDate'];
         this.editable = false;
         this.isNew = false;
         this.order = order;
-        this.orderComponent = this.order.recipe;
-        this.prepareForm();
+        this.orderComponent = this.order.recipe.components;        
+        
+        this.quantityComponents(this.orderComponent);
+        this.recipe = ` ${this.order.recipe.id.trim()} - ${this.order.recipe.name.trim()}` ;
+        this.prepareForm();       
 
-        this.recipeService.getRecipes().subscribe((recipes) => {
-          console.log('recipes: ', recipes);
-          this.recipes = recipes;
-          this.selectedRecipe = this.recipes.find(
-            (r) => r.no === this.order?.recipe.no
-          );
-          
-          console.log('selected recipe: ', this.selectedRecipe);
-          if(this.selectedRecipe == null){           
-                       return
-          }
-          this.quantityComponents(this.selectedRecipe.components);
-        });
-
-          this.changeDetectorRef.detectChanges();
+        this.changeDetectorRef.detectChanges();
       });
     });
     
@@ -123,11 +113,7 @@ export class ToPDFComponent implements OnInit {
   quantityComponents(components: ComponentModelSP[]) {  
     if(this.order == null){      
       return
-    }
-    console.log('orderorderorder',this.order);
-    this.selectComponents = components;
-    console.log('selectComponents',this.selectComponents );
-    
+    }          
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (Number(this.order?.quantity) / 100)));
        this.recalculateDose()
@@ -141,11 +127,11 @@ export class ToPDFComponent implements OnInit {
     this.quantityLiquid = [];
     this.quantityMicro = [];
     this.recipeRecalculate = [];
-    if (this.selectedRecipe == null) {
+    if (this.orderComponent == null) {
 
       return;
     }
-    for (let [index, volumeComponents] of this.selectedRecipe.components.entries()) {
+    for (let [index, volumeComponents] of this.orderComponent.entries()) {
       this.quantityBigBag[index] = 0;
       this.quantityADS[index] = 0;
       this.quantityBag[index] = 0;
@@ -188,6 +174,7 @@ export class ToPDFComponent implements OnInit {
     console.log('quantityBigBag', this.quantityBigBag);
     console.log('quantityLiquid', this.quantityLiquid);
     console.log('quantityMicro', this.quantityMicro);
+    this.weightPerDose = this.quantityComponentPerOrder.reduce((acc, comp)=>(acc + comp) ) / this.quantityPallete;
     this.doneDose[0] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityBigBag,0) > 0 ? 0 :5;
     this.doneDose[1] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityLiquid,0) > 0 ? 0 :5;
     this.doneDose[2] = this.recipeRecalculate.reduce((acc,comp)=>acc + comp.quantityADS,0) > 0 ? 0 :5;

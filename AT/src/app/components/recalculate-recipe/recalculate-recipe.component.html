@@ -1,4 +1,4 @@
-
+<div class="container">
 <mat-card>
   <div id="section">
   
@@ -66,7 +66,7 @@
           <h3>Quantity</h3>
           <mat-form-field appearance="outline" style="width: 110px" class="note">
             <mat-label>Quantity</mat-label>
-            <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.quantity">
+            <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.quantity | number :'1.3-3' ">
             <span matSuffix>kg</span>
           </mat-form-field>
         </div>
@@ -124,50 +124,67 @@
               <mat-list-item>
                 <div matLine>
 
-                  <p style="float:left; " class="inputSize">
+                  <p style="float:left; " >
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="light note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>ID</mat-label>
                       <input matInput placeholder="000001" readonly [value]="component.id">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" style="width: 250px" class="note inputSize">
+                    <mat-form-field appearance="outline" style="width: 250px" class="note " [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Name</mat-label>
                       <input matInput placeholder="Paprika" readonly [value]="component.name">
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Packing</mat-label>
                       <input matInput placeholder="1" readonly [value]="component.packing.toFixed(1)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      inputBackground: this.quantityBag[i] > 0,
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
                       <span matSuffix>x</span>
                     </mat-form-field>
 
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note">
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0
+                    }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">
                       <span matSuffix>kg</span>
@@ -185,6 +202,15 @@
         </div>
       </div>
     </mat-card-content>
+    <mat-toolbar style="height: 30px">
+      <span style="font-weight: bold">Weight Per Dose</span>
+      <span class="spacer"></span>
+      <span
+        >{{ weightPerDose | number :'1.3-3' }} kg
+        
+        
+      </span>
+    </mat-toolbar>
   </div>
 
   <mat-card-actions>
@@ -204,7 +230,7 @@
 
 <div>
 
-
+</div>
   <!-- <section class="example-container mat-elevation-z8" tabindex="0">
   <table mat-table [dataSource]="dataSource" *ngFor="let table of tables">
     <ng-container matColumnDef="position">

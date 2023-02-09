@@ -1,3 +1,17 @@
 .default-element-row td {
   border-bottom-width: 0 !important;
 }
+::ng-deep .gridC.mat-form-field-appearance-outline .mat-form-field-outline  {
+  background-color: rgb(240, 240, 240);
+  border-radius: 5px;
+}
+
+::ng-deep .inputBackground.mat-form-field-appearance-outline .mat-form-field-outline  {
+  background-color: rgb(214, 212, 212);
+  border-radius: 5px;
+}
+
+::ng-deep .mat-input-element:disabled, .mat-select-disabled .mat-select-value {
+  color: black;
+  font-weight: 500;
+}

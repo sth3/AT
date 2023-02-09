@@ -1,0 +1,9 @@
+::ng-deep .gridC.mat-form-field-appearance-outline .mat-form-field-outline  {
+    background-color: rgb(240, 240, 240);
+    border-radius: 5px;
+  }
+
+::ng-deep .inputBackground.mat-form-field-appearance-outline .mat-form-field-outline  {
+    background-color: rgb(214, 212, 212);
+    border-radius: 5px;
+  }

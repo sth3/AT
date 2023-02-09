@@ -28,6 +28,7 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityComponentPerOrder: number[] = [];
   recipeRecalculate: RecalculateOrder[] = [];  
   doneDose:number [] = [];
+  weightPerDose: number = 0;
 
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
@@ -73,6 +74,8 @@ export class RecalculateRecipeComponent implements OnInit {
   quantityComponents(components: ComponentModelSP[]) {  
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (this.data.selectedorder.quantity / 100)) / comp.specificBulkWeight), 0) / Number(this.data.selectedorder.volumePerDose));  
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (this.data.selectedorder.quantity / 100)));
+    console.log('quantityComponentPerOrder',this.quantityComponentPerOrder);
+    
        this.recalculateDose()
   }
 
@@ -99,15 +102,18 @@ export class RecalculateRecipeComponent implements OnInit {
           this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
           break;
         case 1:
-          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;
           break;
         case 2:
-          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;
           break;
         case 3:
-          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;
           break;
       }
+
+      
+      
 
       this.recipeRecalculate.push({
         orderNo: this.data.selectedorder.no,
@@ -124,6 +130,15 @@ export class RecalculateRecipeComponent implements OnInit {
       })
 
     }
+
+
+    this.weightPerDose = this.quantityComponentPerOrder.reduce((acc, comp)=>(acc + comp) ) / this.quantityPallete;
+    console.log('quantityADS',this.quantityADS.reduce((acc, comp)=>(acc + comp) ) );
+    console.log('quantityBigBag',this.quantityBigBag.reduce((acc, comp)=>(acc + comp) ) );
+    console.log('quantityLiquid',this.quantityLiquid.reduce((acc, comp)=>(acc + comp) ) );
+    console.log('quantityMicro',this.quantityMicro.reduce((acc, comp)=>(acc + comp) ) );
+
+    console.log('quantity',this.quantityComponentPerOrder.reduce((acc, comp)=>acc + (comp)));
     console.log('quantityBag', this.quantityBag);
     console.log('quantityADS', this.quantityADS);
     console.log('quantityBigBag', this.quantityBigBag);
