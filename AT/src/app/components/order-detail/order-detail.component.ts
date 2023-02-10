@@ -60,7 +60,7 @@ export class OrderDetailComponent implements OnInit {
   recipeChanged = false;
   dosePerOrder?: RecalculateOrder | undefined;
   donePerStation:number[] = [];
-  packingOrders: selectList[] = [
+  packingSelect: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
     { value: 2, viewValue: 'Liquid' },

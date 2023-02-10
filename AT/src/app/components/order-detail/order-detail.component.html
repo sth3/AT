@@ -151,7 +151,7 @@
                             gridC: i % 2 > 0
                           }" >
                             <mat-label>Packing</mat-label>
-                            <mat-select formControlName="{{i}}.packingType"   >
+                            <mat-select formControlName="{{i}}"   >
                               <mat-option *ngFor="let packingOrder of packingSelect" [value]="packingOrder.value"  >
                                 {{packingOrder.viewValue}}
                               </mat-option>
