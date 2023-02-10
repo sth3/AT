@@ -157,3 +157,7 @@ td.cell-no-padding {
 .order-pdf-h3{
   margin: 0 !important;;
 }
+
+.hideItem{
+  visibility: hidden;
+}

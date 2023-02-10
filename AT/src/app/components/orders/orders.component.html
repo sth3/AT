@@ -280,22 +280,7 @@
                             />
                             <span matSuffix>KG</span>
                           </mat-form-field>
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 10%"
-                            class="note" [ngClass]="{
-                              gridC: i % 2 > 0
-                            }"
-                          >
-                            <mat-label>Packing</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.packing.toFixed(1)"
-                            />
-                            <span matSuffix>KG</span>
-                          </mat-form-field>
+                          
                           <mat-form-field
                             appearance="outline"
                             style="width: 12%"
@@ -332,6 +317,24 @@
                                 {{ packingOrder.viewValue }}
                               </mat-option>
                             </mat-select>
+                          </mat-form-field>
+                          <mat-form-field
+                            appearance="outline"
+                            style="width: 10%"
+                            class="note" 
+                            [ngClass]="{
+                              hideItem: component.packingOrder > 0 ,
+                              gridC: i % 2 > 0
+                            }"
+                          >
+                            <mat-label>Packing</mat-label>
+                            <input
+                              matInput
+                              placeholder="0000000001"
+                              readonly
+                              [value]="component.parkingWeight.toFixed(1)"
+                            />
+                            <span matSuffix>KG</span>
                           </mat-form-field>
                         </p>
                         <!-- <p style="margin: 0 0 0 1px;">W:{{component.componentSP.toFixed(3)}} kg |

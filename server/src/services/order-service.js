@@ -39,7 +39,7 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   lastUpdate = GETDATE() ' +
     'WHERE no = @no';
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
-    '(recipeNo, componentNo, orderNo, packing) ' +
+    '(recipeNo, componentNo, orderNo, packing ,parkingWeight) ' +
     'VALUES ';
 const ADD_DOSE = 'INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE] ' +
     '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid, quantityMicro) ' +
@@ -126,7 +126,7 @@ const addOrder = async (order) => {
 const addPacking = async (orderNo, packing) => {
     let query = ADD_PACKING;
     packing.packingOrder.forEach((value, index) => {
-        query += `(${packing.recipeNo}, ${packing.componentNo[index]}, ${orderNo},${packing.packingOrder[index]})`;
+        query += `(${packing.recipeNo}, ${packing.componentNo[index]}, ${orderNo},${packing.packingOrder[index]}, 0)`;
         if (index < packing.packingOrder.length - 1) {
             query += ', ';
         }

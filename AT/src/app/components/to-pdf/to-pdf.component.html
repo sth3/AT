@@ -360,24 +360,28 @@
                             />
                             <span matSuffix>kg</span>
                           </mat-form-field>
+                          
                           <mat-form-field
                             appearance="outline"
-                            style="width: 75px"
+                            style="width: 75px ; "
                             class="note"
+                            
                             [ngClass]="{
                               inputBackground: this.quantityBag[i] > 0,
                               gridC: i % 2 > 0
                             }"
                           >
-                            <mat-label>Quantity</mat-label>
+                            <mat-label >Quantity</mat-label>
                             <input
                               matInput
                               placeholder="0.1"
                               readonly
                               [value]="this.quantityBag[i]"
+                              
                             />
-                            <span matSuffix>x</span>
+                            <span matSuffix >x</span>
                           </mat-form-field>
+                        
 
                           <mat-form-field
                             appearance="outline"

@@ -116,6 +116,8 @@ export class ToPDFComponent implements OnInit {
     }          
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (Number(this.order?.quantity) / 100)));
+    console.log('this.quantityComponentPerOrder',this.quantityComponentPerOrder);
+    
        this.recalculateDose()
   }
 
@@ -144,13 +146,13 @@ export class ToPDFComponent implements OnInit {
           this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
           break;
         case 1:
-          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete;
           break;
         case 2:
-          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityLiquid[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;
           break;
         case 3:
-          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing;
+          this.quantityMicro[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;
           break;
       }
 

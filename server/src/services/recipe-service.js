@@ -48,6 +48,7 @@ const GET_RECIPE_BY_NO_FOR_ORDER = 'SELECT DISTINCT R.no no, ' +
     '   M.componentSP componentSP,' +
     '   C.packing packing,' +
     '   P.packing packingOrder,' +
+    '   P.parkingWeight parkingWeight,' +
     '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +

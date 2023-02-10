@@ -1,4 +1,10 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RecipeModel } from '../../models/recipe.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,14 +14,17 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable, startWith } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ComponentItemModel, ComponentModel } from '../../models/component.model';
-
+import {
+  ComponentItemModel,
+  ComponentModel,
+} from '../../models/component.model';
+import { UserModel, UserRole } from '../../models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-edit-recipe-dialog',
   templateUrl: 'edit-recipe-dialog.component.html',
 })
 export class EditRecipeDialogComponent implements OnInit {
-
   form: FormGroup;
   allComponents: ComponentModel[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -27,63 +36,84 @@ export class EditRecipeDialogComponent implements OnInit {
   cQunatity: number = 0;
   targetWeight = 100;
   targetQunatity = 20;
+  currentUser!: UserModel;
 
-  @ViewChild('componentInput', { static: false }) componentInput: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild('componentInput', { static: false }) componentInput:
+    | ElementRef<HTMLInputElement>
+    | undefined;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {
-                allRecipes: RecipeModel[],
-                recipe: RecipeModel,
-                editMode: boolean
-              },
-              private componentService: ComponentService) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      allRecipes: RecipeModel[];
+      recipe: RecipeModel;
+      editMode: boolean;
+    },
+    private componentService: ComponentService,
+    private authService: AuthService,
+  ) {
     console.log('recipe components: ', data.recipe?.components);
     this.form = new FormGroup({
-      name: new FormControl(data.recipe ? data.recipe.name : '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(30), this.validRecipeNameValidator.bind(this)]),
-      id: new FormControl(data.recipe ? data.recipe.id : this.getNewId(data.allRecipes),
-        [Validators.required, Validators.minLength(6), Validators.maxLength(6),
-          this.validRecipeIdValidator.bind(this)]),
-      components: new FormArray(data.recipe ? data.recipe?.components!.map(component => {
-        return new FormGroup({
-          no: new FormControl(component.no),
-          id: new FormControl(component.id),
-          name: new FormControl(component.name.trim()),
-          quantity: new FormControl(component.componentSP, Validators.required)
-        })
-      }) : []),
+      name: new FormControl(data.recipe ? data.recipe.name : '', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        this.validRecipeNameValidator.bind(this),
+      ]),
+      id: new FormControl(
+        data.recipe ? data.recipe.id : this.getNewId(data.allRecipes),
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(6),
+          this.validRecipeIdValidator.bind(this),
+        ]
+      ),
+      components: new FormArray(
+        data.recipe
+          ? data.recipe?.components!.map((component) => {
+              return new FormGroup({
+                no: new FormControl(component.no),
+                id: new FormControl(component.id),
+                name: new FormControl(component.name.trim()),
+                quantity: new FormControl(
+                  component.componentSP,
+                  Validators.required
+                ),
+              });
+            })
+          : []
+      ),
       // selectedComponents: new FormControl(data.recipe ? data.recipe.components!.map(component => component.componentName) : [])
     });
-    this.form.get('components')?.valueChanges.subscribe(change => this.calculateWeight(change));
-    
-   
-    
+    this.form
+      .get('components')
+      ?.valueChanges.subscribe((change) => this.calculateWeight(change));
   }
 
-
   ngOnInit(): void {
-    
     this.calculateWeight(this.form.value.components);
-     
-    
-    this.componentService.getComponents()
-      .subscribe(response => {
-        this.allComponents = response;
-        
-       
-        (response);
-        this.selectedComponents = this.allComponents
-          .filter(component => this.data.recipe?.components?.find(recipeComponent => recipeComponent.id === component.id));
-        this.filteredComponents = this.newComponent.valueChanges.pipe(
-          startWith(null),
-          map((c: ComponentModel) => {
-            return (c ? this._filter(c) : this.allComponents
-              .filter(c => !this.selectedComponents.includes(c))
-              .slice())
-          }),
-        );
-      })
 
-      
+    this.componentService.getComponents().subscribe((response) => {
+      this.allComponents = response;
+
+      response;
+      this.selectedComponents = this.allComponents.filter((component) =>
+        this.data.recipe?.components?.find(
+          (recipeComponent) => recipeComponent.id === component.id
+        )
+      );
+      this.filteredComponents = this.newComponent.valueChanges.pipe(
+        startWith(null),
+        map((c: ComponentModel) => {
+          return c
+            ? this._filter(c)
+            : this.allComponents
+                .filter((c) => !this.selectedComponents.includes(c))
+                .slice();
+        })
+      );
+    });
   }
 
   get name() {
@@ -104,21 +134,27 @@ export class EditRecipeDialogComponent implements OnInit {
 
   validRecipeNameValidator(control: FormControl) {
     const value = control.value;
-    const isValid = this.data.allRecipes.every(recipe => recipe.name !== value
-      || (this.data.recipe !== null && recipe.no === this.data.recipe.no));
+    const isValid = this.data.allRecipes.every(
+      (recipe) =>
+        recipe.name !== value ||
+        (this.data.recipe !== null && recipe.no === this.data.recipe.no)
+    );
     return isValid ? null : { invalidRecipeName: true };
   }
 
   validRecipeIdValidator(control: FormControl) {
     const value = control.value;
-    const isValid = this.data.allRecipes.every(recipe => recipe.id !== value
-      || (this.data.recipe !== null && recipe.no === this.data.recipe.no));
+    const isValid = this.data.allRecipes.every(
+      (recipe) =>
+        recipe.id !== value ||
+        (this.data.recipe !== null && recipe.no === this.data.recipe.no)
+    );
     return isValid ? null : { invalidRecipeId: true };
   }
 
   getNewId(allRecipes: RecipeModel[]) {
     const maxId = allRecipes
-      .filter(r => !isNaN(parseInt(r.id)))
+      .filter((r) => !isNaN(parseInt(r.id)))
       .reduce((max, recipe) => Math.max(max, parseInt(recipe.id)), 0);
     return (maxId + 1).toString().padStart(6, '0');
   }
@@ -127,34 +163,59 @@ export class EditRecipeDialogComponent implements OnInit {
     const formArray = this.form.get('components') as FormArray;
 
     this.selectedComponents.forEach((component: ComponentModel) => {
-      if (!formArray.controls.find(control => control.get('id')!.value === component.id)) {
-        formArray.push(new FormGroup({
-          no: new FormControl(component.no),
-          id: new FormControl(component.id),
-          name: new FormControl(component.name),
-          quantity: new FormControl(0, Validators.required)
-        }));
+      if (
+        !formArray.controls.find(
+          (control) => control.get('id')!.value === component.id
+        )
+      ) {
+        formArray.push(
+          new FormGroup({
+            no: new FormControl(component.no),
+            id: new FormControl(component.id),
+            name: new FormControl(component.name),
+            quantity: new FormControl(0, Validators.required),
+          })
+        );
       }
     });
     if (this.selectedComponents.length < formArray.controls.length) {
       formArray.controls.forEach((control, index) => {
-        if (!this.selectedComponents.find(component => component.id === control.get('id')!.value)) {
+        if (
+          !this.selectedComponents.find(
+            (component) => component.id === control.get('id')!.value
+          )
+        ) {
           formArray.removeAt(index);
         }
       });
     }
   }
 
-
   getFormValue() {
-    if (!this.form.valid) {
-      return;
-    }
-    const recipe = {
-      id: this.id!.value,
-      name: this.name!.value,
-    }
-    return {...recipe, components: this.getComponents() };
+    // this.authService.getCurrentUser().subscribe((data) => {
+    //   this.currentUser = data;
+    //   if (this.currentUser !== null) {
+    //     if (
+    //       this.currentUser.role === 'ADMIN' ||
+    //       this.currentUser.role === 'TECHNOLOG'
+    //     ) {
+          if (!this.form.valid) {
+            return;
+          }
+          const recipe = {
+            id: this.id!.value,
+            name: this.name!.value,
+          };
+          return { ...recipe, components: this.getComponents() };
+    //     } else {
+    //       this.authService.promptLogin('Login');
+    //       return;
+    //     }
+    //   } else {
+    //     this.authService.promptLogin('Login');
+    //     return;
+    //   }
+    // });
   }
 
   getComponents() {
@@ -163,8 +224,8 @@ export class EditRecipeDialogComponent implements OnInit {
         no: c.no,
         id: c.id,
         name: c.name,
-        componentSP: c.quantity
-      }
+        componentSP: c.quantity,
+      };
     });
   }
 
@@ -195,26 +256,21 @@ export class EditRecipeDialogComponent implements OnInit {
     this.componentInput!.nativeElement.value = '';
     this.newComponent.setValue(null);
     this.setComponents();
-
   }
 
   private _filter(value: string | ComponentModel): ComponentModel[] {
-    if (typeof value !== 'string') {     
-            return [value];
+    if (typeof value !== 'string') {
+      return [value];
     }
-    const filterValue = value.toUpperCase();   
+    const filterValue = value.toUpperCase();
     return this.allComponents
-      .filter(c => !this.selectedComponents.includes(c))
-      .filter(c => c.name.includes(filterValue));
+      .filter((c) => !this.selectedComponents.includes(c))
+      .filter((c) => c.name.includes(filterValue));
   }
 
   calculateWeight(components: any[]): void {
     this.cWeight = components.reduce((acc, comp) => acc + comp.quantity, 0);
     this.cQunatity = this.form.get('components')?.value.length;
     this.currentWeight = Number(this.cWeight.toFixed(3));
-   
-    
   }
 }
-
-

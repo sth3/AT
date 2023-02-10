@@ -88,7 +88,7 @@ const login = async (req, res) => {
 
     // set the expiry time as 5min after the current time
     const now = new Date();
-    const expiresAt = new Date(+now + 5 *  MINUTE);
+    const expiresAt = new Date(+now + 500 *  MINUTE);
 
     await userService.updateLastLoginDate(user.id);
 
