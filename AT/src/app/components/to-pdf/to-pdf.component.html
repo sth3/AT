@@ -136,7 +136,7 @@
                             matInput
                             placeholder="0000000001"
                             readonly
-                            [value]="component.packing.toFixed(1)"
+                            [value]="component.packingWeight.toFixed(1)"
                           />
                           <span matSuffix>KG</span>
                         </mat-form-field>
@@ -356,7 +356,7 @@
                               matInput
                               placeholder="1"
                               readonly
-                              [value]="component.packing | number : '1.1-1'"
+                              [value]="component.packingWeight | number : '1.1-1'"
                             />
                             <span matSuffix>kg</span>
                           </mat-form-field>

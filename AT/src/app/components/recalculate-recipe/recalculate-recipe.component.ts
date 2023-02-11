@@ -11,7 +11,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
 
 import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 
-import { ComponentItemModel, ComponentModelSP } from 'src/app/models/component.model';
+import { ComponentItemModel } from 'src/app/models/component.model';
 
 @Component({
   selector: 'app-recalculate-recipe',

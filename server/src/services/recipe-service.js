@@ -9,10 +9,10 @@ const GET_ALL_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   R.name name,' +
     '   R.lastUpdate lastUpdate,' +
     '   (SELECT C.no no,' +
-        '   C.id id,' +
-        '   C.name name,' +
-        '   C.lastUpdate lastUpdate,' +
-        '   M.componentSP componentSP' +
+    '   C.id id,' +
+    '   C.name name,' +
+    '   C.lastUpdate lastUpdate,' +
+    '   M.componentSP componentSP' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
     '   WHERE M.recipeNo = R.no ' +
@@ -28,7 +28,6 @@ const GET_RECIPE_BY_NO = 'SELECT DISTINCT R.no no, ' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
     '   M.componentSP componentSP,' +
-    '   C.packing packing,' +
     '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
@@ -46,7 +45,6 @@ const GET_RECIPE_BY_NO_FOR_ORDER = 'SELECT DISTINCT R.no no, ' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
     '   M.componentSP componentSP,' +
-    '   C.packing packing,' +
     '   P.packing packingType,' +
     '   P.packingWeight packingWeight,' +
     '   C.specificBulkWeight specificBulkWeight' +
@@ -89,9 +87,9 @@ const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   C.id id,' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
-    '   M.componentSP componentSP,' +   
+    '   M.componentSP componentSP,' +
 
-    '   C.packing packing,' +
+
     '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
@@ -146,7 +144,7 @@ const getRecipeByNo = async (no) => {
         return null;
     }
     const recipe = parseComponentsAndCheckValidity(recordset[0]);
-   
+
     return trimTrailingWhitespace(recipe);
 }
 const getRecipeByNoForOrder = async (no, oNo) => {
@@ -159,7 +157,7 @@ const getRecipeByNoForOrder = async (no, oNo) => {
         return null;
     }
     const recipe = parseComponentsAndCheckValidity(recordset[0]);
-   
+
     return trimTrailingWhitespace(recipe);
 }
 

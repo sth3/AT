@@ -15,8 +15,8 @@ const GET_ARCHIVED_COMPONENTS = 'SELECT CH.id, CH.change, CH.date, ' +
     'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId'
 const GET_COMPONENT_BY_NO = 'SELECT * FROM [AT].[dbo].[COMPONENT] WHERE no = @no';
 const ADD_COMPONENT = 'INSERT INTO [AT].[dbo].[COMPONENT] ' +
-    '(id, name, packing, specificBulkWeight) ' +
-    'VALUES (@id, @name , @packing, @specificBulkWeight) ' +
+    '(id, name, specificBulkWeight) ' +
+    'VALUES (@id, @name , @specificBulkWeight) ' +
     'SELECT SCOPE_IDENTITY() as no';
 const ADD_CHANGE = 'INSERT INTO [AT].[dbo].[COMPONENTS_CHANGES] ' +
     '(oldComponentNo, newComponentNo, userId, change) ' +
@@ -64,7 +64,7 @@ const addComponent = async (component) => {
     const { recordset } = await pool.request()
         .input('id', component.id)
         .input('name', component.name.toUpperCase())
-        .input('packing', component.packing)
+        
         .input('specificBulkWeight', component.specificBulkWeight)
         .query(ADD_COMPONENT);
     return recordset[0];
@@ -106,9 +106,7 @@ const getChange = (oldComponent, newComponent) => {
     if (oldComponent.name !== newComponent.name) {
         changes.push(`name: ${oldComponent.name} -> ${newComponent.name}`);
     }
-    if (oldComponent.packing !== newComponent.packing) {
-        changes.push(`packing: ${oldComponent.packing}kg -> ${newComponent.packing}kg`);
-    }
+    
     if (oldComponent.specificBulkWeight !== newComponent.specificBulkWeight) {
         changes.push(`specificBulkWeight: ${oldComponent.specificBulkWeight.toFixed(3)}kg -> ${newComponent.specificBulkWeight.toFixed(3)}kg`);
     }

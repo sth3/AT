@@ -1,8 +1,7 @@
 export interface ComponentModel {
   no: number;
   id: string;
-  name: string;
-  packing:number;
+  name: string;  
   packingType:number;
   packingWeight:number;
   specificBulkWeight:number;
@@ -24,13 +23,4 @@ export interface ComponentChangeModel {
 }
 
 
-export interface ComponentModelSP {
-  no: number;
-  id: string;
-  name: string;
-  packing:number;
-  packingOrder:number;
-  specificBulkWeight:number;
-  lastUpdate: string;
-  componentSP: number;
-}
+

@@ -31,14 +31,7 @@ import { ComponentModel } from '../../models/component.model';
           </mat-error>
           <mat-error *ngIf="id!.hasError('invalidComponentId')">This ID is already in use.
           </mat-error>
-        </mat-form-field>
-
-        <mat-form-field style="width: 100%" appearance="outline">
-          <mat-label>Packing</mat-label>
-          <input matInput placeholder="Packing" formControlName="packing" type="number" min="0" >
-          <mat-error *ngIf="packing!.hasError('required')">Packing is required.</mat-error>
-          <span matSuffix>kg</span>
-        </mat-form-field>
+        </mat-form-field>        
 
         <mat-form-field style="width: 100%" appearance="outline">
           <mat-label>Specific bulk weight</mat-label>
@@ -72,9 +65,7 @@ export class EditComponentDialogComponent implements OnInit {
         [Validators.required, Validators.minLength(3), Validators.maxLength(30), this.validComponentNameValidator.bind(this)]),
       id: new FormControl(data.component ? data.component.id : this.getNewId(data.allComponents),
         [Validators.required, Validators.minLength(6), Validators.maxLength(6),
-        this.validComponentIdValidator.bind(this)]),
-      packing: new FormControl(data.component ? data.component.packing : '',
-        [Validators.required]),
+        this.validComponentIdValidator.bind(this)]),      
       specificBulkWeight: new FormControl(data.component ? data.component.specificBulkWeight.toFixed(3) : '',
         [Validators.required])
     });
@@ -88,9 +79,7 @@ export class EditComponentDialogComponent implements OnInit {
     return this.form.get('id');
   }
 
-  get packing() {
-    return this.form.get('packing');
-  }
+  
 
   get specificBulkWeight() {
     return this.form.get('specificBulkWeight');

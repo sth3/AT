@@ -35,8 +35,7 @@ export class ComponentsComponent implements OnInit {
   columnsToDisplay = [
     { field: 'no', header: 'Number' },
     { field: 'id', header: 'ID' },
-    { field: 'name', header: 'Component name', width: '40%' },
-    { field: 'packing', header: 'Packing' },
+    { field: 'name', header: 'Component name', width: '40%' },    
     { field: 'specificBulkWeight', header: 'Specific bulk weight' },
     { field: 'lastUpdate', header: 'Last update' },
   ]

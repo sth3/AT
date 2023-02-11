@@ -20,7 +20,7 @@ import { RecipeModel } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ComponentItemModel, ComponentModelSP } from 'src/app/models/component.model';
+import { ComponentItemModel } from 'src/app/models/component.model';
 
 
 @Component({
@@ -142,8 +142,8 @@ export class ToPDFComponent implements OnInit {
 
       switch (this.order?.recipe.components[index].packingType) {
         case 0:
-          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
-          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
+          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packingWeight);
+          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packingWeight * this.quantityBag[index]);
           break;
         case 1:
           this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete;
