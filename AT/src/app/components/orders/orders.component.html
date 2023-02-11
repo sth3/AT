@@ -165,7 +165,7 @@
                         <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{
                               gridC: i % 2 > 0
                             }">
-                          <mat-label>Packing</mat-label>
+                          <mat-label>Type of packing</mat-label>
                           <mat-select [(ngModel)]="component.packingType" [disabled]="component.packingType"
                             name="packingOrders">
                             <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
@@ -177,7 +177,7 @@
                               hideItem: component.packingType > 0 ,
                               gridC: i % 2 > 0
                             }">
-                          <mat-label>Packing</mat-label>
+                          <mat-label>Packing Weight</mat-label>
                           <input matInput placeholder="0000000001" readonly
                             [value]="component.packingWeight.toFixed(1)" />
                           <span matSuffix>KG</span>
@@ -185,22 +185,14 @@
                         <mat-form-field appearance="outline" style="width: 20%" class="note" [ngClass]="{
                               gridC: i % 2 > 0
                             }">
-                          <mat-label>Weight per Order</mat-label>
+                          <mat-label>Weight Per Order</mat-label>
                           <input matInput placeholder="0000000001" readonly
                             [value]="component.componentSP * (element.quantity/100) |number :'1.3-3'" />
                           <span matSuffix>KG</span>
                         </mat-form-field>
-                      </p>
-                      <!-- <p style="margin: 0 0 0 1px;">W:{{component.componentSP.toFixed(3)}} kg |
-                           P:{{component.packing.toFixed(1)}} |
-                           SBW:{{component.specificBulkWeight.toFixed(3)}} kg/l 
-                        </p> -->
+                      </p>                      
                     </div>
-
-
-
                   </div>
-
                 </mat-list-item>
               </ng-container>
 

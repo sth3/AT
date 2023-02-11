@@ -2,99 +2,48 @@
   <mat-toolbar>
     <mat-toolbar-row>
       <div style="font-size: 15px">
-        <mat-form-field
-          appearance="outline"
-          style="margin: 20px 10px 0; padding: 0"
-        >
+        <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
           <mat-label>Quick filter</mat-label>
-          <input
-            matInput
-            placeholder="gulas"
-            [(ngModel)]="quickFilter"
-            (ngModelChange)="changeFilter()"
-          />
+          <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()" />
           <span matSuffix><mat-icon>filter_alt</mat-icon></span>
         </mat-form-field>
 
-        <mat-form-field
-          appearance="outline"
-          style="margin: 20px 10px 0; padding: 0"
-        >
+        <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
           <mat-label>Enter a date range</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-            <input
-              matStartDate
-              formControlName="start"
-              placeholder="Start date"
-              (ngModelChange)="getOrders()"
-            />
-            <input
-              matEndDate
-              formControlName="end"
-              placeholder="End date"
-              (ngModelChange)="getOrders()"
-            />
+            <input matStartDate formControlName="start" placeholder="Start date" (ngModelChange)="getOrders()" />
+            <input matEndDate formControlName="end" placeholder="End date" (ngModelChange)="getOrders()" />
           </mat-date-range-input>
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-date-range-picker
-            #picker
-            startView="year"
-          ></mat-date-range-picker>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker startView="year"></mat-date-range-picker>
         </mat-form-field>
       </div>
       <h2 class="table-title">Orders Archive</h2>
       <span class="spacer"></span>
     </mat-toolbar-row>
   </mat-toolbar>
-  <table
-    mat-table
-    matSort
-    [dataSource]="dataSource"
-    multiTemplateDataRows
-    class="mat-elevation-z8"
-  >
+  <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef aria-label="row">&nbsp;</th>
       <td mat-cell *matCellDef="let element">
-        <button
-          mat-icon-button
-          aria-label="expand row"
-          (click)="
+        <button mat-icon-button aria-label="expand row" (click)="
             expandedOrder = expandedOrder === element ? null : element;
             $event.stopPropagation()
-          "
-        >
-          <mat-icon *ngIf="expandedOrder !== element"
-            >keyboard_arrow_down</mat-icon
-          >
-          <mat-icon *ngIf="expandedOrder === element"
-            >keyboard_arrow_up</mat-icon
-          >
+          ">
+          <mat-icon *ngIf="expandedOrder !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedOrder === element">keyboard_arrow_up</mat-icon>
         </button>
       </td>
     </ng-container>
 
-    <ng-container
-      [matColumnDef]="column.field"
-      *ngFor="let column of columnsToDisplay"
-    >
-      <th
-        mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header
-        [style]="{ width: column.width || 'auto' }"
-      >
+    <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [style]="{ width: column.width || 'auto' }">
         {{ column.header }}
       </th>
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           column.field === 'lastUpdate' || column.field === 'dueDate';
           else normalTd
-        "
-      >
+        ">
         <td mat-cell *matCellDef="let element">
           {{ element[column.field] | date : "d.M.y, HH:mm:ss" : "UTC" }}
         </td>
@@ -104,185 +53,93 @@
       </ng-template>
     </ng-container>
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-    <ng-container matColumnDef="expandedDetail" >
-      <td
-        mat-cell
-        *matCellDef="let element"
-        [attr.colspan]="columnsToDisplayWithExpand.length"        
-      >
-        <div
-          class="default-element-detail"
-          [@detailExpand]="element == expandedOrder ? 'expanded' : 'collapsed'"
-          *ngIf="expandedOrder === element"
-        >
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="default-element-detail" [@detailExpand]="element == expandedOrder ? 'expanded' : 'collapsed'"
+          *ngIf="expandedOrder === element">
           <div style="margin-top: 20px">
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Recipe ID</mat-label>
-              <input
-                matInput
-                placeholder="0000000001"
-                readonly
-                [value]="element.recipe.id"
-              />
+              <input matInput placeholder="0000000001" readonly [value]="element.recipe.id" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 30%">
               <mat-label>Recipe name</mat-label>
-              <input
-                matInput
-                placeholder="gulas"
-                readonly
-                [value]="element.recipe.name"
-              />
+              <input matInput placeholder="gulas" readonly [value]="element.recipe.name" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Quantity</mat-label>
-              <input
-                matInput
-                placeholder="250"
-                readonly
-                [value]="element.quantity"
-              />
+              <input matInput placeholder="250" readonly [value]="element.quantity" />
             </mat-form-field>
           </div>
           <div style="flex-direction: row; flex: 1 0 30%">
             <mat-list>
-              <div style="width: 100%; display: flex">
-                <div style="width: 50%; height: auto">
-                  <h2>Components/Recipe</h2>
-                </div>
-                <div style="width: 50%; height: auto">
-                  <h2>Components/Order</h2>
-                </div>
+              <div style="width: 100%; display: flex">               
+                  <h2>Components/Recipe</h2>                
               </div>
-              <ng-container
-                *ngFor="
+              <ng-container *ngFor="
                   let component of element.recipe.components;
                   let i = index
-                "
-              >
+                ">
                 <mat-list-item>
                   <div matLine>
-                    <div style="width: 100%; display: flex">
-                      <div style="width: 50%; height: auto">
+                    <div style="width: 100%; display: flex">                     
                         <p style="float: left">
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 20%"
-                            class=" note" [ngClass]="{
+                          <mat-form-field appearance="outline" style="width: 20%" class=" note" [ngClass]="{
                               gridC: i % 2 > 0
-                            }"
-                          >
+                            }">
                             <mat-label>ID</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.id"
-                            />
+                            <input matInput placeholder="0000000001" readonly [value]="component.id" />
                           </mat-form-field>
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 300px"
-                            class="note" [ngClass]="{
+                          <mat-form-field appearance="outline" style="width: 300px" class="note" [ngClass]="{
                               gridC: i % 2 > 0
-                            }"
-                          >
+                            }">
                             <mat-label>Name</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.name"
-                            />
+                            <input matInput placeholder="0000000001" readonly [value]="component.name" />
                           </mat-form-field>
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 15%"
-                            class="note" [ngClass]="{
+                          <mat-form-field appearance="outline" style="width: 15%" class="note" [ngClass]="{
                               gridC: i % 2 > 0
-                            }"
-                          >
+                            }">
                             <mat-label>Weight</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.componentSP.toFixed(3)"
-                            />
+                            <input matInput placeholder="0000000001" readonly
+                              [value]="component.componentSP.toFixed(3)" />
                             <span matSuffix>KG</span>
                           </mat-form-field>
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 15%"
-                            class="note" [ngClass]="{
-                              gridC: i % 2 > 0
-                            }"
-                          >
-                            <mat-label>Packing</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.packing.toFixed(1)"
-                            />
-                            <span matSuffix>KG</span>
-                          </mat-form-field>
-                          
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 15%"
-                            class="note" [ngClass]="{
-                              gridC: i % 2 > 0
-                            }"
-                          >
-                            <mat-label>Packing</mat-label>
-                            <mat-select
-                              [(ngModel)]="component.packingOrder"
-                              [disabled]="component.packingOrder"
-                              name="packingOrders"
-                            >
-                              <mat-option
-                                *ngFor="let packingOrder of packingOrders"
-                                [value]="packingOrder.value"
-                              >
-                                {{ packingOrder.viewValue }}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                          <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{
+                            gridC: i % 2 > 0
+                          }">
+                        <mat-label>Type of packing</mat-label>
+                        <mat-select [(ngModel)]="component.packingType" [disabled]="component.packingType"
+                          name="packingOrders">
+                          <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
+                            {{ packingOrder.viewValue }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{
+                            hideItem: component.packingType > 0 ,
+                            gridC: i % 2 > 0
+                          }">
+                        <mat-label>Packing Weight</mat-label>
+                        <input matInput placeholder="0000000001" readonly
+                          [value]="component.packingWeight.toFixed(1)" />
+                        <span matSuffix>KG</span>
+                      </mat-form-field>
+                      <mat-form-field appearance="outline" style="width: 20%" class="note" [ngClass]="{
+                            gridC: i % 2 > 0
+                          }">
+                        <mat-label>Weight Per Order</mat-label>
+                        <input matInput placeholder="0000000001" readonly
+                          [value]="component.componentSP * (element.quantity/100) |number :'1.3-3'" />
+                        <span matSuffix>KG</span>
+                      </mat-form-field>
                         </p>
-                        
-                      </div>
-                      <div style="width: 50%; height: auto">
-                        <p style="float: left">
-                          
-                          <mat-form-field
-                            appearance="outline"
-                            style="width: 150px"
-                            class="note" [ngClass]="{
-                              gridC: i % 2 > 0
-                            }"
-                          >
-                            <mat-label>Weight</mat-label>
-                            <input
-                              matInput
-                              placeholder="0000000001"
-                              readonly
-                              [value]="component.componentSP * (element.quantity/100) |number :'1.3-3'"
-                            />
-                            <span matSuffix>KG</span>
-                          </mat-form-field>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                      </div>                      
+                    </div>                 
                 </mat-list-item>
               </ng-container>
 
-              <span
-                style="margin: auto"
-                *ngIf="element.recipe.components.length === 0"
-                >No components in this recipe.</span
-              >
+              <span style="margin: auto" *ngIf="element.recipe.components.length === 0">No components in this
+                recipe.</span>
             </mat-list>
           </div>
           <div style="flex-grow: 1">
@@ -290,125 +147,73 @@
               <mat-label>Mixer ID</mat-label>
               <!-- <input matInput placeholder="0000000001" readonly [value]="element.idMixer"> -->
               <mat-select [(ngModel)]="element.idMixer" [disabled]="true">
-                <mat-option
-                  *ngFor="let slecetIdMixer of slecetIdMixers"
-                  [value]="slecetIdMixer.value"
-                >
+                <mat-option *ngFor="let slecetIdMixer of slecetIdMixers" [value]="slecetIdMixer.value">
                   {{ slecetIdMixer.viewValue }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Mixing time</mat-label>
-              <input
-                matInput
-                placeholder="100"
-                readonly
-                [value]="element.mixingTime"
-              />
+              <input matInput placeholder="100" readonly [value]="element.mixingTime" />
               <span matSuffix>min</span>
             </mat-form-field>
           </div>
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Packing machine ID</mat-label>
-              <input
-                matInput
-                placeholder="0000000001"
-                readonly
-                [value]="element.idPackingMachine"
-              />
+              <input matInput placeholder="0000000001" readonly [value]="element.idPackingMachine" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Emptying station ID</mat-label>
-              <input
-                matInput
-                placeholder="1"
-                readonly
-                [value]="element.idEmptyingStationBag"
-              />
+              <input matInput placeholder="1" readonly [value]="element.idEmptyingStationBag" />
             </mat-form-field>
           </div>
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Volume per Dose</mat-label>
-              <input
-                matInput
-                placeholder="700.0"
-                readonly
-                [value]="element.volumePerDose"
-              />
+              <input matInput placeholder="700.0" readonly [value]="element.volumePerDose" />
               <span matSuffix>L</span>
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Operator</mat-label>
-              <input
-                matInput
-                placeholder="John"
-                readonly
-                [value]="
+              <input matInput placeholder="John" readonly [value]="
                   element.operator.firstName + ' ' + element.operator.lastName
-                "
-              />
+                " />
             </mat-form-field>
           </div>
           <div style="flex-grow: 1; margin-bottom: 20px">
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Created at</mat-label>
-              <input
-                matInput
-                readonly
-                [value]="element.createdAt | date : 'd.M.y, HH:mm:ss' : 'UTC'"
-              />
+              <input matInput readonly [value]="element.createdAt | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>Last update</mat-label>
-              <input
-                matInput
-                readonly
-                [value]="element.lastUpdate | date : 'd.M.y, HH:mm:ss' : 'UTC'"
-              />
+              <input matInput readonly [value]="element.lastUpdate | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
             </mat-form-field>
           </div>
         </div>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-    <tr
-      mat-row
-      *matRowDef="let element; columns: columnsToDisplayWithExpand"
-      class="default-element-row"
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand" class="default-element-row"
       [ngClass]="!element.recipe.isValid ? 'lightred-background' : ''"
-      [class.default-expanded-row]="expandedOrder === element"
-    ></tr>
-    <tr
-      mat-row
-      *matRowDef="let row; columns: ['expandedDetail']"
-      class="default-detail-row"
-    ></tr>
+      [class.default-expanded-row]="expandedOrder === element"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">
         No data matching the filter "{{ quickFilter }}".
       </td>
     </tr>
   </table>
-  <div
-    *ngIf="isLoading"
-    style="
+  <div *ngIf="isLoading" style="
       display: flex;
       justify-content: center;
       align-items: center;
       background: white;
-    "
-  >
+    ">
     <mat-progress-spinner color="primary" mode="indeterminate">
     </mat-progress-spinner>
   </div>
-  <mat-paginator
-    [length]="orders.length"
-    [pageSizeOptions]="[10, 20, 50, 100]"
-    [showFirstLastButtons]="true"
-    [pageSize]="10"
-    aria-label="Select page of orders search results"
-  ></mat-paginator>
+  <mat-paginator [length]="orders.length" [pageSizeOptions]="[10, 20, 50, 100]" [showFirstLastButtons]="true"
+    [pageSize]="10" aria-label="Select page of orders search results"></mat-paginator>
 </div>
