@@ -110,7 +110,7 @@ export class ToPDFComponent implements OnInit {
     
   }
 
-  quantityComponents(components: ComponentModelSP[]) {  
+  quantityComponents(components: ComponentItemModel[]) {  
     if(this.order == null){      
       return
     }          
@@ -140,7 +140,7 @@ export class ToPDFComponent implements OnInit {
       this.quantityMicro[index] = 0;
       this.quantityLiquid[index] = 0;   
 
-      switch (this.order?.recipe.components[index].packingOrder) {
+      switch (this.order?.recipe.components[index].packingType) {
         case 0:
           this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
           this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);

@@ -39,7 +39,7 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   lastUpdate = GETDATE() ' +
     'WHERE no = @no';
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
-    '(recipeNo, componentNo, orderNo, packing ,parkingWeight) ' +
+    '(recipeNo, componentNo, orderNo, packing ,packingWeight) ' +
     'VALUES ';
 const ADD_DOSE = 'INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE] ' +
     '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid, quantityMicro) ' +
@@ -58,7 +58,7 @@ const getOrders = async (done) => {
     for (let order of recordset) {
         order = trimTrailingWhitespace(order);
         if (order.recipeNo) {
-            order.recipe = await getRecipeByNoForOrder(order.recipeNo);
+            order.recipe = await getRecipeByNoForOrder(order.recipeNo, order.no);
             console.log('getOrders ' + JSON.stringify(order));
         }
         if (order.operatorId) {
@@ -88,7 +88,7 @@ const getOrderByNo = async (no) => {
     }
     const order = trimTrailingWhitespace(recordset[0]);
     if (order.recipeNo) {
-        order.recipe = await getRecipeByNoForOrder(order.recipeNo);
+        order.recipe = await getRecipeByNoForOrder(order.recipeNo , order.no);
     }
     if (order.operatorId) {
         order.operator = await getUserById(order.operatorId);
@@ -126,7 +126,9 @@ const addOrder = async (order) => {
 const addPacking = async (orderNo, packing) => {
     let query = ADD_PACKING;
     packing.packingOrder.forEach((value, index) => {
-        query += `(${packing.recipeNo}, ${packing.componentNo[index]}, ${orderNo},${packing.packingOrder[index]}, 0)`;
+        
+        console.log("🚀 ~ file: order-service.js:135 ~ packing.packingOrder.forEach ~ packing.packingType", value.packingType)
+        query += `(${packing.recipeNo}, ${packing.componentNo[index]}, ${orderNo},${value.packingType},${value.packingWeight})`;
         if (index < packing.packingOrder.length - 1) {
             query += ', ';
         }

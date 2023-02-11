@@ -47,8 +47,8 @@ const GET_RECIPE_BY_NO_FOR_ORDER = 'SELECT DISTINCT R.no no, ' +
     '   C.lastUpdate lastUpdate,' +
     '   M.componentSP componentSP,' +
     '   C.packing packing,' +
-    '   P.packing packingOrder,' +
-    '   P.parkingWeight parkingWeight,' +
+    '   P.packing packingType,' +
+    '   P.packingWeight packingWeight,' +
     '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
     '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
@@ -58,7 +58,7 @@ const GET_RECIPE_BY_NO_FOR_ORDER = 'SELECT DISTINCT R.no no, ' +
     'FROM [AT].[dbo].[ORDERS] O ' +
     'LEFT JOIN [AT].[dbo].[RECIPE_H] R ON O.recipeNo = R.no ' +
     'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ' +
-    'WHERE R.no = @no';
+    'WHERE R.no = @no AND O.no =@oNo';
 const ADD_RECIPE = 'INSERT INTO [AT].[dbo].[RECIPE_H] ' +
     '(id, name) ' +
     'VALUES (@id, @name) ' +
@@ -89,7 +89,8 @@ const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   C.id id,' +
     '   C.name name,' +
     '   C.lastUpdate lastUpdate,' +
-    '   M.componentSP componentSP,' +
+    '   M.componentSP componentSP,' +   
+
     '   C.packing packing,' +
     '   C.specificBulkWeight specificBulkWeight' +
     '   FROM [AT].[dbo].[RECIPE_B] M ' +
@@ -148,10 +149,11 @@ const getRecipeByNo = async (no) => {
    
     return trimTrailingWhitespace(recipe);
 }
-const getRecipeByNoForOrder = async (no) => {
+const getRecipeByNoForOrder = async (no, oNo) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
         .input('no', sql.Int, no)
+        .input('oNo', sql.Int, oNo)
         .query(GET_RECIPE_BY_NO_FOR_ORDER);
     if (recordset.length < 0) {
         return null;

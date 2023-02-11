@@ -3,7 +3,8 @@ export interface ComponentModel {
   id: string;
   name: string;
   packing:number;
-  packingOrder:number;
+  packingType:number;
+  packingWeight:number;
   specificBulkWeight:number;
   lastUpdate: string;
 }

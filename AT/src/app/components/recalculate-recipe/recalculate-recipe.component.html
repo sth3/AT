@@ -97,16 +97,17 @@
                       <mat-label>Station</mat-label>
                       <input matInput placeholder="000001" readonly value="Palette">
                     </mat-form-field>
-
+                    
+                    <mat-form-field appearance="fill" style="width: 150px" class="note">
+                      <mat-label>Station</mat-label>
+                      <input matInput placeholder="000001" readonly value="ADS line">
+                    </mat-form-field>
+                    
                     <mat-form-field appearance="fill" style="width: 150px" class="note">
                       <mat-label>Station</mat-label>
                       <input matInput placeholder="000001" readonly value="BigBag line">
                     </mat-form-field>
 
-                    <mat-form-field appearance="fill" style="width: 150px" class="note">
-                      <mat-label>Station</mat-label>
-                      <input matInput placeholder="000001" readonly value="ADS line">
-                    </mat-form-field>
 
                     <mat-form-field appearance="fill" style="width: 150px" class="note">
                       <mat-label>Station</mat-label>
@@ -140,24 +141,35 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
-                      gridC: i % 2 > 0
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityBag[i] == 0 
                     }">
                       <mat-label>Packing</mat-label>
-                      <input matInput placeholder="1" readonly [value]="component.packing.toFixed(1)">
+                      <input matInput placeholder="1" readonly [value]="this.data.selectedorder.packingOrders[i].packingWeight.toFixed(1)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
                       inputBackground: this.quantityBag[i] > 0,
-                      gridC: i % 2 > 0
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityBag[i] == 0 
                     }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
                       <span matSuffix>x</span>
                     </mat-form-field>
 
+                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityADS[i] == 0 
+                    }">
+                      <mat-label>Quantity</mat-label>
+                      <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
+                      <span matSuffix>kg</span>
+                    </mat-form-field>
 
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
-                      gridC: i % 2 > 0
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityBigBag[i] == 0 
                     }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
@@ -165,17 +177,11 @@
                     </mat-form-field>
 
 
-                    <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
-                      gridC: i % 2 > 0
-                    }">
-                      <mat-label>Quantity</mat-label>
-                      <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
-                      <span matSuffix>kg</span>
-                    </mat-form-field>
 
 
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
-                      gridC: i % 2 > 0
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityLiquid[i] == 0 
                     }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
@@ -183,7 +189,8 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
-                      gridC: i % 2 > 0
+                      gridC: i % 2 > 0,
+                      hideItem: this.quantityMicro[i] == 0 
                     }">
                       <mat-label>Quantity</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">

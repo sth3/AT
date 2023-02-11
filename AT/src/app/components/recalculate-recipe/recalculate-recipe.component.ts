@@ -52,16 +52,7 @@ export class RecalculateRecipeComponent implements OnInit {
     private componentService: ComponentService) {
     console.log('allRecipes components: ', data.selectedRecipe);
     console.log('allOrder components: ', data.selectedorder);
-    // this.dataSource = data.selectedRecipe;
-    // this.displayedColumns.length = 24;
-    // this.displayedColumns.fill('filler');
-
-    // // The first two columns should be position and name; the last two columns: weight, symbol
-    // this.displayedColumns[0] = 'position';
-    // this.displayedColumns[1] = 'name';
-    // this.displayedColumns[22] = 'weight';
-    // this.displayedColumns[23] = 'symbol';
-    // this.recipeTest = data.selectedRecipe.components
+    
   }
 
 
@@ -71,7 +62,7 @@ export class RecalculateRecipeComponent implements OnInit {
     // this.dataSource = new MatTableDataSource<ComponentItemModel>(this.recipeTest);
   }
 
-  quantityComponents(components: ComponentModelSP[]) {  
+  quantityComponents(components: ComponentItemModel[]) {  
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (this.data.selectedorder.quantity / 100)) / comp.specificBulkWeight), 0) / Number(this.data.selectedorder.volumePerDose));  
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (this.data.selectedorder.quantity / 100)));
     console.log('quantityComponentPerOrder',this.quantityComponentPerOrder);
@@ -80,6 +71,7 @@ export class RecalculateRecipeComponent implements OnInit {
   }
 
   recalculateDose() {    
+   
     this.quantityBag = [];
     this.quantityBigBag = [];
     this.quantityADS = [];
@@ -95,11 +87,12 @@ export class RecalculateRecipeComponent implements OnInit {
       this.quantityBag[index] = 0;
       this.quantityMicro[index] = 0;
       this.quantityLiquid[index] = 0;   
-
-      switch (this.data.selectedorder.packingOrders[index]) {
+      
+      switch (this.data.selectedorder.packingOrders[index].packingType) {
+       
         case 0:
-          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / volumeComponents.packing);
-          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (volumeComponents.packing * this.quantityBag[index]);
+          this.quantityBag[index] = Math.floor(this.quantityComponentPerOrder[index] / this.quantityPallete / this.data.selectedorder.packingOrders[index].packingWeight);
+          this.quantityADS[index] = (this.quantityComponentPerOrder[index] / this.quantityPallete) - (this.data.selectedorder.packingOrders[index].packingWeight * this.quantityBag[index]);
           break;
         case 1:
           this.quantityBigBag[index] = this.quantityComponentPerOrder[index] / this.quantityPallete ;

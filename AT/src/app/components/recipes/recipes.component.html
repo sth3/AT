@@ -240,38 +240,8 @@
                       />
                       <span matSuffix>kg</span>
                     </mat-form-field>
-                    <mat-form-field
-                      appearance="outline"
-                      style="width: 10%"
-                      class="note" [ngClass]="{
-                        gridC: i % 2 > 0
-                      }"
-                    >
-                      <mat-label>Packing</mat-label>
-                      <input
-                        matInput
-                        placeholder="0000000001"
-                        readonly
-                        [value]="component.packing.toFixed(1)"
-                      />
-                      <span matSuffix>kg</span>
-                    </mat-form-field>
-                    <mat-form-field
-                      appearance="outline"
-                      style="width: 12%"
-                      class="note" [ngClass]="{
-                        gridC: i % 2 > 0
-                      }"
-                    >
-                      <mat-label>Specific bulk weight</mat-label>
-                      <input
-                        matInput
-                        placeholder="0000000001"
-                        readonly
-                        [value]="component.specificBulkWeight.toFixed(3)"
-                      />
-                      <span matSuffix>kg/l</span>
-                    </mat-form-field>
+                    
+                    
                   </p>
                 </div>
               </mat-list-item>

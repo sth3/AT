@@ -67,7 +67,7 @@ export interface OrderModelPacking {
   lastUpdate: string;
   completedAt: string | null;
   operator: UserModel;
-  packingOrders: number[];
+  packingOrders: PackingInterface[];
   packing: OrderPacking;
   doses: RecalculateOrder;
   BigBagDone: number;
@@ -80,6 +80,11 @@ export interface OrderModelPacking {
 export interface selectList {
   value: number;
   viewValue: string;
+}
+
+export interface PackingInterface  {
+  packingType: number;
+  packingWeight:number
 }
 
 
