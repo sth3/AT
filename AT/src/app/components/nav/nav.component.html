@@ -6,13 +6,13 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <!-- <a mat-list-item routerLink="/home">Home</a> -->
-      <a mat-list-item routerLink="/components">Components</a>
-      <a mat-list-item routerLink="/recipes">Recipes</a>
-      <a mat-list-item routerLink="/orders">Orders</a>
-      <a mat-list-item routerLink="/orders-archive">Orders Archive</a>
-      <a mat-list-item routerLink="/aggregate">Aggregate</a>
-      <a mat-list-item routerLink="/statistics">Statistics</a>
-      <a mat-list-item routerLink="/users" *ngIf="isAdmin">Users</a>
+      <a mat-list-item routerLink="/components">{{ 'navBar.components'  | translate }}</a>
+      <a mat-list-item routerLink="/recipes">{{ 'navBar.recipes'  | translate }}</a>
+      <a mat-list-item routerLink="/orders">{{ 'navBar.orders'  | translate }}</a>
+      <a mat-list-item routerLink="/orders-archive">{{ 'navBar.ordersArchive'  | translate }}</a>
+      <a mat-list-item routerLink="/aggregate">{{ 'navBar.aggregate'  | translate }}</a>
+      <a mat-list-item routerLink="/statistics">{{ 'navBar.statistics'  | translate }}</a>
+      <a mat-list-item routerLink="/users" *ngIf="isAdmin">{{ 'navBar.users'  | translate }}</a>
 
       <!--<a mat-list-item href="#">Link 3</a>-->
     </mat-nav-list>
@@ -39,6 +39,17 @@
       <mat-slide-toggle [(ngModel)]="isDarkTheme" labelPosition = "before" (change)="storeThemeSelection()">
         <mat-icon>lightbulb</mat-icon>
       </mat-slide-toggle>
+      <select 
+         
+          #selectedLang 
+          (change)="switchLang(selectedLang.value)">
+        <option *ngFor="let language of translateService.getLangs()" 
+          [value]="language"
+          [selected]="language === translateService.currentLang">
+          {{ language }}
+        </option>
+      </select>
+      
     </mat-toolbar>
 
     <router-outlet></router-outlet>
@@ -62,8 +73,8 @@
   </ng-container>
   <ng-template #noUser>
     <p style="margin: 5px">
-      You are currently not logged in. <br> Some actions will be limited.
+      {{ 'login.tooltip1'  | translate }} <br> {{ 'login.tooltip2'  | translate }}
     </p>
-  <button mat-icon-button (click)="login()" style="width: 100%"><mat-icon>login</mat-icon>Login</button>
+  <button mat-icon-button (click)="login()" style="width: 100%"><mat-icon>login</mat-icon> {{ 'login.login'  | translate }}</button>
   </ng-template>
 </mat-menu>

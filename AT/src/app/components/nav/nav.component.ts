@@ -6,39 +6,56 @@ import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { UserModel, UserRole } from '../../models/user.model';
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent {
   user: BehaviorSubject<UserModel | null>;
-
+  suportLanguages = ['sk', 'en'];
   isDarkTheme: boolean = false;
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map((result) => result.matches),
       shareReplay()
     );
   isAdmin = false;
 
-  constructor(private breakpointObserver: BreakpointObserver,
-              
-              private authService: AuthService) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    public translateService: TranslateService,
+    private authService: AuthService
+  ) {
     this.user = this.authService.user$;
-    this.user.subscribe(user => {
+    this.user.subscribe((user) => {
       this.isAdmin = user?.role === UserRole.ADMIN;
     });
+
+    this.translateService.addLangs(this.suportLanguages);
+    this.translateService.setDefaultLang('sk');
+    const browserLang:any = this.translateService.getBrowserLang();
+    if( (browserLang !== 'sk') && ( browserLang !== 'en') ){
+      this.translateService.setDefaultLang('sk');
+    }
+    this.translateService.use(browserLang);
+
   }
 
-
   ngOnInit() {
-    this.isDarkTheme = localStorage.getItem('theme') === "Dark" ? true : false;
+    this.isDarkTheme = localStorage.getItem('theme') === 'Dark' ? true : false;
+  }
+
+  switchLang = (browserLang: string) => {
+    this.translateService.use(browserLang)
   }
 
   storeThemeSelection() {
-    localStorage.setItem('theme', this.isDarkTheme ? "Dark" : "Light")
+    localStorage.setItem('theme', this.isDarkTheme ? 'Dark' : 'Light');
   }
 
   login() {

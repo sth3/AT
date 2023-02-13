@@ -1,0 +1,20 @@
+{
+  "welcomeMessage": "",
+  "login": {
+    "username": "",
+    "password": "",
+    "tooltip1": "Momentálne nie ste prihlásený.",
+    "tooltip2": "Niektoré akcie budú obmedzené.",
+    "login": " Prihlásiť sa"
+  },
+
+  "navBar": {
+    "components": "Komponenty",
+    "recipes": "Recepty",
+    "orders": "Výrobný príkaz",
+    "ordersArchive": "História výrobných príkazov",
+    "aggregate": "Agregáty",
+    "statistics": "Štatistika",
+    "users": "Užívatelia"
+  }
+}

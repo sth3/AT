@@ -1,0 +1,20 @@
+{
+    "welcomeMessage": "",
+    "login": {
+      "username": "Enter your user name",
+      "password": "Password here",
+      "tooltip1": "You are currently not logged in.",
+      "tooltip2": "Some actions will be limited.",
+      "login": " Login"
+    },
+    "navBar": {
+      "components": "Components",
+      "recipes": "Recipes",
+      "orders": "Orders",
+      "ordersArchive": "Orders Archive",
+      "aggregate": "Aggregates",
+      "statistics": "Statistics",
+      "users": "Users"      
+    }
+  }
+  

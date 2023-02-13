@@ -16,7 +16,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotifierComponent } from './components/notifier/notifier.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -58,6 +58,9 @@ import { OrdersArchiveComponent } from './components/orders-archive/orders-archi
 //import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {NgxPrintModule} from 'ngx-print';
 
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 
 @NgModule({
   declarations: [
@@ -83,6 +86,7 @@ import {NgxPrintModule} from 'ngx-print';
     RecalculateRecipeComponent,
     AggregateComponent,
     OrdersArchiveComponent,
+    
   ],
     imports: [
         BrowserModule,
@@ -116,13 +120,28 @@ import {NgxPrintModule} from 'ngx-print';
         MatNativeDateModule,
         MatDatepickerModule,
         MatExpansionModule,
-        NgxPrintModule
+        NgxPrintModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient],
+          },
+        }),
+        HttpClientModule
+    
     ],
+    
   providers: [
     
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [TranslateModule]
 })
 export class AppModule {
+}
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
 }
