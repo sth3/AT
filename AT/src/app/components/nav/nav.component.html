@@ -61,13 +61,13 @@
   <ng-container *ngIf="user | async as user; else noUser">
     <mat-card>
       <mat-card-title>{{user.username}}</mat-card-title>
-      <mat-card-subtitle>Current user</mat-card-subtitle>
+      <mat-card-subtitle>{{ 'login.currentUser'  | translate }}</mat-card-subtitle>
       <mat-card-content>
-        <p>Role: <strong>{{user.role}}</strong></p>
-        <p>Full name: <strong>{{user.firstName}} {{user.lastName}}</strong></p>
+        <p>{{ 'login.role'  | translate }} <strong>{{user.role}}</strong></p>
+        <p>{{ 'login.fullName'  | translate }} <strong>{{user.firstName}} {{user.lastName}}</strong></p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-icon-button (click)="logout()" style="width: 100%"><mat-icon>logout</mat-icon>Logout</button>
+        <button mat-icon-button (click)="logout()" style="width: 100%"><mat-icon>logout</mat-icon>{{ 'login.logout'  | translate }}</button>
       </mat-card-actions>
     </mat-card>
   </ng-container>

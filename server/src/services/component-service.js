@@ -104,11 +104,11 @@ const getChange = (oldComponent, newComponent) => {
         changes.push(`id: ${oldComponent.id} -> ${newComponent.id}`);
     }
     if (oldComponent.name !== newComponent.name) {
-        changes.push(`name: ${oldComponent.name} -> ${newComponent.name}`);
+        changes.push(`meno: ${oldComponent.name} -> ${newComponent.name}`);
     }
     
     if (oldComponent.specificBulkWeight !== newComponent.specificBulkWeight) {
-        changes.push(`specificBulkWeight: ${oldComponent.specificBulkWeight.toFixed(3)}kg -> ${newComponent.specificBulkWeight.toFixed(3)}kg`);
+        changes.push(`Špecifická objemová hmotnosť: ${oldComponent.specificBulkWeight.toFixed(3)}kg -> ${newComponent.specificBulkWeight.toFixed(3)}kg`);
     }
     if (changes.length === 0) {
         changes.push('unknown change');

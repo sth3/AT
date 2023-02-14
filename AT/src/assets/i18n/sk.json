@@ -5,7 +5,11 @@
     "password": "",
     "tooltip1": "Momentálne nie ste prihlásený.",
     "tooltip2": "Niektoré akcie budú obmedzené.",
-    "login": " Prihlásiť sa"
+    "login": " Prihlásiť sa",
+    "currentUser" :"Aktuálny užívateľ",
+    "role" :"Rola:",
+    "fullName" :"Meno:",
+    "logout" :"Odhlásiť sa"
   },
 
   "navBar": {
@@ -16,5 +20,71 @@
     "aggregate": "Agregáty",
     "statistics": "Štatistika",
     "users": "Užívatelia"
-  }
+  },
+
+  "head": {
+    "quickFilter": "Rýchle vyhľadávanie",
+    "dateRange": "Zadajte rozsah dátumov",
+    "startDate": "Dátum začiatku",
+    "endDate": "Dátum ukončenia",
+    "createComponent": "Vytvorte komponent",
+    "exportEntire": "Exportujte celú tabuľku do CSV",
+    "exportVisible": "Exportujte viditeľné údaje do CSV",
+    "noDataFilter": "Filtru nezodpovedajú žiadne údaje"
+  },
+  
+
+ 
+
+  "componentsTableHead": [
+    { "item": "ID" },
+    { "item": "ID komponentu" },
+    { "item": "Meno komponentu" },
+    { "item": "Špecifická objemová hmotnosť" },
+    { "item": "Posledná aktualizácia" }
+  ],
+  "componentsArchiveTableHead": [
+    { "item": "ID" },
+    { "item": "ID komponentu" },
+    { "item": "Meno komponentu" },    
+    { "item": "Posledná aktualizácia" },
+    { "item": "Zmenil" }
+  ],
+
+  "dialogService":{
+    "title": "Si si istý?",
+    "dialogDelete": "Naozaj chcete odstrániť tento komponent?",
+    "yes": "Áno",
+    "no": "Nie",
+    "cancel": "Zrušiť",
+    "save": "Uložiť",
+    "notifierDeleted": "Komponent vymazaný",
+    "dialogUpdate": "Naozaj chcete aktualizovať tento komponent?",
+    "notifierUpdate": "Komponent bol aktualizovaný",
+    "notifierCreated": "Komponent vytvorený"
+} ,
+  "dialogComponent":{
+    "edit": "Editácia komponentu",
+    "create": "Tvorba komponentu",    
+    "requiredName": " je vyžadované.",
+    "minlengthName": " musí mať aspoň 3 znaky.",
+    "maxlengthName": " nesmie mať viac ako 30 znakov.",
+    "invalidComponentName": "Tento názov komponentu sa už používa.",    
+    "exactlyID": "ID komponentu musí mať presne 6 znakov.",
+    "invalidComponentId": "Toto ID sa už používa.",
+    "requiredSBW": "Zadajte špecifickú objemovú hmotnosť." 
+    },
+    "archivedComponent":{
+      "title":"Archivované komponenty",
+      "description":"Kliknutím zobrazíte komponenty, ktoré boli zmenené, ale stále sa môžu používať v receptoch",
+      "reload":"znovu načítať",
+      "newComponent": "Nový komponent",
+      "Changes": "Zmeny"
+    }
+
+
+
+
+  
+  
 }

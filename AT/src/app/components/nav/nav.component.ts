@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserModel, UserRole } from '../../models/user.model';
 
 import { TranslateService } from '@ngx-translate/core';
-
+import { MatPaginatorIntl } from '@angular/material/paginator';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -42,8 +42,8 @@ export class NavComponent {
     if( (browserLang !== 'sk') && ( browserLang !== 'en') ){
       this.translateService.setDefaultLang('sk');
     }
-    this.translateService.use(browserLang);
-
+    this.translateService.use(browserLang); 
+    this.getDutchPaginatorIntl();
   }
 
   ngOnInit() {
@@ -66,5 +66,15 @@ export class NavComponent {
     this.authService.logout().subscribe(() => {
       console.log('logged out');
     });
+  }
+
+   getDutchPaginatorIntl() {
+    const paginatorIntl = new MatPaginatorIntl();
+    
+    paginatorIntl.itemsPerPageLabel = 'Items per pagina:';
+    paginatorIntl.nextPageLabel = 'Volgende pagina';
+    paginatorIntl.previousPageLabel = 'Vorige pagina';   
+    
+    return paginatorIntl;
   }
 }
