@@ -1,8 +1,8 @@
 <mat-card>
   <mat-card-title>Order detail</mat-card-title>
   <mat-card-content>
-    <form [formGroup]="form">
-      <fieldset [disabled]="!editable" class="order-form-container">
+    <form [formGroup]="form" >
+      <fieldset [disabled]="!editable" class="order-form-container" >
         <div class="order-form-field">
           <h3>Order ID</h3>
           <mat-form-field appearance="outline">
@@ -141,13 +141,13 @@
                         <span matSuffix>KG/L</span>
                       </mat-form-field>
 
-                      <ng-container formArrayName="packingOrders">
-                        <mat-form-field [formGroupName]="i" appearance="outline" style="width: 10%; " class="note"
+                      <ng-container formArrayName="packingOrders"  >
+                        <mat-form-field [formGroupName]="i"  appearance="outline" style="width: 10%; " class="note"
                           [ngClass]="{
                             gridC: i % 2 > 0
                           }">
                           <mat-label>Packing</mat-label>
-                          <mat-select formControlName="packingType">
+                          <mat-select formControlName="packingType"   [disabled]="!editable" >
                             <mat-option *ngFor="let packingOrder of packingSelect" [value]="packingOrder.value">
                               {{packingOrder.viewValue}}
                             </mat-option>
@@ -155,7 +155,7 @@
                         </mat-form-field>
                       </ng-container>
                       <ng-container formArrayName="packingOrders">
-                        <mat-form-field [formGroupName]="i" appearance="outline" style="width: 10%; " class="note"
+                        <mat-form-field [formGroupName]="i"  appearance="outline" style="width: 10%; " class="note"
                           [ngClass]="{
                             gridC: i % 2 > 0, hideItem: this.form.value.packingOrders[i].packingType > 0 || this.form.value.packingOrders[i].packingType == null
                           }">
@@ -314,9 +314,6 @@
       <mat-icon>save</mat-icon>
       Save
     </button>    
-    <button mat-button (click)="buttonCheck()">
-      <mat-icon>save</mat-icon>
-      check
-    </button>    
+    
   </mat-card-actions>
 </mat-card>

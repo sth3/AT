@@ -237,14 +237,12 @@ export class OrderDetailComponent implements OnInit {
   }
 
   onEditClick() {
-    this.editable = true;
-    this.form.get('packingOrders')?.enable();
+    this.editable = true;    
     this.form.get('idMixer')?.enable();
   }
 
   offEditClick() {
     this.editable = false;
-    this.form.get('packingOrders')?.disable();
     this.form.get('idMixer')?.disable();
   }
 
@@ -370,26 +368,23 @@ export class OrderDetailComponent implements OnInit {
           packingWeight: new FormControl(this.orderComponent[index].packingWeight, Validators.required),
         });
         this.packingOrders.push(this.packingForm);
-        //this.form.get('packingOrders')?.disable();
+       
+        //this.packingOrders.controls [index].get('packingType')?.disable({onlySelf: true})
+        
       } else {     
         this.packingForm = new FormGroup({
           packingType: new FormControl(null, Validators.required),
           packingWeight: new FormControl(0, Validators.required),
         });
         this.packingOrders.push(this.packingForm);
-      }
-      console.log(
-        '🚀 ~ file: order-detail.component.ts:340 ~ OrderDetailComponent ~ packingType',
-        this.form.value.packingOrders
-      );
+      }      
     }
 
     console.log('this.formr', this.form);
     this.recipeChanged = false;
   }
 
-  recalculateRecipe() {
-    this.form.get('packingOrders')?.enable();
+  recalculateRecipe() {   
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
