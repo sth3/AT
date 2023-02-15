@@ -3,7 +3,13 @@ import { ChangedRecipeModel, RecipeModel } from '../../models/recipe.model';
 import { RecipeService } from '../../services/recipe.service';
 import { DialogService } from '../../services/dialog.service';
 import { EditRecipeDialogComponent } from '../edit-recipe-dialog/edit-recipe-dialog.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { finalize } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -13,7 +19,7 @@ import { NotifierService } from '../../services/notifier.service';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
@@ -22,12 +28,14 @@ import { FormGroup, FormControl } from '@angular/forms';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
 export class RecipesComponent implements OnInit {
-
   archivedData: ChangedRecipeModel[] = [];
   data: RecipeModel[] = [];
   quickFilter: string = '';
@@ -42,18 +50,26 @@ export class RecipesComponent implements OnInit {
     { field: 'lastUpdate', header: 'Last update', width: '20%' },
   ];
   isLoading = true;
-  columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field), 'actions'];
+  columnsToDisplayWithExpand = [
+    'expand',
+    ...this.columnsToDisplay.map((c) => c.field),
+    'actions',
+  ];
   expandedRecipe: RecipeModel | null = null;
-  dataSource: MatTableDataSource<RecipeModel> = new MatTableDataSource<RecipeModel>([]);
+  dataSource: MatTableDataSource<RecipeModel> =
+    new MatTableDataSource<RecipeModel>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private recipeService: RecipeService,
-              private dialogService: DialogService,
-              private exportService: ExportService,
-              private notifierService: NotifierService,
-              private dateAdapter: DateAdapter<Date>) {
-                this.dateAdapter.setLocale('en-GB');
+  constructor(
+    private recipeService: RecipeService,
+    private dialogService: DialogService,
+    private exportService: ExportService,
+    private notifierService: NotifierService,
+    private translate: TranslateService,
+    private dateAdapter: DateAdapter<Date>
+  ) {
+    this.dateAdapter.setLocale('en-GB');
   }
 
   ngOnInit(): void {
@@ -65,58 +81,71 @@ export class RecipesComponent implements OnInit {
   }
 
   onDeleteClick(data: any) {
-    this.dialogService.confirmDialog('Are you sure you want to delete this recipe?')
-      .subscribe(result => {
-        if (result) {
-          this.recipeService.deleteRecipe(data.no)
-            .subscribe(() => {
+    this.translate.get('dialogService').subscribe((successMessage) => {
+      this.dialogService
+        .confirmDialog(successMessage.dialogRecipeDelete)
+        .subscribe((result) => {
+          if (result) {
+            this.recipeService.deleteRecipe(data.no).subscribe(() => {
               console.log('recipe deleted: ', data);
-              this.notifierService.showDefaultNotification('Recipe deleted');
-              this.data = this.data.filter(r => r.no !== data.no);
+              this.notifierService.showDefaultNotification(
+                successMessage.notifierRecipeDeleted
+              );
+              this.data = this.data.filter((r) => r.no !== data.no);
               this.dataSource.data = this.data;
-            })
-        }
-      })
+            });
+          }
+        });
+    });
   }
 
   onEditClick(data: any) {
     console.log(data);
-    
-    this.dialogService.customDialog(EditRecipeDialogComponent,
-      { recipe: data, allRecipes: this.data, editMode: true },
-      { width: '700px', height: '700px' })
-      .subscribe(result => {
+
+    this.dialogService
+      .customDialog(
+        EditRecipeDialogComponent,
+        { recipe: data, allRecipes: this.data, editMode: true },
+        { width: '700px', height: '700px' }
+      )
+      .subscribe((result) => {
         if (result) {
           this.promptSave(data.no, result);
         }
-      })
+      });
   }
 
   createRecipe() {
-    this.dialogService.customDialog(EditRecipeDialogComponent,
-      { recipe: null, allRecipes: this.data, editMode: false },
-      { width: '700px', height: '700px' })
-      .subscribe(result => {
+    this.dialogService
+      .customDialog(
+        EditRecipeDialogComponent,
+        { recipe: null, allRecipes: this.data, editMode: false },
+        { width: '700px', height: '700px' }
+      )
+      .subscribe((result) => {
         if (result) {
-          console.log('result',result);
-          
-          this.recipeService.addRecipe(result)
-            .subscribe(response => {
+          console.log('result', result);
+          this.translate.get('dialogService').subscribe((successMessage) => {
+            this.recipeService.addRecipe(result).subscribe((response) => {
               const recipe = { ...response, ...result };
               console.log('recipe created: ', recipe);
-              this.notifierService.showDefaultNotification('New recipe created');
+              this.notifierService.showDefaultNotification(
+                successMessage.notifierRecipeCreated
+              );
               this.data.push(recipe);
               this.dataSource.data = this.data;
               console.log('this.dataSource.data: ', this.dataSource.data);
-            })
+            });
+          });
         }
-      })
+      });
   }
 
   loadRecipes() {
     this.isLoading = true;
-    this.recipeService.getAllRecipes()
-      .pipe(finalize(() => this.isLoading = false))
+    this.recipeService
+      .getAllRecipes()
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe((response) => {
         console.log('data: ', response);
         this.data = response.active;
@@ -125,42 +154,48 @@ export class RecipesComponent implements OnInit {
           this.data = response.active.filter((item: RecipeModel) => {
             // console.log('new Date(item.datetime)',new Date(item.datetime));
             // console.log('range start', this.range.value.start);
-            return new Date(item.lastUpdate) >= this.range.value.start &&
-              new Date(item.lastUpdate) <= this.range.value.end;
+            return (
+              new Date(item.lastUpdate) >= this.range.value.start &&
+              new Date(item.lastUpdate) <= this.range.value.end
+            );
           });
         } else if (this.range.value.start !== null) {
           this.data = response.active.filter((item: RecipeModel) => {
-            return new Date(item.lastUpdate) >= this.range.value.start ;
+            return new Date(item.lastUpdate) >= this.range.value.start;
           });
         } else if (this.range.value.end !== null) {
           this.data = response.active.filter((item: RecipeModel) => {
-            return new Date(item.lastUpdate) <= this.range.value.end ;
+            return new Date(item.lastUpdate) <= this.range.value.end;
           });
         }
         this.dataSource = new MatTableDataSource<RecipeModel>(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.archivedData = response.archived;
-      })
+      });
   }
 
   private promptSave(no: number, data: any) {
-    this.dialogService.confirmDialog('Are you sure you want to save this recipe?')
-      .subscribe(result => {
+    this.translate.get('dialogService').subscribe((successMessage) => {
+    this.dialogService
+      .confirmDialog(successMessage.dialogRecipeCreate)
+      .subscribe((result) => {
         if (result) {
-          this.recipeService.updateRecipe(no, data)
-            .subscribe(response => {
-              console.log('recipe updated: ', response);
-              this.notifierService.showDefaultNotification('Recipe updated');
-              this.data = this.data.map(r => r.no === no ? {...r, ...response} : r);
-              this.dataSource.data = this.data;
-            })
+          this.recipeService.updateRecipe(no, data).subscribe((response) => {
+            console.log('recipe updated: ', response);
+            this.notifierService.showDefaultNotification(successMessage.notifierRecipeUpdate);
+            this.data = this.data.map((r) =>
+              r.no === no ? { ...r, ...response } : r
+            );
+            this.dataSource.data = this.data;
+          });
         }
-      })
+      });
+    });
   }
 
   getInvalidComponents(element: RecipeModel) {
-    return this.recipeService.getInvalidComponents(element)
+    return this.recipeService.getInvalidComponents(element);
   }
 
   exportCSV(visibleDataOnly: boolean) {
@@ -168,7 +203,8 @@ export class RecipesComponent implements OnInit {
     let data;
     if (visibleDataOnly) {
       // @ts-ignore
-      data = this.exportService.convertRecipesForDownload(this.dataSource._renderData.value);
+      data = this.exportService.convertRecipesForDownload(this.dataSource._renderData.value
+      );
     } else {
       data = this.exportService.convertRecipesForDownload(this.data);
     }
@@ -181,16 +217,23 @@ export class RecipesComponent implements OnInit {
     console.log('does he need changes? ', this.expandedRecipe);
     if (this.expandedRecipe && !this.expandedRecipe.componentsChanges) {
       console.log('loading changes');
-      this.recipeService.getComponentsChangesForRecipe(this.expandedRecipe.no)
-        .subscribe(response => {
+      this.recipeService
+        .getComponentsChangesForRecipe(this.expandedRecipe.no)
+        .subscribe((response) => {
           if (!response) {
             response = [];
           }
           console.log('changes: ', response);
-          this.data = this.data.map(r => r.no === this.expandedRecipe!.no ? {...r, componentsChanges: response} : r);
+          this.data = this.data.map((r) =>
+            r.no === this.expandedRecipe!.no
+              ? { ...r, componentsChanges: response }
+              : r
+          );
           this.dataSource.data = this.data;
-          this.expandedRecipe = this.data.find(r => r.no === this.expandedRecipe!.no)!;
-        })
+          this.expandedRecipe = this.data.find(
+            (r) => r.no === this.expandedRecipe!.no
+          )!;
+        });
     }
   }
 }

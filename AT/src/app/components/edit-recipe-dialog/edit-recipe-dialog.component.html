@@ -1,37 +1,48 @@
 <h1 mat-dialog-title>
-  {{ data.editMode ? "Edit" : "Create" }} recipe
+  {{
+    data.editMode
+      ? ("dialogRecipe.edit" | translate)
+      : ("dialogRecipe.create" | translate)
+  }}
   {{ data.editMode ? data.recipe.id : "" }}
 </h1>
 <div mat-dialog-content style="height: auto; width: 100%; max-height: 555px">
   <form [formGroup]="form">
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Recipe name</mat-label>
+      <mat-label>{{ "recipeTableHead.2.item" | translate }}</mat-label>
       <input matInput placeholder="Name" formControlName="name" />
-      <mat-error *ngIf="name!.hasError('required')"
-        >Recipe name is required.</mat-error
-      >
-      <mat-error *ngIf="name!.hasError('minlength')"
-        >Recipe name must be at least 3 characters long.
+      <mat-error *ngIf="name!.hasError('required')">
+        {{ "recipeTableHead.2.item" | translate }}
+        {{ "dialogRecipe.requiredName" | translate }}
       </mat-error>
-      <mat-error *ngIf="name!.hasError('invalidRecipeName')"
-        >This component name is already in use.
+      <mat-error *ngIf="name!.hasError('minlength')">
+        {{ "recipeTableHead.2.item" | translate }}
+        {{ "dialogRecipe.minlengthName" | translate }}
+      </mat-error>
+     <mat-error *ngIf="name!.hasError('maxlength')">
+        {{ "recipeTableHead.2.item" | translate }}
+        {{ "dialogRecipe.maxlengthName" | translate }}
+      </mat-error> 
+      <mat-error *ngIf="name!.hasError('invalidRecipeName')">
+        {{ "dialogRecipe.invalidName" | translate }}
       </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Recipe ID</mat-label>
+      <mat-label>{{ "recipeTableHead.1.item" | translate }}</mat-label>
       <input matInput placeholder="ID" formControlName="id" />
-      <mat-error *ngIf="id!.hasError('required')"
-        >Recipe ID is required.</mat-error
-      >
-      <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')"
-        >Recipe ID must be exactly 6 characters long.
+      <mat-error *ngIf="id!.hasError('required')">
+        {{ "recipeTableHead.1.item" | translate }}
+        {{ "dialogRecipe.requiredName" | translate }}
       </mat-error>
-      <mat-error *ngIf="id!.hasError('invalidRecipeId')"
-        >This ID is already in use.
+      <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')">        
+        {{ "dialogRecipe.exactlyID" | translate }}
+      </mat-error>
+      <mat-error *ngIf="id!.hasError('invalidRecipeId')">
+        {{ "dialogRecipe.invalidId" | translate }}
       </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Components</mat-label>
+      <mat-label> {{ "navBar.components" | translate }}</mat-label>
       <mat-chip-list #chipList aria-label="Components selection">
         <mat-chip
           *ngFor="let component of selectedComponents"
@@ -43,7 +54,7 @@
           </button>
         </mat-chip>
         <input
-          placeholder="New component..."
+          placeholder="{{ 'dialogRecipe.newComponent' | translate }}"
           #componentInput
           [formControl]="newComponent"
           [matAutocomplete]="auto"
@@ -59,10 +70,9 @@
       >
         <mat-option
           *ngFor="let component of filteredComponents | async"
-          [value]="component"
-        >
-          <span class="light note">{{ component.id }}</span
-          >{{ component.name }} 
+          [value]="component">
+          <span class="light note">{{ component.id }}</span>
+          {{ component.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -73,7 +83,7 @@
     >
       <div [formGroupName]="i">
         <mat-form-field style="width: 20%" appearance="outline">
-          <mat-label>Component ID</mat-label>
+          <mat-label> {{ "recipeTableHead.1.item" | translate }}</mat-label>
           <input
             matInput
             readonly
@@ -82,7 +92,7 @@
           />
         </mat-form-field>
         <mat-form-field style="width: 50%" appearance="outline">
-          <mat-label>Component name</mat-label>
+          <mat-label> {{ "recipeTableHead.2.item" | translate }}</mat-label>
           <input
             matInput
             readonly
@@ -91,7 +101,7 @@
           />
         </mat-form-field>
         <mat-form-field style="width: 30%" appearance="outline">
-          <mat-label>Quantity</mat-label>
+          <mat-label> {{ "dialogRecipe.quantity" | translate }}</mat-label>
           <input
             matInput
             placeholder="10"
@@ -106,7 +116,7 @@
       </div>
     </div>
     <mat-toolbar style="height: 30px">
-      <span style="font-weight: bold">Weight check</span>
+      <span style="font-weight: bold">{{ "dialogRecipe.weightCheck" | translate }}</span>
       <span class="spacer"></span>
       <span
         >{{ currentWeight.toFixed(3) }}/{{ targetWeight }}
@@ -116,34 +126,40 @@
           >done</mat-icon
         >
         <ng-template #crossIcon>
-          <mat-icon style="color: darkred; vertical-align: sub;">close</mat-icon>
+          <mat-icon style="color: darkred; vertical-align: sub">close</mat-icon>
         </ng-template>
       </span>
     </mat-toolbar>
     <mat-toolbar style="height: 30px">
-      <span style="font-weight: bold">Number of Compoents</span>
+      <span style="font-weight: bold">{{ "dialogRecipe.numberOfCompoents" | translate }}</span>
       <span class="spacer"></span>
       <span
         >{{ cQunatity }}/{{ targetQunatity }}
         <mat-icon
-          *ngIf="cQunatity <= targetQunatity && cQunatity > 0 ; else crossIcon"
+          *ngIf="cQunatity <= targetQunatity && cQunatity > 0; else crossIcon"
           style="color: green; vertical-align: sub"
           >done</mat-icon
         >
         <ng-template #crossIcon>
-          <mat-icon style="color: darkred; vertical-align: sub;">close</mat-icon>
+          <mat-icon style="color: darkred; vertical-align: sub">close</mat-icon>
         </ng-template>
       </span>
     </mat-toolbar>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-button [mat-dialog-close]="false">{{ "dialogService.cancel" | translate }}</button>
   <button
     mat-button
     [mat-dialog-close]="getFormValue()"
-    [disabled]="!form.valid || !form.dirty || currentWeight !== targetWeight || cQunatity > targetQunatity || cQunatity === 0 "
+    [disabled]="
+      !form.valid ||
+      !form.dirty ||
+      currentWeight !== targetWeight ||
+      cQunatity > targetQunatity ||
+      cQunatity === 0
+    "
   >
-    Save
+  {{ "dialogService.save" | translate }}
   </button>
 </div>

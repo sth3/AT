@@ -2,26 +2,26 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <strong>Archived recipes</strong>
+        <strong>{{ 'archivedRecipe.title'  | translate }}</strong>
       </mat-panel-title>
       <mat-panel-description>
-        Click to show recipes that were changed but might still be used in orders
+        {{ 'archivedRecipe.description'  | translate }}
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div style="display: flex; flex-direction: row; place-content: space-between;">
       <div style="font-size: 15px">
         <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
-          <mat-label>Quick filter</mat-label>
+          <mat-label>{{'head.quickFilter'| translate}}</mat-label>
           <input matInput placeholder="chilli" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
           <span matSuffix><mat-icon>filter_alt</mat-icon></span>
         </mat-form-field>
       </div>
       <div style="font-size: 15px; ">
         <mat-form-field appearance="outline" style="margin: 23px 10px 0; padding: 0; ">
-            <mat-label >Enter a date range</mat-label>
+            <mat-label >{{'head.dateRange'| translate}}</mat-label>
             <mat-date-range-input [formGroup]="range" [rangePicker]="picker" >
-                <input matStartDate formControlName="start" placeholder="Start date" (ngModelChange)="refreshData()" >
-                <input matEndDate formControlName="end" placeholder="End date" (ngModelChange)="refreshData()">
+                <input matStartDate formControlName="start" placeholder="{{ 'head.startDate'  | translate }}" (ngModelChange)="refreshData()" >
+                <input matEndDate formControlName="end" placeholder="{{ 'head.endtDate'  | translate }}" (ngModelChange)="refreshData()">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker startView="year"></mat-date-range-picker>
@@ -34,7 +34,7 @@
       <span class="spacer"></span>
       <button mat-button (click)="refreshData()">
         <mat-icon>refresh</mat-icon>
-        Reload
+        {{ 'archivedRecipe.reload'  | translate }}
       </button>
     </div>
     <table mat-table
@@ -52,9 +52,9 @@
           </button>
         </td>
       </ng-container>
-      <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
+      <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay; let i = index ">
         <th mat-header-cell *matHeaderCellDef mat-sort-header
-            [style]="{'width': column.width || 'auto'}"> {{column.header}} </th>
+            [style]="{'width': column.width || 'auto'}"> {{'recipesArchiveTableHead.'+i+'.item' | translate}} </th>
         <ng-container *ngIf="column.field === 'date'; else normalTd">
           <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' : 'UTC'  }} </td>
         </ng-container>
@@ -72,23 +72,23 @@
         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
           <div class="default-element-detail"
                [@detailExpand]="element == expandedRecipe ? 'expanded' : 'collapsed'">
-            <h3>New component</h3>
+            <h3>{{ 'archivedRecipe.newComponent'  | translate }}</h3>
             <div style="display: flex; flex-direction: row">
               <mat-form-field style="width: 30%" appearance="outline">
-                <mat-label>Recipe No</mat-label>
+                <mat-label>{{'recipeTableHead.0.item' | translate}}</mat-label>
                 <input matInput id="componentSP{{element.id}}" readonly [value]="element.newRecipe.no">
               </mat-form-field>
               <mat-form-field style="width: 20%" appearance="outline">
-                <mat-label>Recipe ID</mat-label>
+                <mat-label>{{'recipeTableHead.1.item' | translate}}</mat-label>
                 <input matInput readonly [value]="element.newRecipe.id" id="newRecipeID-{{element.id}}">
               </mat-form-field>
               <mat-form-field style="width: 50%" appearance="outline">
-                <mat-label>Recipe name</mat-label>
+                <mat-label>{{'recipeTableHead.2.item' | translate}}</mat-label>
                 <input matInput readonly [value]="element.newRecipe.name" id="componentName{{element.id}}">
               </mat-form-field>
             </div>
             <mat-list style="width: 40%; margin: 20px">
-              <h3>Changes</h3>
+              <h3>{{ 'archivedRecipe.Changes'  | translate }}</h3>
               <ng-container *ngFor="let change of element.changes; let i = index">
                 <mat-list-item>
                   <div matLine>

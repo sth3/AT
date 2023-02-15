@@ -34,7 +34,7 @@ export class AggregateComponent implements OnInit {
     { field: 'id', header: 'Component ID' },
     { field: 'name', header: 'Component Name' },
     { field: 'lastUpdate', header: 'Last update', width: '20%' },
-    { field: 'user', header: 'User Name', width: '20%' },
+   // { field: 'user', header: 'User Name', width: '20%' },
   ];
   isLoading = true;
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];

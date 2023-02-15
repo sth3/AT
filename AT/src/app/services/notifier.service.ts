@@ -22,12 +22,12 @@ export class NotifierService {
       data: {
         message: displayMessage,
         buttonText: buttonText,
-        type: messageType
+        type: messageType == 'error' || 'Chyba' ? 'error' : 'success'
       },
 
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
-      panelClass: messageType
+      panelClass: messageType == 'error' || 'Chyba' ? 'error' : 'success'
     });
   }
 

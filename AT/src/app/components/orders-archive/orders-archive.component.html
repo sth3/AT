@@ -3,22 +3,22 @@
     <mat-toolbar-row>
       <div style="font-size: 15px">
         <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
-          <mat-label>Quick filter</mat-label>
+          <mat-label>{{'head.quickFilter'| translate}}</mat-label>
           <input matInput placeholder="gulas" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()" />
           <span matSuffix><mat-icon>filter_alt</mat-icon></span>
         </mat-form-field>
 
         <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
-          <mat-label>Enter a date range</mat-label>
+          <mat-label>{{'head.dateRange'| translate}}</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-            <input matStartDate formControlName="start" placeholder="Start date" (ngModelChange)="getOrders()" />
-            <input matEndDate formControlName="end" placeholder="End date" (ngModelChange)="getOrders()" />
+            <input matStartDate formControlName="start" placeholder="{{'head.startDate'| translate}}" (ngModelChange)="getOrders()" />
+            <input matEndDate formControlName="end" placeholder="{{'head.endDate'| translate}}" (ngModelChange)="getOrders()" />
           </mat-date-range-input>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker startView="year"></mat-date-range-picker>
         </mat-form-field>
       </div>
-      <h2 class="table-title">Orders Archive</h2>
+      <h2 class="table-title">{{'navBar.ordersArchive'| translate}}</h2>
       <span class="spacer"></span>
     </mat-toolbar-row>
   </mat-toolbar>
@@ -36,9 +36,9 @@
       </td>
     </ng-container>
 
-    <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay">
+    <ng-container [matColumnDef]="column.field" *ngFor="let column of columnsToDisplay ; let i = index">
       <th mat-header-cell *matHeaderCellDef mat-sort-header [style]="{ width: column.width || 'auto' }">
-        {{ column.header }}
+        {{'orderTableHead.'+i+'.item' | translate}}
       </th>
       <ng-container *ngIf="
           column.field === 'lastUpdate' || column.field === 'dueDate';
@@ -59,22 +59,22 @@
           *ngIf="expandedOrder === element">
           <div style="margin-top: 20px">
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Recipe ID</mat-label>
+              <mat-label>{{'recipeTableHead.1.item'| translate}}</mat-label>
               <input matInput placeholder="0000000001" readonly [value]="element.recipe.id" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 30%">
-              <mat-label>Recipe name</mat-label>
+              <mat-label>{{'recipeTableHead.2.item'| translate}}</mat-label>
               <input matInput placeholder="gulas" readonly [value]="element.recipe.name" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Quantity</mat-label>
+              <mat-label>{{'dialogRecipe.quantity'| translate}}</mat-label>
               <input matInput placeholder="250" readonly [value]="element.quantity" />
             </mat-form-field>
           </div>
           <div style="flex-direction: row; flex: 1 0 30%">
             <mat-list>
               <div style="width: 100%; display: flex">               
-                  <h2>Components/Recipe</h2>                
+                  <h2>{{'navBar.components'| translate}}</h2>                
               </div>
               <ng-container *ngFor="
                   let component of element.recipe.components;
@@ -87,19 +87,19 @@
                           <mat-form-field appearance="outline" style="width: 20%" class=" note" [ngClass]="{
                               gridC: i % 2 > 0
                             }">
-                            <mat-label>ID</mat-label>
+                            <mat-label>{{'componentsTableHead.1.item'| translate}}</mat-label>
                             <input matInput placeholder="0000000001" readonly [value]="component.id" />
                           </mat-form-field>
                           <mat-form-field appearance="outline" style="width: 300px" class="note" [ngClass]="{
                               gridC: i % 2 > 0
                             }">
-                            <mat-label>Name</mat-label>
+                            <mat-label>{{'componentsTableHead.2.item'| translate}}</mat-label>
                             <input matInput placeholder="0000000001" readonly [value]="component.name" />
                           </mat-form-field>
                           <mat-form-field appearance="outline" style="width: 15%" class="note" [ngClass]="{
                               gridC: i % 2 > 0
                             }">
-                            <mat-label>Weight</mat-label>
+                            <mat-label>{{'dialogOrder.quantity'| translate}}</mat-label>
                             <input matInput placeholder="0000000001" readonly
                               [value]="component.componentSP.toFixed(3)" />
                             <span matSuffix>KG</span>
@@ -107,10 +107,10 @@
                           <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{
                             gridC: i % 2 > 0
                           }">
-                        <mat-label>Type of packing</mat-label>
+                        <mat-label>{{'dialogOrder.typeOfPacking'| translate}}</mat-label>
                         <mat-select [(ngModel)]="component.packingType" [disabled]="component.packingType"
                           name="packingOrders">
-                          <mat-option *ngFor="let packingOrder of packingOrders" [value]="packingOrder.value">
+                          <mat-option *ngFor="let packingOrder of 'selectPacking'|translate" [value]="packingOrder.value">
                             {{ packingOrder.viewValue }}
                           </mat-option>
                         </mat-select>
@@ -119,7 +119,7 @@
                             hideItem: component.packingType > 0 ,
                             gridC: i % 2 > 0
                           }">
-                        <mat-label>Packing Weight</mat-label>
+                        <mat-label>{{'dialogOrder.packingWeight'| translate}}</mat-label>
                         <input matInput placeholder="0000000001" readonly
                           [value]="component.packingWeight.toFixed(1)" />
                         <span matSuffix>KG</span>
@@ -127,7 +127,7 @@
                       <mat-form-field appearance="outline" style="width: 20%" class="note" [ngClass]="{
                             gridC: i % 2 > 0
                           }">
-                        <mat-label>Weight Per Order</mat-label>
+                        <mat-label>{{'dialogOrder.weightPerOrder'| translate}}</mat-label>
                         <input matInput placeholder="0000000001" readonly
                           [value]="component.componentSP * (element.quantity/100) |number :'1.3-3'" />
                         <span matSuffix>KG</span>
@@ -138,13 +138,12 @@
                 </mat-list-item>
               </ng-container>
 
-              <span style="margin: auto" *ngIf="element.recipe.components.length === 0">No components in this
-                recipe.</span>
+              <span style="margin: auto" *ngIf="element.recipe.components.length === 0">{{'dialogOrder.noComponents'| translate}}</span>
             </mat-list>
           </div>
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Mixer ID</mat-label>
+              <mat-label>{{'dialogOrder.mixerID'| translate}}</mat-label>
               <!-- <input matInput placeholder="0000000001" readonly [value]="element.idMixer"> -->
               <mat-select [(ngModel)]="element.idMixer" [disabled]="true">
                 <mat-option *ngFor="let slecetIdMixer of slecetIdMixers" [value]="slecetIdMixer.value">
@@ -153,29 +152,29 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Mixing time</mat-label>
+              <mat-label>{{'dialogOrder.mixingTime'| translate}}</mat-label>
               <input matInput placeholder="100" readonly [value]="element.mixingTime" />
               <span matSuffix>min</span>
             </mat-form-field>
           </div>
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Packing machine ID</mat-label>
+              <mat-label>{{'dialogOrder.packingMachineID'| translate}}</mat-label>
               <input matInput placeholder="0000000001" readonly [value]="element.idPackingMachine" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Emptying station ID</mat-label>
+              <mat-label>{{'dialogOrder.emptyingStationID'| translate}}</mat-label>
               <input matInput placeholder="1" readonly [value]="element.idEmptyingStationBag" />
             </mat-form-field>
           </div>
           <div style="flex-grow: 1">
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Volume per Dose</mat-label>
+              <mat-label>{{'dialogOrder.volumePerDose'| translate}}</mat-label>
               <input matInput placeholder="700.0" readonly [value]="element.volumePerDose" />
               <span matSuffix>L</span>
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Operator</mat-label>
+              <mat-label>{{'dialogOrder.operator'| translate}}</mat-label>
               <input matInput placeholder="John" readonly [value]="
                   element.operator.firstName + ' ' + element.operator.lastName
                 " />
@@ -183,11 +182,11 @@
           </div>
           <div style="flex-grow: 1; margin-bottom: 20px">
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Created at</mat-label>
+              <mat-label>{{'dialogOrder.createdAt'| translate}}</mat-label>
               <input matInput readonly [value]="element.createdAt | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 20%">
-              <mat-label>Last update</mat-label>
+              <mat-label>{{'dialogOrder.lastUpdate'| translate}}</mat-label>
               <input matInput readonly [value]="element.lastUpdate | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
             </mat-form-field>
           </div>
@@ -201,7 +200,7 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="default-detail-row"></tr>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">
-        No data matching the filter "{{ quickFilter }}".
+        {{'head.noDataFilter'| translate}} "{{ quickFilter }}".
       </td>
     </tr>
   </table>

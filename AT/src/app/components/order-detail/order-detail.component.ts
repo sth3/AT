@@ -24,7 +24,7 @@ import { UserModel } from '../../models/user.model';
 import { RecalculateRecipeComponent } from '../recalculate-recipe/recalculate-recipe.component';
 import { ComponentItemModel } from 'src/app/models/component.model';
 import { FocusTrapManager } from '@angular/cdk/a11y/focus-trap/focus-trap-manager';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -86,6 +86,7 @@ export class OrderDetailComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private dialogService: DialogService,
     private notifier: NotifierService,
+    private translate: TranslateService,
     private dateAdapter: DateAdapter<Date>,
     private auth: AuthService
   ) {
@@ -100,7 +101,8 @@ export class OrderDetailComponent implements OnInit {
     });
 
     this.form
-      .get('packingOrders')?.valueChanges.subscribe((change) => this.checkForm(change));
+      .get('packingOrders')
+      ?.valueChanges.subscribe((change) => this.checkForm(change));
   }
 
   ngOnInit(): void {
@@ -237,7 +239,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   onEditClick() {
-    this.editable = true;    
+    this.editable = true;
     this.form.get('idMixer')?.enable();
   }
 
@@ -247,29 +249,32 @@ export class OrderDetailComponent implements OnInit {
   }
 
   onDeleteClick() {
-    this.dialogService
-      .confirmDialog('Are you sure you want to delete this order?')
-      .subscribe((result) => {
-        if (result) {
-          if (this.isNew) {
-            this.router.navigate(['/orders']);
-          } else {
-            this.ordersService.deleteOrder(this.order!.no).subscribe(() => {
+    this.translate.get('dialogService').subscribe((successMessage) => {
+      this.dialogService
+        .confirmDialog(successMessage.dialogOrderDelete)
+        .subscribe((result) => {
+          if (result) {
+            if (this.isNew) {
               this.router.navigate(['/orders']);
-            });
+            } else {
+              this.ordersService.deleteOrder(this.order!.no).subscribe(() => {
+                this.router.navigate(['/orders']);
+              });
+            }
           }
-        }
-      });
+        });
+    });
   }
 
   saveOrder() {
+    this.translate.get('dialogService').subscribe((successMessage) => {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.recipeSelect?.ngControl?.control?.markAsTouched();
       this.notifier.showNotification(
-        'Please fill out all fields correctly.',
-        'Close',
-        'error'
+        successMessage.notifierErrordescription,
+        successMessage.close,
+        successMessage.error
       );
       return;
     }
@@ -286,7 +291,7 @@ export class OrderDetailComponent implements OnInit {
     console.log(this.allOrderPacking);
 
     this.dialogService
-      .confirmDialog('Are you sure you want to save this order?')
+      .confirmDialog(successMessage.dialogOrderCreate)
       .subscribe((result) => {
         if (result) {
           if (this.isNew) {
@@ -341,6 +346,7 @@ export class OrderDetailComponent implements OnInit {
           }
         }
       });
+    });
   }
 
   recipeSelected() {
@@ -353,46 +359,57 @@ export class OrderDetailComponent implements OnInit {
 
   addRowFromArray() {
     this.packingOrders.controls = [];
-    
+
     if (this.selectedRecipe == null) {
-      console.log("🚀 ~ file: order-detail.component.ts:360 ~ OrderDetailComponent ~ addRowFromArray ~ this.selectedRecipe", this.selectedRecipe)
-      
+      console.log(
+        '🚀 ~ file: order-detail.component.ts:360 ~ OrderDetailComponent ~ addRowFromArray ~ this.selectedRecipe',
+        this.selectedRecipe
+      );
+
       return;
     }
-    
-    console.log("🚀 ~ file: order-detail.component.ts:366 ~ OrderDetailComponent ~ addRowFromArray ~ this.orderComponent", this.orderComponent)
+
+    console.log(
+      '🚀 ~ file: order-detail.component.ts:366 ~ OrderDetailComponent ~ addRowFromArray ~ this.orderComponent',
+      this.orderComponent
+    );
     for (let index of this.selectedRecipe.components.keys()) {
       if (!this.recipeChanged) {
-         this.packingForm = new FormGroup({
-          packingType: new FormControl(this.orderComponent[index].packingType, Validators.required),
-          packingWeight: new FormControl(this.orderComponent[index].packingWeight, Validators.required),
+        this.packingForm = new FormGroup({
+          packingType: new FormControl(
+            this.orderComponent[index].packingType,
+            Validators.required
+          ),
+          packingWeight: new FormControl(
+            this.orderComponent[index].packingWeight,
+            Validators.required
+          ),
         });
         this.packingOrders.push(this.packingForm);
-       
+
         //this.packingOrders.controls [index].get('packingType')?.disable({onlySelf: true})
-        
-      } else {     
+      } else {
         this.packingForm = new FormGroup({
           packingType: new FormControl(null, Validators.required),
           packingWeight: new FormControl(0, Validators.required),
         });
         this.packingOrders.push(this.packingForm);
-      }      
+      }
     }
 
     console.log('this.formr', this.form);
     this.recipeChanged = false;
   }
 
-  recalculateRecipe() {   
-
+  recalculateRecipe() {
+    this.translate.get('dialogService').subscribe((successMessage) => {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.recipeSelect?.ngControl?.control?.markAsTouched();
       this.notifier.showNotification(
-        'Please fill out all fields correctly.',
-        'Close',
-        'error'
+        successMessage.notifierErrordescription,
+        successMessage.close,
+        successMessage.error
       );
       return;
     }
@@ -429,6 +446,7 @@ export class OrderDetailComponent implements OnInit {
           this.saveOrder();
         }
       });
+    });
   }
 
   validOrderNameValidator(control: FormControl) {
@@ -454,14 +472,24 @@ export class OrderDetailComponent implements OnInit {
   }
 
   checkForm(change: PackingInterface[]) {
-    console.log("🚀 ~ file: order-detail.component.ts:459 ~ OrderDetailComponent ~ checkForm ~ change", change)
-    this.packingWeightForm = change.map(x =>x.packingType>0 ? 0 : x.packingWeight)
-    console.log("🚀 ~ file: order-detail.component.ts:462 ~ OrderDetailComponent ~ checkForm ~ packingWeightForm", this.packingWeightForm)
-    
+    console.log(
+      '🚀 ~ file: order-detail.component.ts:459 ~ OrderDetailComponent ~ checkForm ~ change',
+      change
+    );
+    this.packingWeightForm = change.map((x) =>
+      x.packingType > 0 ? 0 : x.packingWeight
+    );
+    console.log(
+      '🚀 ~ file: order-detail.component.ts:462 ~ OrderDetailComponent ~ checkForm ~ packingWeightForm',
+      this.packingWeightForm
+    );
   }
-  buttonCheck():void {
+  buttonCheck(): void {
     this.packingOrders.setValue([this.packingWeightForm]);
-    console.log("🚀 ~ file: order-detail.component.ts:465 ~ OrderDetailComponent ~ checkForm ~ this.packingOrders", this.packingOrders)
-
+    console.log(
+      '🚀 ~ file: order-detail.component.ts:465 ~ OrderDetailComponent ~ checkForm ~ this.packingOrders',
+      this.packingOrders
+    );
   }
+  
 }

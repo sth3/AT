@@ -1,81 +1,288 @@
 {
-    "welcomeMessage": "",
-    "login": {
-      "username": "Enter your user name",
-      "password": "Password here",
-      "tooltip1": "You are currently not logged in.",
-      "tooltip2": "Some actions will be limited.",
-      "login": " Login",
-      "currentUser" :"Current user",
-      "role" :"Role:",
-      "fullName" :"Full name:",
-      "logout" :"Logout:"
-    },
-    "navBar": {
-      "components": "Components",
-      "recipes": "Recipes",
-      "orders": "Orders",
-      "ordersArchive": "Orders Archive",
-      "aggregate": "Aggregates",
-      "statistics": "Statistics",
-      "users": "Users"      
-    },
-
-    "head": {
-      "quickFilter": "Quick filter",
-      "dateRange": "Enter a date range",
-      "startDate": "Start date",
-      "endDate": "End date",
-      "createComponent": "Create component",
-      "exportEntire": "Export entire table to CSV",
-      "exportVisible": "Export visible data to CSV",
-      "noDataFilter": "No data matching the filter"
-    },
-    
-
-    "componentsTableHead": [
-      { "item": "ID" },
-      { "item": "ID Component" },
-      { "item": "Component name" },
-      { "item": "Specific bulk weight" },
-      { "item": "Last update" }
-    ],
-    "componentsArchiveTableHead": [
-      { "item": "ID" },
-      { "item": "ID Component" },
-      { "item": "Component name" },      
-      { "item": "Last update" },
-      { "item": "Changed by" }
-    ],
-    "dialogService":{
-      "title": "Are you sure?",
-      "dialogDelete": "Are you sure you want to delete this component?",
-      "yes": "Yes",
-      "no": "No",
-      "cancel": "Cancel",
-      "save": "Save",
-      "notifierDeleted": "Component deleted",
-      "dialogUpdate": "Are you sure you want to update this component?",
-      "notifierUpdate": "Component updated",
-      "notifierCreated": "Component created"
-  }  ,
-  "dialogComponent":{
+  "login": {
+    "username": "Username",
+    "password": "Password",
+    "tooltip1": "You are currently not logged in.",
+    "tooltip2": "Some actions will be limited.",
+    "login": " Login",
+    "currentUser": "Current user",
+    "role": "Role:",
+    "fullName": "Full name:",
+    "logout": "Logout:"
+  },
+  "navBar": {
+    "components": "Components",
+    "recipes": "Recipes",
+    "orders": "Orders",
+    "ordersArchive": "Orders Archive",
+    "aggregate": "Aggregates",
+    "statistics": "Statistics",
+    "users": "Users",
+    "orderDetail": "Order detail",
+    "recalculate": "Order detail/Recalculate"
+  },
+  "head": {
+    "quickFilter": "Quick filter",
+    "dateRange": "Enter a date range",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "createComponent": "Create component",
+    "createOrder": "Create order",
+    "export": "Export",
+    "exportEntire": "Export entire table to CSV",
+    "exportVisible": "Export visible data to CSV",
+    "noDataFilter": "No data matching the filter"
+  },
+  "dialogService": {
+    "title": "Are you sure?",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "edit": "Edit",
+    "delete": "Delete",
+    "error": "Error",
+    "close": "Close",
+    "dialogDelete": "Are you sure you want to delete this component?",
+    "dialogRecipeDelete": "Are you sure you want to delete this recipe?",
+    "dialogOrderDelete": "Are you sure you want to delete this order?",
+    "dialogUpdate": "Are you sure you want to update this component?",
+    "dialogRecipeUpdate": "Are you sure you want to update this recipe?",
+    "dialogOrderUpdate": "Are you sure you want to update this order?",
+    "dialogRecipeCreate": "'Are you sure you want to save this recipe?",
+    "dialogOrderCreate": "'Are you sure you want to save this order?",
+    "notifierDeleted": "Component deleted",
+    "notifierRecipeDeleted": "Recipe deleted",
+    "notifierOrderDeleted": "Order deleted",
+    "notifierUpdate": "Component updated",
+    "notifierRecipeUpdate": "Recipe updated",
+    "notifierOrderUpdate": "Order updated",
+    "notifierCreated": "Component created",
+    "notifierRecipeCreated": "Recipe created",
+    "notifierOrderCreated": "Order created",
+    "notifierErrordescription": "Please fill out all fields correctly."
+  },
+  "dialogComponent": {
     "edit": "Edit component",
-    "create": "Create component",    
+    "create": "Create component",
     "requiredName": " is required.",
     "minlengthName": " must be at least 3 characters long.",
     "maxlengthName": " must have no more than 30 characters.",
-    "invalidComponentName": "This component name is already in use.",   
+    "invalidComponentName": "This component name is already in use.",
     "exactlyID": "Component ID must be exactly 6 characters long.",
     "invalidComponentId": "This ID is already in use.",
-    "requiredSBW": "Specific bulk weight is required." 
-    } ,
-    "archivedComponent":{
-      "title":"Archived components",
-      "description":"Click to show components that were changed but might still be used in recipes",
-      "reload":"reload",
-      "newComponent": "New component",
-      "Changes": "Changes"
+    "requiredSBW": "Specific bulk weight is required."
+  },
+  "archivedComponent": {
+    "title": "Archived components",
+    "description": "Click to show components that were changed but might still be used in recipes",
+    "reload": "reload",
+    "newComponent": "New component",
+    "Changes": "Changes"
+  },
+  "archivedRecipe": {
+    "title": "Archived recipes",
+    "description": "Click to show recipes that were changed but might still be used in orders",
+    "reload": "reload",
+    "newComponent": "New recipe",
+    "Changes": "Changes"
+  },
+  "dialogRecipe": {
+    "edit": "Edit recipe",
+    "create": "Create recipe",
+    "requiredName": " is required.",
+    "minlengthName": " must be at least 3 characters long.",
+    "invalidName": "This recipe name is already in use",
+    "maxlengthName": " must have no more than 30 characters.",
+    "invalidId": "Recipe ID is already in use.",
+    "exactlyID": "Recipe ID must be exactly 6 characters long.",
+    "newComponent": "New component...",
+    "quantity": "Quantity",
+    "weightCheck": "Weight check",
+    "numberOfCompoents": "Number of Compoents",
+    "flag": "Some components were changed in this recipe after its creation. Expand to see all changes.",
+    "noComponents": "No components in this recipe.",
+    "componentsChanges": "Components changes",
+    "changeID": "Change ID",
+    "changedBy": "Changed by",
+    "dateOfChange": "Date of change"
+  },
+  "dialogOrder": {
+    "mixerID": "Mixer ID",
+    "mixingTime": "Mixing time",
+    "packingMachineID": "Packing machine ID",
+    "emptyingStationID": "Emptying station ID",
+    "volumePerDose": "Volume per Dose",
+    "operator": "Operator name",
+    "createdAt": "Created at",
+    "lastUpdate": "Last update",
+    "completedAt": "Completed at",
+    "newComponent": "New component...",
+    "quantity": "Quantity",
+    "weight": "Weight",
+    "typeOfPacking": "Type of packing",
+    "packingWeight": "Packing Weight",
+    "weightPerOrder": "Weight Per Order",
+    "flag": "Recipe in this order is no longer valid.",
+    "noComponents": "No components in this recipe.",
+    "componentsChanges": "Components changes",
+    "changeID": "Change ID",
+    "invalidId": "Order ID is already in use.",
+    "exactlyID": "Order ID must be exactly 10 characters long.",
+    "invalidName": "Order name is already in use.",
+    "minlengthName": " must be at least 3 characters long.",
+    "idPackingMachine": "Valid packing machine IDs are 1-8.",
+    "idEmptyingStationBag": "Valid emptying station IDs are 1-4.",
+    "invalidVolumePerDose": "Valid volumes are 50-700.",
+    "recipe": "Recipe",
+    "changedBy": "Changed by",
+    "dateOfChange": "Date of change"
+  },
+  "recalculate": {
+    "numberOfDoses":"Number of doses",
+    "station": "Station",
+    "palette": "Palette",
+    "ADSline": "ADS line",
+    "components": "Components",
+    "bigBagLine": "BigBag line",
+    "liquide": "Liquide",
+    "micro": "Micro",
+    "quantity": "Quantity",
+    "packingWeight": "Packing Weight"
+  },
+  "componentsTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "ID Component"
+    },
+    {
+      "item": "Component name"
+    },
+    {
+      "item": "Specific bulk weight"
+    },
+    {
+      "item": "Last update"
     }
-  }
-  
+  ],
+  "componentsArchiveTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "ID Component"
+    },
+    {
+      "item": "Component name"
+    },
+    {
+      "item": "Last update"
+    },
+    {
+      "item": "Changed by"
+    }
+  ],
+  "recipesArchiveTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "ID Recipe"
+    },
+    {
+      "item": "Recipe name"
+    },
+    {
+      "item": "Last update"
+    },
+    {
+      "item": "Changed by"
+    }
+  ],
+  "aggregateTableHead": [
+    {
+      "item": "No"
+    },
+    {
+      "item": "ID Aggregate"
+    },
+    {
+      "item": "ID Component"
+    },
+    {
+      "item": "Component name"
+    },
+    {
+      "item": "Last update"
+    },
+    {
+      "item": "Changed by"
+    }
+  ],
+  "recipeTableHead": [
+    {
+      "item": "No"
+    },
+    {
+      "item": "Recipe ID"
+    },
+    {
+      "item": "Recipe name"
+    },
+    {
+      "item": "Last update"
+    }
+  ],
+  "orderTableHead": [
+    {
+      "item": "No"
+    },
+    {
+      "item": "Order ID"
+    },
+    {
+      "item": "Order name"
+    },
+    {
+      "item": "Customer name"
+    },
+    {
+      "item": "Due date"
+    }
+  ],
+  "selectIdMixers": [
+    {
+      "value": 1,
+      "viewValue": "Vertical mixer"
+    },
+    {
+      "value": 2,
+      "viewValue": "Horizontal mixer"
+    },
+    {
+      "value": 3,
+      "viewValue": "External mixer"
+    }
+  ],
+  "selectPacking": [
+    {
+      "value": 0,
+      "viewValue": "Bag"
+    },
+    {
+      "value": 1,
+      "viewValue": "Big Bag"
+    },
+    {
+      "value": 2,
+      "viewValue": "Liquid"
+    },
+    {
+      "value": 3,
+      "viewValue": "Micro"
+    }
+  ]
+}

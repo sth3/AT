@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
-
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-orders',
@@ -68,6 +68,7 @@ export class OrdersComponent implements OnInit {
               private dialogService: DialogService,
               private exportService: ExportService,
               private notifierService: NotifierService,
+              private translate: TranslateService,
               private router: Router, private r: ActivatedRoute,
               private dateAdapter: DateAdapter<Date>) {
                 this.dateAdapter.setLocale('en-GB'); }
@@ -112,18 +113,22 @@ export class OrdersComponent implements OnInit {
   }
 
   onDeleteClick(data: any) {
-    this.dialogService.confirmDialog('Are you sure you want to delete this order?')
+    this.translate
+          .get('dialogService')
+          .subscribe((successMessage) => {
+    this.dialogService.confirmDialog(successMessage.dialogOrderDelete)
       .subscribe(result => {
         if (result) {
           this.ordersService.deleteOrder(data.no)
             .subscribe(() => {
               console.log('order deleted: ', data);
-              this.notifierService.showDefaultNotification('Order deleted');
+              this.notifierService.showDefaultNotification(successMessage.notifierOrderDeleted);
               this.orders = this.orders.filter(o => o.no !== data.no);
               this.dataSource.data = this.orders;
             })
         }
       })
+    })
   }
 
   onEditClick(data: any) {

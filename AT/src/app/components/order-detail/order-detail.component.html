@@ -1,34 +1,34 @@
 <mat-card>
-  <mat-card-title>Order detail</mat-card-title>
+  <mat-card-title>{{'navBar.orderDetail'| translate}}</mat-card-title>
   <mat-card-content>
     <form [formGroup]="form" >
       <fieldset [disabled]="!editable" class="order-form-container" >
         <div class="order-form-field">
-          <h3>Order ID</h3>
+          <h3>{{'orderTableHead.1.item' | translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="ID" formControlName="id">
-            <mat-error *ngIf="id.hasError('invalidOrderId')">This order id is already in use.</mat-error>
+            <input matInput placeholder="{{'orderTableHead.1.item' | translate}}" formControlName="id">
+            <mat-error *ngIf="id.hasError('invalidOrderId')">{{'dialogOrder.invalidId' | translate}}</mat-error>
             <mat-error *ngIf="id.hasError('maxlength') || id.hasError('minlength')">
-              Order ID must be exactly 10 characters.</mat-error>
+              {{'dialogOrder.exactlyID' | translate}}</mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
-          <h3>Order name</h3>
+          <h3>{{'orderTableHead.2.item' | translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Name" formControlName="name">
-            <mat-error *ngIf="name!.hasError('invalidOrderName')">This order name is already in use.</mat-error>
+            <input matInput placeholder="{{'orderTableHead.2.item' | translate}}" formControlName="name">
+            <mat-error *ngIf="name!.hasError('invalidOrderName')">{{'dialogOrder.invalidName' | translate}}</mat-error>
             <mat-error *ngIf="name!.hasError('minlength')">
-              Order name must be at least 3 characters long.</mat-error>
+              {{'navBar.orderDetail' | translate}}{{'navBar.minlengthName' | translate}}</mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
-          <h3>Customer name</h3>
+          <h3>{{'orderTableHead.3.item' | translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Customer name" formControlName="customerName">
+            <input matInput placeholder="{{'orderTableHead.3.item' | translate}}" formControlName="customerName">
           </mat-form-field>
         </div>
         <div class="order-form-field">
-          <h3>Due date</h3>
+          <h3>{{'orderTableHead.4.item' | translate}}</h3>
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="picker" formControlName="dueDate" [min]="now">
             <mat-hint>DD/MM/YYYY</mat-hint>
@@ -48,9 +48,9 @@
         <!--        </ng-container>-->
         <!--        <ng-template #selectRecipe>-->
         <div class="order-form-field">
-          <h3>Recipe</h3>
+          <h3>{{'dialogOrder.recipe'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <mat-select (selectionChange)="recipeSelected()" placeholder="Recipe" [(ngModel)]="selectedRecipe"
+            <mat-select (selectionChange)="recipeSelected()" placeholder="{{'dialogOrder.recipe'| translate}}" [(ngModel)]="selectedRecipe"
               [ngModelOptions]="{ standalone: true }" [disabled]="!editable" required #recipeSelect>
               <mat-select-trigger>
                 <span>{{ selectedRecipe?.id }} - {{ selectedRecipe?.name }}</span>
@@ -65,7 +65,7 @@
                 </mat-option>
                 <mat-menu #menu="matMenu" class="recipeList">
                   <mat-list style="width: 500px;">
-                    <h3 style="text-align: center;">Components</h3>
+                    <h3 style="text-align: center;">{{'navBar.components'| translate}}</h3>
                     <ng-container *ngFor="let component of recipe.components; let i = index">
                       <mat-list-item>
                         <div matLine>
@@ -79,8 +79,7 @@
                       </mat-list-item>
                       <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
                     </ng-container>
-                    <span style="margin: auto" *ngIf="recipe?.components?.length === 0">No components in this
-                      recipe.</span>
+                    <span style="margin: auto" *ngIf="recipe?.components?.length === 0">{{'dialogRecipe.noComponents'| translate}}</span>
                   </mat-list>
                 </mat-menu>
               </ng-container>
@@ -89,9 +88,9 @@
         </div>
         <!--        </ng-template>-->
         <div class="order-form-field">
-          <h3>Quantity</h3>
+          <h3>{{'dialogOrder.quantity'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity">
+            <input matInput placeholder="{{'dialogOrder.quantity'| translate}}" type="number" min="1" formControlName="quantity">
 
           </mat-form-field>
         </div>
@@ -101,7 +100,7 @@
           <mat-list>
             <div style="width: 100%; display: flex;">
 
-              <h2>Components/Recipe</h2>
+              <h2>{{'navBar.components'| translate}}</h2>
             </div>
 
             <ng-container *ngFor="let component of selectedRecipe?.components; let i = index" ;>
@@ -114,20 +113,20 @@
                       <mat-form-field appearance="outline" style="width: 20%" class=" note" [ngClass]="{
                           gridC: i % 2 > 0
                         }">
-                        <mat-label>ID</mat-label>
-                        <input matInput placeholder="0000000001" readonly [value]=" component.id">
+                        <mat-label>{{'componentsTableHead.1.item'| translate}}</mat-label>
+                        <input matInput placeholder="{{'componentsTableHead.1.item'| translate}}" readonly [value]=" component.id">
                       </mat-form-field>
                       <mat-form-field appearance="outline" style="width: 250px" class="note" [ngClass]="{
                           gridC: i % 2 > 0
                         }">
-                        <mat-label>Name</mat-label>
-                        <input matInput placeholder="0000000001" readonly [value]="component.name">
+                        <mat-label>{{'componentsTableHead.2.item'| translate}}</mat-label>
+                        <input matInput placeholder="{{'componentsTableHead.2.item'| translate}}" readonly [value]="component.name">
                       </mat-form-field>
                       <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{
                           gridC: i % 2 > 0
                         }">
-                        <mat-label>Weight</mat-label>
-                        <input matInput placeholder="0000000001" readonly
+                        <mat-label>{{'dialogOrder.quantity'| translate}}</mat-label>
+                        <input matInput placeholder="{{'dialogOrder.quantity'| translate}}" readonly
                           [value]="component.componentSP | number :'1.3-3'">
                         <span matSuffix>KG</span>
                       </mat-form-field>
@@ -135,8 +134,8 @@
                       <mat-form-field appearance="outline" style="width: 12%" class="note" [ngClass]="{
                           gridC: i % 2 > 0
                         }">
-                        <mat-label>Specific bulk weight</mat-label>
-                        <input matInput placeholder="0000000001" readonly
+                        <mat-label>{{'componentsTableHead.3.item'| translate}}</mat-label>
+                        <input matInput placeholder="{{'componentsTableHead.3.item'| translate}}" readonly
                           [value]="component.specificBulkWeight.toFixed(3)">
                         <span matSuffix>KG/L</span>
                       </mat-form-field>
@@ -146,9 +145,9 @@
                           [ngClass]="{
                             gridC: i % 2 > 0
                           }">
-                          <mat-label>Packing</mat-label>
+                          <mat-label>{{'dialogOrder.typeOfPacking'| translate}}</mat-label>
                           <mat-select formControlName="packingType"   [disabled]="!editable" >
-                            <mat-option *ngFor="let packingOrder of packingSelect" [value]="packingOrder.value">
+                            <mat-option *ngFor="let packingOrder of 'selectPacking'|translate" [value]="packingOrder.value">
                               {{packingOrder.viewValue}}
                             </mat-option>
                           </mat-select>
@@ -159,8 +158,8 @@
                           [ngClass]="{
                             gridC: i % 2 > 0, hideItem: this.form.value.packingOrders[i].packingType > 0 || this.form.value.packingOrders[i].packingType == null
                           }">
-                          <mat-label>Packing Weight</mat-label>
-                          <input matInput placeholder="Mixing time" type="number" min="{{this.form.value.packingOrders[i].packingType == 0 ? 1 :0}}" formControlName="packingWeight">
+                          <mat-label>{{'dialogOrder.packingWeight'| translate}}</mat-label>
+                          <input matInput placeholder="{{'dialogOrder.packingWeight'| translate}}" type="number" min="{{this.form.value.packingOrders[i].packingType == 0 ? 1 :0}}" formControlName="packingWeight">
                           <span matSuffix>kg</span>
                         </mat-form-field>
                       </ng-container>
@@ -190,8 +189,8 @@
                       <mat-form-field appearance="outline" style="width: 20%" class="note" [ngClass]="{
                             gridC: i % 2 > 0
                           }">
-                        <mat-label>Weight</mat-label>
-                        <input matInput placeholder="0000000001"
+                        <mat-label>{{'dialogOrder.weightPerOrder'| translate}}</mat-label>
+                        <input matInput placeholder="{{'dialogOrder.weightPerOrder'| translate}}"
                           [value]="component.componentSP * (this.form.value.quantity/100) |number :'1.3-3'">
                         <span matSuffix>KG</span>
                       </mat-form-field>
@@ -206,7 +205,7 @@
               <!-- <mat-divider *ngIf="i !== selectedRecipe!.components!.length! - 1"></mat-divider> -->
             </ng-container>
 
-            <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">No components in this
+            <span style="margin: auto" *ngIf="selectedRecipe!.components?.length === 0">{{'dialogOrder.noComponents'| translate}}
               recipe.</span>
           </mat-list>
         </div>
@@ -220,57 +219,57 @@
         </div> -->
 
         <div class="order-form-field">
-          <h3>Mixer ID</h3>
+          <h3>{{'dialogOrder.mixerID'| translate}}</h3>
           <mat-form-field appearance="outline">
 
-            <mat-select formControlName="idMixer" placeholder="Mixer ID" c min="1" max="3" type="number">
-              <mat-option *ngFor="let slecetIdMixer of slecetIdMixers" [value]="slecetIdMixer.value">
+            <mat-select formControlName="idMixer" placeholder="{{'dialogOrder.mixerID'| translate}}" c min="1" max="3" type="number">
+              <mat-option *ngFor="let slecetIdMixer of 'selectIdMixers'|translate" [value]="slecetIdMixer.value">
                 {{slecetIdMixer.viewValue}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="idMixer!.invalid">Valid mixer IDs are 1-3.</mat-error>
+            
           </mat-form-field>
         </div>
 
         <div class="order-form-field">
-          <h3>Mixing time</h3>
+          <h3>{{'dialogOrder.mixingTime'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Mixing time" type="number" min="1" formControlName="mixingTime">
+            <input matInput placeholder="{{'dialogOrder.mixingTime'| translate}}" type="number" min="1" formControlName="mixingTime">
             <span matSuffix>min</span>
           </mat-form-field>
         </div>
 
         <div class="order-form-field">
-          <h3>Packing machine ID</h3>
+          <h3>{{'dialogOrder.packingMachineID'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Packing machine ID" formControlName="idPackingMachine" min="1" max="8"
+            <input matInput placeholder="{{'dialogOrder.packingMachineID'| translate}}" formControlName="idPackingMachine" min="1" max="8"
               type="number">
-            <mat-error *ngIf="idPackingMachine!.invalid">Valid packing machine IDs are 1-8.</mat-error>
+            <mat-error *ngIf="idPackingMachine!.invalid">{{'dialogOrder.idPackingMachine'| translate}}</mat-error>
           </mat-form-field>
         </div>
 
         <div class="order-form-field">
-          <h3>Emptying station ID</h3>
+          <h3>{{'dialogOrder.emptyingStationID'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Emptying station ID" formControlName="idEmptyingStationBag" min="1" max="4"
+            <input matInput placeholder="{{'dialogOrder.emptyingStationID'| translate}}" formControlName="idEmptyingStationBag" min="1" max="4"
               type="number">
-            <mat-error *ngIf="idEmptyingStationBag!.invalid">Valid packing machine IDs are 1-4.</mat-error>
+            <mat-error *ngIf="idEmptyingStationBag!.invalid">{{'dialogOrder.idEmptyingStationBag'| translate}}</mat-error>
           </mat-form-field>
         </div>
 
         <div class="order-form-field">
-          <h3>Volume per dose</h3>
+          <h3>{{'dialogOrder.volumePerDose'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Volume" type="number" min="50" max="700" formControlName="volumePerDose">
-            <mat-error *ngIf="volumePerDose!.invalid">Valid volumes are 50-700.</mat-error>
+            <input matInput placeholder="{{'dialogOrder.volumePerDose'| translate}}" type="number" min="50" max="700" formControlName="volumePerDose">
+            <mat-error *ngIf="volumePerDose!.invalid">{{'dialogOrder.invalidVolumePerDose'| translate}}</mat-error>
             <span matSuffix>L</span>
           </mat-form-field>
         </div>
 
         <div class="order-form-field">
-          <h3>Operator</h3>
+          <h3>{{'dialogOrder.operator'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Operator" formControlName="operatorName" readonly>
+            <input matInput placeholder="{{'dialogOrder.operator'| translate}}" formControlName="operatorName" readonly>
           </mat-form-field>
         </div>
 
@@ -279,15 +278,15 @@
 
     <div *ngIf="!isNew" class="order-time-container">
       <div class="order-time">
-        <h3>Created at</h3>
+        <h3>{{'dialogOrder.createdAt'| translate}}</h3>
         <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
       </div>
       <div class="order-time">
-        <h3>Last update</h3>
+        <h3>{{'dialogOrder.lastUpdate'| translate}}</h3>
         <span>{{order?.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</span>
       </div>
       <div *ngIf="order?.completedAt" class="order-time">
-        <h3>Completed at</h3>
+        <h3>{{'dialogOrder.completedAt'| translate}}</h3>
         <span>{{order?.completedAt | date: 'dd/MM/yyyy HH:mm'}}</span>
       </div>
     </div>
@@ -295,24 +294,24 @@
   <mat-card-actions>
     <button mat-button color="primary" (click)="backToOrder();">
       <mat-icon>arrow_back</mat-icon>
-      Back to order
+      {{'dialogService.back'| translate}}
     </button>
     <button mat-icon-button color="danger" aria-label="Edit item" (click)="onEditClick()" *ngIf="!editable">
       <mat-icon>edit</mat-icon>
-      Edit
+      {{'dialogService.edit'| translate}}
     </button>
     <button mat-icon-button color="primary" aria-label="Edit item" (click)="offEditClick()" *ngIf="editable">
       <mat-icon>edit</mat-icon>
-      Edit
+      {{'dialogService.edit'| translate}}
     </button>
     <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick()">
       <mat-icon>delete_forever</mat-icon>
-      Delete
+      {{'dialogService.delete'| translate}}
     </button>
 
     <button mat-button (click)="recalculateRecipe()">
       <mat-icon>save</mat-icon>
-      Save
+      {{'dialogService.save'| translate}}
     </button>    
     
   </mat-card-actions>

@@ -1,90 +1,289 @@
 {
-  "welcomeMessage": "",
   "login": {
-    "username": "",
-    "password": "",
+    "username": "Používateľské meno",
+    "password": "Heslo",
     "tooltip1": "Momentálne nie ste prihlásený.",
     "tooltip2": "Niektoré akcie budú obmedzené.",
     "login": " Prihlásiť sa",
-    "currentUser" :"Aktuálny užívateľ",
-    "role" :"Rola:",
-    "fullName" :"Meno:",
-    "logout" :"Odhlásiť sa"
+    "currentUser": "Aktuálny užívateľ",
+    "role": "Rola:",
+    "fullName": "Meno:",
+    "logout": "Odhlásiť sa"
   },
-
   "navBar": {
     "components": "Komponenty",
     "recipes": "Recepty",
-    "orders": "Výrobný príkaz",
-    "ordersArchive": "História výrobných príkazov",
+    "orders": "Výrobné príkazy",
+    "ordersArchive": "Archív výrobných príkazov",
     "aggregate": "Agregáty",
     "statistics": "Štatistika",
-    "users": "Užívatelia"
+    "users": "Užívatelia",
+    "orderDetail": "Výrobný príkaz",
+    "recalculate": "Výrobný príkaz/Prepočet"
   },
-
   "head": {
     "quickFilter": "Rýchle vyhľadávanie",
     "dateRange": "Zadajte rozsah dátumov",
     "startDate": "Dátum začiatku",
     "endDate": "Dátum ukončenia",
     "createComponent": "Vytvorte komponent",
+    "createOrder": "Vytvorte výrobný príkaz",
+    "createRecipe": "Vytvorte recept",
+    "export": "Export",
     "exportEntire": "Exportujte celú tabuľku do CSV",
     "exportVisible": "Exportujte viditeľné údaje do CSV",
     "noDataFilter": "Filtru nezodpovedajú žiadne údaje"
   },
-  
-
- 
-
-  "componentsTableHead": [
-    { "item": "ID" },
-    { "item": "ID komponentu" },
-    { "item": "Meno komponentu" },
-    { "item": "Špecifická objemová hmotnosť" },
-    { "item": "Posledná aktualizácia" }
-  ],
-  "componentsArchiveTableHead": [
-    { "item": "ID" },
-    { "item": "ID komponentu" },
-    { "item": "Meno komponentu" },    
-    { "item": "Posledná aktualizácia" },
-    { "item": "Zmenil" }
-  ],
-
-  "dialogService":{
+  "dialogService": {
     "title": "Si si istý?",
-    "dialogDelete": "Naozaj chcete odstrániť tento komponent?",
     "yes": "Áno",
     "no": "Nie",
     "cancel": "Zrušiť",
     "save": "Uložiť",
-    "notifierDeleted": "Komponent vymazaný",
+    "back": "Naspäť",
+    "edit": "Editácia",
+    "delete": "Vymazať",
+    "close": "Zavrieť",
+    "error": "Chyba",
+    "dialogDelete": "Naozaj chcete odstrániť tento komponent?",
+    "dialogRecipeDelete": "Naozaj chcete odstrániť tento recept?",
+    "dialogOrderDelete": "Naozaj chcete odstrániť tento výrobný príkaz?",
     "dialogUpdate": "Naozaj chcete aktualizovať tento komponent?",
+    "dialogRecipeUpdate": "Naozaj chcete aktualizovať tento recept?",
+    "dialogOrderUpdate": "Naozaj chcete aktualizovať tento výrobný príkaz?",
+    "dialogRecipeCreate": "Naozaj chcete vytvoriť tento recept?",
+    "dialogOrderCreate": "Naozaj chcete vytvoriť tento výrobný príkaz?",
+    "notifierDeleted": "Komponent vymazaný",
+    "notifierRecipeDeleted": "Recept vymazaný",
+    "notifierOrderDeleted": "Výrobný príkaz vymazaný",
     "notifierUpdate": "Komponent bol aktualizovaný",
-    "notifierCreated": "Komponent vytvorený"
-} ,
-  "dialogComponent":{
+    "notifierRecipeUpdate": "Recept bol aktualizovaný",
+    "notifierOrderUpdate": "Výrobný príkaz bol aktualizovaný",
+    "notifierCreated": "Komponent vytvorený",
+    "notifierRecipeCreated": "Recept vytvorený",
+    "notifierOrderCreated": "Výrobný príkaz vytvorený",
+    "notifierErrordescription": "Vyplňte prosím všetky polia správne."
+  },
+  "dialogComponent": {
     "edit": "Editácia komponentu",
-    "create": "Tvorba komponentu",    
+    "create": "Tvorba komponentu",
     "requiredName": " je vyžadované.",
     "minlengthName": " musí mať aspoň 3 znaky.",
     "maxlengthName": " nesmie mať viac ako 30 znakov.",
-    "invalidComponentName": "Tento názov komponentu sa už používa.",    
+    "invalidComponentName": "Tento názov komponentu sa už používa.",
     "exactlyID": "ID komponentu musí mať presne 6 znakov.",
     "invalidComponentId": "Toto ID sa už používa.",
-    "requiredSBW": "Zadajte špecifickú objemovú hmotnosť." 
+    "requiredSBW": "Zadajte špecifickú objemovú hmotnosť."
+  },
+  "archivedComponent": {
+    "title": "Archivované komponenty",
+    "description": "Kliknutím zobrazíte komponenty, ktoré boli zmenené, ale stále sa môžu používať v receptoch",
+    "reload": "znovu načítať",
+    "newComponent": "Nový komponent",
+    "Changes": "Zmenené užívatelom"
+  },
+  "archivedRecipe": {
+    "title": "Archivované recepty",
+    "description": "Kliknutím zobrazíte recepty, ktoré boli zmenené, ale stále sa môžu používať v pracovných príkazoch",
+    "reload": "znovu načítať",
+    "newComponent": "Nový komponent",
+    "Changes": "Zmenené užívatelom"
+  },
+  "dialogRecipe": {
+    "edit": "Editácia receptu",
+    "create": "Tvorba receptu",
+    "requiredName": " je vyžadované.",
+    "minlengthName": " musí mať aspoň 3 znaky.",
+    "invalidName": "Tento názov receptu sa už používa.",
+    "maxlengthName": " nesmie mať viac ako 30 znakov.",
+    "invalidId": "Toto ID sa už používa.",
+    "exactlyID": "ID Receptu musí mať presne 6 znakov.",
+    "newComponent": "Nový komponent....",
+    "quantity": "Množstvo",
+    "weightCheck": "Kontrola váhy",
+    "numberOfCompoents": "Počet komponentov v recepte",
+    "flag": "Niektoré komponenty boli v recepte zmenené po jeho vytvorení. Rozbalením zobrazíte všetky zmeny.",
+    "noComponents": "No components in this recipe.",
+    "componentsChanges": "Zmeny v komponentoch",
+    "changeID": "Zmenené ID",
+    "changedBy": "Zmenené užívatelom",
+    "dateOfChange": "Dátum zmeny"
+  },
+  "dialogOrder": {
+    "mixerID": "Mixér",
+    "mixingTime": "Čas miešania",
+    "packingMachineID": "ID Baličky",
+    "emptyingStationID": "ID Vyprázdňovacej stanice",
+    "volumePerDose": "Objem dávky",
+    "operator": "Meno operátora",
+    "createdAt": "Vytvorené",
+    "lastUpdate": "Posledná úprava",
+    "completedAt": "Ukončené",
+    "newComponent": "Nový komponent....",
+    "quantity": "Množstvo",
+    "weight": "Váha",
+    "typeOfPacking": "Typ balenia",
+    "packingWeight": "Hmotnosť balenia",
+    "weightPerOrder": "Hmotnosť na objednávku",
+    "flag": "Recept v tejto objednávke už nie je platný.",
+    "noComponents": "No components in this recipe.",
+    "componentsChanges": "Zmeny v komponentoch",
+    "changeID": "Zmenené ID",
+    "invalidId": "Toto ID sa už používa.",
+    "exactlyID": "ID výrobného príkazu musí mať presne 10 znakov.",
+    "invalidName": "Meno výrobného príkazu sa už používa.",
+    "minlengthName": " musí mať aspoň 3 znaky.",
+    "idPackingMachine": "Validné ID baličky sú 1-8.",
+    "idEmptyingStationBag": "Validné ID vyprázdňovacej stanice sú 1-4.",
+    "invalidVolumePerDose": "Validné objemy sú 50-700.",
+    "recipe": "Recept",
+    "changedBy": "Zmenené užívatelom",
+    "dateOfChange": "Dátum zmeny"
+  },
+  "recalculate": {
+    "numberOfDoses": "Počet dávok",
+    "station": "Stanica",
+    "palette": "Paleta",
+    "ADSline": "ADS linka",
+    "components": "Komponenty",
+    "bigBagLine": "BigBag linka",
+    "liquide": "Tekuté",
+    "micro": "Mikro",
+    "quantity": "Množstvo",
+    "packingWeight": "Hmotnosť balenia"
+  },
+  "componentsTableHead": [
+    {
+      "item": "ID"
     },
-    "archivedComponent":{
-      "title":"Archivované komponenty",
-      "description":"Kliknutím zobrazíte komponenty, ktoré boli zmenené, ale stále sa môžu používať v receptoch",
-      "reload":"znovu načítať",
-      "newComponent": "Nový komponent",
-      "Changes": "Zmeny"
+    {
+      "item": "ID komponentu"
+    },
+    {
+      "item": "Meno komponentu"
+    },
+    {
+      "item": "Špecifická objemová hmotnosť"
+    },
+    {
+      "item": "Posledná aktualizácia"
     }
-
-
-
-
-  
-  
+  ],
+  "componentsArchiveTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "ID komponentu"
+    },
+    {
+      "item": "Meno komponentu"
+    },
+    {
+      "item": "Posledná aktualizácia"
+    },
+    {
+      "item": "Zmenil"
+    }
+  ],
+  "recipesArchiveTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "ID Receptu"
+    },
+    {
+      "item": "Meno Receptu"
+    },
+    {
+      "item": "Posledná aktualizácia"
+    },
+    {
+      "item": "Zmenil"
+    }
+  ],
+  "aggregateTableHead": [
+    {
+      "item": "Č"
+    },
+    {
+      "item": "ID Agregátu"
+    },
+    {
+      "item": "ID komponentu"
+    },
+    {
+      "item": "Meno komponentu"
+    },
+    {
+      "item": "Posledná aktualizácia"
+    },
+    {
+      "item": "Zmenil"
+    }
+  ],
+  "recipeTableHead": [
+    {
+      "item": "Č"
+    },
+    {
+      "item": "ID Receptu"
+    },
+    {
+      "item": "Meno receptu"
+    },
+    {
+      "item": "Posledná aktualizácia"
+    }
+  ],
+  "orderTableHead": [
+    {
+      "item": "No"
+    },
+    {
+      "item": "ID Výrobného príkazu"
+    },
+    {
+      "item": "Meno výrobného príkazu"
+    },
+    {
+      "item": "Meno zákazníka"
+    },
+    {
+      "item": "Dátum ukončenia"
+    }
+  ],
+  "selectIdMixers": [
+    {
+      "value": 1,
+      "viewValue": "Vertikálny mixér"
+    },
+    {
+      "value": 2,
+      "viewValue": "Horizontálny mixér"
+    },
+    {
+      "value": 3,
+      "viewValue": "Externý mixér"
+    }
+  ],
+  "selectPacking": [
+    {
+      "value": 0,
+      "viewValue": "Vrece"
+    },
+    {
+      "value": 1,
+      "viewValue": "Big Bag"
+    },
+    {
+      "value": 2,
+      "viewValue": "Tekuté"
+    },
+    {
+      "value": 3,
+      "viewValue": "Mikro"
+    }
+  ]
 }

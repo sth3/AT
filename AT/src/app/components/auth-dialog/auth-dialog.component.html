@@ -2,14 +2,14 @@
 <div mat-dialog-content style="margin: auto">
   <form [formGroup]="form">
     <mat-form-field>
-      <input matInput placeholder="Username" formControlName="username" name="username" autofocus>
+      <input matInput placeholder="{{'login.username' | translate}}" formControlName="username" name="username" autofocus>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="password" placeholder="Password" formControlName="password" name="password">
+      <input matInput type="password" placeholder="{{'login.password' | translate}}" formControlName="password" name="password">
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Cancel</button>
-  <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid">Login</button>
+  <button mat-button [mat-dialog-close]="false">{{'dialogService.cancel' | translate}}</button>
+  <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid">{{'login.login' | translate}}</button>
 </div>
