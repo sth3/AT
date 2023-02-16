@@ -44,6 +44,7 @@
     "delete": "Delete",
     "error": "Error",
     "close": "Close",
+    "print": "Print",
     "dialogDelete": "Are you sure you want to delete this component?",
     "dialogRecipeDelete": "Are you sure you want to delete this recipe?",
     "dialogOrderDelete": "Are you sure you want to delete this order?",
@@ -137,19 +138,21 @@
     "invalidVolumePerDose": "Valid volumes are 50-700.",
     "recipe": "Recipe",
     "changedBy": "Changed by",
-    "dateOfChange": "Date of change"
+    "dateOfChange": "Date of change",
+    "recipePerDose": "Recipe per Dose"
   },
   "recalculate": {
     "numberOfDoses":"Number of doses",
     "station": "Station",
     "palette": "Palette",
-    "ADSline": "ADS line",
+    "ADSline": "ADS",
     "components": "Components",
-    "bigBagLine": "BigBag line",
+    "bigBagLine": "BigBag",
     "liquide": "Liquide",
     "micro": "Micro",
     "quantity": "Quantity",
-    "packingWeight": "Packing Weight"
+    "packingWeight": "Packing Weight",    
+    "weightPerDose": "Weight Per Dose"
   },
   "componentsTableHead": [
     {
@@ -265,6 +268,32 @@
     {
       "value": 3,
       "viewValue": "External mixer"
+    }
+  ],
+  "statisticsTableHead": [
+    {
+      "item": "No"
+    },
+    {
+      "item": "Data and Time "
+    },
+    {
+      "item": "Component name"
+    },
+    {
+      "item": "Setpoint"
+    },
+    {
+      "item": "Proces value"    
+    },
+    {
+      "item": "Number of dose"    
+    },
+    {
+      "item": "Order ID"    
+    },
+    {
+      "item": "Recipe name"
     }
   ],
   "selectPacking": [

@@ -33,6 +33,7 @@ export class StatisticsComponent implements OnInit {
     { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
     { field: 'noContainer', header: 'Number of Dose' },
     { field: 'noOrder', header: 'ID Zákazky' },
+    { field: 'noRecipe', header: 'No Recipe' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<DoseModel> = new MatTableDataSource<DoseModel>([]);

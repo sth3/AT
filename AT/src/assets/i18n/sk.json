@@ -45,6 +45,7 @@
     "delete": "Vymazať",
     "close": "Zavrieť",
     "error": "Chyba",
+    "print": "Tlačiť",
     "dialogDelete": "Naozaj chcete odstrániť tento komponent?",
     "dialogRecipeDelete": "Naozaj chcete odstrániť tento recept?",
     "dialogOrderDelete": "Naozaj chcete odstrániť tento výrobný príkaz?",
@@ -138,19 +139,21 @@
     "invalidVolumePerDose": "Validné objemy sú 50-700.",
     "recipe": "Recept",
     "changedBy": "Zmenené užívatelom",
-    "dateOfChange": "Dátum zmeny"
+    "dateOfChange": "Dátum zmeny",
+    "recipePerDose": "Recept na dávku"
   },
   "recalculate": {
     "numberOfDoses": "Počet dávok",
     "station": "Stanica",
     "palette": "Paleta",
-    "ADSline": "ADS linka",
+    "ADSline": "ADS",
     "components": "Komponenty",
-    "bigBagLine": "BigBag linka",
+    "bigBagLine": "BigBag",
     "liquide": "Tekuté",
     "micro": "Mikro",
     "quantity": "Množstvo",
-    "packingWeight": "Hmotnosť balenia"
+    "packingWeight": "Hmotnosť balenia",
+    "weightPerDose": "Celková hmotnosť na dávku"
   },
   "componentsTableHead": [
     {
@@ -252,6 +255,32 @@
     },
     {
       "item": "Dátum ukončenia"
+    }
+  ],
+  "statisticsTableHead": [
+    {
+      "item": "Pč"
+    },
+    {
+      "item": "Dátum a čas "
+    },
+    {
+      "item": "Meno komponentu"
+    },
+    {
+      "item": "žiadaná hodnota"
+    },
+    {
+      "item": "Aktuálna hodnota"    
+    },
+    {
+      "item": "Číslo dávky"    
+    },
+    {
+      "item": "ID Výrobného príkazu"    
+    },
+    {
+      "item": "Meno receptu"
     }
   ],
   "selectIdMixers": [

@@ -11,7 +11,7 @@
 
 
         <div class="order-form-field-rec">
-          <h3>{{'recalculate.numberOfDoses'|translate}}</h3>
+          <!-- <h3>{{'recalculate.numberOfDoses'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 140px" class="note">
             <mat-label>{{'recalculate.numberOfDoses'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.quantityPallete">
@@ -20,42 +20,42 @@
         </div>
 
         <div class="order-form-field-rec">
-          <h3>{{'orderTableHead.1.item'|translate}}</h3>
+          <!-- <h3>{{'orderTableHead.1.item'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 100px" class="note">
             <mat-label>{{'orderTableHead.1.item'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.id">
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'orderTableHead.2.item'|translate}}</h3>
+          <!-- <h3>{{'orderTableHead.2.item'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 170px" class="note">
             <mat-label>{{'orderTableHead.2.item'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.name">
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'orderTableHead.3.item'|translate}}</h3>
+          <!-- <h3>{{'orderTableHead.3.item'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 170px" class="note">
             <mat-label>{{'orderTableHead.3.item'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.customerName">
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'dialogOrder.packingMachineID'|translate}}</h3>
+          <!-- <h3>{{'dialogOrder.packingMachineID'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 150px" class="note">
             <mat-label>{{'dialogOrder.packingMachineID'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.idPackingMachine">
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'dialogOrder.emptyingStationID'|translate}}</h3>
+          <!-- <h3>{{'dialogOrder.emptyingStationID'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 150px" class="note">
             <mat-label>{{'dialogOrder.emptyingStationID'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.idEmptyingStationBag">
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'dialogOrder.volumePerDose'|translate}}</h3>
+          <!-- <h3>{{'dialogOrder.volumePerDose'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 150px" class="note">
             <mat-label>{{'dialogOrder.volumePerDose'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.volumePerDose">
@@ -63,7 +63,7 @@
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'dialogOrder.quantity'|translate}}</h3>
+          <!-- <h3>{{'dialogOrder.quantity'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 110px" class="note">
             <mat-label>{{'dialogOrder.quantity'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.quantity | number :'1.3-3' ">
@@ -71,7 +71,7 @@
           </mat-form-field>
         </div>
         <div class="order-form-field-rec">
-          <h3>{{'orderTableHead.4.item'|translate}}</h3>
+          <!-- <h3>{{'orderTableHead.4.item'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 110px" class="note">
             <mat-label>{{'orderTableHead.4.item'|translate}}</mat-label>
             <input matInput placeholder="0001" readonly
@@ -153,7 +153,7 @@
                       gridC: i % 2 > 0,
                       hideItem: this.quantityBag[i] == 0 
                     }">
-                      <mat-label>Quantity</mat-label>
+                      <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
                       <span matSuffix>x</span>
                     </mat-form-field>
@@ -162,7 +162,7 @@
                       gridC: i % 2 > 0,
                       hideItem: this.quantityADS[i] == 0 
                     }">
-                      <mat-label>Quantity</mat-label>
+                      <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
@@ -171,7 +171,7 @@
                       gridC: i % 2 > 0,
                       hideItem: this.quantityBigBag[i] == 0 
                     }">
-                      <mat-label>Quantity</mat-label>
+                      <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
@@ -183,7 +183,7 @@
                       gridC: i % 2 > 0,
                       hideItem: this.quantityLiquid[i] == 0 
                     }">
-                      <mat-label>Quantity</mat-label>
+                      <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
@@ -192,7 +192,7 @@
                       gridC: i % 2 > 0,
                       hideItem: this.quantityMicro[i] == 0 
                     }">
-                      <mat-label>Quantity</mat-label>
+                      <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                       <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">
                       <span matSuffix>kg</span>
                     </mat-form-field>
@@ -203,14 +203,13 @@
               </mat-list-item>
 
             </ng-container>
-            <span style="margin: auto" *ngIf="data.selectedRecipe!.components?.length === 0">No components in this
-              recipe.</span>
+            <span style="margin: auto" *ngIf="data.selectedRecipe!.components?.length === 0">{{'dialogOrder.noComponents'| translate}}</span>
           </mat-list>
         </div>
       </div>
     </mat-card-content>
     <mat-toolbar style="height: 30px">
-      <span style="font-weight: bold">Weight Per Dose</span>
+      <span style="font-weight: bold">{{'recalculate.weightPerDose'|translate}}</span>
       <span class="spacer"></span>
       <span
         >{{ weightPerDose | number :'1.3-3' }} kg
@@ -224,9 +223,9 @@
   
 
 
-    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button [mat-dialog-close]="false">{{'dialogService.cancel'|translate}}</button>
     <button mat-button [mat-dialog-close]="saveOrder()" *ngIf="data.editMode">
-      Save
+      {{'dialogService.save'|translate}}
     </button>   
 
 
