@@ -63,7 +63,9 @@
     "notifierCreated": "Komponent vytvorený",
     "notifierRecipeCreated": "Recept vytvorený",
     "notifierOrderCreated": "Výrobný príkaz vytvorený",
-    "notifierErrordescription": "Vyplňte prosím všetky polia správne."
+    "notifierErrordescription": "Vyplňte prosím všetky polia správne.",
+    "notifierErrorComponentDescription": "Maximálny počet komponentov je "
+    
   },
   "dialogComponent": {
     "edit": "Editácia komponentu",

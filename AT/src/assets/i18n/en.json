@@ -62,7 +62,8 @@
     "notifierCreated": "Component created",
     "notifierRecipeCreated": "Recipe created",
     "notifierOrderCreated": "Order created",
-    "notifierErrordescription": "Please fill out all fields correctly."
+    "notifierErrordescription": "Please fill out all fields correctly.",
+    "notifierErrorComponentDescription": "The maximum number of components is "
   },
   "dialogComponent": {
     "edit": "Edit component",

@@ -28,15 +28,16 @@ export class ComponentsComponent implements OnInit {
   data: ComponentModel[] = [];
   quickFilter: string = '';
   currentUser!: UserModel;
+  maxNumberOfComponents:Number = 200;
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
   });
- 
+
   columnsToDisplay = [
     { field: 'no', header: '' },
     { field: 'id', header: '' },
-    { field: 'name', header: '', width: '40%' },    
+    { field: 'name', header: '', width: '40%' },
     { field: 'specificBulkWeight', header: '' },
     { field: 'lastUpdate', header: '' },
   ]
@@ -60,42 +61,42 @@ export class ComponentsComponent implements OnInit {
     });
 
     this.translate
-    .get('dialogService.delete')
-    .subscribe((successMessage: string) => {
-      
-     
-     
-    });
+      .get('dialogService.delete')
+      .subscribe((successMessage: string) => {
+
+
+
+      });
   }
 
-  ngOnInit(): void {      
-    
+  ngOnInit(): void {
+
     this.loadComponents();
-    
+
   }
 
   onDeleteClick(data: any) {
     this.authService.getCurrentUser().subscribe(dataUser => {
       this.currentUser = dataUser;
       if (this.currentUser !== null) {
-        if (this.currentUser.role === 'ADMIN' ) {
+        if (this.currentUser.role === 'ADMIN') {
           this.translate
-          .get('dialogService')
-          .subscribe((successMessage) => {
-          this.dialogService.confirmDialog(successMessage.dialogDelete)
-            .subscribe(result => {
-              if (result) {
-                console.log('delete clicked: ', data);
-                this.componentService.deleteComponent(data.no)
-                  .subscribe(response => {
-                    console.log('component deleted: ', response);
-                    this.notifierService.showDefaultNotification(successMessage.notifierDeleted);
-                    this.data = this.data.filter(u => u.no !== data.no);
-                    this.dataSource.data = this.data;
-                  })
-              }
-            })
-          });
+            .get('dialogService')
+            .subscribe((successMessage) => {
+              this.dialogService.confirmDialog(successMessage.dialogDelete)
+                .subscribe(result => {
+                  if (result) {
+                    console.log('delete clicked: ', data);
+                    this.componentService.deleteComponent(data.no)
+                      .subscribe(response => {
+                        console.log('component deleted: ', response);
+                        this.notifierService.showDefaultNotification(successMessage.notifierDeleted);
+                        this.data = this.data.filter(u => u.no !== data.no);
+                        this.dataSource.data = this.data;
+                      })
+                  }
+                })
+            });
         } else {
           this.authService.promptLogin('Login');
           return;
@@ -117,22 +118,22 @@ export class ComponentsComponent implements OnInit {
             .subscribe(result => {
               if (result) {
                 this.translate
-                .get('dialogService')
-                .subscribe((successMessage) => {
-                this.dialogService.confirmDialog(successMessage.dialogUpdate)
-                  .subscribe(resultS => {
-                    if (resultS) {
-                      console.log('edit clicked: ', data, result);
-                      this.componentService.updateComponent(data.no, result)
-                        .subscribe(response => {
-                          console.log('component updated: ', response);
-                          this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
-                          this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
-                          this.dataSource.data = this.data;
-                        })
-                    }
-                  })
-                });
+                  .get('dialogService')
+                  .subscribe((successMessage) => {
+                    this.dialogService.confirmDialog(successMessage.dialogUpdate)
+                      .subscribe(resultS => {
+                        if (resultS) {
+                          console.log('edit clicked: ', data, result);
+                          this.componentService.updateComponent(data.no, result)
+                            .subscribe(response => {
+                              console.log('component updated: ', response);
+                              this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
+                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                              this.dataSource.data = this.data;
+                            })
+                        }
+                      })
+                  });
               }
             })
         } else {
@@ -151,25 +152,38 @@ export class ComponentsComponent implements OnInit {
       this.currentUser = data;
       if (this.currentUser !== null) {
         if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.translate.get('dialogService').subscribe((successMessage) => {
+            console.log('this.data', this.data.length);
+            if (this.data.length > this.maxNumberOfComponents) {
+              this.notifierService.showNotification(
+                successMessage.notifierErrorComponentDescription + this.maxNumberOfComponents+" !" ,
+                successMessage.close,
+                successMessage.error
+              );
+              return;
+            }
+          
           this.dialogService.customDialog(EditComponentDialogComponent,
             { component: null, allComponents: this.data, editMode: false })
             .subscribe(result => {
               if (result) {
                 this.translate
-                .get('dialogService')
-                .subscribe((successMessage) => {
-                console.log('create clicked: ', result);
-                this.componentService.addComponent(result)
-                  .subscribe(response => {
-                    const component = { ...response, ...result };
-                    console.log('component created: ', component);
-                    this.notifierService.showDefaultNotification(successMessage.notifierCreated);
-                    this.data.push(component);
-                    this.dataSource.data = this.data;
-                  })
-                });
+                  .get('dialogService')
+                  .subscribe((successMessage) => {
+                    console.log('create clicked: ', result);
+                    this.componentService.addComponent(result)
+                      .subscribe(response => {
+                        const component = { ...response, ...result };
+                        console.log('component created: ', component);
+                        this.notifierService.showDefaultNotification(successMessage.notifierCreated);
+                        this.data.push(component);
+                        this.dataSource.data = this.data;
+                      })
+                  });
               }
             })
+          });
+
         } else {
           this.authService.promptLogin('Login');
           return;
@@ -189,8 +203,8 @@ export class ComponentsComponent implements OnInit {
   }
 
   loadComponents() {
-    console.log(this.translate.get('components') );
-    
+    console.log(this.translate.get('components'));
+
     this.isLoading = true;
     this.componentService.getAllComponents()
       .pipe(finalize(() => this.isLoading = false))
@@ -225,7 +239,7 @@ export class ComponentsComponent implements OnInit {
   }
 
   exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['no', 'id', 'name','specificBulkWeight', 'lastUpdate'];
+    const headerList = ['no', 'id', 'name', 'specificBulkWeight', 'lastUpdate'];
     if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'components');
@@ -234,5 +248,5 @@ export class ComponentsComponent implements OnInit {
     }
   }
 
-  
+
 }
