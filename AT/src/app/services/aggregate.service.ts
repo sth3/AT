@@ -11,7 +11,8 @@ export class AggregateService {
   constructor(private http: HttpClient) { }
 
   
-  getAggregates(): Observable<AggregateModel[]> {
-    return this.http.get<AggregateModel[]>(`${environment.apiUrl}/aggregate`)
+  getAggregates(type: number): Observable<AggregateModel[]> {
+    return this.http.get<AggregateModel[]>(`${environment.apiUrl}/aggregates/${type}`)
   }
+  
 }

@@ -26,6 +26,7 @@ module.exports = {
         user: SQL_USER,
         password: SQL_PASSWORD,
         port: "1433",
+        driver: "msnodesqlv8",
         pool: {
             max: 10,
             min: 0,

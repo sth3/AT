@@ -33,3 +33,6 @@ qckwinsvc --name "at-frontend" --description "" --script "D:\Web-app\AT\AT\autor
 qckwinsvc --uninstall --name "at-server" --script "D:\Web-app\AT\server\server.js" 
 qckwinsvc --uninstall --name "at-frontend" --script "D:\Web-app\AT\AT\autorun.js"
 
+qckwinsvc2 install name="at-server" description="AT" path="D:\Web-app\AT\server\server.js" args="-a -c" now
+qckwinsvc2 install name="at-frontend" description="AT" path="D:\Web-app\AT\AT\autorun.js" args="-a -c" now
+

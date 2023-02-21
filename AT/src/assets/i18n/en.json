@@ -220,10 +220,10 @@
       "item": "Component name"
     },
     {
-      "item": "Last update"
+      "item": "Quantity"
     },
     {
-      "item": "Changed by"
+      "item": "Last update"
     }
   ],
   "recipeTableHead": [
@@ -295,6 +295,24 @@
     },
     {
       "item": "Recipe name"
+    }
+  ],
+  "selectAggregates": [
+    {
+      "value": 0,
+      "viewValue": "Aggregates - ADS"
+    },
+    {
+      "value": 1,
+      "viewValue": "Aggregates - Micro"
+    },
+    {
+      "value": 2,
+      "viewValue": "Aggregates - Big Bag"
+    },
+    {
+      "value": 3,
+      "viewValue": "Aggregates - Liquid"
     }
   ],
   "selectPacking": [

@@ -21,7 +21,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class AggregateComponent implements OnInit {
 
- 
+ type: number = 0;
   data: AggregateModel[] = [];
   quickFilter: string = '';
   range = new FormGroup({
@@ -33,6 +33,7 @@ export class AggregateComponent implements OnInit {
     { field: 'aID', header: 'Aggregate ID' },
     { field: 'id', header: 'Component ID' },
     { field: 'name', header: 'Component Name' },
+    { field: 'quantity', header: 'Quantity' },
     { field: 'lastUpdate', header: 'Last update', width: '20%' },
    // { field: 'user', header: 'User Name', width: '20%' },
   ];
@@ -52,20 +53,22 @@ export class AggregateComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.loadAggregate();
+    this.loadAggregate(0);
   }
 
   changeFilter() {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
-  changeDate() {
-    this.loadAggregate();  
+  changeDate(num: number) {
+    console.log(num);
+    
+    this.loadAggregate(num);  
   }
 
-  loadAggregate() {
+  loadAggregate(type:number) {
     this.isLoading = true;
-    this.aggregateService.getAggregates()
+    this.aggregateService.getAggregates(type)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((response:AggregateModel[]) => {
         console.log('data: ', response);

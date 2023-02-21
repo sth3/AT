@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "fs-extra": "^10.1.0",
     "http-errors": "~1.6.3",
@@ -25,8 +25,9 @@
     "moment": "^2.29.4",
     "morgan": "~1.9.1",
     "msnodesqlv8": "^2.7.0",
-    "mssql": "^8.1.2",
+    "mssql": "^8.1.4",
     "nodemon": "^2.0.16",
+    "qckwinsvc2": "^1.0.2",
     "uuid": "^8.3.2"
   }
 }

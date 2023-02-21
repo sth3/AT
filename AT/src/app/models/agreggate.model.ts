@@ -5,4 +5,5 @@ export interface AggregateModel {
     nameC: string;    
     user:number;    
     lastUpdate: string;
+    quantity: number;
   }
