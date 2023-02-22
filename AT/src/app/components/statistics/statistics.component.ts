@@ -16,7 +16,7 @@ import { StatisticsService } from '../../services/statistics.service'
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit {
-
+  type: number = 0;
   data: DoseModel[] = [];
   quickFilter: string = '';
   range = new FormGroup({
@@ -57,7 +57,7 @@ export class StatisticsComponent implements OnInit {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();    
   }
 
-  changeDate() {
+  changeDate(num: number) {
     this.loadComponents();  
   }
 

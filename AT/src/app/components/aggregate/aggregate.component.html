@@ -27,8 +27,8 @@
                     <mat-label>{{'navBar.aggregate'| translate}}</mat-label>
                     <!-- <input matInput placeholder="0000000001" readonly [value]="element.idMixer"> -->
                     <mat-select  [(ngModel)] = "this.type" (ngModelChange)="changeDate(this.type)"  >
-                      <mat-option *ngFor="let slecetIdMixer of 'selectAggregates'|translate " [value]="slecetIdMixer.value" >
-                        {{ slecetIdMixer.viewValue }}
+                      <mat-option *ngFor="let slecetIdAggregates of 'selectAggregates'|translate " [value]="slecetIdAggregates.value" >
+                        {{ slecetIdAggregates.viewValue }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -41,7 +41,7 @@
             <span class="spacer"></span>
             <button mat-button (click)="exportCSV(false)">
                 <mat-icon>file_download</mat-icon>
-                {{'head.exportEntire'| translate}}
+                {{'head.export'| translate}}
             </button>
 
         </mat-toolbar-row>

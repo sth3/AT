@@ -19,6 +19,8 @@ import { NotifierService } from '../../services/notifier.service';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { UserModel, UserRole } from '../../models/user.model';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-recipes',
@@ -39,6 +41,7 @@ export class RecipesComponent implements OnInit {
   archivedData: ChangedRecipeModel[] = [];
   data: RecipeModel[] = [];
   quickFilter: string = '';
+  currentUser!: UserModel;
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
@@ -66,6 +69,7 @@ export class RecipesComponent implements OnInit {
     private dialogService: DialogService,
     private exportService: ExportService,
     private notifierService: NotifierService,
+    private authService: AuthService,
     private translate: TranslateService,
     private dateAdapter: DateAdapter<Date>
   ) {
@@ -101,44 +105,69 @@ export class RecipesComponent implements OnInit {
 
   onEditClick(data: any) {
     console.log(data);
-
-    this.dialogService
-      .customDialog(
-        EditRecipeDialogComponent,
-        { recipe: data, allRecipes: this.data, editMode: true },
-        { width: '700px', height: '700px' }
-      )
-      .subscribe((result) => {
-        if (result) {
-          this.promptSave(data.no, result);
+    this.authService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.dialogService
+            .customDialog(
+              EditRecipeDialogComponent,
+              { recipe: data, allRecipes: this.data, editMode: true },
+              { width: '700px', height: '700px' }
+            )
+            .subscribe((result) => {
+              if (result) {
+                this.promptSave(data.no, result);
+              }
+            });
+        } else {
+          this.authService.promptLogin('Login');
+          return;
         }
-      });
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
   }
 
   createRecipe() {
-    this.dialogService
-      .customDialog(
-        EditRecipeDialogComponent,
-        { recipe: null, allRecipes: this.data, editMode: false },
-        { width: '700px', height: '700px' }
-      )
-      .subscribe((result) => {
-        if (result) {
-          console.log('result', result);
-          this.translate.get('dialogService').subscribe((successMessage) => {
-            this.recipeService.addRecipe(result).subscribe((response) => {
-              const recipe = { ...response, ...result };
-              console.log('recipe created: ', recipe);
-              this.notifierService.showDefaultNotification(
-                successMessage.notifierRecipeCreated
-              );
-              this.data.push(recipe);
-              this.dataSource.data = this.data;
-              console.log('this.dataSource.data: ', this.dataSource.data);
+    this.authService.getCurrentUser().subscribe(data => {
+      this.currentUser = data;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.dialogService
+            .customDialog(
+              EditRecipeDialogComponent,
+              { recipe: null, allRecipes: this.data, editMode: false },
+              { width: '700px', height: '700px' }
+            )
+            .subscribe((result) => {
+              if (result) {
+                console.log('result', result);
+                this.translate.get('dialogService').subscribe((successMessage) => {
+                  this.recipeService.addRecipe(result).subscribe((response) => {
+                    const recipe = { ...response, ...result };
+                    console.log('recipe created: ', recipe);
+                    this.notifierService.showDefaultNotification(
+                      successMessage.notifierRecipeCreated
+                    );
+                    this.data.push(recipe);
+                    this.dataSource.data = this.data;
+                    console.log('this.dataSource.data: ', this.dataSource.data);
+                  });
+                });
+              }
             });
-          });
+        } else {
+          this.authService.promptLogin('Login');
+          return;
         }
-      });
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
   }
 
   loadRecipes() {
@@ -177,20 +206,20 @@ export class RecipesComponent implements OnInit {
 
   private promptSave(no: number, data: any) {
     this.translate.get('dialogService').subscribe((successMessage) => {
-    this.dialogService
-      .confirmDialog(successMessage.dialogRecipeCreate)
-      .subscribe((result) => {
-        if (result) {
-          this.recipeService.updateRecipe(no, data).subscribe((response) => {
-            console.log('recipe updated: ', response);
-            this.notifierService.showDefaultNotification(successMessage.notifierRecipeUpdate);
-            this.data = this.data.map((r) =>
-              r.no === no ? { ...r, ...response } : r
-            );
-            this.dataSource.data = this.data;
-          });
-        }
-      });
+      this.dialogService
+        .confirmDialog(successMessage.dialogRecipeCreate)
+        .subscribe((result) => {
+          if (result) {
+            this.recipeService.updateRecipe(no, data).subscribe((response) => {
+              console.log('recipe updated: ', response);
+              this.notifierService.showDefaultNotification(successMessage.notifierRecipeUpdate);
+              this.data = this.data.map((r) =>
+                r.no === no ? { ...r, ...response } : r
+              );
+              this.dataSource.data = this.data;
+            });
+          }
+        });
     });
   }
 

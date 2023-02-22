@@ -127,7 +127,7 @@ const refreshToken = (req, res, next, userSession) => {
 
     // renew the expiry time
     const now = new Date()
-    const expiresAt = new Date(+now + 5 * MINUTE);
+    const expiresAt = new Date(+now + 50 * MINUTE);
     sessions[newSessionToken] = new Session(userSession.username, userSession.role, expiresAt);
     delete sessions[sessionToken];
 

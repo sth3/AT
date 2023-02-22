@@ -13,6 +13,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { UserModel, UserRole } from '../../models/user.model';
+
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -30,12 +33,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class OrdersComponent implements OnInit {
 
   orders: OrderModel[] = [];
+  currentUser!: UserModel;
   quickFilter: string = '';
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
   });
-  
+
   columnsToDisplay = [
     { field: 'no', header: 'No' },
     { field: 'id', header: 'ID' },
@@ -44,17 +48,17 @@ export class OrdersComponent implements OnInit {
     { field: 'dueDate', header: 'Due date', width: '20%' },
   ];
 
-  slecetIdMixers: selectList[] = [    
+  slecetIdMixers: selectList[] = [
     { value: 1, viewValue: 'Vertical mixer' },
     { value: 2, viewValue: 'Horizontal mixer' },
     { value: 3, viewValue: 'External mixer' },
-  ];  
+  ];
 
   packingOrders: selectList[] = [
-    {value: 0, viewValue: 'Bag'},
-    {value: 1, viewValue: 'Big Bag'},  
+    { value: 0, viewValue: 'Bag' },
+    { value: 1, viewValue: 'Big Bag' },
     { value: 2, viewValue: 'Liquid' },
-    { value: 3, viewValue: 'Micro' },  
+    { value: 3, viewValue: 'Micro' },
   ];
 
   isLoading = true;
@@ -65,13 +69,15 @@ export class OrdersComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private ordersService: OrdersService,
-              private dialogService: DialogService,
-              private exportService: ExportService,
-              private notifierService: NotifierService,
-              private translate: TranslateService,
-              private router: Router, private r: ActivatedRoute,
-              private dateAdapter: DateAdapter<Date>) {
-                this.dateAdapter.setLocale('en-GB'); }
+    private dialogService: DialogService,
+    private exportService: ExportService,
+    private notifierService: NotifierService,
+    private translate: TranslateService,
+    private authService: AuthService,
+    private router: Router, private r: ActivatedRoute,
+    private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('en-GB');
+  }
 
   ngOnInit(): void {
     this.getOrders();
@@ -82,30 +88,30 @@ export class OrdersComponent implements OnInit {
     this.ordersService.getOrders(0)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
-      (data: OrderModel[]) => {
-        this.orders = data;
-        console.log(this.orders);
-        if (this.range.value.start !== null && this.range.value.end !== null) {
-          this.orders = data.filter((item: OrderModel) => {
-            // console.log('new Date(item.datetime)',new Date(item.datetime));
-            // console.log('range start', this.range.value.start);
-            return new Date(item.lastUpdate) >= this.range.value.start &&
-              new Date(item.lastUpdate) <= this.range.value.end;
-          });
-        } else if (this.range.value.start !== null) {
-          this.orders = data.filter((item: OrderModel) => {
-            return new Date(item.lastUpdate) >= this.range.value.start ;
-          });
-        } else if (this.range.value.end !== null) {
-          this.orders = data.filter((item: OrderModel) => {
-            return new Date(item.lastUpdate) <= this.range.value.end ;
-          });
-        }
+        (data: OrderModel[]) => {
+          this.orders = data;
+          console.log(this.orders);
+          if (this.range.value.start !== null && this.range.value.end !== null) {
+            this.orders = data.filter((item: OrderModel) => {
+              // console.log('new Date(item.datetime)',new Date(item.datetime));
+              // console.log('range start', this.range.value.start);
+              return new Date(item.lastUpdate) >= this.range.value.start &&
+                new Date(item.lastUpdate) <= this.range.value.end;
+            });
+          } else if (this.range.value.start !== null) {
+            this.orders = data.filter((item: OrderModel) => {
+              return new Date(item.lastUpdate) >= this.range.value.start;
+            });
+          } else if (this.range.value.end !== null) {
+            this.orders = data.filter((item: OrderModel) => {
+              return new Date(item.lastUpdate) <= this.range.value.end;
+            });
+          }
 
-        this.dataSource = new MatTableDataSource<OrderModel>(this.orders);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      });
+          this.dataSource = new MatTableDataSource<OrderModel>(this.orders);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
   }
 
   changeFilter() {
@@ -114,21 +120,21 @@ export class OrdersComponent implements OnInit {
 
   onDeleteClick(data: any) {
     this.translate
-          .get('dialogService')
-          .subscribe((successMessage) => {
-    this.dialogService.confirmDialog(successMessage.dialogOrderDelete)
-      .subscribe(result => {
-        if (result) {
-          this.ordersService.deleteOrder(data.no)
-            .subscribe(() => {
-              console.log('order deleted: ', data);
-              this.notifierService.showDefaultNotification(successMessage.notifierOrderDeleted);
-              this.orders = this.orders.filter(o => o.no !== data.no);
-              this.dataSource.data = this.orders;
-            })
-        }
+      .get('dialogService')
+      .subscribe((successMessage) => {
+        this.dialogService.confirmDialog(successMessage.dialogOrderDelete)
+          .subscribe(result => {
+            if (result) {
+              this.ordersService.deleteOrder(data.no)
+                .subscribe(() => {
+                  console.log('order deleted: ', data);
+                  this.notifierService.showDefaultNotification(successMessage.notifierOrderDeleted);
+                  this.orders = this.orders.filter(o => o.no !== data.no);
+                  this.dataSource.data = this.orders;
+                })
+            }
+          })
       })
-    })
   }
 
   onEditClick(data: any) {
@@ -136,11 +142,24 @@ export class OrdersComponent implements OnInit {
   }
 
   createOrder() {
-    this.router.navigate(['new'], { relativeTo: this.r })
+    this.authService.getCurrentUser().subscribe(data => {
+      this.currentUser = data;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.router.navigate(['new'], { relativeTo: this.r })
+        } else {
+          this.authService.promptLogin('Login');
+          return;
+        }
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
   }
 
   pdfClick(data: any) {
-    this.router.navigate(['../pdf/'+data.no], { relativeTo: this.r })
+    this.router.navigate(['../pdf/' + data.no], { relativeTo: this.r })
   }
 
   exportCSV(visibleDataOnly: boolean) {

@@ -15,15 +15,23 @@
                 <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0; ">
                     <mat-label >{{'head.dateRange'| translate}}</mat-label>
                     <mat-date-range-input [formGroup]="range" [rangePicker]="picker" >
-                        <input matStartDate formControlName="start" placeholder="{{'head.startDate'| translate}}" (ngModelChange)="changeDate()" >
-                        <input matEndDate formControlName="end" placeholder="{{'head.endDate'| translate}}" (ngModelChange)="changeDate()">
+                        <input matStartDate formControlName="start" placeholder="{{'head.startDate'| translate}}" (ngModelChange)="changeDate(this.type)" >
+                        <input matEndDate formControlName="end" placeholder="{{'head.endDate'| translate}}" (ngModelChange)="changeDate(this.type)">
                     </mat-date-range-input>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker startView="year"></mat-date-range-picker>
                 </mat-form-field>
 
                 <!-- <p>Selected range: {{range.value.start | date : 'd.M.y, HH:mm:ss'  }} Selected range: {{range.value.end | date : 'd.M.y, HH:mm:ss' }}</p> -->
-
+                <mat-form-field appearance="outline" >
+                    <mat-label>{{'navBar.statistics'| translate}}</mat-label>
+                    <!-- <input matInput placeholder="0000000001" readonly [value]="element.idMixer"> -->
+                    <mat-select  [(ngModel)] = "this.type" (ngModelChange)="changeDate(this.type)"  >
+                      <mat-option *ngFor="let slecetTypStat of 'selectTypeStats'|translate " [value]="slecetTypStat.value" >
+                        {{ slecetTypStat.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
             </div>
             <h2 class="table-title">{{'navBar.statistics'| translate}}</h2>
             

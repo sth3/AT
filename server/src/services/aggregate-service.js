@@ -13,7 +13,7 @@ const GET_AGGREGATES = [
         C.id id,
         ISNULL(C.name,'') name             
         FROM [AT].[dbo].[AGGREGATES_ADS] M 
-        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent`,
+        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent ORDER BY M.no`,
         `SELECT 
         M.no aNo,
         M.id aID,
@@ -22,7 +22,7 @@ const GET_AGGREGATES = [
         C.id id,
         ISNULL(C.name,'') name             
         FROM [AT].[dbo].[AGGREGATES_Micro] M 
-        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent`,
+        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent ORDER BY M.no`,
        `SELECT 
         M.no aNo,
         M.id aID,
@@ -31,7 +31,7 @@ const GET_AGGREGATES = [
         C.id id,
         ISNULL(C.name,'') name             
         FROM [AT].[dbo].[AGGREGATES_BigBag] M 
-        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent`,
+        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent ORDER BY M.no`,
         `SELECT 
         M.no aNo,
         M.id aID,
@@ -40,7 +40,7 @@ const GET_AGGREGATES = [
         C.id id,
         ISNULL(C.name,'') name             
         FROM [AT].[dbo].[AGGREGATES_Liquid] M 
-        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent`
+        LEFT OUTER join [AT].[dbo].[COMPONENT] C on C.no = M.idComponent ORDER BY M.no`
 ];
 
 

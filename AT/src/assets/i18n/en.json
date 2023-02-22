@@ -315,6 +315,20 @@
       "viewValue": "Aggregates - Liquid"
     }
   ],
+  "selectTypeStats": [
+    {
+      "value": 0,
+      "viewValue": "Dose"
+    },
+    {
+      "value": 1,
+      "viewValue": "Shift"
+    },
+    {
+      "value": 2,
+      "viewValue": "Month"
+    }
+  ],
   "selectPacking": [
     {
       "value": 0,

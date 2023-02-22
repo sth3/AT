@@ -317,6 +317,20 @@
       "viewValue": "Agregaty - Tekuté"
     }
   ],
+  "selectTypeStats": [
+    {
+      "value": 0,
+      "viewValue": "Dávok"
+    },
+    {
+      "value": 1,
+      "viewValue": "Smenová"
+    },
+    {
+      "value": 2,
+      "viewValue": "Mesačná"
+    }
+  ],
   "selectPacking": [
     {
       "value": 0,
