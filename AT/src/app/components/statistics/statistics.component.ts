@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material/core';
 import { DoseModel } from '../../models/statistics.model';
 import { ExportService } from '../../services/export.service';
 import { StatisticsService } from '../../services/statistics.service'
+import { selectList } from 'src/app/models/order.model';
 
 @Component({
   selector: 'app-statistics',
@@ -23,17 +24,48 @@ export class StatisticsComponent implements OnInit {
     start: new FormControl(),
     end: new FormControl(),
   });
+  groupBy = new FormControl([0, 1, 2, 3, 4, 5]);
+  groupByList: string[] = ['Number Of Dose', 'Creator', 'Recipe ID', 'Recipe Name', 'Order ID', 'Order Name'];
+  selectTypeStats : selectList[] = [
+    {
+      "value": 0,
+      "viewValue": "Number Of Dose"
+    },
+    {
+      "value": 1,
+      "viewValue": "Creator"
+    },
+    {
+      "value": 2,
+      "viewValue": "Recipe ID"
+    },
+    {
+      "value": 3,
+      "viewValue": "Recipe Name"
+    },
+    {
+      "value": 4,
+      "viewValue": "Order ID"
+    },
+    {
+      "value": 5,
+      "viewValue": "Order Name"
+    }
+  ]
+
 
 
   columnsToDisplay = [
-    { field: 'no', header: 'Poradové čislo' },
     { field: 'datetime', header: 'Dátum a Čas' },
-    { field: 'name', header: 'Meno Komponentu', width: '40%' },
+    { field: 'componentN', header: 'Meno Komponentu', },
     { field: 'componentSP', header: 'Žiadaná Hodnota' },
     { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
     { field: 'noContainer', header: 'Number of Dose' },
-    { field: 'noOrder', header: 'ID Zákazky' },
-    { field: 'noRecipe', header: 'No Recipe' },
+    { field: 'orderID', header: 'ID Zákazky' },
+    { field: 'orderN', header: 'Name Zákazky' },
+    { field: 'recipeID', header: 'No Recipe' },
+    { field: 'recipeN', header: 'Name Recipe' },
+    { field: 'UserName', header: 'UserName' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<DoseModel> = new MatTableDataSource<DoseModel>([]);
@@ -47,7 +79,7 @@ export class StatisticsComponent implements OnInit {
     private dateAdapter: DateAdapter<Date>) { this.dateAdapter.setLocale('en-GB'); }
 
   ngOnInit(): void {
-    this.loadComponents();
+    this.loadComponents(0);
   }
 
 
@@ -56,18 +88,55 @@ export class StatisticsComponent implements OnInit {
   changeFilter() {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();    
   }
+  changeGroupBy() {
+   console.log(this.groupBy.value);
+   console.log('this.type',this.type);
+   setTimeout(() => {this.statisticsService.updateSelectStat(this.groupBy.value, this.type).subscribe((groupBy) => {
+    console.log('updated groupBy: ', groupBy);
+  });;}, 500);
+   
+      
+  }
 
   changeDate(num: number) {
-    this.loadComponents();  
+    this.loadComponents(num);  
+    this.columnsToDisplay = [
+      { field: 'datetime', header: 'Dátum a Čas' },
+      { field: 'componentN', header: 'Meno Komponentu', },
+      { field: 'componentSP', header: 'Žiadaná Hodnota' },
+      { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
+      { field: 'noContainer', header: 'Number of Dose' },
+      { field: 'orderID', header: 'ID Zákazky' },
+      { field: 'orderN', header: 'Name Zákazky' },
+      { field: 'recipeID', header: 'No Recipe' },
+      { field: 'recipeN', header: 'Name Recipe' },
+      { field: 'UserName', header: 'UserName' },
+    ]
+   
+    if(num == 1){
+      this.columnsToDisplay = [        
+        { field: 'componentN', header: 'Meno Komponentu', },
+        { field: 'componentSP', header: 'Žiadaná Hodnota' },
+        { field: 'componentPV', header: 'Nadávkovaná Hodnota' },
+        { field: 'noContainer', header: 'Number of Dose' },
+        { field: 'orderID', header: 'ID Zákazky' },
+        { field: 'orderN', header: 'Name Zákazky' },
+        { field: 'recipeID', header: 'No Recipe' },
+        { field: 'recipeN', header: 'Name Recipe' },
+        { field: 'UserName', header: 'UserName' },
+      ]
+    }
+    this.allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   }
 
 
-  private loadComponents() {
+  private loadComponents(type:number) {
     this.isLoading = true;
-    this.statisticsService.getDoseStatistics()
+    this.statisticsService.getStatistics(type)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(data => {
-
+        console.log('data',data);
+        
         this.data = data;
         if (this.range.value.start !== null && this.range.value.end !== null) {
           this.data = data.filter((item: DoseModel) => {

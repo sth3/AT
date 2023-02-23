@@ -261,9 +261,6 @@
   ],
   "statisticsTableHead": [
     {
-      "item": "Pč"
-    },
-    {
       "item": "Dátum a čas "
     },
     {
@@ -282,7 +279,46 @@
       "item": "ID Výrobného príkazu"    
     },
     {
+      "item": "Meno výrobného príkazu"    
+    },
+    {
+      "item": "ID receptu"
+    },
+    {
       "item": "Meno receptu"
+    },
+    {
+      "item": "Tvorca"
+    }
+  ],
+  "statisticsTableHead1": [
+    
+    {
+      "item": "Meno komponentu"
+    },
+    {
+      "item": "žiadaná hodnota"
+    },
+    {
+      "item": "Aktuálna hodnota"    
+    },
+    {
+      "item": "Číslo dávky"    
+    },
+    {
+      "item": "ID Výrobného príkazu"    
+    },
+    {
+      "item": "Meno výrobného príkazu"    
+    },
+    {
+      "item": "ID receptu"
+    },
+    {
+      "item": "Meno receptu"
+    },
+    {
+      "item": "Tvorca"
     }
   ],
   "selectIdMixers": [
@@ -324,7 +360,7 @@
     },
     {
       "value": 1,
-      "viewValue": "Smenová"
+      "viewValue": "Komponentov"
     },
     {
       "value": 2,

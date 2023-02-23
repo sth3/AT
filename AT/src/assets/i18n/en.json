@@ -271,10 +271,7 @@
       "viewValue": "External mixer"
     }
   ],
-  "statisticsTableHead": [
-    {
-      "item": "No"
-    },
+  "statisticsTableHead": [    
     {
       "item": "Data and Time "
     },
@@ -294,7 +291,16 @@
       "item": "Order ID"    
     },
     {
+      "item": "Order name"    
+    },
+    {
+      "item": "Recipe ID"    
+    },
+    {
       "item": "Recipe name"
+    },
+    {
+      "item": "Creator"
     }
   ],
   "selectAggregates": [
@@ -322,7 +328,7 @@
     },
     {
       "value": 1,
-      "viewValue": "Shift"
+      "viewValue": "Components"
     },
     {
       "value": 2,

@@ -11,7 +11,12 @@ export class StatisticsService {
 
   constructor(private http: HttpClient) { }
 
-  getDoseStatistics(): Observable<DoseModel[]> {
-    return this.http.get<DoseModel[]>(`${environment.apiUrl}/dose-statistics`);
+  getStatistics(type: number): Observable<DoseModel[]> {
+    return this.http.get<DoseModel[]>(`${environment.apiUrl}/statistics/${type}`);
+  }
+  updateSelectStat( groupBy: Number[], type:Number): Observable<DoseModel[]>  {
+    console.log('groupBy',groupBy,'type',type  );
+    
+    return this.http.post<DoseModel[]>(`${environment.apiUrl}/statistics/${type}/list`,groupBy,   { withCredentials: true });
   }
 }

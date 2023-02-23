@@ -8,5 +8,6 @@ export interface DoseModel {
     componentPV: number;
     idContainer: string;
     idOrder: string; 
+    groupBy: Number[] | null
   }
 
