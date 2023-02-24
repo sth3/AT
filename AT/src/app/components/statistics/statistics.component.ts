@@ -50,6 +50,7 @@ export class StatisticsComponent implements OnInit {
     private dateAdapter: DateAdapter<Date>) { this.dateAdapter.setLocale('en-GB'); }
 
   ngOnInit(): void {
+    this.filter = [...this.groupBy.value, 6,7,8,9]  
     this.loadComponents(this.type, this.groupBy.value);
   }
 
@@ -130,13 +131,14 @@ export class StatisticsComponent implements OnInit {
   }
 
   exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['no', 'dateTime', 'name', 'componentSP', 'componentPV', 'idContainer', 'idOrder'];
-    if (visibleDataOnly) {
+    console.log([...this.columnsToDisplay.filter(   val => this.filter.includes(val.id) ).map(c => c.field)])
+    const headerList = [...this.columnsToDisplay.filter(   val => this.filter.includes(val.id) ).map(c => c.field)];
+    //if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'DoseStatistics');
-    } else {
-      this.exportService.downloadFile(this.data, headerList, 'DoseStatistics');
-    }
+   // } else {
+      //this.exportService.downloadFile(this.data, headerList, 'DoseStatistics');
+    //}
   }
 }
 

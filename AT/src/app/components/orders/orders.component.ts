@@ -90,7 +90,8 @@ export class OrdersComponent implements OnInit {
       .subscribe(
         (data: OrderModel[]) => {
           this.orders = data;
-          console.log(this.orders);
+          console.log('getOrders',data);
+          console.log('columnsToDisplayWithExpand',this.columnsToDisplayWithExpand);
           if (this.range.value.start !== null && this.range.value.end !== null) {
             this.orders = data.filter((item: OrderModel) => {
               // console.log('new Date(item.datetime)',new Date(item.datetime));
@@ -112,6 +113,8 @@ export class OrdersComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         });
+        console.log('columnsToDisplayWithExpand',this.columnsToDisplayWithExpand);
+        
   }
 
   changeFilter() {
@@ -169,7 +172,10 @@ export class OrdersComponent implements OnInit {
       // @ts-ignore
       data = this.exportService.convertOrdersForDownload(this.dataSource._renderData.value);
     } else {
+      console.log(this.orders);
+      
       data = this.exportService.convertOrdersForDownload(this.orders);
+      console.log('data',data);
     }
     this.exportService.downloadFile(data, headerList, 'orders');
   }
