@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RecipeModel } from '../models/recipe.model';
-import { OrderModel } from '../models/order.model';
+import { OrderModel, OrderModelPacking } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -74,12 +74,28 @@ export class ExportService {
   }
 
   getOrdersHeaders() {
-    return ['no', 'id', 'name','customerName','dueDate' ,'lastUpdate','operatorId','idMixer','mixingTime','idPackingMachine','createdAt','idEmptyingStationBag','volumePerDose','recipeName','','','',''];
+    const headers = ['no', 'id', 'name','customerName','dueDate' ,'lastUpdate','operatorId','idMixer','mixingTime','idPackingMachine','createdAt','idEmptyingStationBag','volumePerDose','recipeName'];
+    for (let i = 1; i < 21; i++) {
+      headers.push('componentID' + i);
+      headers.push('componentName' + i);
+      headers.push('componentSP' + i);
+    }
+    
+    return headers
   }
 
-  convertOrdersForDownload(orders: OrderModel[]) {
+  convertOrdersForDownload(orders: OrderModelPacking[]) {
     console.log(orders);
-    
+    orders.map(r => {
+      const recipe: any = r;
+        recipe['recipeName'] = r.recipe.name;
+      r.recipe.components.forEach((c, i) => {
+        recipe['componentID' + (i + 1)] = c.id;
+        recipe['componentName' + (i + 1)] = c.name;
+        recipe['componentSP' + (i + 1)] = c.componentSP;
+      })
+      return recipe;
+    });
     return orders;
   }
 }

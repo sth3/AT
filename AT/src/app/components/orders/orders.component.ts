@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrdersService } from '../../services/orders.service';
-import { OrderModel, selectList } from '../../models/order.model';
+import { OrderModel, OrderModelPacking, selectList } from '../../models/order.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -32,7 +32,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class OrdersComponent implements OnInit {
 
-  orders: OrderModel[] = [];
+  orders: OrderModelPacking[] = [];
   currentUser!: UserModel;
   quickFilter: string = '';
   range = new FormGroup({
@@ -88,7 +88,7 @@ export class OrdersComponent implements OnInit {
     this.ordersService.getOrders(0)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
-        (data: OrderModel[]) => {
+        (data: OrderModelPacking[]) => {
           this.orders = data;
           console.log('getOrders',data);
           console.log('columnsToDisplayWithExpand',this.columnsToDisplayWithExpand);

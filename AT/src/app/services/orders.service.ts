@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { OrderListModel, OrderModel, OrderPacking } from '../models/order.model';
+import { OrderListModel, OrderModel, OrderModelPacking } from '../models/order.model';
 import { UserModel } from '../models/user.model';
 import { formatDate } from '@angular/common';
 
@@ -14,8 +14,8 @@ export class OrdersService {
   constructor(private http: HttpClient) {
   }
 
-  getOrders(done: number): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders/${done}`);
+  getOrders(done: number): Observable<OrderModelPacking[]> {
+    return this.http.get<OrderModelPacking[]>(`${environment.apiUrl}/orders/${done}`);
   }
 
   deleteOrder(no: number) {
