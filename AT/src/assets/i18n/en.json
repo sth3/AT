@@ -155,6 +155,9 @@
     "packingWeight": "Packing Weight",    
     "weightPerDose": "Weight Per Dose"
   },
+  "statistics": {
+    "select":"Select"    
+  },
   "componentsTableHead": [
     {
       "item": "ID"
@@ -351,6 +354,32 @@
     {
       "value": 3,
       "viewValue": "Micro"
+    }
+  ],
+  "selectGroupBy" :  [
+    {
+      "value": 0,
+      "viewValue": "Number Of Dose"
+    },
+    {
+      "value": 1,
+      "viewValue": "Creator"
+    },
+    {
+      "value": 2,
+      "viewValue": "Recipe ID"
+    },
+    {
+      "value": 3,
+      "viewValue": "Recipe Name"
+    },
+    {
+      "value": 4,
+      "viewValue": "Order ID"
+    },
+    {
+      "value": 5,
+      "viewValue": "Order Name"
     }
   ]
 }

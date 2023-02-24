@@ -2,87 +2,6 @@ const { poolPromise } = require('../data/events/dbIndexComponents');
 const sql = require('mssql/msnodesqlv8');
 const { trimTrailingWhitespace } = require('../data/utils');
 
-const GET_STATISTICS = [
-    `
-    SELECT 
-    [datetime]
-    ,C.name componentN
-    ,[componentSP]
-    ,[componentPV]
-    ,[noContainer]
-    ,U.firstName
-    ,U.lastName
-    ,U.firstName + '' + U.lastName AS UserName
-    ,RH.id recipeID
-    ,RH.name recipeN
-    ,O.id orderID
-    ,O.name orderN
-
-    FROM [AT].[dbo].[STATISTICS] S
-    INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = S.noComponent
-    INNER JOIN [AT].[dbo].[USERS] U on U.id = S.noUser
-    INNER JOIN [AT].[dbo].[ORDERS] O on O.no = S.noOrder
-    INNER JOIN [AT].[dbo].[RECIPE_H] RH on RH.no = S.noRecipe
-    `,
-    `
-    SELECT 
-
-    C.name componentN
-    ,SUM(S.componentSP) AS componentSP
-    ,SUM(S.componentPV) AS componentPV
-    ,S.noContainer
-    ,U.firstName + '' + U.lastName AS UserName
-    ,RH.id recipeID
-    ,RH.name recipeN
-    ,O.id orderID
-    ,O.name orderN
-    FROM [AT].[dbo].[STATISTICS] S
-    INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = S.noComponent
-    INNER JOIN [AT].[dbo].[USERS] U on U.id = S.noUser
-    INNER JOIN [AT].[dbo].[ORDERS] O on O.no = S.noOrder
-    INNER JOIN [AT].[dbo].[RECIPE_H] RH on RH.no = S.noRecipe
-    GROUP BY C.name,  S.noContainer, O.name, O.id ,RH.name ,RH.id, U.firstName, U.lastName
-    `,
-    // TODO month
-    `
-    SELECT 
-
-    C.name componentN
-    ,SUM(S.componentSP) AS componentSP
-    ,SUM(S.componentPV) AS componentPV
-    ,S.noContainer
-    ,U.firstName + '' + U.lastName AS UserName
-    ,RH.id recipeID
-    ,RH.name recipeN
-    ,O.id orderID
-    ,O.name orderN
-    FROM [AT].[dbo].[STATISTICS] S
-    INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = S.noComponent
-    INNER JOIN [AT].[dbo].[USERS] U on U.id = S.noUser
-    INNER JOIN [AT].[dbo].[ORDERS] O on O.no = S.noOrder
-    INNER JOIN [AT].[dbo].[RECIPE_H] RH on RH.no = S.noRecipe
-    
-    `,
-    `
-    SELECT 
-
-    C.name componentN
-    ,SUM(S.componentSP) AS componentSP
-    ,SUM(S.componentPV) AS componentPV
-    ,S.noContainer
-    ,U.firstName + '' + U.lastName AS UserName
-    ,RH.id recipeID
-    ,RH.name recipeN
-    ,O.id orderID
-    ,O.name orderN
-    FROM [AT].[dbo].[STATISTICS] S
-    INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = S.noComponent
-    INNER JOIN [AT].[dbo].[USERS] U on U.id = S.noUser
-    INNER JOIN [AT].[dbo].[ORDERS] O on O.no = S.noOrder
-    INNER JOIN [AT].[dbo].[RECIPE_H] RH on RH.no = S.noRecipe
-    GROUP BY C.name,  S.noContainer, O.name, O.id ,RH.name ,RH.id, U.firstName, U.lastName
-    `
-];
 
 STATISTICS_HEADER = `
     SELECT 
@@ -127,16 +46,6 @@ GROUP_BY_FOOTER = [
 ]
 
 
-
-const getStat = async (type) => {
-    const pool = await poolPromise;
-    const { recordset } = await pool.request()
-        .query(GET_STATISTICS[type]);
-    console.log(trimTrailingWhitespace(recordset));
-    return trimTrailingWhitespace(recordset);
-}
-
-
 const updateStatSelect = async (type, groupBy) => {    
     let queryBody = [];
     let queryBodyFooter = [];    
@@ -156,19 +65,13 @@ const updateStatSelect = async (type, groupBy) => {
     }
     console.log(query);
 
-    //const pool = await poolPromise;
-   // return pool.request()
-   //     .query(query);
-
         const pool = await poolPromise;
-        const { recordset } = await pool.request()
+        return  pool.request()
             .query(query);
-        console.log(trimTrailingWhitespace(recordset));
-        return trimTrailingWhitespace(recordset);
+        
 
 }
 
-module.exports = {
-    getStat,
+module.exports = {    
     updateStatSelect
 }

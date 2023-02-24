@@ -157,6 +157,9 @@
     "packingWeight": "Hmotnosť balenia",
     "weightPerDose": "Celková hmotnosť na dávku"
   },  
+  "statistics": {
+    "select":"Výber"    
+  },
   "componentsTableHead": [
     {
       "item": "ID"
@@ -383,6 +386,32 @@
     {
       "value": 3,
       "viewValue": "Mikro"
+    }
+  ],
+  "selectGroupBy" :  [
+    {
+      "value": 0,
+      "viewValue": "Číslo dávky"
+    },
+    {
+      "value": 1,
+      "viewValue": "Tvorca"
+    },
+    {
+      "value": 2,
+      "viewValue": "ID receptu"
+    },
+    {
+      "value": 3,
+      "viewValue": "Meno receptu"
+    },
+    {
+      "value": 4,
+      "viewValue": "ID Výrobného príkazu"
+    },
+    {
+      "value": 5,
+      "viewValue": "Meno výrobného príkazu"
     }
   ]
 }
