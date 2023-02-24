@@ -26,7 +26,9 @@ import { ComponentModel } from '../../models/component.model';
           <mat-label>{{ 'componentsTableHead.1.item' | translate }}</mat-label>
           <input matInput placeholder="ID" formControlName="id">
           <mat-error *ngIf="id!.hasError('required')">{{ 'componentsTableHead.1.item' | translate  }}{{ 'dialogComponent.requiredName' | translate  }}</mat-error>
-          <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')">{{ 'dialogComponent.exactlyID' | translate  }}
+          <mat-error *ngIf="id!.hasError('minlength') ">{{ 'componentsTableHead.1.item' | translate  }}{{ 'dialogComponent.minlengthName' | translate  }}
+          </mat-error>
+          <mat-error *ngIf="id!.hasError('maxlength')">{{ 'componentsTableHead.1.item' | translate  }}{{ 'dialogComponent.maxlengthID' | translate  }}
           </mat-error>
           <mat-error *ngIf="id!.hasError('invalidComponentId')">{{ 'dialogComponent.invalidComponentId' | translate  }}
           </mat-error>
@@ -34,7 +36,7 @@ import { ComponentModel } from '../../models/component.model';
 
         <mat-form-field style="width: 100%" appearance="outline">
           <mat-label>{{ 'componentsTableHead.3.item' | translate }}</mat-label>
-          <input matInput placeholder="Specific bulk weight" formControlName="specificBulkWeight" type="number" min="0" >
+          <input matInput placeholder="Specific bulk weight" formControlName="specificBulkWeight" type="number" min="0" max="5" >
           <mat-error *ngIf="specificBulkWeight!.hasError('required')">{{ 'dialogComponent.requiredSBW' | translate  }}</mat-error>
                     
           <span matSuffix>kg/l</span>
@@ -61,10 +63,10 @@ export class EditComponentDialogComponent implements OnInit {
   }) {
     this.form = new FormGroup({
       name: new FormControl(data.component ? data.component.name : '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(30), this.validComponentNameValidator.bind(this)]),
+        [Validators.required, Validators.minLength(1), Validators.maxLength(40), this.validComponentNameValidator.bind(this)]),
       id: new FormControl(data.component ? data.component.id : this.getNewId(data.allComponents),
-        [Validators.required, Validators.minLength(6), Validators.maxLength(6),
-        this.validComponentIdValidator.bind(this)]),      
+        [Validators.required, Validators.minLength(1), Validators.maxLength(22),
+        this.validComponentIdValidator.bind(this)]),
       specificBulkWeight: new FormControl(data.component ? data.component.specificBulkWeight.toFixed(3) : '',
         [Validators.required])
     });
@@ -78,7 +80,7 @@ export class EditComponentDialogComponent implements OnInit {
     return this.form.get('id');
   }
 
-  
+
 
   get specificBulkWeight() {
     return this.form.get('specificBulkWeight');

@@ -56,16 +56,16 @@ export class EditRecipeDialogComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(data.recipe ? data.recipe.name : '', [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
+        Validators.minLength(1),
+        Validators.maxLength(40),
         this.validRecipeNameValidator.bind(this),
       ]),
       id: new FormControl(
         data.recipe ? data.recipe.id : this.getNewId(data.allRecipes),
         [
           Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(6),
+          Validators.minLength(1),
+          Validators.maxLength(22),
           this.validRecipeIdValidator.bind(this),
         ]
       ),

@@ -34,8 +34,13 @@
         {{ "recipeTableHead.1.item" | translate }}
         {{ "dialogRecipe.requiredName" | translate }}
       </mat-error>
-      <mat-error *ngIf="id!.hasError('minlength') || id!.hasError('maxlength')">        
-        {{ "dialogRecipe.exactlyID" | translate }}
+      <mat-error *ngIf="id!.hasError('minlength')">        
+        {{ "recipeTableHead.1.item" | translate }}
+        {{ "dialogRecipe.minlengthName" | translate }}
+      </mat-error>
+      <mat-error *ngIf=" id!.hasError('maxlength')">        
+        {{ "recipeTableHead.1.item" | translate }}
+        {{ "dialogRecipe.maxlengthID" | translate }}
       </mat-error>
       <mat-error *ngIf="id!.hasError('invalidRecipeId')">
         {{ "dialogRecipe.invalidId" | translate }}

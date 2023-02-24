@@ -8,23 +8,39 @@
           <mat-form-field appearance="outline">
             <input matInput placeholder="{{'orderTableHead.1.item' | translate}}" formControlName="id">
             <mat-error *ngIf="id.hasError('invalidOrderId')">{{'dialogOrder.invalidId' | translate}}</mat-error>
-            <mat-error *ngIf="id.hasError('maxlength') || id.hasError('minlength')">
-              {{'dialogOrder.exactlyID' | translate}}</mat-error>
+            <mat-error *ngIf=" id.hasError('minlength')">
+              {{'orderTableHead.1.item' | translate}}{{'dialogOrder.minlengthName' | translate}}
+            </mat-error>
+              <mat-error *ngIf="id.hasError('maxlength') ">
+                {{'orderTableHead.1.item' | translate}}{{'dialogOrder.maxlengthID' | translate}}
+              </mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
           <h3>{{'orderTableHead.2.item' | translate}}</h3>
           <mat-form-field appearance="outline">
             <input matInput placeholder="{{'orderTableHead.2.item' | translate}}" formControlName="name">
-            <mat-error *ngIf="name!.hasError('invalidOrderName')">{{'dialogOrder.invalidName' | translate}}</mat-error>
+            <mat-error *ngIf="name!.hasError('invalidOrderName')">
+              {{'dialogOrder.invalidId' | translate}}
+            </mat-error>
             <mat-error *ngIf="name!.hasError('minlength')">
-              {{'navBar.orderDetail' | translate}}{{'navBar.minlengthName' | translate}}</mat-error>
+              {{'orderTableHead.2.item' | translate}}{{'dialogOrder.minlengthName' | translate}}
+            </mat-error>
+            <mat-error *ngIf="name!.hasError('maxlength')">
+              {{'orderTableHead.2.item' | translate}}{{'dialogOrder.maxlengthName' | translate}}
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
           <h3>{{'orderTableHead.3.item' | translate}}</h3>
           <mat-form-field appearance="outline">
             <input matInput placeholder="{{'orderTableHead.3.item' | translate}}" formControlName="customerName">
+            <mat-error *ngIf="customerName!.hasError('minlength')">
+              {{'orderTableHead.3.item' | translate}}{{'dialogOrder.minlengthName' | translate}}
+            </mat-error>
+            <mat-error *ngIf="customerName!.hasError('maxlength')">
+              {{'orderTableHead.3.item' | translate}}{{'dialogOrder.maxlengthName' | translate}}
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="order-form-field">
@@ -241,7 +257,7 @@
         <div class="order-form-field">
           <h3>{{'dialogOrder.packingMachineID'| translate}}</h3>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="{{'dialogOrder.packingMachineID'| translate}}" formControlName="idPackingMachine" min="1" max="8"
+            <input matInput placeholder="{{'dialogOrder.packingMachineID'| translate}}" formControlName="idPackingMachine" min="1" max="9"
               type="number">
             <mat-error *ngIf="idPackingMachine!.invalid">{{'dialogOrder.idPackingMachine'| translate}}</mat-error>
           </mat-form-field>

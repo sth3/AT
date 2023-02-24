@@ -160,6 +160,9 @@ export class OrderDetailComponent implements OnInit {
   get name() {
     return this.form.get('name') as FormControl;
   }
+  get customerName() {
+    return this.form.get('customerName') as FormControl;
+  }
 
   get idPackingMachine() {
     return this.form.get('idPackingMachine') as FormControl;
@@ -184,19 +187,23 @@ export class OrderDetailComponent implements OnInit {
   private prepareForm() {
     this.form = new FormGroup({
       id: new FormControl(this.order?.id || '', [
+        Validators.minLength(1),
         Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10),
+        Validators.maxLength(22),
         this.validOrderIdValidator.bind(this),
       ]),
       name: new FormControl(this.order?.name || '', [
         Validators.required,
-        Validators.minLength(3),
+        Validators.minLength(1),
+        Validators.maxLength(40),
         this.validOrderNameValidator.bind(this),
       ]),
       customerName: new FormControl(
         this.order?.customerName || '',
-        Validators.required
+        [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(40),]
       ),
       dueDate: new FormControl(this.order?.dueDate, Validators.required),
       recipeNo: new FormControl(
