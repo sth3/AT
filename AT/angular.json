@@ -28,6 +28,7 @@
             ],
             "styles": [
               "src/custom-theme.scss",
+              "./node_modules/material-icons-font/material-icons-font.css",
               "src/styles.css"
             ],
             "scripts": []

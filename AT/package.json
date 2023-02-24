@@ -24,6 +24,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "dom-to-image": "^2.6.0",
     "jspdf": "^2.5.1",
+    "material-icons-font": "^2.1.0",
     "moment": "^2.29.4",
     "ngx-print": "^1.2.1",
     "rxjs": "~7.5.0",

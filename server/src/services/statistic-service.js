@@ -16,6 +16,9 @@ STATISTICS_SP_PV = `
     ,componentSP
     ,componentPV `;
 
+STATISTICS_DATETIME = `
+    ,CONCAT(month(S.datetime), '.', year(S.datetime)) as datetime `;
+
 STATISTICS_FROM = `
     FROM [AT].[dbo].[STATISTICS] S
     INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = S.noComponent
@@ -26,6 +29,11 @@ STATISTICS_FROM = `
 
 STATISTICS_GROUP_BY = 
     `GROUP BY C.name `;
+
+STATISTICS_GROUP_BY_MONTH = 
+    `GROUP BY C.name 
+    ,MONTH(S.datetime), YEAR(S.datetime)`;
+
 
 GROUP_BY_BODY = [
         `,S.noContainer `,
@@ -45,6 +53,10 @@ GROUP_BY_FOOTER = [
         `,O.name `
 ]
 
+ORDER_BY = `ORDER BY MONTH(S.datetime), YEAR(S.datetime) `
+   
+	
+
 
 const updateStatSelect = async (type, groupBy) => {    
     let queryBody = [];
@@ -52,16 +64,20 @@ const updateStatSelect = async (type, groupBy) => {
    
         groupBy.forEach(element => {
             queryBody.push(GROUP_BY_BODY[element]) ;
-            if(type == 1) {
+            if(type > 0) {
                 queryBodyFooter.push(GROUP_BY_FOOTER[element]);        
             }     
                 
         });
         
     console.log('groupBy', groupBy , 'type:', type);
+
     query = STATISTICS_HEADER + STATISTICS_SP_PV + queryBody.join(' ') + STATISTICS_FROM 
     if(type == 1) {
     query = STATISTICS_HEADER + STATISTICS_SP_PV_SUM + queryBody.join(' ') + STATISTICS_FROM + STATISTICS_GROUP_BY + queryBodyFooter.join(' ')
+    }
+    else if(type == 2) {
+        query = STATISTICS_HEADER + STATISTICS_SP_PV_SUM + STATISTICS_DATETIME  + queryBody.join(' ') + STATISTICS_FROM + STATISTICS_GROUP_BY_MONTH + queryBodyFooter.join(' ') + ORDER_BY
     }
     console.log(query);
 

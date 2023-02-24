@@ -67,7 +67,9 @@ export class StatisticsComponent implements OnInit {
       this.filter =[...this.groupBy.value, 7,8,9]  
       if(this.type == 0) {
         this.filter = [...this.groupBy.value, 6,7,8,9]    
-      } 
+      } else if (this.type == 2){
+        this.filter = [...this.groupBy.value, 6,7,8,9]    
+      }
       
       this.allColumnsToDisplay = [...this.columnsToDisplay.filter(   val => this.filter.includes(val.id) ).map(c => c.field)];
     }, 300);  
