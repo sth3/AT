@@ -31,10 +31,10 @@ export class ExportService {
   convertToCSV(objArray: any[] | any, headerList: string[]) {
     let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
     let str = '';
-    let row = 'Index,';
+    let row = 'Index;';
 
     for (let index in headerList) {
-      row += headerList[index] + ',';
+      row += headerList[index] + ';';
     }
     row = row.slice(0, -1);
     str += row + '\r\n';
@@ -43,7 +43,7 @@ export class ExportService {
       for (let index in headerList) {
         let head = headerList[index];
 
-        line += ',' + (array[i][head] || '');
+        line += ';' + (array[i][head] || '');
       }
       str += line + '\r\n';
     }
@@ -65,7 +65,7 @@ export class ExportService {
 
   getRecipesHeaders() {
     const headers = ['no', 'id', 'name', 'lastUpdate'];
-    for (let i = 1; i < 31; i++) {
+    for (let i = 1; i < 21; i++) {
       headers.push('componentID' + i);
       headers.push('componentName' + i);
       headers.push('componentSP' + i);
@@ -74,10 +74,12 @@ export class ExportService {
   }
 
   getOrdersHeaders() {
-    return ['no', 'id', 'name', 'lastUpdate'];
+    return ['no', 'id', 'name','customerName','dueDate' ,'lastUpdate','operatorId','idMixer','mixingTime','idPackingMachine','createdAt','idEmptyingStationBag','volumePerDose','recipeName','','','',''];
   }
 
   convertOrdersForDownload(orders: OrderModel[]) {
+    console.log(orders);
+    
     return orders;
   }
 }
