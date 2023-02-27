@@ -16,7 +16,8 @@ import { finalize } from 'rxjs';
 
 import { OrderModel, selectList } from '../../models/order.model';
 import { OrdersService } from '../../services/orders.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { ExportService } from '../../services/export.service';
 @Component({
   selector: 'app-orders-archive',
   templateUrl: './orders-archive.component.html',
@@ -52,29 +53,20 @@ export class OrdersArchiveComponent implements OnInit  {
   ];
   columnsToDisplayWithExpand = [
     'expand',
-    ...this.columnsToDisplay.map((c) => c.field),
+    ...this.columnsToDisplay.map((c) => c.field), 'actions',
   ];
   dataSource: MatTableDataSource<OrderModel> =
     new MatTableDataSource<OrderModel>([]);
 
-  slecetIdMixers: selectList[] = [
-    { value: 1, viewValue: 'Vertical mixer' },
-    { value: 2, viewValue: 'Horizontal mixer' },
-    { value: 3, viewValue: 'External mixer' },
-  ];
-
-  packingOrders: selectList[] = [
-    { value: 0, viewValue: 'Bag' },
-    { value: 1, viewValue: 'Big Bag' },
-    { value: 2, viewValue: 'Liquid' },
-    { value: 3, viewValue: 'Micro' },
-  ];
+ 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private ordersService: OrdersService,
+    private exportService: ExportService,
+    private router: Router, private r: ActivatedRoute,
     private dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-GB');
@@ -119,6 +111,23 @@ export class OrdersArchiveComponent implements OnInit  {
     this.dataSource.filter = this.quickFilter.trim().toLowerCase();
   }
 
+  onEditClick(data: any) {
+    this.router.navigate([`../pdf/${data.no}`], { relativeTo: this.r })
+  }
 
+  exportCSV(visibleDataOnly: boolean) {
+    const headerList = this.exportService.getOrdersHeaders();
+    let data;
+    //if (visibleDataOnly) {
+      // @ts-ignore
+      data = this.exportService.convertOrdersForDownload(this.dataSource._renderData.value);
+    //} else {
+    //  console.log(this.orders);
+      
+     // data = this.exportService.convertOrdersForDownload(this.orders);
+    //  console.log('data',data);
+   // }
+    this.exportService.downloadFile(data, headerList, 'orders');
+  }
   
 }

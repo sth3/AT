@@ -25,6 +25,8 @@ import { RecalculateRecipeComponent } from '../recalculate-recipe/recalculate-re
 import { ComponentItemModel } from 'src/app/models/component.model';
 import { FocusTrapManager } from '@angular/cdk/a11y/focus-trap/focus-trap-manager';
 import { TranslateService } from '@ngx-translate/core';
+import {Observable, startWith} from 'rxjs'
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -63,6 +65,10 @@ export class OrderDetailComponent implements OnInit {
   dosePerOrder?: RecalculateOrder | undefined;
   donePerStation: number[] = [];
   packingWeightForm: number[] = [0];
+
+   myControl:FormControl = new FormControl('');
+   filteredComponents!: Observable<RecipeModel[]>;
+   filterValue: string = ''
   packingSelect: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -100,9 +106,12 @@ export class OrderDetailComponent implements OnInit {
       });
     });
 
-    this.form
-      .get('packingOrders')
-      ?.valueChanges.subscribe((change) => this.checkForm(change));
+   
+
+      this.filteredComponents = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => ( value? this._filter(value) : this.recipes.slice())),
+      );
   }
 
   ngOnInit(): void {
@@ -134,6 +143,11 @@ export class OrderDetailComponent implements OnInit {
           this.addRowFromArray();
 
           this.changeDetectorRef.detectChanges();
+          this.filteredComponents = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => ( value? this._filter(value) : this.recipes.slice())),
+          );
+          
         });
       });
     });
@@ -147,6 +161,11 @@ export class OrderDetailComponent implements OnInit {
 
       console.log('selected recipe 2: ', this.selectedRecipe);
       this.changeDetectorRef.detectChanges();
+      this.filteredComponents = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => ( value? this._filter(value) : this.recipes.slice())),
+      );
+      
     });
     this.ordersService
       .getOrdersList()
@@ -356,30 +375,25 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  recipeSelected() {
+  recipeSelected(result:any) {
     console.log('selected recipe: ', this.selectedRecipe);
     console.log('this.order', this.packingOrderValue);
+    this.selectedRecipe = result.option.value;
     this.recipeChanged = true;
     this.addRowFromArray();
     this.form.get('recipeNo')!.setValue(this.selectedRecipe?.no);
   }
 
+ 
   addRowFromArray() {
     this.packingOrders.controls = [];
 
-    if (this.selectedRecipe == null) {
-      console.log(
-        '🚀 ~ file: order-detail.component.ts:360 ~ OrderDetailComponent ~ addRowFromArray ~ this.selectedRecipe',
-        this.selectedRecipe
-      );
+    if (this.selectedRecipe == null) {     
 
       return;
     }
 
-    console.log(
-      '🚀 ~ file: order-detail.component.ts:366 ~ OrderDetailComponent ~ addRowFromArray ~ this.orderComponent',
-      this.orderComponent
-    );
+    
     for (let index of this.selectedRecipe.components.keys()) {
       if (!this.recipeChanged) {
         this.packingForm = new FormGroup({
@@ -478,25 +492,37 @@ export class OrderDetailComponent implements OnInit {
     this.router.navigate(['../../orders'], { relativeTo: this.r });
   }
 
-  checkForm(change: PackingInterface[]) {
-    console.log(
-      '🚀 ~ file: order-detail.component.ts:459 ~ OrderDetailComponent ~ checkForm ~ change',
-      change
-    );
-    this.packingWeightForm = change.map((x) =>
-      x.packingType > 0 ? 0 : x.packingWeight
-    );
-    console.log(
-      '🚀 ~ file: order-detail.component.ts:462 ~ OrderDetailComponent ~ checkForm ~ packingWeightForm',
-      this.packingWeightForm
-    );
+  
+  
+  private _filter(value: string | RecipeModel): RecipeModel[] {
+    if (typeof value !== 'string') {
+      console.log('value',value,'typeof',typeof value);
+      
+      return [value];
+    }
+    console.log('valueE',value,'typeofF',typeof value);
+    this.filterValue = value.toUpperCase();
+    console.log(this.filterValue);
+    
+    
+      return this.recipes      
+      .filter((c) => c.name.includes(this.filterValue) || c.id.includes(this.filterValue))      
+      ;
+        
   }
-  buttonCheck(): void {
-    this.packingOrders.setValue([this.packingWeightForm]);
-    console.log(
-      '🚀 ~ file: order-detail.component.ts:465 ~ OrderDetailComponent ~ checkForm ~ this.packingOrders',
-      this.packingOrders
-    );
+
+  displayFn(recipe: RecipeModel): string {
+    return recipe && recipe.name ? recipe.id + ' - '+ recipe.name   : '';
   }
   
+
+  reload(){
+    this.filterValue = ''
+    console.log('this.filterValue',this.filterValue);
+    
+    this.filteredComponents = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => ( value? this._filter(value) : this.recipes.slice())),
+    );
+    }
 }
