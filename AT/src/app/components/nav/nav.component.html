@@ -31,14 +31,15 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>AT</span>
+     
+      <img cImg height="50" rounded src="assets/img/at.jpg" thumbnail width="50" />
       <span style="flex: auto;"></span>
       <button mat-icon-button aria-label="Profile icon" style="margin-bottom: 5px" [matMenuTriggerFor]="accountMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
-      <mat-slide-toggle [(ngModel)]="isDarkTheme" labelPosition = "before" (change)="storeThemeSelection()">
+      <!-- <mat-slide-toggle [(ngModel)]="isDarkTheme" labelPosition = "before" (change)="storeThemeSelection()">
         <mat-icon>lightbulb</mat-icon>
-      </mat-slide-toggle>
+      </mat-slide-toggle> -->
       <select 
          
           #selectedLang 
