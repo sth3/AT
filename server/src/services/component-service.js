@@ -62,7 +62,7 @@ const updateLastUpdate = async (no) => {
 const addComponent = async (component) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
-        .input('id', component.id)
+        .input('id', component.id.toUpperCase())
         .input('name', component.name.toUpperCase())
         
         .input('specificBulkWeight', component.specificBulkWeight)

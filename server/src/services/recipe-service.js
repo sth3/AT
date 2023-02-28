@@ -172,8 +172,8 @@ const deleteRecipe = async (no) => {
 const addRecipe = async (recipe) => {
     const pool = await poolPromise;
     const { recordset } = await pool.request()
-        .input('id', recipe.id)
-        .input('name', recipe.name)
+        .input('id', recipe.id.toUpperCase())
+        .input('name', recipe.name.toUpperCase())
         .query(ADD_RECIPE);
     const recipeNo = recordset[0].no;
     await addComponentsToRecipe(recipeNo, recipe.components);

@@ -265,7 +265,7 @@ export class EditRecipeDialogComponent implements OnInit {
     const filterValue = value.toUpperCase();
     return this.allComponents
       .filter((c) => !this.selectedComponents.includes(c))
-      .filter((c) => c.name.includes(filterValue));
+      .filter((c) => c.name.includes(filterValue) || c.id.includes(filterValue));
   }
 
   calculateWeight(components: any[]): void {
