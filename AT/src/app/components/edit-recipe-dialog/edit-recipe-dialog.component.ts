@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RecipeModel } from '../../models/recipe.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentService } from '../../services/component.service';
@@ -20,6 +20,8 @@ import {
 } from '../../models/component.model';
 import { UserModel, UserRole } from '../../models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+
+
 @Component({
   selector: 'app-edit-recipe-dialog',
   templateUrl: 'edit-recipe-dialog.component.html',
@@ -51,7 +53,9 @@ export class EditRecipeDialogComponent implements OnInit {
     },
     private componentService: ComponentService,
     private authService: AuthService,
+    private dialogRef: MatDialogRef<EditRecipeDialogComponent>,
   ) {
+    dialogRef.disableClose = true;
     console.log('recipe components: ', data.recipe?.components);
     this.form = new FormGroup({
       name: new FormControl(data.recipe ? data.recipe.name : '', [

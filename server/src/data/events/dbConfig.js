@@ -7,14 +7,17 @@ const sqlConfig = {
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
     server: process.env.SQL_SERVER,
-    pool: {
+    
+    driver: "msnodesqlv8",
+    pool: { 
       max: 10,
       min: 0,
-      idleTimeoutMillis: 30000
+      idleTimeoutMillis: 30000 
     },
     options: {
       //encrypt: true, // for azure
       enableArithAbort: true,
+      trustedConnection: true,
       //trustServerCertificate: false // change to true for local dev / self-signed certs
     }
   };

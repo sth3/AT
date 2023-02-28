@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA , MatDialogRef} from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentModel } from '../../models/component.model';
 
@@ -60,7 +60,9 @@ export class EditComponentDialogComponent implements OnInit {
     allComponents: ComponentModel[],
     component: ComponentModel,
     editMode: boolean
-  }) {
+  },
+  private dialogRef: MatDialogRef<EditComponentDialogComponent>,) {
+    dialogRef.disableClose = true;
     this.form = new FormGroup({
       name: new FormControl(data.component ? data.component.name : '',
         [Validators.required, Validators.minLength(1), Validators.maxLength(40), this.validComponentNameValidator.bind(this)]),
