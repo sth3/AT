@@ -64,6 +64,7 @@ export class ToPDFComponent implements OnInit {
   recipeRecalculate: RecalculateOrder[] = [];  
   doneDose:number [] = [];
   weightPerDose: number = 0;
+  volumePerDoseTank: number = 0;
 
   slecetIdMixers: selectList[] = [
     { value: 1, viewValue: 'Vertical mixer' },
@@ -115,8 +116,10 @@ export class ToPDFComponent implements OnInit {
       return
     }          
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
+    this.volumePerDoseTank = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0)/this.quantityPallete );  
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (Number(this.order?.quantity) / 100)));
     console.log('this.quantityComponentPerOrder',this.quantityComponentPerOrder);
+    console.log('this.volumePerDoseTank',this.volumePerDoseTank);
     
        this.recalculateDose()
   }

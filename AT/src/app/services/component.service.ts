@@ -27,6 +27,9 @@ export class ComponentService {
   updateComponent(no: number, component: ComponentModel) {
     return this.http.put<ComponentModel>(`${environment.apiUrl}/components/${no}`, component, { withCredentials: true });
   }
+  updateComponentPacking(no: number, component: ComponentModel) {
+    return this.http.put<ComponentModel>(`${environment.apiUrl}/componentsPacking/${no}`, component, { withCredentials: true });
+  }
 
   deleteComponent(no: string) {
     return this.http.delete(`${environment.apiUrl}/components/${no}`, { withCredentials: true });

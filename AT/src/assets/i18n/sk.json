@@ -77,7 +77,8 @@
     "invalidComponentName": "Tento názov komponentu sa už používa.",
     "exactlyID": "ID komponentu musí mať presne 6 znakov.",
     "invalidComponentId": "Toto ID sa už používa.",
-    "requiredSBW": "Zadajte špecifickú objemovú hmotnosť."
+    "requiredSBW": "Zadajte špecifickú objemovú hmotnosť.",
+    "requiredPacking": "Zadajte balenie."
   },
   "archivedComponent": {
     "title": "Archivované komponenty",
@@ -176,6 +177,12 @@
     },
     {
       "item": "Špecifická objemová hmotnosť"
+    },
+    {
+      "item": "Balenie"
+    },
+    {
+      "item": "Špecifikácia"
     },
     {
       "item": "Posledná aktualizácia"

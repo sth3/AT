@@ -8,7 +8,10 @@ const {
     getComponentByNo,
     addComponent,
     updateComponent,
-    deleteComponent, getActiveComponents
+    deleteComponent,
+    getActiveComponents,
+    addPacking,
+    updateComponentPacking,
 } = require('../services/component-service');
 const userService = require('../services/user-service');
 
@@ -39,15 +42,23 @@ router.put('/components/:no', authorizationCheck(roles.TECHNOLOG, false), async 
     const response = await updateComponent(+req.params.no, req.body, user.id);
     res.json(response);
 });
+router.put('/componentsPacking/:no', authorizationCheck(roles.TECHNOLOG, false), async (req, res) => {
+   
+    const response = await updateComponentPacking(+req.params.no, req.body);
+    res.json(response);
+});
 
 router.delete('/components/:no', authorizationCheck(roles.TECHNOLOG), async (req, res) => {
     await deleteComponent(+req.params.no);
     res.status(204).end();
 });
 
-router.post('/components', authorizationCheck(roles.TECHNOLOG), (req, res) => {
-    const component = addComponent(req.body);
-    const response = getComponentByNo(component.no);
+router.post('/components', authorizationCheck(roles.TECHNOLOG),async (req, res) => {    
+    
+    const component =await addComponent(req.body);       
+    await addPacking(req.body, component.no);
+    const response =await getComponentByNo(component.no);   
+    
     res.status(201).json(response);
 });
 

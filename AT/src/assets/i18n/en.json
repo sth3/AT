@@ -75,7 +75,8 @@
     "invalidComponentName": "This component name is already in use.",
     "exactlyID": "Component ID must be exactly 6 characters long.",
     "invalidComponentId": "This ID is already in use.",
-    "requiredSBW": "Specific bulk weight is required."
+    "requiredSBW": "Specific bulk weight is required.",
+    "requiredPacking": "Packing is required."
   },
   "archivedComponent": {
     "title": "Archived components",
@@ -174,6 +175,12 @@
     },
     {
       "item": "Specific bulk weight"
+    },
+     {
+      "item": "Packing"
+    },
+    {
+      "item": "Specification"
     },
     {
       "item": "Last update"

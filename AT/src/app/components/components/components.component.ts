@@ -12,7 +12,7 @@ import { ComponentChangeModel, ComponentModel } from '../../models/component.mod
 import { UserModel, UserRole } from '../../models/user.model';
 
 import { DateAdapter } from '@angular/material/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -28,7 +28,7 @@ export class ComponentsComponent implements OnInit {
   data: ComponentModel[] = [];
   quickFilter: string = '';
   currentUser!: UserModel;
-  maxNumberOfComponents:Number = 200;
+  maxNumberOfComponents:Number = 500;
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
@@ -39,6 +39,8 @@ export class ComponentsComponent implements OnInit {
     { field: 'id', header: '' },
     { field: 'name', header: '', width: '40%' },
     { field: 'specificBulkWeight', header: '' },
+    { field: 'packingWeight', header: '' },
+    { field: 'packingType', header: '' },    
     { field: 'lastUpdate', header: '' },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field), 'actions'];
@@ -114,7 +116,7 @@ export class ComponentsComponent implements OnInit {
       if (this.currentUser !== null) {
         if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
           this.dialogService.customDialog(EditComponentDialogComponent,
-            { component: data, allComponents: this.data, editMode: true })
+            { component: data, allComponents: this.data, editMode: 1 })
             .subscribe(result => {
               if (result) {
                 this.translate
@@ -124,7 +126,45 @@ export class ComponentsComponent implements OnInit {
                       .subscribe(resultS => {
                         if (resultS) {
                           console.log('edit clicked: ', data, result);
-                          this.componentService.updateComponent(data.no, result)
+                          // this.componentService.updateComponent(data.no, result)
+                          //   .subscribe(response => {
+                          //     console.log('component updated: ', response);
+                          //     this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
+                          //     this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                          //     this.dataSource.data = this.data;
+                          //   })
+                        }
+                      })
+                  });
+              }
+            })
+        } else {
+          this.authService.promptLogin('Login');
+          return;
+        }
+      } else {
+        this.authService.promptLogin('Login');
+        return;
+      }
+    })
+  }
+  onEditClickPacking(data: any) {
+    this.authService.getCurrentUser().subscribe(dataUser => {
+      this.currentUser = dataUser;
+      if (this.currentUser !== null) {
+        if (this.currentUser.role === 'ADMIN' || this.currentUser.role === 'TECHNOLOG') {
+          this.dialogService.customDialog(EditComponentDialogComponent,
+            { component: data, allComponents: this.data, editMode: 2 })
+            .subscribe(result => {
+              if (result) {
+                this.translate
+                  .get('dialogService')
+                  .subscribe((successMessage) => {
+                    this.dialogService.confirmDialog(successMessage.dialogUpdate)
+                      .subscribe(resultS => {
+                        if (resultS) {
+                          console.log('edit clicked: ', data, result);
+                          this.componentService.updateComponentPacking(data.no, result)
                             .subscribe(response => {
                               console.log('component updated: ', response);
                               this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
@@ -164,7 +204,7 @@ export class ComponentsComponent implements OnInit {
             }
           
           this.dialogService.customDialog(EditComponentDialogComponent,
-            { component: null, allComponents: this.data, editMode: false })
+            { component: null, allComponents: this.data, editMode: 0 })
             .subscribe(result => {
               if (result) {
                 this.translate

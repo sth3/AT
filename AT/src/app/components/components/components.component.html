@@ -60,11 +60,14 @@
       <ng-container *ngIf="column.field === 'lastUpdate'; else normalTd">
         <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' : 'UTC'  }} </td>
       </ng-container>
-      <ng-container *ngIf="column.field === 'packing'; else normalTd">
-        <td mat-cell *matCellDef="let element"> {{element[column.field]  }} kg</td>
+      <ng-container *ngIf="column.field === 'packingType'; else normalTd">
+        <td mat-cell *matCellDef="let element"> {{element[column.field] !== null ? ('selectPacking.'+element[column.field]+'.viewValue' | translate) : ''}}</td>
       </ng-container>
       <ng-container *ngIf="column.field === 'specificBulkWeight'; else normalTd">
         <td mat-cell *matCellDef="let element"> {{element[column.field].toFixed(3)  }} kg/l</td>
+      </ng-container>
+      <ng-container *ngIf="column.field === 'packingWeight'; else normalTd">
+        <td mat-cell *matCellDef="let element"> {{element[column.field] ?element[column.field].toFixed(2) + ' kg':''}} </td>
       </ng-container>
       <ng-template #normalTd>
         <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>
@@ -76,6 +79,9 @@
       <td mat-cell *matCellDef="let element">
         <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClick(element)">
           <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" aria-label="Edit item" (click)="onEditClickPacking(element)">
+          <mat-icon>settings</mat-icon>
         </button>
         <!-- <button mat-icon-button color="danger" aria-label="Delete item" (click)="onDeleteClick(element)">
           <mat-icon>delete_forever</mat-icon>
