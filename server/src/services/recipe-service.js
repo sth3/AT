@@ -79,27 +79,30 @@ const GET_ARCHIVED_RECIPES = 'SELECT CH.id, CH.change, CH.date, ' +
     'FROM [AT].[dbo].[RECIPES_CHANGES] CH ' +
     'JOIN [AT].[dbo].[RECIPE_H] R ON CH.oldRecipeNo = R.no ' +
     'JOIN [AT].[dbo].[USERS] U ON U.id = CH.userId';
-const GET_ACTIVE_RECIPES = 'SELECT DISTINCT R.no no, ' +
-    '   R.id id,' +
-    '   R.name name,' +
-    '   R.lastUpdate lastUpdate,' +
-    '   (SELECT C.no no,' +
-    '   C.id id,' +
-    '   C.name name,' +
-    '   C.lastUpdate lastUpdate,' +
-    '   M.componentSP componentSP,' +
-
-
-    '   C.specificBulkWeight specificBulkWeight' +
-    '   FROM [AT].[dbo].[RECIPE_B] M ' +
-    '   INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo' +
-    '   WHERE M.recipeNo = R.no ' +
-    '   FOR JSON PATH) components ' +
-    'FROM [AT].[dbo].[RECIPE_H] R ' +
-    'LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo ' +
-    'WHERE R.no NOT IN ' +
-    '   (SELECT CH.oldRecipeNo ' +
-    '   FROM [AT].[dbo].[RECIPES_CHANGES] CH)';
+const GET_ACTIVE_RECIPES = `SELECT DISTINCT R.no no, 
+R.id id,
+ R.name name,
+ R.lastUpdate lastUpdate,
+ (SELECT 
+ S.packingType packingType,
+ S.packingWeight packingWeight,
+ C.no no,
+ C.id id,
+ C.name name,
+ C.lastUpdate lastUpdate,
+ M.componentSP componentSP,
+ C.specificBulkWeight specificBulkWeight
+ 
+ FROM [AT].[dbo].[RECIPE_B] M 
+ INNER JOIN [AT].[dbo].[COMPONENT] C on C.no = M.componentNo
+ INNER JOIN [AT].[dbo].[COMPONENTS_SPECIFICATION] S ON S.no = C.no 
+ WHERE M.recipeNo = R.no 
+ FOR JSON PATH) components 
+ FROM [AT].[dbo].[RECIPE_H] R 
+ LEFT JOIN [AT].[dbo].[RECIPE_B] M ON R.no = M.recipeNo 
+ WHERE R.no NOT IN 
+ (SELECT CH.oldRecipeNo 
+ FROM [AT].[dbo].[RECIPES_CHANGES] CH)`;
 
 const GET_CHANGES_FOR_RECIPE = 'SELECT CH.id, CH.change, CH.date, ' +
     'CONCAT(LTRIM(RTRIM(U.firstName)), \' \', LTRIM(RTRIM(U.lastName))) as \'user\', ' +

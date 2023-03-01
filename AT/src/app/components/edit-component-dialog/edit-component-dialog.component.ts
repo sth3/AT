@@ -158,7 +158,7 @@ export class EditComponentDialogComponent implements OnInit {
         [Validators.required]
       ),
       packingType: new FormControl(
-         data.component ? (data.component.packingType ? data.component.packingType :'') : '',
+         data.component ? (data.component.packingType>=0 ? data.component.packingType :'') : '',
         [Validators.required]
       ),
     })

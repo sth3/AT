@@ -133,7 +133,7 @@ const updateComponentPacking = async (no, component) => {
         .input('no', sql.Int, no)
         .input('packingType', component.packingType)
         .input('packingWeight', component.packingWeight)        
-        .query(UPDATE_COMPONENT_PACKING)
+        .query(ADD_PACKING)
     return getComponentByNo(no);
 };
 

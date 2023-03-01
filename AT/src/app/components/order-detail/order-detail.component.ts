@@ -123,23 +123,27 @@ export class OrderDetailComponent implements OnInit {
         return;
       }
       this.ordersService.getOrderByNo(no).subscribe((order) => {
-        console.log('order: ', order);
+        
+        console.log("🚀 ~ file: order-detail.component.ts:127 ~ OrderDetailComponent ~ this.ordersService.getOrderByNo ~ order:", order)
         this.editable = false;
         this.isNew = false;
         this.order = order;
-        console.log('this order: ', this.order);
+        
+        console.log("🚀 ~ file: order-detail.component.ts:131 ~ OrderDetailComponent ~ this.ordersService.getOrderByNo ~ this.order:", this.order)
         this.orderComponent = order.recipe.components;
-
-        console.log('this this.orderComponent: ', this.orderComponent);
+        
+        console.log("🚀 ~ file: order-detail.component.ts:134 ~ OrderDetailComponent ~ this.ordersService.getOrderByNo ~ this.orderComponent:", this.orderComponent)
         this.prepareForm();
         this.form.get('idMixer')?.disable({ onlySelf: true });
         this.recipeService.getRecipes().subscribe((recipes) => {
-          console.log('recipes: ', recipes);
+          
+          console.log("🚀 ~ file: order-detail.component.ts:138 ~ OrderDetailComponent ~ this.recipeService.getRecipes ~ recipes:", recipes)
           this.recipes = recipes;
           this.selectedRecipe = this.recipes.find(
             (r) => r.no === this.order?.recipe.no
           );
-          console.log('selected recipe 1: ', this.selectedRecipe);
+          
+          console.log("🚀 ~ file: order-detail.component.ts:143 ~ OrderDetailComponent ~ this.recipeService.getRecipes ~ this.selectedRecipe:", this.selectedRecipe)
           this.addRowFromArray();
 
           this.changeDetectorRef.detectChanges();
@@ -152,14 +156,16 @@ export class OrderDetailComponent implements OnInit {
       });
     });
     this.recipeService.getRecipes().subscribe((recipes) => {
-      console.log('recipes: ', recipes);
+    
+      console.log("🚀 ~ file: order-detail.component.ts:160 ~ OrderDetailComponent ~ this.recipeService.getRecipes ~ recipes:", recipes)
       this.recipes = recipes;
       this.selectedRecipe = this.recipes.find(
         (r) => r.no === this.order?.recipe.no
       );
       this.addRowFromArray();
 
-      console.log('selected recipe 2: ', this.selectedRecipe);
+      
+      console.log("🚀 ~ file: order-detail.component.ts:168 ~ OrderDetailComponent ~ this.recipeService.getRecipes ~ this.selectedRecipe:", this.selectedRecipe)
       this.changeDetectorRef.detectChanges();
       this.filteredComponents = this.myControl.valueChanges.pipe(
         startWith(''),
@@ -394,7 +400,7 @@ export class OrderDetailComponent implements OnInit {
     }
 
     
-    for (let index of this.selectedRecipe.components.keys()) {
+    for (let [index, components] of this.selectedRecipe.components.entries()) {
       if (!this.recipeChanged) {
         this.packingForm = new FormGroup({
           packingType: new FormControl(
@@ -411,8 +417,8 @@ export class OrderDetailComponent implements OnInit {
         //this.packingOrders.controls [index].get('packingType')?.disable({onlySelf: true})
       } else {
         this.packingForm = new FormGroup({
-          packingType: new FormControl(null, Validators.required),
-          packingWeight: new FormControl(0, Validators.required),
+          packingType: new FormControl(components.packingType, Validators.required),
+          packingWeight: new FormControl(components.packingWeight, Validators.required),
         });
         this.packingOrders.push(this.packingForm);
       }
