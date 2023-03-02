@@ -176,9 +176,11 @@
     "confirmPassword":"Confirm Password",
     "password":"Password",
     "nameRequired":"Username is required.",
-    "nameLength":"Username must be at least 5 characters long.",
+    "nameLength":"Username must be at least 3 characters long.",
     "nameInUse":"This username is already in use.",
-    "passwordRequired":"Password is required."
+    "passwordRequired":"Password is required.",
+    "addUserDialog":"Add user",
+    "editUserDialog":"Edit user"
   },  
   "statistics": {
     "select":"Select"    

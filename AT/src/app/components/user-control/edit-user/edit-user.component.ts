@@ -48,6 +48,13 @@ export class EditUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+      this.form.get('firstName')?.enable();
+      this.form.get('lastName')?.enable();      
+    if (this.data.editMode){
+      this.form.get('firstName')?.disable();
+      this.form.get('lastName')?.disable();      
+    }
   }
 
   validUserNameValidator(control: FormControl) {

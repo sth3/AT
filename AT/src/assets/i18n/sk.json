@@ -169,7 +169,7 @@
     "weightPerDose": "Celková hmotnosť na dávku"
   },  
   "users": {
-    "addUser": "Pridaj užívatela",
+    "addUser": "Pridaj užívateľa",
     "changePassword": "Zmena hesla",
     "minLength":"Minimálna dĺžka hesla je 5 znakov.",
     "match":"Heslá sa nezhodujú.",
@@ -177,10 +177,12 @@
     "newPassword":"Nové heslo",
     "confirmPassword":"Potvrďte heslo",
     "password":"Heslo",
-    "nameRequired":"Užívatelské meno je vyžadované.",
+    "nameRequired":"Užívateľské meno je vyžadované.",
     "nameLength":"Minimálna dĺžka mena je 5 znakov.",
-    "nameInUse":"Užívatelské meno sa už používa",
-    "passwordRequired":"Heslo je vyžadované."
+    "nameInUse":"Užívateľské meno sa už používa",
+    "passwordRequired":"Heslo je vyžadované.",
+    "addUserDialog":"Pridanie užívateľa",
+    "editUserDialog":"Editácia užívateľa"
   },  
   "statistics": {
     "select":"Výber"    

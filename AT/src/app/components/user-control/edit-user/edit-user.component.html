@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>{{ data.editMode ? 'Edit' : 'Add' }}
-  user {{data.editMode ? data.user.id : ''}}</h1>
+<h1 mat-dialog-title>{{ data.editMode ? ('users.editUserDialog' | translate) : ('users.addUserDialog' | translate) }}
+   {{data.editMode ? data.user.id : ''}}</h1>
 <div mat-dialog-content style="height: 470px; width: 100%">
   <form [formGroup]="form">
     <mat-form-field style="width: 100%" appearance="outline">
