@@ -46,9 +46,11 @@
     "close": "Zavrieť",
     "error": "Chyba",
     "print": "Tlačiť",
+    "ok": "Ok",
     "dialogDelete": "Naozaj chcete odstrániť tento komponent?",
     "dialogRecipeDelete": "Naozaj chcete odstrániť tento recept?",
     "dialogOrderDelete": "Naozaj chcete odstrániť tento výrobný príkaz?",
+    "dialogUserDelete": "Naozaj chcete odstrániť užívatela",
     "dialogUpdate": "Naozaj chcete aktualizovať tento komponent?",
     "dialogRecipeUpdate": "Naozaj chcete aktualizovať tento recept?",
     "dialogOrderUpdate": "Naozaj chcete aktualizovať tento výrobný príkaz?",
@@ -57,12 +59,16 @@
     "notifierDeleted": "Komponent vymazaný",
     "notifierRecipeDeleted": "Recept vymazaný",
     "notifierOrderDeleted": "Výrobný príkaz vymazaný",
+    "notifierUserDeleted": "Užívatel vymazaný",
     "notifierUpdate": "Komponent bol aktualizovaný",
     "notifierRecipeUpdate": "Recept bol aktualizovaný",
     "notifierOrderUpdate": "Výrobný príkaz bol aktualizovaný",
+    "notifierUserPassUpdate": "Heslo používateľa zmenené ",
+    "notifierUserUpdate": "Užívatel aktualizovaný ",
     "notifierCreated": "Komponent vytvorený",
     "notifierRecipeCreated": "Recept vytvorený",
     "notifierOrderCreated": "Výrobný príkaz vytvorený",
+    "notifierUserCreated": "Nový užívatel vytvorený",
     "notifierErrordescription": "Vyplňte prosím všetky polia správne.",
     "notifierErrorComponentDescription": "Maximálny počet komponentov je "
     
@@ -161,6 +167,20 @@
     "quantity": "Množstvo",
     "packingWeight": "Hmotnosť balenia",
     "weightPerDose": "Celková hmotnosť na dávku"
+  },  
+  "users": {
+    "addUser": "Pridaj užívatela",
+    "changePassword": "Zmena hesla",
+    "minLength":"Minimálna dĺžka hesla je 5 znakov.",
+    "match":"Heslá sa nezhodujú.",
+    "oldPassword":"Staré heslo",
+    "newPassword":"Nové heslo",
+    "confirmPassword":"Potvrďte heslo",
+    "password":"Heslo",
+    "nameRequired":"Užívatelské meno je vyžadované.",
+    "nameLength":"Minimálna dĺžka mena je 5 znakov.",
+    "nameInUse":"Užívatelské meno sa už používa",
+    "passwordRequired":"Heslo je vyžadované."
   },  
   "statistics": {
     "select":"Výber"    
@@ -333,6 +353,30 @@
     },
     {
       "item": "Tvorca"
+    }
+  ],
+  "userTableHead": [
+    
+    {
+      "item": "ID"
+    },
+    {
+      "item": "Užívateľské meno"
+    },
+    {
+      "item": "Rola"    
+    },
+    {
+      "item": "Meno"    
+    },
+    {
+      "item": "Priezvisko"    
+    },
+    {
+      "item": "Dátum registrácie"    
+    },
+    {
+      "item": "Posledné prihlásenie"
     }
   ],
   "selectIdMixers": [

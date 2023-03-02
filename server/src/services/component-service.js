@@ -112,6 +112,7 @@ const updateComponent = async (no, component, userId) => {
   console.log("oldComponent", oldComponent);
   const newComponentNo = await addComponent(component);
   console.log("newComponentNo", newComponentNo);
+  await addPacking(oldComponent ,newComponentNo.no)
   const newComponent = await getComponentByNo(newComponentNo.no);
   console.log("newComponent", newComponent);
   const change = getChange(oldComponent, newComponent).join(", ");
@@ -133,7 +134,7 @@ const updateComponentPacking = async (no, component) => {
         .input('no', sql.Int, no)
         .input('packingType', component.packingType)
         .input('packingWeight', component.packingWeight)        
-        .query(ADD_PACKING)
+        .query(UPDATE_COMPONENT_PACKING)
     return getComponentByNo(no);
 };
 

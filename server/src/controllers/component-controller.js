@@ -40,6 +40,7 @@ router.put('/components/:no', authorizationCheck(roles.TECHNOLOG, false), async 
     }
     const user = await userService.getUserByUsername(session.username);
     const response = await updateComponent(+req.params.no, req.body, user.id);
+    console.log('response',response);
     res.json(response);
 });
 router.put('/componentsPacking/:no', authorizationCheck(roles.TECHNOLOG, false), async (req, res) => {

@@ -126,13 +126,13 @@ export class ComponentsComponent implements OnInit {
                       .subscribe(resultS => {
                         if (resultS) {
                           console.log('edit clicked: ', data, result);
-                          // this.componentService.updateComponent(data.no, result)
-                          //   .subscribe(response => {
-                          //     console.log('component updated: ', response);
-                          //     this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
-                          //     this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
-                          //     this.dataSource.data = this.data;
-                          //   })
+                          this.componentService.updateComponent(data.no, result)
+                            .subscribe(response => {
+                              console.log('component updated: ', response);
+                              this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
+                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                              this.dataSource.data = this.data;
+                            })
                         }
                       })
                   });

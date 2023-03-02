@@ -1,18 +1,18 @@
 <h1 mat-dialog-title>{{ data.editMode ? 'Edit' : 'Add' }}
   user {{data.editMode ? data.user.id : ''}}</h1>
-<div mat-dialog-content style="height: 350px; width: 100%">
+<div mat-dialog-content style="height: 470px; width: 100%">
   <form [formGroup]="form">
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Username</mat-label>
+      <mat-label>{{'userTableHead.1.item' | translate}}</mat-label>
       <input matInput placeholder="Username" formControlName="username">
-      <mat-error *ngIf="username!.hasError('required')">Username is required.</mat-error>
-      <mat-error *ngIf="username!.hasError('minlength')">Username must be at least 5 characters long.
+      <mat-error *ngIf="username!.hasError('required')">{{'users.nameRequired' | translate}}</mat-error>
+      <mat-error *ngIf="username!.hasError('minlength')">{{'users.nameLength' | translate}}
       </mat-error>
-      <mat-error *ngIf="username!.hasError('invalidUserName')">This username is already in use.
+      <mat-error *ngIf="username!.hasError('invalidUserName')">{{'users.nameInUse' | translate}}
       </mat-error>
     </mat-form-field>
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Role</mat-label>
+      <mat-label>{{'userTableHead.2.item' | translate}}</mat-label>
       <mat-select formControlName="role">
         <mat-option *ngFor="let role of roles" [value]="role">
           {{role}}
@@ -20,30 +20,30 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>First name</mat-label>
+      <mat-label>{{'userTableHead.3.item' | translate}}</mat-label>
       <input matInput placeholder="First name" formControlName="firstName">
     </mat-form-field>
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Last name</mat-label>
+      <mat-label>{{'userTableHead.4.item' | translate}}</mat-label>
       <input matInput placeholder="Last name" formControlName="lastName">
     </mat-form-field>
     <ng-container *ngIf="!data.user">
     <mat-form-field style="width: 100%" appearance="outline">
-      <mat-label>Password</mat-label>
+      <mat-label>{{'users.password' | translate}}</mat-label>
       <input matInput formControlName="password" type="password">
-      <mat-error *ngIf="password!.hasError('required')">Password is required.</mat-error>
-      <mat-error *ngIf="password!.hasError('minlength')">Password must be at least 5 characters long.
+      <mat-error *ngIf="password!.hasError('required')">{{'users.passwordRequired' | translate}}</mat-error>
+      <mat-error *ngIf="password!.hasError('minlength')">{{'users.minLength' | translate}}
       </mat-error>
     </mat-form-field>
       <mat-form-field style="width: 100%" appearance="outline">
-        <mat-label>Confirm password</mat-label>
+        <mat-label>{{'users.confirmPassword' | translate}}</mat-label>
         <input matInput formControlName="confirmPass" type="password">
-        <mat-error *ngIf="confirmPass.hasError('invalidConfirmPass')">Passwords don't match.</mat-error>
+        <mat-error *ngIf="confirmPass.hasError('invalidConfirmPass')">{{'users.match' | translate}}</mat-error>
       </mat-form-field>
     </ng-container>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Cancel</button>
-  <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid || !form.dirty">Save</button>
+  <button mat-button [mat-dialog-close]="false">{{'dialogService.cancel' | translate}}</button>
+  <button mat-button [mat-dialog-close]="form.value" [disabled]="!form.valid || !form.dirty">{{'dialogService.save' | translate}}</button>
 </div>

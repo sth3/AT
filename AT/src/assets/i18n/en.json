@@ -45,9 +45,11 @@
     "error": "Error",
     "close": "Close",
     "print": "Print",
+    "ok": "Ok",
     "dialogDelete": "Are you sure you want to delete this component?",
     "dialogRecipeDelete": "Are you sure you want to delete this recipe?",
     "dialogOrderDelete": "Are you sure you want to delete this order?",
+    "dialogUserDelete": "Are you sure you want to delete user",
     "dialogUpdate": "Are you sure you want to update this component?",
     "dialogRecipeUpdate": "Are you sure you want to update this recipe?",
     "dialogOrderUpdate": "Are you sure you want to update this order?",
@@ -56,12 +58,16 @@
     "notifierDeleted": "Component deleted",
     "notifierRecipeDeleted": "Recipe deleted",
     "notifierOrderDeleted": "Order deleted",
+    "notifierUserDeleted": "User deleted",
     "notifierUpdate": "Component updated",
     "notifierRecipeUpdate": "Recipe updated",
     "notifierOrderUpdate": "Order updated",
+    "notifierUserPassUpdate": "Password changed for user ",
+    "notifierUserUpdate": "User updated ",
     "notifierCreated": "Component created",
     "notifierRecipeCreated": "Recipe created",
     "notifierOrderCreated": "Order created",
+    "notifierUserCreated": "New user added",
     "notifierErrordescription": "Please fill out all fields correctly.",
     "notifierErrorComponentDescription": "The maximum number of components is "
   },
@@ -160,6 +166,20 @@
     "packingWeight": "Packing Weight",    
     "weightPerDose": "Weight Per Dose"
   },
+  "users": {
+    "addUser": "Add user",
+    "changePassword": "Change Password ",
+    "minLength":"Minimum password length is 5 characters.",
+    "match":"Passwords don't match.",
+    "oldPassword":"Old Password",
+    "newPassword":"New Password",
+    "confirmPassword":"Confirm Password",
+    "password":"Password",
+    "nameRequired":"Username is required.",
+    "nameLength":"Username must be at least 5 characters long.",
+    "nameInUse":"This username is already in use.",
+    "passwordRequired":"Password is required."
+  },  
   "statistics": {
     "select":"Select"    
   },
@@ -269,6 +289,30 @@
     },
     {
       "item": "Due date"
+    }
+  ],
+   "userTableHead": [
+    
+    {
+      "item": "ID"
+    },
+    {
+      "item": "Username"
+    },
+    {
+      "item": "Role"    
+    },
+    {
+      "item": "First name"    
+    },
+    {
+      "item": "Last name"    
+    },
+    {
+      "item": "Date of registration"    
+    },
+    {
+      "item": "Last login"
     }
   ],
   "selectIdMixers": [
