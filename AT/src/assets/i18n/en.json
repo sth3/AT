@@ -161,7 +161,7 @@
     "components": "Components",
     "bigBagLine": "BigBag",
     "liquide": "Liquide",
-    "micro": "Micro",
+    "micro": "Macro",
     "quantity": "Quantity",
     "packingWeight": "Packing Weight",    
     "weightPerDose": "Weight Per Dose"
@@ -370,7 +370,7 @@
     },
     {
       "value": 1,
-      "viewValue": "Aggregates - Micro"
+      "viewValue": "Aggregates - Macro"
     },
     {
       "value": 2,
@@ -410,7 +410,7 @@
     },
     {
       "value": 3,
-      "viewValue": "Micro"
+      "viewValue": "Macro"
     }
   ],
   "selectGroupBy" :  [
