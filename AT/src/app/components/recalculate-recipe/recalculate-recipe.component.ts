@@ -29,7 +29,7 @@ export class RecalculateRecipeComponent implements OnInit {
   recipeRecalculate: RecalculateOrder[] = [];  
   doneDose:number [] = [];
   weightPerDose: number = 0;
-
+  volumePerDoseTank: number = 0;
   packingOrders: selectList[] = [
     { value: 0, viewValue: 'Bag' },
     { value: 1, viewValue: 'Big Bag' },
@@ -64,6 +64,7 @@ export class RecalculateRecipeComponent implements OnInit {
 
   quantityComponents(components: ComponentItemModel[]) {  
     this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (this.data.selectedorder.quantity / 100)) / comp.specificBulkWeight), 0) / Number(this.data.selectedorder.volumePerDose));  
+    this.volumePerDoseTank = Math.ceil(components.reduce((acc, comp) => acc + ((comp.componentSP * (Number(this.data.selectedorder.quantity) / 100)) / comp.specificBulkWeight), 0)/this.quantityPallete );
     this.quantityComponentPerOrder = components.map((comp) => (comp.componentSP * (this.data.selectedorder.quantity / 100)));
     console.log('quantityComponentPerOrder',this.quantityComponentPerOrder);
     
