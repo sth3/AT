@@ -246,7 +246,7 @@
   ],
   "aggregateTableHead": [
     {
-      "item": "Č"
+      "item": "ID"
     },
     {
       "item": "ID Agregátu"
@@ -266,7 +266,7 @@
   ],
   "recipeTableHead": [
     {
-      "item": "Č"
+      "item": "ID"
     },
     {
       "item": "ID Receptu"
@@ -280,7 +280,7 @@
   ],
   "orderTableHead": [
     {
-      "item": "No"
+      "item": "ID"
     },
     {
       "item": "ID Výrobného príkazu"
