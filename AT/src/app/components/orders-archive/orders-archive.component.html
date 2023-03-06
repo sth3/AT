@@ -121,7 +121,7 @@
                             }">
                             <mat-label>{{'dialogOrder.quantity'| translate}}</mat-label>
                             <input matInput placeholder="0000000001" readonly
-                              [value]="component.componentSP.toFixed(3)" />
+                              [value]="component.componentSP| number :'1.3-3':'sk'" />
                             <span matSuffix>KG</span>
                           </mat-form-field>
                           <mat-form-field appearance="outline" style="width: 10%" class="note" [ngClass]="{

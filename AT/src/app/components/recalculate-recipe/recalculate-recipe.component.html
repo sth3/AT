@@ -66,7 +66,7 @@
           <!-- <h3>{{'dialogOrder.quantity'|translate}}</h3> -->
           <mat-form-field appearance="outline" style="width: 110px" class="note">
             <mat-label>{{'dialogOrder.quantity'|translate}}</mat-label>
-            <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.quantity | number :'1.3-3' ">
+            <input matInput placeholder="0001" readonly [value]="this.data.selectedorder.quantity | number :'1.3-3':'sk' ">
             <span matSuffix>kg</span>
           </mat-form-field>
         </div>
@@ -145,7 +145,7 @@
                       hideItem: this.quantityBag[i] == 0 
                     }">
                       <mat-label>{{'componentsTableHead.1.item'| translate}}</mat-label>
-                      <input matInput placeholder="1" readonly [value]="this.data.selectedorder.packingOrders[i].packingWeight.toFixed(1)">
+                      <input matInput placeholder="1" readonly [value]="this.data.selectedorder.packingOrders[i].packingWeight | number :'1.1-3':'sk'">
                       <span matSuffix>kg</span>
                     </mat-form-field>
                     <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
@@ -163,7 +163,7 @@
                       hideItem: this.quantityADS[i] == 0 
                     }">
                       <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
-                      <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i].toFixed(3)">
+                      <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i]| number :'1.1-3':'sk' ">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
@@ -172,7 +172,7 @@
                       hideItem: this.quantityBigBag[i] == 0 
                     }">
                       <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
-                      <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i].toFixed(3)">
+                      <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i] | number :'1.1-3':'sk'">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
@@ -184,7 +184,7 @@
                       hideItem: this.quantityLiquid[i] == 0 
                     }">
                       <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
-                      <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i].toFixed(3)">
+                      <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i] | number :'1.1-3':'sk'">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
@@ -193,7 +193,7 @@
                       hideItem: this.quantityMicro[i] == 0 
                     }">
                       <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
-                      <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i].toFixed(3)">
+                      <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i] | number :'1.1-3':'sk'">
                       <span matSuffix>kg</span>
                     </mat-form-field>
 
@@ -212,7 +212,7 @@
       <span style="font-weight: bold">{{'recalculate.weightPerDose'|translate}}</span>
       <span class="spacer"></span>
       <span
-        >{{ weightPerDose | number :'1.3-3' }} kg / {{ volumePerDoseTank  }} l
+        >{{ weightPerDose | number :'1.3-3':'sk' }} kg / {{ volumePerDoseTank  }} l
         
         
       </span>

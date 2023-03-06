@@ -97,7 +97,7 @@
                         [ngClass]="{gridC: i % 2 > 0}">
                         <mat-label>{{'dialogOrder.weightPerOrder'| translate}}</mat-label>
                         <input matInput placeholder="0000000001"
-                          [value]="component.componentSP *(this.form.value.quantity / 100)| number : '1.3-3'" />
+                          [value]="component.componentSP *(this.form.value.quantity / 100)| number : '1.3-3':'sk'" />
                         <span matSuffix>KG</span>
                       </mat-form-field>
                     </div>
@@ -281,7 +281,7 @@
                                                     }">
                               <mat-label>{{'dialogOrder.packingWeight'| translate}}</mat-label>
                               <input matInput placeholder="1" readonly
-                                [value]="component.packingWeight | number : '1.1-1'" />
+                                [value]="component.packingWeight | number : '1.1-1':'sk'" />
                               <span matSuffix>kg</span>
                             </mat-form-field>
 
@@ -302,7 +302,7 @@
                                                     }">
                                                     <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                               <input matInput placeholder="0.1" readonly [value]="
-                                                        this.quantityADS[i] | number : '1.3-3'
+                                                        this.quantityADS[i] | number : '1.3-3':'sk'
                                                       " />
                               <span matSuffix>kg</span>
                             </mat-form-field>
@@ -313,7 +313,7 @@
                                                     }">
                                                     <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                               <input matInput placeholder="0.1" readonly
-                                [value]="this.quantityBigBag[i] | number : '1.3-3'" />
+                                [value]="this.quantityBigBag[i] | number : '1.3-3':'sk'" />
                               <span matSuffix>kg</span>
                             </mat-form-field>
 
@@ -323,7 +323,7 @@
                                                     }">
                                                     <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
                               <input matInput placeholder="0.1" readonly [value]="
-                                                        this.quantityLiquid[i] | number : '1.3-3'
+                                                        this.quantityLiquid[i] | number : '1.3-3':'sk'
                                                       " />
                               <span matSuffix>kg</span>
                             </mat-form-field>
@@ -345,7 +345,7 @@
                   <mat-toolbar style="height: 30px; width: 830px">
                     <span style="font-weight: bold">{{'recalculate.weightPerDose'|translate}}</span>
                     <span class="spacer"></span>
-                    <span>{{ weightPerDose | number : "1.3-3" }} kg/{{ volumePerDoseTank  }} l </span>
+                    <span>{{ weightPerDose | number : "1.3-3":'sk' }} kg/{{ volumePerDoseTank  }} l </span>
                   </mat-toolbar>
                   <span style="margin: auto" *ngIf="this.orderComponent.length === 0">{{'dialogOrder.noComponents'| translate}}</span>
                 </mat-list>

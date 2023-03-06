@@ -60,7 +60,10 @@ import {NgxPrintModule} from 'ngx-print';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import  localeSk  from '@angular/common/locales/sk';
+import { registerLocaleData } from '@angular/common';
 
+registerLocaleData(localeSk, 'sk')
 
 @NgModule({
   declarations: [

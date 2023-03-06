@@ -63,6 +63,12 @@
                 <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' }}
                 </td>
             </ng-container>
+            <ng-container *ngIf="column.field === 'componentSP'; ">
+                <td mat-cell *matCellDef="let element"> {{element[column.field] | number : "1.1-3":'sk'  }} </td>
+              </ng-container>
+              <ng-container *ngIf="column.field === 'componentPV'; else normalTd">
+                <td mat-cell *matCellDef="let element"> {{element[column.field] | number : "1.1-3":'sk'  }} </td>
+              </ng-container>
             <ng-template #normalTd>
                 <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>
             </ng-template>

@@ -90,7 +90,7 @@
                             {{component.name}}
 
                           </p>
-                          <p>| W:{{component.componentSP |number :'1.3-3'}} kg</p>
+                          <p>| W:{{component.componentSP | number :'1.3-3':'sk'}} kg</p>
                         </div>
                       </mat-list-item>
                       <mat-divider *ngIf="i !== recipe!.components!.length! - 1"></mat-divider>
@@ -140,7 +140,7 @@
                       {{component.name}}
 
                     </p>
-                    <p>| V:{{component.componentSP |number :'1.3-3'}} kg</p>
+                    <p>| V:{{component.componentSP | number :'1.3-3':'sk'}} kg</p>
                   </div>
                 </mat-list-item>
                 <mat-divider *ngIf="i !== option!.components!.length! - 1"></mat-divider>
@@ -193,7 +193,7 @@
                         }">
                         <mat-label>{{'dialogOrder.quantity'| translate}}</mat-label>
                         <input matInput placeholder="{{'dialogOrder.quantity'| translate}}" readonly
-                          [value]="component.componentSP | number :'1.3-3'">
+                          [value]="component.componentSP | number :'1.3-3':'sk'">
                         <span matSuffix>KG</span>
                       </mat-form-field>
                       
@@ -202,7 +202,7 @@
                         }">
                         <mat-label>{{'componentsTableHead.3.item'| translate}}</mat-label>
                         <input matInput placeholder="{{'componentsTableHead.3.item'| translate}}" readonly
-                          [value]="component.specificBulkWeight.toFixed(3)">
+                          [value]="component.specificBulkWeight | number :'1.3-3':'sk'">
                         <span matSuffix>KG/L</span>
                       </mat-form-field>
 
@@ -257,7 +257,7 @@
                           }">
                         <mat-label>{{'dialogOrder.weightPerOrder'| translate}}</mat-label>
                         <input matInput placeholder="{{'dialogOrder.weightPerOrder'| translate}}"
-                          [value]="component.componentSP * (this.form.value.quantity/100) |number :'1.3-3'">
+                          [value]="component.componentSP * (this.form.value.quantity/100) | number :'1.3-3':'sk'">
                         <span matSuffix>KG</span>
                       </mat-form-field>
                       <!-- </ng-container> -->

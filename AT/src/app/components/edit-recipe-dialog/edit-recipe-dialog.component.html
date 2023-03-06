@@ -124,7 +124,7 @@
       <span style="font-weight: bold">{{ "dialogRecipe.weightCheck" | translate }}</span>
       <span class="spacer"></span>
       <span
-        >{{ currentWeight.toFixed(3) }}/{{ targetWeight }}
+        >{{ currentWeight | number :'1.3-3':'sk' }}/{{ targetWeight }}
         <mat-icon
           *ngIf="currentWeight === targetWeight; else crossIcon"
           style="color: green; vertical-align: sub"
