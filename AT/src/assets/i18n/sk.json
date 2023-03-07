@@ -325,6 +325,9 @@
     },
     {
       "item": "Tvorca"
+    },
+    {
+      "item": "Stanica"
     }
   ],
   "statisticsTableHead1": [
@@ -333,7 +336,7 @@
       "item": "Meno komponentu"
     },
     {
-      "item": "žiadaná hodnota"
+      "item": "Žiadaná hodnota"
     },
     {
       "item": "Aktuálna hodnota"    
@@ -355,6 +358,9 @@
     },
     {
       "item": "Tvorca"
+    },
+    {
+      "item": "Stanica"
     }
   ],
   "userTableHead": [
@@ -469,6 +475,36 @@
     {
       "value": 5,
       "viewValue": "Meno výrobného príkazu"
+    },
+    {
+      "value": 6,
+      "viewValue": "Stanica"
+    }
+  ],
+  "selectLine" :  [
+    {
+      "value": 0,
+      "viewValue": "Nedefinované"
+    },
+    {
+      "value": 1,
+      "viewValue": "Big Bag"
+    },
+    {
+      "value": 2,
+      "viewValue": "Tekuté koomponenty"
+    },
+    {
+      "value": 3,
+      "viewValue": "ADS"
+    },
+    {
+      "value": 4,
+      "viewValue": "Makro"
+    },
+    {
+      "value": 5,
+      "viewValue": "Vrece"
     }
   ]
 }

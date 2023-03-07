@@ -41,7 +41,8 @@ GROUP_BY_BODY = [
         `,RH.id recipeID `,
         `,RH.name recipeN `, 
         `,O.id orderID `, 
-        `,O.name orderN `        
+        `,O.name orderN `,
+        `,S.station station`        
 ]
 
 GROUP_BY_FOOTER = [        
@@ -50,7 +51,8 @@ GROUP_BY_FOOTER = [
         `,RH.id `, 
         `,RH.name `, 
         `,O.id `, 
-        `,O.name `
+        `,O.name `,
+        `,S.station`
 ]
 
 ORDER_BY = `ORDER BY MONTH(S.datetime), YEAR(S.datetime) `
@@ -82,8 +84,10 @@ const updateStatSelect = async (type, groupBy) => {
     console.log(query);
 
         const pool = await poolPromise;
-        return  pool.request()
-            .query(query);
+        const recordset   =  pool.request()
+        .query(query)
+        
+        return recordset;
         
 
 }

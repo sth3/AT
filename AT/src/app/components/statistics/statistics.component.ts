@@ -25,18 +25,19 @@ export class StatisticsComponent implements OnInit {
     start: new FormControl(),
     end: new FormControl(),
   });
-  groupBy = new FormControl([0, 1, 2, 3, 4, 5]);  
+  groupBy = new FormControl([0, 1, 2, 3, 4, 5, 6]);  
    columnsToDisplay = [
-    { field: 'datetime', header: 'Dátum a Čas' , id:6},
-    { field: 'componentN', header: 'Meno Komponentu', id:7 },
-    { field: 'componentSP', header: 'Žiadaná Hodnota', id:8 },
-    { field: 'componentPV', header: 'Nadávkovaná Hodnota', id:9 },
+    { field: 'datetime', header: 'Dátum a Čas' , id:7},
+    { field: 'componentN', header: 'Meno Komponentu', id:8 },
+    { field: 'componentSP', header: 'Žiadaná Hodnota', id:9 },
+    { field: 'componentPV', header: 'Nadávkovaná Hodnota', id:10 },
     { field: 'noContainer', header: 'Number of Dose', id:0 },
     { field: 'orderID', header: 'ID Zákazky', id:4 },
     { field: 'orderN', header: 'Name Zákazky', id:5 },
     { field: 'recipeID', header: 'No Recipe', id:2 },
     { field: 'recipeN', header: 'Name Recipe', id:3 },
     { field: 'UserName', header: 'UserName', id:1 },
+    { field: 'station', header: 'Station', id:6 },
   ]
   allColumnsToDisplay = [...this.columnsToDisplay.map(c => c.field)];
   dataSource: MatTableDataSource<DoseModel> = new MatTableDataSource<DoseModel>([]);
@@ -50,7 +51,7 @@ export class StatisticsComponent implements OnInit {
     private dateAdapter: DateAdapter<Date>) { this.dateAdapter.setLocale('en-GB'); }
 
   ngOnInit(): void {
-    this.filter = [...this.groupBy.value, 6,7,8,9]  
+    this.filter = [...this.groupBy.value, 7,8,9,10]  
     this.loadComponents(this.type, this.groupBy.value);
   }
 
@@ -65,11 +66,11 @@ export class StatisticsComponent implements OnInit {
    console.log('this.type',this.type);
    setTimeout(() => {    
       this.loadComponents(this.type, this.groupBy.value);
-      this.filter =[...this.groupBy.value, 7,8,9]  
+      this.filter =[...this.groupBy.value, 8,9,10]  
       if(this.type == 0) {
-        this.filter = [...this.groupBy.value, 6,7,8,9]    
+        this.filter = [...this.groupBy.value, 7,8,9,10]    
       } else if (this.type == 2){
-        this.filter = [...this.groupBy.value, 6,7,8,9]    
+        this.filter = [...this.groupBy.value, 7,8,9,10]    
       }
       
       this.allColumnsToDisplay = [...this.columnsToDisplay.filter(   val => this.filter.includes(val.id) ).map(c => c.field)];
@@ -101,7 +102,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   dataForTable(data: DoseModel[]){
-    this.dataSource = new MatTableDataSource<DoseModel>(data);
+    this.dataSource = new MatTableDataSource<DoseModel>(data);   
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }

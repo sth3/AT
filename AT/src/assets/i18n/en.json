@@ -361,6 +361,9 @@
     },
     {
       "item": "Creator"
+    },
+    {      
+      "item": "Station"
     }
   ],
   "selectAggregates": [
@@ -437,6 +440,36 @@
     {
       "value": 5,
       "viewValue": "Order Name"
+    },
+    {
+      "value": 6,
+      "viewValue": "Station"
+    }
+  ],
+  "selectLine" :  [
+    {
+      "value": 0,
+      "viewValue": "Undefine"
+    },
+    {
+      "value": 1,
+      "viewValue": "Big Bag"
+    },
+    {
+      "value": 2,
+      "viewValue": "Liquid"
+    },
+    {
+      "value": 3,
+      "viewValue": "ADS"
+    },
+    {
+      "value": 4,
+      "viewValue": "Macro"
+    },
+    {
+      "value": 5,
+      "viewValue": "Bag"
     }
   ]
 }

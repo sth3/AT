@@ -279,7 +279,7 @@ export class ComponentsComponent implements OnInit {
   }
 
   exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['no', 'id', 'name', 'specificBulkWeight', 'lastUpdate'];
+    const headerList = ['no', 'id', 'name', 'specificBulkWeight', 'packingWeight', 'lastUpdate'];
     if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'components');

@@ -98,7 +98,7 @@ export class AggregateComponent implements OnInit {
 
 
    exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['aNo', 'aID', 'id', 'name', 'lastUpdate', 'user'];
+    const headerList = ['aNo', 'aID', 'id', 'name', 'quantity', 'lastUpdate'];
     if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'Aggregate');

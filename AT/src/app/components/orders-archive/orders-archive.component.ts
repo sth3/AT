@@ -127,7 +127,7 @@ export class OrdersArchiveComponent implements OnInit  {
      // data = this.exportService.convertOrdersForDownload(this.orders);
     //  console.log('data',data);
    // }
-    this.exportService.downloadFile(data, headerList, 'orders');
+    this.exportService.downloadFile(data, headerList, 'archiveOrders');
   }
   
 }
