@@ -170,7 +170,7 @@
             <div *ngIf="!isNew" class="order-time-container">
               <div class="order-time">
                 <h3 class="order-pdf-h3">{{'dialogOrder.createdAt'| translate}}</h3>
-                <span>{{ order?.createdAt | date : "dd/MM/yyyy HH:mm" }}</span>
+                <span>{{ order?.createdAt | date : "dd/MM/yyyy HH:mm":'UTC' }}</span>
               </div>
             </div>
           </fieldset>

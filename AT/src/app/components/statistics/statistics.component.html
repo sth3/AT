@@ -60,7 +60,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style]="{'width': 125 || 'auto'}">
                 {{'statisticsTableHead.'+i+'.item' | translate }} </th>
             <ng-container *ngIf="column.field === 'datetime' && type < 2; else normalTd">
-                <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' }}
+                <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss':'UTC' }}
                 </td>
             </ng-container>
             <ng-container *ngIf="column.field === 'componentSP'; ">
