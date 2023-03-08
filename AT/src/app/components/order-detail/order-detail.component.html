@@ -344,15 +344,15 @@
     <div *ngIf="!isNew" class="order-time-container">
       <div class="order-time">
         <h3>{{'dialogOrder.createdAt'| translate}}</h3>
-        <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</span>
+        <span>{{order?.createdAt | date: 'dd/MM/yyyy HH:mm':'UTC'}}</span>
       </div>
       <div class="order-time">
         <h3>{{'dialogOrder.lastUpdate'| translate}}</h3>
-        <span>{{order?.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</span>
+        <span>{{order?.lastUpdate | date: 'dd/MM/yyyy HH:mm':'UTC'}}</span>
       </div>
       <div *ngIf="order?.completedAt" class="order-time">
         <h3>{{'dialogOrder.completedAt'| translate}}</h3>
-        <span>{{order?.completedAt | date: 'dd/MM/yyyy HH:mm'}}</span>
+        <span>{{order?.completedAt | date: 'dd/MM/yyyy HH:mm':'UTC'}}</span>
       </div>
     </div>
   </mat-card-content>
