@@ -61,24 +61,9 @@ export class ExportService {
           array[i][head] !== null &&
            (head === 'station' )
         ) {
-          let station : string = 'Nedefinované'
-            if (array[i][head]==1) {
-              station = 'Big Bag'
-            }
-            if (array[i][head]==2) {
-              station = 'Tekuté komponenty'
-            }
-            if (array[i][head]==3) {
-              station = 'ADS'
-            }
-            if (array[i][head]==4) {
-              station = 'Makro komponenty'
-            }
-            if (array[i][head]==5) {
-              station = 'Vrece'
-            }
-            
-          line += ';' + (station || '')          
+          let station : string[] = ['Nedefinované', 'Big Bag', 'Tekuté komponenty', 'ADS', 'Makro komponenty', 'Vrece']
+                       
+          line += ';' + (station[array[i][head]] || '')          
           
         }
         
