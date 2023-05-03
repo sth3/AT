@@ -240,13 +240,22 @@
           </div>
           <div style="flex-grow: 1; margin-bottom: 20px">
             <mat-form-field appearance="outline" style="width: 20%">
+              <mat-label>{{'dialogOrder.package'| translate}}</mat-label>
+              <mat-select [(ngModel)]="element.package" [disabled]="true" >
+                <mat-option *ngFor="let slecetPackage of 'selectPackage'|translate" [value]="slecetPackage.value">
+                  {{slecetPackage.viewValue}}
+                </mat-option>
+              </mat-select>
+              
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>{{'dialogOrder.createdAt'| translate}}</mat-label>
               <input matInput readonly [value]="element.createdAt | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
             </mat-form-field>
-            <mat-form-field appearance="outline" style="width: 20%">
+            <!-- <mat-form-field appearance="outline" style="width: 20%">
               <mat-label>{{'dialogOrder.lastUpdate'| translate}}</mat-label>
               <input matInput readonly [value]="element.lastUpdate | date : 'd.M.y, HH:mm:ss' : 'UTC'" />
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
         </div>
       </td>

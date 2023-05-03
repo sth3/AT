@@ -12,6 +12,7 @@ export interface OrderModel {
   recipe: RecipeModel;
   quantity: number;
   idMixer: number;
+  package: number;
   mixingTime: number;
   idPackingMachine: number;
   idEmptyingStationBag: number;
@@ -58,6 +59,7 @@ export interface OrderModelPacking {
   recipe: RecipeModel;
   quantity: number;
   idMixer: number;
+  package: number;
   mixingTime: number;
   idPackingMachine: number;
   idEmptyingStationBag: number;

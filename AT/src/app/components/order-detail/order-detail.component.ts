@@ -65,6 +65,7 @@ export class OrderDetailComponent implements OnInit {
   dosePerOrder?: RecalculateOrder | undefined;
   donePerStation: number[] = [];
   packingWeightForm: number[] = [0];
+  
 
    myControl:FormControl = new FormControl('');
    filteredComponents!: Observable<RecipeModel[]>;
@@ -120,6 +121,7 @@ export class OrderDetailComponent implements OnInit {
       if (no === 'new') {
         this.editable = true;
         this.isNew = true;
+        
         return;
       }
       this.ordersService.getOrderByNo(no).subscribe((order) => {
@@ -135,6 +137,7 @@ export class OrderDetailComponent implements OnInit {
         console.log("🚀 ~ file: order-detail.component.ts:134 ~ OrderDetailComponent ~ this.ordersService.getOrderByNo ~ this.orderComponent:", this.orderComponent)
         this.prepareForm();
         this.form.get('idMixer')?.disable({ onlySelf: true });
+        this.form.get('package')?.disable({ onlySelf: true });
         this.recipeService.getRecipes().subscribe((recipes) => {
           
           console.log("🚀 ~ file: order-detail.component.ts:138 ~ OrderDetailComponent ~ this.recipeService.getRecipes ~ recipes:", recipes)
@@ -201,6 +204,10 @@ export class OrderDetailComponent implements OnInit {
     return this.form.get('idMixer') as FormControl;
   }
 
+  get package() {
+    return this.form.get('package') as FormControl;
+  }
+
   get volumePerDose() {
     return this.form.get('volumePerDose') as FormControl;
   }
@@ -243,6 +250,10 @@ export class OrderDetailComponent implements OnInit {
         Validators.required,
         Validators.min(1),
       ]),
+      package: new FormControl(this.order?.package || 1, [
+        Validators.required,
+        Validators.min(1),
+      ]),
       mixingTime: new FormControl(
         this.order?.mixingTime || null,
         Validators.required
@@ -273,11 +284,13 @@ export class OrderDetailComponent implements OnInit {
   onEditClick() {
     this.editable = true;
     this.form.get('idMixer')?.enable();
+    this.form.get('package')?.enable();
   }
 
   offEditClick() {
     this.editable = false;
     this.form.get('idMixer')?.disable();
+    this.form.get('package')?.disable();
   }
 
   onDeleteClick() {

@@ -121,6 +121,7 @@
   },
   "dialogOrder": {
     "mixerID": "Mixer ID",
+    "package": "Container/Pallet",
     "mixingTime": "Mixing time",
     "packingMachineID": "Packing machine ID",
     "emptyingStationID": "Emptying station ID",
@@ -329,6 +330,16 @@
     {
       "value": 3,
       "viewValue": "External mixer"
+    }
+  ],
+  "selectPackage": [
+    {
+      "value": 1,
+      "viewValue": "Container"
+    },
+    {
+      "value": 2,
+      "viewValue": "Pallet"
     }
   ],
   "statisticsTableHead": [    

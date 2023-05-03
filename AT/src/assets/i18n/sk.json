@@ -123,6 +123,7 @@
   },
   "dialogOrder": {
     "mixerID": "Mixér",
+    "package": "Kontajner/Paleta",
     "mixingTime": "Čas miešania",
     "packingMachineID": "ID Baličky",
     "emptyingStationID": "ID Vyprázdňovacej stanice",
@@ -399,6 +400,16 @@
     {
       "value": 3,
       "viewValue": "Externý mixér"
+    }
+  ],
+  "selectPackage": [
+    {
+      "value": 1,
+      "viewValue": "Kontajner"
+    },
+    {
+      "value": 2,
+      "viewValue": "Paleta"
     }
   ],
   "selectAggregates": [

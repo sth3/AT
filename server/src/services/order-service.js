@@ -10,10 +10,10 @@ const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     '   (id, name, customerName, dueDate, recipeNo, operatorId, quantity, ' +
-    '   idMixer, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, done, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
+    '   idMixer, package, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, done, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
     'VALUES (' +
     '   @id, @name, @customerName, @dueDate, @recipeNo, @operatorId, @quantity, ' +
-    '   @idMixer, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, @done, @BigBagDone, @LiquidDone, @ADSDone, @MicroDone, GETDATE(), GETDATE() ' +
+    '   @idMixer, @package, @mixingTime, @idPackingMachine, @idEmptyingStationBag, @volumePerDose, @done, @BigBagDone, @LiquidDone, @ADSDone, @MicroDone, GETDATE(), GETDATE() ' +
     ') SELECT SCOPE_IDENTITY() as no';
 const DELETE_ORDER_BY_NO = 'DELETE FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
@@ -27,6 +27,7 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
     '   operatorId = @operatorId, ' +
     '   quantity = @quantity, ' +
     '   idMixer = @idMixer, ' +
+    '   package = @package, ' +
     '   mixingTime = @mixingTime, ' +
     '   idPackingMachine = @idPackingMachine, ' +
     '   idEmptyingStationBag = @idEmptyingStationBag, ' +
@@ -108,6 +109,7 @@ const addOrder = async (order) => {
         .input('operatorId', sql.Int, order.operatorId)
         .input('quantity', sql.Real, order.quantity)
         .input('idMixer', sql.Int, order.idMixer)
+        .input('package', sql.Int, order.package)
         .input('mixingTime', sql.Int, order.mixingTime)
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)
@@ -194,6 +196,7 @@ const updateOrder = async (no, order) => {
         .input('operatorId', sql.Int, order.operatorId)
         .input('quantity', sql.Real, order.quantity)
         .input('idMixer', sql.Int, order.idMixer)
+        .input('package', sql.Int, order.package)
         .input('mixingTime', sql.Int, order.mixingTime)
         .input('idPackingMachine', sql.Int, order.idPackingMachine)
         .input('idEmptyingStationBag', sql.Int, order.idEmptyingStationBag)

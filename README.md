@@ -34,7 +34,9 @@ qckwinsvc --uninstall --name "at-server" --script "D:\Web-app\AT\server\server.j
 qckwinsvc --uninstall --name "at-frontend" --script "D:\Web-app\AT\AT\autorun.js"
 
 qckwinsvc2 install name="at-server" description="AT" path="D:\Web-app\AT\server\server.js" args="-a -c" now
+qckwinsvc2 install name="at-server" description="AT" path="C:\Users\Lenovo\Desktop\AT\Projects\VisualStudioCode\AppAT\AT\server\server.js" args="-a -c" now
 qckwinsvc2 install name="at-frontend" description="AT" path="D:\Web-app\AT\AT\autorun.js" args="-a -c" now
 qckwinsvc2 uninstall name="at-server" 
 qckwinsvc2 uninstall name="at-frontend"
 
+C:\Users\Lenovo\Desktop\AT\Projects\VisualStudioCode\AppAT\AT\server\server.js

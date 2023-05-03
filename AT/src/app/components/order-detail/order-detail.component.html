@@ -331,6 +331,20 @@
           </mat-form-field>
         </div>
 
+
+        <div class="order-form-field">
+          <h3>{{'dialogOrder.package'| translate}}</h3>
+          <mat-form-field appearance="outline">
+
+            <mat-select formControlName="package" placeholder="{{'dialogOrder.package'| translate}}" c min="1" max="2" type="number" >
+              <mat-option *ngFor="let slecetPackage of 'selectPackage'|translate" [value]="slecetPackage.value">
+                {{slecetPackage.viewValue}}
+              </mat-option>
+            </mat-select>
+            
+          </mat-form-field>
+        </div>
+
         <div class="order-form-field">
           <h3>{{'dialogOrder.operator'| translate}}</h3>
           <mat-form-field appearance="outline">
