@@ -4,6 +4,15 @@ const { trimTrailingWhitespace } = require('../data/utils');
 const { getComponentByNo } = require('./component-service');
 
 const MAX_CHANGE_LENGTH = 512;
+const GET_ACTIVE_COMPONENTS = `
+    SELECT DISTINCT C.*,	   
+    S.packingType packingType,
+    S.packingWeight packingWeight
+    FROM [AT].[dbo].[COMPONENT] C 
+    LEFT JOIN [AT].[dbo].[COMPONENTS_SPECIFICATION] S ON S.no = C.no 
+    WHERE C.no NOT IN 
+    (SELECT CH.oldComponentNo 
+    FROM [AT].[dbo].[COMPONENTS_CHANGES] CH)`;
 const GET_ALL_RECIPES = 'SELECT DISTINCT R.no no, ' +
     '   R.id id,' +
     '   R.name name,' +
@@ -134,9 +143,23 @@ const getActiveRecipes = async () => {
     const { recordset } = await pool.request()
         .query(GET_ACTIVE_RECIPES);
     const recipes = trimTrailingWhitespace(recordset);
-    recipes.map(recipe => parseComponentsAndCheckValidity(recipe));
+    const components = await getActiveComponents()
+    //console.log("🚀 ~ file: recipe-service.js:138 ~ getActiveRecipes ~ components:", components)
+
+    recipes.map(recipe => parseComponentsAndCheckValidity(recipe, components));
     return recipes;
 }
+const getActiveComponents = async () => {
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()
+        .query(GET_ACTIVE_COMPONENTS);
+    //console.log("🚀 ~ file: recipe-service.js:156 ~ getActiveComponents ~ recordset:", recordset)
+    const components = trimTrailingWhitespace(recordset);
+    
+    return components;
+}
+
+
 
 const getRecipeByNo = async (no) => {
     const pool = await poolPromise;
@@ -146,7 +169,8 @@ const getRecipeByNo = async (no) => {
     if (recordset.length < 0) {
         return null;
     }
-    const recipe = parseComponentsAndCheckValidity(recordset[0]);
+    const components = await getActiveComponents()
+    const recipe = parseComponentsAndCheckValidity(recordset[0], components);
 
     return trimTrailingWhitespace(recipe);
 }
@@ -159,7 +183,8 @@ const getRecipeByNoForOrder = async (no, oNo) => {
     if (recordset.length < 0) {
         return null;
     }
-    const recipe = parseComponentsAndCheckValidity(recordset[0]);
+    const components = await getActiveComponents()
+    const recipe = parseComponentsAndCheckValidity(recordset[0] , components);
 
     return trimTrailingWhitespace(recipe);
 }
@@ -298,7 +323,9 @@ const getArchivedRecipes = async () => {
     return recordset;
 }
 
-const parseComponentsAndCheckValidity = (recipe) => {
+const parseComponentsAndCheckValidity = (recipe, components) => {
+    
+    
     if (recipe.components) {
         recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
     }
@@ -309,6 +336,21 @@ const parseComponentsAndCheckValidity = (recipe) => {
             recipe.isValid = false;
             break;
         }
+            if(components){
+                components = trimTrailingWhitespace(components);
+                //console.log("🚀 ~ file: recipe-service.js:315 ~ parseComponentsAndCheckValidity ~ components:", components)
+                
+                
+                const resultNo = components.some(c => c.no === component.no);
+                
+                
+                console.log("🚀 ~ file: recipe-service.js:341 ~ parseComponentsAndCheckValidity ~ result:", resultNo)
+                if (!resultNo) {
+                    recipe.isValid = false;
+                    break;
+                }
+            }
+
     }
     return recipe;
 }

@@ -28,7 +28,7 @@ export class ComponentsComponent implements OnInit {
   data: ComponentModel[] = [];
   quickFilter: string = '';
   currentUser!: UserModel;
-  maxNumberOfComponents:Number = 500;
+  maxNumberOfComponents:number = 500;
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
@@ -130,8 +130,9 @@ export class ComponentsComponent implements OnInit {
                             .subscribe(response => {
                               console.log('component updated: ', response);
                               this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
-                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...response } : c);
                               this.dataSource.data = this.data;
+                              //this.dataSource = new MatTableDataSource<ComponentModel>(this.data);
                             })
                         }
                       })
@@ -168,8 +169,10 @@ export class ComponentsComponent implements OnInit {
                             .subscribe(response => {
                               console.log('component updated: ', response);
                               this.notifierService.showDefaultNotification(successMessage.notifierUpdate);
-                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...result } : c);
+                              this.data = this.data.map(c => c.no === data.no ? { ...c, ...response } : c);
                               this.dataSource.data = this.data;
+                              
+                              
                             })
                         }
                       })
