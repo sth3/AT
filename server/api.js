@@ -11,6 +11,7 @@ const recipeController = require('./src/controllers/recipe-controller');
 const orderController = require('./src/controllers/order-controller');
 const statisticsController = require('./src/controllers/statistics-controller');
 const aggregateController = require('./src/controllers/aggregate-controller');
+const orderSapController = require('./src/controllers/order-sap-controller');
 const { roles } = require("./src/services/user-service");
 
 
@@ -25,6 +26,7 @@ router.use(recipeController);
 router.use(orderController);
 router.use(statisticsController);
 router.use(aggregateController);
+router.use(orderSapController);
 
 
 
