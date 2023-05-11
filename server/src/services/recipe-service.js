@@ -144,7 +144,7 @@ const getActiveRecipes = async () => {
         .query(GET_ACTIVE_RECIPES);
     const recipes = trimTrailingWhitespace(recordset);
     const components = await getActiveComponents()
-    //console.log("🚀 ~ file: recipe-service.js:138 ~ getActiveRecipes ~ components:", components)
+    console.log("🚀 ~ file: recipe-service.js:138 ~ getActiveRecipes ~ components:", components)
 
     recipes.map(recipe => parseComponentsAndCheckValidity(recipe, components));
     return recipes;
