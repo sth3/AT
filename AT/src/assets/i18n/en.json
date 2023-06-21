@@ -15,6 +15,7 @@
     "recipes": "Recipes",
     "orders": "Orders",
     "ordersArchive": "Orders Archive",
+    "ordersSap": "Orders SAP",
     "aggregate": "Aggregates",
     "statistics": "Statistics",
     "users": "Users",
@@ -186,6 +187,13 @@
   "statistics": {
     "select":"Select"    
   },
+  "recipeSAP": {
+    "customerName":"Customer Name",    
+    "quantity":"Quantity",    
+    "timeStampWrite":"Write timestamp",    
+    "timeStampRead":"Read timestamp",    
+    "status":"Status"   
+  },
   "componentsTableHead": [
     {
       "item": "ID"
@@ -292,6 +300,29 @@
     },
     {
       "item": "Due date"
+    }
+  ],
+  "orderTableHeadSap": [
+    {
+      "item": "Row ID"
+    },
+    {
+      "item": "Order ID"
+    },
+    {
+      "item": "Segment Requirement ID"
+    },
+    {
+      "item": "Product ID"
+    },    
+    {
+      "item": "Product Name"
+    },
+    {
+      "item": "Due Date"
+    },
+    {
+      "item": "Write timestamp"
     }
   ],
    "userTableHead": [

@@ -15,6 +15,7 @@
     "recipes": "Recepty",
     "orders": "Výrobné príkazy",
     "ordersArchive": "Archív výrobných príkazov",
+    "ordersSap": "Výrobné príkazy SAP",
     "aggregate": "Agregáty",
     "statistics": "Štatistika",
     "users": "Užívatelia",
@@ -188,6 +189,13 @@
   "statistics": {
     "select":"Výber"    
   },
+  "recipeSAP": {
+    "customerName":"Meno zákazníka",    
+    "quantity":"Množstvo",    
+    "timeStampWrite":"Čas zápisu",    
+    "timeStampRead":"Čas spracovania",    
+    "status":"Status zápisu"   
+  },
   "componentsTableHead": [
     {
       "item": "ID"
@@ -294,6 +302,29 @@
     },
     {
       "item": "Dátum ukončenia"
+    }
+  ],
+  "orderTableHeadSap": [
+    {
+      "item": "ID Riadku"
+    },
+    {
+      "item": "ID Výrobného príkazu"
+    },
+    {
+      "item": "ID Segmentu"
+    },
+    {
+      "item": "ID Produkt"
+    },    
+    {
+      "item": "Meno produktu"
+    },
+    {
+      "item": "Dátum ukončenia"
+    },
+    {
+      "item": "Čas zápisu"
     }
   ],
   "statisticsTableHead": [

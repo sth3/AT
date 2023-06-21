@@ -1,32 +1,36 @@
-const { poolPromise } = require("../data/events/dbIndexComponents");
+const { poolPromiseTST } = require("../data/events/dbIndexComponents");
 const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_ORDERS = `SELECT DISTINCT 
-                    O.recipeNo recipeNo, 
-                    O.orderID orderID,
-                    O.segmentRequirementID segmentRequirementID,
-                    O.name nameO,
-                    O.customerName,
-                    O.recipeID,
-                    O.recipeName,
+                    o.rowID recipeRowID,                    
+                    O.orderID ,
+                    O.segmentRequirementID,
+                    O.productID,
+                    O.productName,
+                    O.customerName,                    
                     O.dueDate,
                     O.quantity,
+                    O.unitOfMeasure,
                     O.timeStampWrite,
+                    O.timeStampRead,
+                    O.status,
                     (SELECT 
-                    R.id,
-                    R.name nameC,
-                    R.sp,
+                    R.rowID componentRowID,
+                    R.recipeRowID,
+                    R.componentID,
+                    R.componentName nameC,
+                    R.quantity sp,
                     R.specificBulkWeight,
                     R.unitOfMeasure,
                     R.packingWeight,
                     R.packingType
-                    FROM [AT].[dbo].[RECIPE_SAP] R 
+                    FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                     FOR JSON PATH) components 
-                    FROM [AT].[dbo].[ORDERS_SAP] O  `;
+                    FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O  `;
 
 const getOrdersSap = async () => {
-  const pool = await poolPromise;
+  const pool = await poolPromiseTST;
   const { recordset } = await pool.request().query(GET_ORDERS);
   const recipes = trimTrailingWhitespace(recordset);
   recipes.map((recipe) => parseComponentsAndCheckValidity(recipe));
