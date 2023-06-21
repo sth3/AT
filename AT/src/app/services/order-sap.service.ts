@@ -11,6 +11,10 @@ export class OrderSapService {
   constructor(private http: HttpClient) { }
 
   getOrdersSAP(): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders-sap`);
+    return this.http.get<OrderModel[]>(`${environment.apiUrl}/orders-sap/0`);
+  }
+
+  getOrderByNo(no: any) {
+    return this.http.get<OrderModel>(`${environment.apiUrl}/orders-sap/0/${no}`);
   }
 }

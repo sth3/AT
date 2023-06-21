@@ -5,6 +5,7 @@ import { RecipesComponent } from './components/recipes/recipes.component';
 import { ComponentsComponent } from './components/components/components.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
+import { OrderDetailSapComponent } from './components/order-detail-sap/order-detail-sap.component';
 import { OrdersArchiveComponent } from './components/orders-archive/orders-archive.component';
 import { OrderSapComponent} from './components/order-sap/order-sap.component';
 import { AggregateComponent } from './components/aggregate/aggregate.component';
@@ -23,7 +24,7 @@ const routes: Routes = [
   { path: 'orders/:id', component: OrderDetailComponent },
   { path: 'orders-archive', component: OrdersArchiveComponent },
   { path: 'orders-sap', component: OrderSapComponent },
-  { path: 'orders-sap/:id', component: OrderDetailComponent },
+  { path: 'orders-sap/:id', component: OrderDetailSapComponent },
   { path: 'aggregate', component: AggregateComponent },
   { path: 'statistics', component: StatisticsComponent },
   { path: 'users', component: UserControlComponent, canActivate: [AdminGuard] },

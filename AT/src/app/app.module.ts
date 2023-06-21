@@ -63,6 +63,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import  localeSk  from '@angular/common/locales/sk';
 import { registerLocaleData } from '@angular/common';
 import { OrderSapComponent } from './components/order-sap/order-sap.component';
+import { OrderDetailSapComponent } from './components/order-detail-sap/order-detail-sap.component';
 
 registerLocaleData(localeSk, 'sk')
 
@@ -91,6 +92,7 @@ registerLocaleData(localeSk, 'sk')
     AggregateComponent,
     OrdersArchiveComponent,
     OrderSapComponent,
+    OrderDetailSapComponent,
     
   ],
     imports: [
