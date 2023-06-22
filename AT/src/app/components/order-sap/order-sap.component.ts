@@ -80,6 +80,6 @@ export class OrderSapComponent implements OnInit {
     console.log("🚀 ~ file: order-sap.component.ts:80 ~ OrderSapComponent ~ onEditClick ~ data:", data.recipeRowID)
     
     this.router.navigate([data.recipeRowID], { relativeTo: this.r })
-   // this.router.navigate([data.recipeRowID, { idDB: 1 }], { relativeTo: this.r })
+    //this.router.navigate([data.recipeRowID, { idDB: 1 }], { relativeTo: this.r })
   }
 }

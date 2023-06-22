@@ -11,7 +11,7 @@ export interface OrderModel {
   dueDate: string;
   quantity: number;
   unitOfMeasure: string;
-  components: ComponentModel;
+  components: ComponentModel[];
   timeStampWrite: number;
   timeStampRead: number;
   status: number;  

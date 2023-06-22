@@ -82,7 +82,7 @@ const getOrderSapByNo = async (recipeRowID) => {
   const order = await trimTrailingWhitespace(recordset); 
   order[0].components = await  trimTrailingWhitespace(JSON.parse(recordset[0].components)); 
    
-  return order;
+  return order[0];
 }
 
 
