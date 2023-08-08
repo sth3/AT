@@ -31,7 +31,7 @@ import { TranslateService } from '@ngx-translate/core';
   ],
 })
 export class OrdersComponent implements OnInit {
-
+  type: number = 0; 
   orders: OrderModelPacking[] = [];
   currentUser!: UserModel;
   quickFilter: string = '';
@@ -160,6 +160,25 @@ export class OrdersComponent implements OnInit {
       }
     })
   }
+
+
+
+  changeGroupBy() {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   pdfClick(data: any) {
     this.router.navigate(['../pdf/' + data.no], { relativeTo: this.r })

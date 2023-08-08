@@ -166,7 +166,10 @@
     "micro": "Macro",
     "quantity": "Quantity",
     "packingWeight": "Packing Weight",    
-    "weightPerDose": "Weight Per Dose"
+    "weightPerDose": "Weight Per Dose",
+    "productName": "Product Name",
+    "productID": "Product ID",
+    "segmentRequirementID": "Segment Requirement ID"
   },
   "users": {
     "addUser": "Add user",

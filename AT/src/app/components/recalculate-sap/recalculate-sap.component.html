@@ -1,0 +1,244 @@
+<div class="container">
+    <mat-card>
+      <div id="section">
+      
+        <mat-card-title>{{'navBar.recalculate'|translate}}</mat-card-title>
+        <mat-card-content>
+    
+          <fieldset  class="order-form-container-rec" style="padding-bottom:0px">
+          
+    
+    
+    
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'recalculate.numberOfDoses'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'recalculate.numberOfDoses'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.quantityPallete">
+                <span matSuffix>x</span>
+              </mat-form-field>
+            </div>
+    
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'orderTableHead.1.item'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'orderTableHead.1.item'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.data.orderSap.orderID">
+              </mat-form-field>
+            </div>
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'orderTableHead.2.item'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'recalculate.segmentRequirementID'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.data.orderSap.segmentRequirementID">
+              </mat-form-field>
+            </div>
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'orderTableHead.3.item'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'recalculate.productID'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.data.orderSap.productID">
+              </mat-form-field>
+            </div>
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'orderTableHead.3.item'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 330px" class="note">
+                <mat-label>{{'recalculate.productName'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.data.orderSap.productName">
+              </mat-form-field>
+            </div>
+        </fieldset>
+        <fieldset  class="order-form-container-rec" style="padding-bottom:0px">
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'dialogOrder.quantity'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'dialogOrder.quantity'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly [value]="this.data.orderSap.quantity | number :'1.3-3':'sk' ">
+                <span matSuffix>kg</span>
+              </mat-form-field>
+            </div>
+            <div class="order-form-field-rec">
+              <!-- <h3>{{'orderTableHead.4.item'|translate}}</h3> -->
+              <mat-form-field appearance="outline" style="width: 180px" class="note">
+                <mat-label>{{'orderTableHead.4.item'|translate}}</mat-label>
+                <input matInput placeholder="0001" readonly
+                  [value]="this.data.dueDate | date : 'd.M.y' : 'UTC'">
+              </mat-form-field>
+            </div>
+            <div class="order-form-field-rec">
+                <!-- <h3>{{'dialogOrder.packingMachineID'|translate}}</h3> -->
+                <mat-form-field appearance="outline" style="width: 180px" class="note">
+                  <mat-label>{{'dialogOrder.packingMachineID'|translate}}</mat-label>
+                  <input matInput placeholder="0001" readonly [value]="this.data.orderSap.idPackingMachine">
+                </mat-form-field>
+              </div>
+              <div class="order-form-field-rec">
+                <!-- <h3>{{'dialogOrder.emptyingStationID'|translate}}</h3> -->
+                <mat-form-field appearance="outline" style="width: 180px" class="note">
+                  <mat-label>{{'dialogOrder.emptyingStationID'|translate}}</mat-label>
+                  <input matInput placeholder="0001" readonly [value]="this.data.orderSap.idEmptyingStationBag">
+                </mat-form-field>
+              </div>
+              <div class="order-form-field-rec">
+                <!-- <h3>{{'dialogOrder.volumePerDose'|translate}}</h3> -->
+                <mat-form-field appearance="outline" style="width: 180px" class="note">
+                  <mat-label>{{'dialogOrder.volumePerDose'|translate}}</mat-label>
+                  <input matInput placeholder="0001" readonly [value]="this.data.orderSap.volumePerDose">
+                  <span matSuffix>l</span>
+                </mat-form-field>
+              </div>
+          </fieldset>
+          
+            <div style="flex-direction: column; width: 100%; margin-bottom: 20px " *ngIf="data.orderSapComponents">
+            
+            <div style="flex: 1 1 0;">
+              <mat-list>
+    
+    
+                <ng-container *ngFor="let component of data.orderSapComponents; let i = index" >
+                  <div *ngIf="!i">
+                    <mat-list-item>
+                      <p style="float:left; " class="lineL">
+                        <mat-form-field appearance="fill" style="width: 405px" class="note ">
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.components'|translate}}">
+                        </mat-form-field>
+                        <span class="line"></span>
+                        <mat-form-field appearance="fill" style="width: 305px" class="note">
+                          <mat-label>{{'recalculate.station'|translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.palette'|translate}}">
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="fill" style="width: 150px" class="note">
+                          <mat-label>{{'recalculate.station'|translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.ADSline'|translate}}">
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="fill" style="width: 150px" class="note">
+                          <mat-label>{{'recalculate.station'|translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.bigBagLine'|translate}}">
+                        </mat-form-field>
+    
+    
+                        <mat-form-field appearance="fill" style="width: 150px" class="note">
+                          <mat-label>{{'recalculate.station'|translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.liquide'|translate}}">
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="fill" style="width: 150px" class="note">
+                          <mat-label>{{'recalculate.station'|translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly value="{{'recalculate.micro'|translate}}">
+                        </mat-form-field>
+                      </p>
+                    </mat-list-item>
+                  </div>
+    
+                  <mat-list-item>
+                    <div matLine>
+    
+                      <p style="float:left; " >
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0
+                        }">
+                          <mat-label>{{'componentsTableHead.1.item'| translate}}</mat-label>
+                          <input matInput placeholder="000001" readonly [value]="component.componentID">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="width: 250px" class="note " [ngClass]="{
+                          gridC: i % 2 > 0
+                        }">
+                          <mat-label>{{'componentsTableHead.2.item'| translate}}</mat-label>
+                          <input matInput placeholder="Paprika" readonly [value]="component.nameC">
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityBag[i] == 0 
+                        }">
+                          <mat-label>{{'componentsTableHead.1.item'| translate}}</mat-label>
+                          <input matInput placeholder="1" readonly [value]="this.data.orderSap.packingOrders[i].packingWeight | number :'1.1-3':'sk'">
+                          <span matSuffix>kg</span>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          inputBackground: this.quantityBag[i] > 0,
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityBag[i] == 0 
+                        }">
+                          <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
+                          <input matInput placeholder="0.1" readonly [value]="this.quantityBag[i]">
+                          <span matSuffix>x</span>
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityADS[i] == 0 
+                        }">
+                          <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
+                          <input matInput placeholder="0.1" readonly [value]="this.quantityADS[i]| number :'1.1-3':'sk' ">
+                          <span matSuffix>kg</span>
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityBigBag[i] == 0 
+                        }">
+                          <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
+                          <input matInput placeholder="0.1" readonly [value]="this.quantityBigBag[i] | number :'1.1-3':'sk'">
+                          <span matSuffix>kg</span>
+                        </mat-form-field>
+    
+    
+    
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityLiquid[i] == 0 
+                        }">
+                          <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
+                          <input matInput placeholder="0.1" readonly [value]="this.quantityLiquid[i] | number :'1.1-3':'sk'">
+                          <span matSuffix>kg</span>
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="outline" style="width: 150px" class="note" [ngClass]="{
+                          gridC: i % 2 > 0,
+                          hideItem: this.quantityMicro[i] == 0 
+                        }">
+                          <mat-label>{{'recalculate.quantity'|translate}}</mat-label>
+                          <input matInput placeholder="0.1" readonly [value]="this.quantityMicro[i] | number :'1.1-3':'sk'">
+                          <span matSuffix>kg</span>
+                        </mat-form-field>
+    
+                      </p>
+    
+                    </div>
+                  </mat-list-item>
+    
+                </ng-container>
+                <span style="margin: auto" *ngIf="data.orderSapComponents?.length === 0">{{'dialogOrder.noComponents'| translate}}</span>
+              </mat-list>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-toolbar style="height: 30px">
+          <span style="font-weight: bold">{{'recalculate.weightPerDose'|translate}}</span>
+          <span class="spacer"></span>
+          <span
+            >{{ weightPerDose | number :'1.3-3':'sk' }} kg / {{ volumePerDoseTank  }} l
+            
+            
+          </span>
+        </mat-toolbar>
+      </div>
+    
+      <mat-card-actions>
+      
+    
+    
+        <button mat-button [mat-dialog-close]="false">{{'dialogService.cancel'|translate}}</button>
+        <button mat-button [mat-dialog-close]="saveOrder()" >
+          {{'dialogService.save'|translate}}
+        </button>   
+    
+    
+      </mat-card-actions>
+    </mat-card>
+</div>

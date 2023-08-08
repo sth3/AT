@@ -64,6 +64,7 @@ import  localeSk  from '@angular/common/locales/sk';
 import { registerLocaleData } from '@angular/common';
 import { OrderSapComponent } from './components/order-sap/order-sap.component';
 import { OrderDetailSapComponent } from './components/order-detail-sap/order-detail-sap.component';
+import { RecalculateSapComponent } from './components/recalculate-sap/recalculate-sap.component';
 
 registerLocaleData(localeSk, 'sk')
 
@@ -93,6 +94,7 @@ registerLocaleData(localeSk, 'sk')
     OrdersArchiveComponent,
     OrderSapComponent,
     OrderDetailSapComponent,
+    RecalculateSapComponent,
     
   ],
     imports: [

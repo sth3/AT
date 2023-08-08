@@ -1,4 +1,4 @@
-const { poolPromiseTST } = require("../data/events/dbIndexComponents");
+const { poolPromiseTST, poolPromise } = require("../data/events/dbIndexComponents");
 const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 
@@ -56,6 +56,55 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                     FOR JSON PATH) components 
                     FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE O.rowID = @recipeRowID `;
 
+const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
+                    (
+                      recipeRowID,                                      
+                      idMixer, 
+                      package, 
+                      mixingTime, 
+                      idPackingMachine, 
+                      idEmptyingStationBag, 
+                      volumePerDose, 
+                      done, 
+                      BigBagDone, 
+                      LiquidDone, 
+                      ADSDone, 
+                      MicroDone, 
+                      createdAt) 
+                    VALUES (
+                      @recipeRowID,                      
+                      @idMixer,
+                      @package, 
+                      @mixingTime,
+                      @idPackingMachine, 
+                      @idEmptyingStationBag, 
+                      @volumePerDose, 
+                      @done, 
+                      @BigBagDone, 
+                      @LiquidDone, 
+                      @ADSDone, 
+                      @MicroDone, 
+                      GETDATE()
+                    ) 
+                    SELECT SCOPE_IDENTITY() as no`;
+
+const ADD_DOSE = `INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE_SAP] 
+                  (
+                    orderNo,
+                    orderRowID, 
+                    segmentRequirementID, 
+                    componentRowID,  
+                    packingType,  
+                    packingWeight,  
+                    quantityDose, 
+                    quantityBag, 
+                    quantityBigBag, 
+                    quantityADS, 
+                    quantityLiquid, 
+                    quantityMicro
+                  ) 
+                  VALUES `;
+
 const getOrdersSap = async () => {
   const pool = await poolPromiseTST;
   const { recordset } = await pool.request().query(GET_ORDERS);
@@ -70,37 +119,76 @@ const getOrdersSap = async () => {
 };
 
 const getOrderSapByNo = async (recipeRowID) => {
-  
   const pool = await poolPromiseTST;
-  const { recordset } = await pool.request()
-      .input('recipeRowID', sql.Int, recipeRowID)
-      .query(GET_ORDER_BY_NO);
+  const { recordset } = await pool
+    .request()
+    .input("recipeRowID", sql.Int, recipeRowID)
+    .query(GET_ORDER_BY_NO);
 
   if (recordset.length < 0) {
-      return null;
-  }  
-  const order = await trimTrailingWhitespace(recordset); 
-  order[0].components = await  trimTrailingWhitespace(JSON.parse(recordset[0].components)); 
-   
+    return null;
+  }
+  const order = await trimTrailingWhitespace(recordset);
+  order[0].components = await trimTrailingWhitespace(
+    JSON.parse(recordset[0].components)
+  );
+
   return order[0];
-}
+};
 
+const addOrderSap = async (order) => {
+  console.log("order", order);
+  const pool = await poolPromise;
+  const { recordset } = await pool
+    .request()
+    .input("recipeRowID",sql.Int, order.recipeRowID)
 
+    //.input('dueDate', order.dueDate)
+    //.input('operatorId', sql.Int, order.operatorId)
 
+    .input("idMixer", sql.Int, order.idMixer)
+    .input("package", sql.Int, order.package)
+    .input("mixingTime", sql.Int, order.mixingTime)
+    .input("idPackingMachine", sql.Int, order.idPackingMachine)
+    .input("idEmptyingStationBag", sql.Int, order.idEmptyingStationBag)
+    .input("volumePerDose", sql.Int, order.volumePerDose)
+    .input("done", sql.Int, 0)
+    .input("BigBagDone", sql.Int, order.BigBagDone)
+    .input("LiquidDone", sql.Int, order.LiquidDone)
+    .input("ADSDone", sql.Int, order.ADSDone)
+    .input("MicroDone", sql.Int, order.MicroDone)
+    .query(ADD_ORDER);
+  const orderNo = recordset[0].no;
 
+  await addOrderDose(orderNo, order.rec);
+  return recordset[0];
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
+const addOrderDose = async (orderNo, doses) => {
+  let query = ADD_DOSE;
+  doses.forEach((value, index) => {
+    query += `(${orderNo},
+        ${value.orderRowID}, 
+        '${value.segmentRequirementID}', 
+        ${value.componentRowID}, 
+        ${value.packingType}, 
+        ${value.packingWeight}, 
+        ${value.quantityDose},
+        ${value.quantityBag},
+        ${value.quantityBigBag.toFixed(3)},
+        ${value.quantityADS.toFixed(3)},
+        ${value.quantityLiquid.toFixed(3)},
+        ${value.quantityMicro.toFixed(3)})`;
+        console.log("🚀 ~ file: order-sap-service.js:182 ~ doses.forEach ~ value.segmentRequirementID:", typeof value.segmentRequirementID)
+    if (index < doses.length - 1) {
+      query += ", ";
+    }
+    
+  });
+  console.log("query", query);
+  const pool = await poolPromise;
+  return pool.request().query(query);
+};
 
 const parseComponentsAndCheckValidity = (recipe) => {
   if (recipe.components) {
@@ -113,5 +201,6 @@ const parseComponentsAndCheckValidity = (recipe) => {
 
 module.exports = {
   getOrdersSap,
-  getOrderSapByNo
+  getOrderSapByNo,
+  addOrderSap,
 };

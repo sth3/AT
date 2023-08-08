@@ -168,7 +168,10 @@
     "micro": "Makro",
     "quantity": "Množstvo",
     "packingWeight": "Hmotnosť balenia",
-    "weightPerDose": "Celková hmotnosť na dávku"
+    "weightPerDose": "Celková hmotnosť na dávku",
+    "productName": "Meno produktu",
+    "productID": "Produkt ID",
+    "segmentRequirementID": "ID Segmentu"
   },  
   "users": {
     "addUser": "Pridaj užívateľa",

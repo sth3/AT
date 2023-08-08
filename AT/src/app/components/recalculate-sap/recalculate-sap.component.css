@@ -1,0 +1,37 @@
+:host ::ng-deep .mat-list-item.lineL.line {
+    height: 350px !important;
+    border-left: 2px solid green
+  }
+
+  .lineL.line {
+    height: 200px !important;
+    border-left: 2px solid green
+  }
+
+  .mat-divider-vertical{
+    height: 100%;
+    width: 0px !important;
+    position: inherit !important;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix .inputSize{
+    padding: 0 !important;
+}
+
+::ng-deep .gridC.mat-form-field-appearance-outline .mat-form-field-outline  {
+  background-color: rgb(240, 240, 240);
+  border-radius: 5px;
+}
+.mat-input-element {
+  font-weight: 500;
+}
+
+::ng-deep .inputBackground.mat-form-field-appearance-outline .mat-form-field-outline  {
+  background-color: rgb(214, 212, 212);
+  border-radius: 5px;
+}
+
+::ng-deep .mat-input-element:disabled, .mat-select-disabled .mat-select-value {
+  color: black;
+  font-weight: 500;
+}
