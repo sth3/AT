@@ -225,3 +225,12 @@
     <mat-paginator [length]="orders.length" [pageSizeOptions]="[10, 20, 50, 100]" [showFirstLastButtons]="true"
       [pageSize]="20" aria-label="Select page of orders search results"></mat-paginator>
   </div>
+
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="backToOrder();">
+      <mat-icon>arrow_back</mat-icon>
+      {{'dialogService.back'| translate}}
+    </button>
+    
+    
+  </mat-card-actions>

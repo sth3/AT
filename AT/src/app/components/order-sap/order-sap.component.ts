@@ -10,7 +10,7 @@ import { finalize } from 'rxjs';
 
 import { OrderSapService } from '../../services/order-sap.service';
 
-import { OrderModel } from '../../models/order-sap.model';
+import { OrderSapModel } from '../../models/order-sap.model';
 @Component({
   selector: 'app-order-sap',
   templateUrl: './order-sap.component.html',
@@ -36,7 +36,7 @@ export class OrderSapComponent implements OnInit {
   ];
 
   isLoading: boolean = true;
-  orders: OrderModel[] = [];
+  orders: OrderSapModel[] = [];
   quickFilter: string = '';
   range = new FormGroup({
     start: new FormControl(),
@@ -44,8 +44,8 @@ export class OrderSapComponent implements OnInit {
   });
 
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay.map(c => c.field), 'actions'];
-  expandedOrder: OrderModel | null = null;
-  dataSource: MatTableDataSource<OrderModel> = new MatTableDataSource<OrderModel>([]);
+  expandedOrder: OrderSapModel | null = null;
+  dataSource: MatTableDataSource<OrderSapModel> = new MatTableDataSource<OrderSapModel>([]);
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -63,9 +63,9 @@ export class OrderSapComponent implements OnInit {
     this.orderSapService
       .getOrdersSAP()
       .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe((data: OrderModel[]) => {
+      .subscribe((data: OrderSapModel[]) => {
         this.orders = data;
-        this.dataSource = new MatTableDataSource<OrderModel>(this.orders);
+        this.dataSource = new MatTableDataSource<OrderSapModel>(this.orders);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         console.log('getOrders', data);
@@ -81,5 +81,9 @@ export class OrderSapComponent implements OnInit {
     
     this.router.navigate([data.recipeRowID], { relativeTo: this.r })
     //this.router.navigate([data.recipeRowID, { idDB: 1 }], { relativeTo: this.r })
+  }
+
+  backToOrder() {
+    this.router.navigate(['../orders'], { relativeTo: this.r });
   }
 }

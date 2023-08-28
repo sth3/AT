@@ -32,7 +32,9 @@
     "export": "Export",
     "exportEntire": "Export entire table to CSV",
     "exportVisible": "Export visible data to CSV",
-    "noDataFilter": "No data matching the filter"
+    "noDataFilter": "No data matching the filter",
+    "typeOfOrder": "Type of order",
+    "selectedTypeOfOrder": "Set type"
   },
   "dialogService": {
     "title": "Are you sure?",
@@ -56,6 +58,7 @@
     "dialogOrderUpdate": "Are you sure you want to update this order?",
     "dialogRecipeCreate": "'Are you sure you want to save this recipe?",
     "dialogOrderCreate": "'Are you sure you want to save this order?",
+    "dialogTypeOfOrder": "'Are you sure you want to save this select?",
     "notifierDeleted": "Component deleted",
     "notifierRecipeDeleted": "Recipe deleted",
     "notifierOrderDeleted": "Order deleted",
@@ -441,6 +444,16 @@
     {
       "value": 2,
       "viewValue": "Month"
+    }
+  ],
+  "selectTypeOrder": [
+    {
+      "value": 0,
+      "viewValue": "AT"
+    },
+    {
+      "value": 1,
+      "viewValue": "SAP"
     }
   ],
   "selectPacking": [

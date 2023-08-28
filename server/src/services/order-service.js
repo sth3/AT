@@ -8,6 +8,9 @@ const GET_ORDERS = 'SELECT * FROM [AT].[dbo].[ORDERS] WHERE [done] = @done ';
 
 const GET_ORDER_BY_NO = 'SELECT * FROM [AT].[dbo].[ORDERS] ' +
     'WHERE no = @no';
+
+const GET_TYPE_OF_ORDER = `SELECT * FROM  [AT].[dbo].[TYPE_OF_ORDER] WHERE [rowID] = (SELECT MAX([rowID])  FROM [AT].[dbo].[TYPE_OF_ORDER])`;
+
 const ADD_ORDER = 'INSERT INTO [AT].[dbo].[ORDERS] ' +
     '   (id, name, customerName, dueDate, recipeNo, operatorId, quantity, ' +
     '   idMixer, package, mixingTime, idPackingMachine, idEmptyingStationBag, volumePerDose, done, BigBagDone, LiquidDone, ADSDone, MicroDone, createdAt, lastUpdate) ' +
@@ -42,6 +45,9 @@ const UPDATE_ORDER = 'UPDATE [AT].[dbo].[ORDERS] ' +
 const ADD_PACKING = 'INSERT INTO [AT].[dbo].[PACKING_ORDERS] ' +
     '(recipeNo, componentNo, orderNo, packing ,packingWeight) ' +
     'VALUES ';
+const ADD_TYPE_OF_ORDER = 'INSERT INTO [AT].[dbo].[TYPE_OF_ORDER] ' +
+    '(typeOfOrder, userRowID, timeStampWrite) ' +
+    'VALUES (@typeOfOrder, @userRowID , GETDATE()) ';
 const ADD_DOSE = 'INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE] ' +
     '(orderNo, recipeNo, componentNo,  quantityDose, quantityBag, quantityBigBag, quantityADS, quantityLiquid, quantityMicro) ' +
     'VALUES ';
@@ -96,6 +102,15 @@ const getOrderByNo = async (no) => {
     }
     return order;
 }
+const getTypeOfOrder = async () => {
+    
+    const pool = await poolPromise;
+    const { recordset } = await pool.request()        
+        .query(GET_TYPE_OF_ORDER);
+    console.log('get by no fine as well ', recordset[0]);
+    
+    return recordset[0];
+}
 
 const addOrder = async (order) => {
     console.log('order', order)
@@ -124,6 +139,17 @@ const addOrder = async (order) => {
     await addPacking(orderNo, order.packing);
     await addOrderDose(orderNo, order.doses);
     return recordset[0];
+}
+
+const addTypeOfOrder = async (data) => {
+    console.log('order', data)
+    const pool = await poolPromise;
+    const   recordset   = await pool.request()
+        .input('typeOfOrder', sql.BigInt, data.typeOfOrder)
+        .input('userRowID', sql.Int, data.userRowID)        
+        .query(ADD_TYPE_OF_ORDER) ;   
+        
+    return recordset;
 }
 const addPacking = async (orderNo, packing) => {
     let query = ADD_PACKING;
@@ -215,5 +241,7 @@ module.exports = {
     getOrderByNo,
     addOrder,
     deleteOrder,
-    updateOrder
+    updateOrder,
+    addTypeOfOrder,
+    getTypeOfOrder
 };

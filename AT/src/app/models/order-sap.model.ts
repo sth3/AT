@@ -1,7 +1,7 @@
 
 import { UserModel } from './user.model';
 
-export interface OrderModel {
+export interface OrderSapModel {
   recipeRowID: number;
   orderID: string;
   segmentRequirementID: string;
@@ -30,7 +30,7 @@ export interface ComponentModel {
 
 }
 
-export interface OrderItemModel extends OrderModel {
+export interface OrderItemModel extends OrderSapModel {
   idMixer: number;
   package: number;
   mixingTime: number;
@@ -98,10 +98,59 @@ export interface CompliteOrderModel {
   componentRowID: number;    
 
   
-  
-  
+ 
   
 }
+
+export interface CompliteOrdersModel {  
+  ADSDone: number;
+  BigBagDone: number;  
+  LiquidDone: number;
+  MicroDone: number;
+  done: number;
+
+  idEmptyingStationBag: number;
+  idMixer: number;
+  idPackingMachine: number;
+  mixingTime: number;
+
+  orderID: string;
+  orderRowID: number;  
+  package: number;
+  
+  packingOrders: PackingInterfaceModel[];
+  productID: string;
+  productName: string;
+  quantity: number;
+  recipeRowID: number;  
+
+  volumePerDose: number;
+  //operator: UserModel;
+  rec: RecalculateOrderSapModel;
+  segmentRequirementID: string;
+  componentRowID: number;    
+
+  timeStampWrite: number;
+ status: number; 
+
+ 
+  
+  
+  
+  
+  customerName: string;  
+  dueDate: string;
+  
+  unitOfMeasure: string;
+  components: ComponentModel[];
+  
+  timeStampRead: number;
+   
+ 
+  
+}
+
+
 
 
 

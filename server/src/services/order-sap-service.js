@@ -27,7 +27,7 @@ const GET_ORDERS = `SELECT DISTINCT
                     R.packingType
                     FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                     FOR JSON PATH) components 
-                    FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O  `;
+                    FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE timeStampRead IS NULL `;
 
 const GET_ORDER_BY_NO = `SELECT DISTINCT 
                     o.rowID recipeRowID,                    
@@ -55,6 +55,97 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                     FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                     FOR JSON PATH) components 
                     FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE O.rowID = @recipeRowID `;
+const GET_ALL_ORDER_BY_NO = 
+                  `SELECT DISTINCT  R.orderRowID
+                  ,R.recipeRowID
+                  ,R.idMixer
+                  ,R.package
+                  ,R.mixingTime
+                  ,R.idPackingMachine
+                  ,R.completedAt
+                  ,R.idEmptyingStationBag
+                  ,R.volumePerDose
+                  ,R.done
+                  ,R.BigBagDone
+                  ,R.ADSDone
+                  ,R.LiquidDone
+                  ,R.MicroDone
+                  ,R.createdAt
+                  ,O.rowID                     
+                  ,O.orderID
+                  ,O.segmentRequirementID
+                  ,O.productID
+                  ,O.productName
+                  ,O.customerName                    
+                  ,O.dueDate
+                  ,O.quantity
+                  ,O.unitOfMeasure
+                  ,O.timeStampWrite
+                  ,O.timeStampRead
+                  ,O.status,
+                        (SELECT 
+                        R.rowID componentRowID,
+                        O.componentRowID QcomponentRowID,
+                        R.recipeRowID,
+                        R.componentID,
+                        R.componentName nameC,
+                        R.quantity sp,
+                        R.specificBulkWeight,
+                        R.unitOfMeasure,
+                        O.packingWeight,
+                        O.packingType
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
+                        FOR JSON PATH) components 
+                FROM [AT].[dbo].[ORDERS_SAP] R
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                WHERE R.orderRowID = @recipeRowID `;
+
+                const GET_ORDERS_ALL = 
+                  `SELECT DISTINCT  R.orderRowID
+                  ,R.recipeRowID
+                  ,R.idMixer
+                  ,R.package
+                  ,R.mixingTime
+                  ,R.idPackingMachine
+                  ,R.completedAt
+                  ,R.idEmptyingStationBag
+                  ,R.volumePerDose
+                  ,R.done
+                  ,R.BigBagDone
+                  ,R.ADSDone
+                  ,R.LiquidDone
+                  ,R.MicroDone
+                  ,R.createdAt
+                  ,O.rowID                     
+                  ,O.orderID
+                  ,O.segmentRequirementID
+                  ,O.productID
+                  ,O.productName
+                  ,O.customerName                    
+                  ,O.dueDate
+                  ,O.quantity
+                  ,O.unitOfMeasure
+                  ,O.timeStampWrite
+                  ,O.timeStampRead
+                  ,O.status,
+                        (SELECT 
+                        R.rowID componentRowID,
+                        O.componentRowID QcomponentRowID,
+                        R.recipeRowID,
+                        R.componentID,
+                        R.componentName nameC,
+                        R.quantity sp,
+                        R.specificBulkWeight,
+                        R.unitOfMeasure,
+                        O.packingWeight,
+                        O.packingType
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
+                        FOR JSON PATH) components 
+                FROM [AT].[dbo].[ORDERS_SAP] R
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                 `;
 
 const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
                     (
@@ -105,6 +196,8 @@ const ADD_DOSE = `INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE_SAP]
                   ) 
                   VALUES `;
 
+ const UPDATE_ORDER = ` UPDATE [ATtoSAP_TST].[dbo].[RECIPE_SAP] SET timeStampRead = GETDATE() where rowID = @rowID  `                 
+
 const getOrdersSap = async () => {
   const pool = await poolPromiseTST;
   const { recordset } = await pool.request().query(GET_ORDERS);
@@ -118,6 +211,40 @@ const getOrdersSap = async () => {
   return recipes;
 };
 
+const getOrdersSapAll = async () => {
+  const pool = await poolPromiseTST;
+  const { recordset } = await pool.request().query(GET_ORDERS_ALL);
+  const recipes = trimTrailingWhitespace(recordset);
+  recipes.map((recipe) => parseComponentsAndCheckValidity(recipe));
+  console.log(
+    "🚀 ~ file: orderSap-service.js:32 ~ getOrdersSap ~ recipes:",
+    recipes
+  );
+
+  return recipes;
+};
+
+const getAllOrderSapByNo = async (recipeRowID) => {
+ console.log("🚀 ~ file: order-sap-service.js:169 ~ getAllOrderSapByNo ~ recipeRowID:", recipeRowID)
+ 
+    const pool = await poolPromise;
+    const { recordset } = await pool
+      .request()
+      .input("recipeRowID", sql.Int, recipeRowID)
+      .query(GET_ALL_ORDER_BY_NO);
+  
+    if (recordset.length < 0) {
+      return null;
+    }
+    console.log("🚀 ~ file: order-sap-service.js:180 ~ getAllOrderSapByNo ~ recordset:", recordset)
+    const order = await trimTrailingWhitespace(recordset);
+    order[0].components = await trimTrailingWhitespace(
+      JSON.parse(recordset[0].components)
+    );
+  
+    return order[0];
+  
+};
 const getOrderSapByNo = async (recipeRowID) => {
   const pool = await poolPromiseTST;
   const { recordset } = await pool
@@ -159,7 +286,8 @@ const addOrderSap = async (order) => {
     .input("MicroDone", sql.Int, order.MicroDone)
     .query(ADD_ORDER);
   const orderNo = recordset[0].no;
-
+  
+  await updateOrder(order.recipeRowID);
   await addOrderDose(orderNo, order.rec);
   return recordset[0];
 };
@@ -190,6 +318,13 @@ const addOrderDose = async (orderNo, doses) => {
   return pool.request().query(query);
 };
 
+const updateOrder = async (orderNo) => {
+  const pool = await poolPromiseTST;
+    await pool.request()        
+        .input('rowID', sql.Int, orderNo)
+        .query(UPDATE_ORDER)
+};
+
 const parseComponentsAndCheckValidity = (recipe) => {
   if (recipe.components) {
     recipe.components = trimTrailingWhitespace(JSON.parse(recipe.components));
@@ -203,4 +338,6 @@ module.exports = {
   getOrdersSap,
   getOrderSapByNo,
   addOrderSap,
+  getAllOrderSapByNo,
+  getOrdersSapAll
 };

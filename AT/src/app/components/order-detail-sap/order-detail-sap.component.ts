@@ -12,7 +12,7 @@ import { OrdersService } from '../../services/orders.service';
 import { DialogService } from '../../services/dialog.service';
 import { NotifierService } from '../../services/notifier.service';
 
-import { OrderModel, ComponentModel, ProductionDoneSapModel , RecalculateOrderSapModel, CompliteOrderModel} from '../../models/order-sap.model';
+import { OrderSapModel, ComponentModel, ProductionDoneSapModel , RecalculateOrderSapModel, CompliteOrderModel} from '../../models/order-sap.model';
 import { RecalculateOrder } from '../../models/order.model';
 import { UserModel } from '../../models/user.model';
 
@@ -34,7 +34,7 @@ import { RecalculateSapComponent } from '../recalculate-sap/recalculate-sap.comp
   ],
 })
 export class OrderDetailSapComponent implements OnInit {
-  order?: OrderModel;
+  order?: OrderSapModel;
   form!: FormGroup;
   packingForm!: FormGroup;
   components: ComponentModel[] = [];
@@ -122,7 +122,7 @@ export class OrderDetailSapComponent implements OnInit {
     this.r.params.subscribe((params) => {
       const no = params['id'];
 
-      this.orderSapService.getOrderByNo(no).subscribe((order: OrderModel) => {
+      this.orderSapService.getOrderByNo(no).subscribe((order: OrderSapModel) => {
         console.log(
           '🚀 ~ file: order-detail-sap.component.ts:46 ~ OrderDetailSapComponent ~ this.orderSapService.getOrderByNo ~ order:',
           order
@@ -338,7 +338,7 @@ export class OrderDetailSapComponent implements OnInit {
               .addOrder(this.compliteOrder)
               .subscribe((order) => {
                 console.log('new order: ', order);
-                this.router.navigate(['/orders-sap', order.orderRowID]);
+                this.router.navigate(['/orders']);
               });
           }
         });

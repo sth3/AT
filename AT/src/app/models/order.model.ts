@@ -88,6 +88,10 @@ export interface PackingInterface  {
   packingType: number;
   packingWeight:number
 }
+export interface TypeOfOrderModel  {
+  typeOfOrder: number;
+  userRowID:number
+}
 
 
 
