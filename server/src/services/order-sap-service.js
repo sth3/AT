@@ -1,7 +1,7 @@
 const { poolPromiseTST, poolPromise } = require("../data/events/dbIndexComponents");
 const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
-
+const { getUserById } = require('./user-service');
 const GET_ORDERS = `SELECT DISTINCT 
                     o.rowID recipeRowID,                    
                     O.orderID ,
@@ -71,6 +71,7 @@ const GET_ALL_ORDER_BY_NO =
                   ,R.LiquidDone
                   ,R.MicroDone
                   ,R.createdAt
+                  ,R.operatorId
                   ,O.rowID                     
                   ,O.orderID
                   ,O.segmentRequirementID
@@ -101,7 +102,7 @@ const GET_ALL_ORDER_BY_NO =
                 JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
                 WHERE R.orderRowID = @recipeRowID `;
 
-                const GET_ORDERS_ALL = 
+                const GET_ORDERS_ALL_ACTIVE = 
                   `SELECT DISTINCT  R.orderRowID
                   ,R.recipeRowID
                   ,R.idMixer
@@ -117,6 +118,7 @@ const GET_ALL_ORDER_BY_NO =
                   ,R.LiquidDone
                   ,R.MicroDone
                   ,R.createdAt
+                  ,R.operatorId
                   ,O.rowID                     
                   ,O.orderID
                   ,O.segmentRequirementID
@@ -145,6 +147,54 @@ const GET_ALL_ORDER_BY_NO =
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] R
                 JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                WHERE R.done = 0
+                 `;
+                const GET_ORDERS_ALL_DONE = 
+                  `SELECT DISTINCT  R.orderRowID
+                  ,R.recipeRowID
+                  ,R.idMixer
+                  ,R.package
+                  ,R.mixingTime
+                  ,R.idPackingMachine
+                  ,R.completedAt
+                  ,R.idEmptyingStationBag
+                  ,R.volumePerDose
+                  ,R.done
+                  ,R.BigBagDone
+                  ,R.ADSDone
+                  ,R.LiquidDone
+                  ,R.MicroDone
+                  ,R.createdAt
+                  ,R.operatorId
+                  ,O.rowID                     
+                  ,O.orderID
+                  ,O.segmentRequirementID
+                  ,O.productID
+                  ,O.productName
+                  ,O.customerName                    
+                  ,O.dueDate
+                  ,O.quantity
+                  ,O.unitOfMeasure
+                  ,O.timeStampWrite
+                  ,O.timeStampRead
+                  ,O.status,
+                        (SELECT 
+                        R.rowID componentRowID,
+                        O.componentRowID QcomponentRowID,
+                        R.recipeRowID,
+                        R.componentID,
+                        R.componentName nameC,
+                        R.quantity sp,
+                        R.specificBulkWeight,
+                        R.unitOfMeasure,
+                        O.packingWeight,
+                        O.packingType
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
+                        FOR JSON PATH) components 
+                FROM [AT].[dbo].[ORDERS_SAP] R
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                WHERE R.done > 0
                  `;
 
 const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
@@ -161,6 +211,7 @@ const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
                       LiquidDone, 
                       ADSDone, 
                       MicroDone, 
+                      operatorId, 
                       createdAt) 
                     VALUES (
                       @recipeRowID,                      
@@ -175,6 +226,7 @@ const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
                       @LiquidDone, 
                       @ADSDone, 
                       @MicroDone, 
+                      @operatorId,
                       GETDATE()
                     ) 
                     SELECT SCOPE_IDENTITY() as no`;
@@ -213,7 +265,7 @@ const getOrdersSap = async () => {
 
 const getOrdersSapAll = async () => {
   const pool = await poolPromiseTST;
-  const { recordset } = await pool.request().query(GET_ORDERS_ALL);
+  const { recordset } = await pool.request().query(GET_ORDERS_ALL_ACTIVE);
   const recipes = trimTrailingWhitespace(recordset);
   recipes.map((recipe) => parseComponentsAndCheckValidity(recipe));
   console.log(
@@ -221,6 +273,33 @@ const getOrdersSapAll = async () => {
     recipes
   );
 
+  for (let order of recordset) {
+    order = trimTrailingWhitespace(order);
+    
+    if (order.operatorId) {
+        order.operator = await getUserById(order.operatorId);
+    }
+}
+  return recipes;
+};
+
+const getOrdersSapAllDone = async () => {
+  const pool = await poolPromiseTST;
+  const { recordset } = await pool.request().query(GET_ORDERS_ALL_DONE);
+  const recipes = trimTrailingWhitespace(recordset);
+  recipes.map((recipe) => parseComponentsAndCheckValidity(recipe));
+  console.log(
+    "🚀 ~ file: orderSap-service.js:32 ~ getOrdersSap ~ recipes:",
+    recipes
+  );
+
+  for (let order of recordset) {
+    order = trimTrailingWhitespace(order);
+    
+    if (order.operatorId) {
+        order.operator = await getUserById(order.operatorId);
+    }
+}
   return recipes;
 };
 
@@ -241,7 +320,13 @@ const getAllOrderSapByNo = async (recipeRowID) => {
     order[0].components = await trimTrailingWhitespace(
       JSON.parse(recordset[0].components)
     );
-  
+
+    
+      
+      if (order[0].operatorId) {
+          order[0].operator = await getUserById(order[0].operatorId);
+      }
+    
     return order[0];
   
 };
@@ -271,7 +356,7 @@ const addOrderSap = async (order) => {
     .input("recipeRowID",sql.Int, order.recipeRowID)
 
     //.input('dueDate', order.dueDate)
-    //.input('operatorId', sql.Int, order.operatorId)
+    .input('operatorId', sql.Int, order.operatorId)
 
     .input("idMixer", sql.Int, order.idMixer)
     .input("package", sql.Int, order.package)
@@ -339,5 +424,6 @@ module.exports = {
   getOrderSapByNo,
   addOrderSap,
   getAllOrderSapByNo,
-  getOrdersSapAll
+  getOrdersSapAll,
+  getOrdersSapAllDone
 };

@@ -19,7 +19,7 @@ export class UserService {
   getUsers() {
     return this.http.get<UserModel[]>(`${environment.apiUrl}/users`, { withCredentials: true });
   }
-
+  
   addUser(user: UserModel) {
     return this.http.post(`${environment.apiUrl}/users`, user, { withCredentials: true });
   }

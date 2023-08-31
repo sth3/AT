@@ -11,6 +11,7 @@ import { OrderSapComponent} from './components/order-sap/order-sap.component';
 import { AggregateComponent } from './components/aggregate/aggregate.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { ToPDFComponent } from './components/to-pdf/to-pdf.component';
+import { PdfSapComponent } from './components/pdf-sap/pdf-sap.component';
 import { UserControlComponent } from './components/user-control/user-control.component';
 import { AdminGuard } from './interceptors/admin.guard';
 
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'statistics', component: StatisticsComponent },
   { path: 'users', component: UserControlComponent, canActivate: [AdminGuard] },
   { path: 'pdf/:id', component: ToPDFComponent },
+  { path: 'pdf-sap/:id', component: PdfSapComponent },
   { path: '**', redirectTo: '/home' },
 ];
 

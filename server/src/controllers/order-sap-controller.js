@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const {getOrdersSap,  getOrderSapByNo, addOrderSap, getAllOrderSapByNo, getOrdersSapAll} = require('../services/order-sap-service');
+const {getOrdersSap,  getOrderSapByNo, addOrderSap, getAllOrderSapByNo, getOrdersSapAll, getOrdersSapAllDone} = require('../services/order-sap-service');
 
 router.use(express.json());
 
@@ -11,6 +11,14 @@ router.get('/orders-sap/0', async (req, res) => {
 });
 router.get('/orders-sap/1', async (req, res) => {
     const response = await getOrdersSapAll();
+    res.json(response);
+});
+router.get('/orders-sap/2', async (req, res) => {
+    const response = await getOrdersSapAllDone();
+    res.json(response);
+});
+router.get('/orders-sap/1/:recipeRowID', async (req, res) => {
+    const response = await getAllOrderSapByNo(+req.params.recipeRowID);
     res.json(response);
 });
 

@@ -18,6 +18,12 @@ export class OrderSapService {
   getOrdersSapAll(): Observable<CompliteOrdersModel[]> {
     return this.http.get<CompliteOrdersModel[]>(`${environment.apiUrl}/orders-sap/1`);
   }
+  getOrdersSapAllDone(): Observable<CompliteOrdersModel[]> {
+    return this.http.get<CompliteOrdersModel[]>(`${environment.apiUrl}/orders-sap/2`);
+  }
+  getOrderSapAllByNo(no: any): Observable<CompliteOrdersModel> {
+    return this.http.get<CompliteOrdersModel>(`${environment.apiUrl}/orders-sap/1/${no}`);
+  }
 
   getOrderByNo(no: any) {
     return this.http.get<OrderSapModel>(`${environment.apiUrl}/orders-sap/0/${no}`);

@@ -371,6 +371,10 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['../pdf/' + data.no], { relativeTo: this.r });
   }
 
+  pdfClickSAP(data: any) {
+    this.router.navigate(['../pdf-sap/' + data.orderRowID], { relativeTo: this.r });
+  }
+
   exportCSV(visibleDataOnly: boolean) {
     const headerList = this.exportService.getOrdersHeaders();
     let data;

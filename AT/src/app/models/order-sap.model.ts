@@ -15,6 +15,7 @@ export interface OrderSapModel {
   timeStampWrite: number;
   timeStampRead: number;
   status: number;  
+  operator: UserModel;
 }
 
 export interface ComponentModel {
@@ -96,7 +97,7 @@ export interface CompliteOrderModel {
   rec: RecalculateOrderSapModel;
   segmentRequirementID: string;
   componentRowID: number;    
-
+  operatorId: string;
   
  
   
@@ -145,7 +146,7 @@ export interface CompliteOrdersModel {
   components: ComponentModel[];
   
   timeStampRead: number;
-   
+  operator: UserModel;
  
   
 }

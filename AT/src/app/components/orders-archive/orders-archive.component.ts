@@ -15,7 +15,9 @@ import {
 import { finalize } from 'rxjs';
 
 import { OrderModel, selectList } from '../../models/order.model';
+import {  OrderSapModel, CompliteOrdersModel } from '../../models/order-sap.model';
 import { OrdersService } from '../../services/orders.service';
+import { OrderSapService } from '../../services/order-sap.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExportService } from '../../services/export.service';
 @Component({
@@ -35,6 +37,7 @@ import { ExportService } from '../../services/export.service';
 })
 export class OrdersArchiveComponent implements OnInit  {
   orders: OrderModel[] = [];
+  ordersSap: CompliteOrdersModel[] = [];
   expandedOrder: OrderModel | null = null;
   isLoading: Boolean = true;
 
@@ -43,6 +46,9 @@ export class OrdersArchiveComponent implements OnInit  {
     start: new FormControl(),
     end: new FormControl(),
   });
+
+  type: number = 0;
+  
 
   columnsToDisplay = [
     { field: 'no', header: 'No' },
@@ -57,7 +63,8 @@ export class OrdersArchiveComponent implements OnInit  {
   ];
   dataSource: MatTableDataSource<OrderModel> =
     new MatTableDataSource<OrderModel>([]);
-
+    dataSourceSap: MatTableDataSource<CompliteOrdersModel> =
+    new MatTableDataSource<CompliteOrdersModel>([]);
  
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -67,6 +74,7 @@ export class OrdersArchiveComponent implements OnInit  {
     private ordersService: OrdersService,
     private exportService: ExportService,
     private router: Router, private r: ActivatedRoute,
+    private orderSapService: OrderSapService,
     private dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-GB');
@@ -105,6 +113,97 @@ export class OrdersArchiveComponent implements OnInit  {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
+  }
+  
+  getOrdersSap() {
+    
+    this.isLoading = true;
+    this.orderSapService
+      .getOrdersSapAllDone()
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe((data: CompliteOrdersModel[]) => {
+        this.ordersSap = data;
+
+        if (this.range.value.start !== null && this.range.value.end !== null) {
+          this.ordersSap = data.filter((item: CompliteOrdersModel) => {
+            // console.log('new Date(item.datetime)',new Date(item.datetime));
+            // console.log('range start', this.range.value.start);
+            return (
+              new Date(item.timeStampWrite) >= this.range.value.start &&
+              new Date(item.timeStampWrite) <= this.range.value.end
+            );
+          });
+        } else if (this.range.value.start !== null) {
+          this.ordersSap = data.filter((item: CompliteOrdersModel) => {
+            return new Date(item.timeStampWrite) >= this.range.value.start;
+          });
+        } else if (this.range.value.end !== null) {
+          this.ordersSap = data.filter((item: CompliteOrdersModel) => {
+            return new Date(item.timeStampWrite) <= this.range.value.end;
+          });
+        }
+
+
+
+        this.dataSourceSap = new MatTableDataSource<CompliteOrdersModel>(this.ordersSap);
+          this.dataSourceSap.paginator = this.paginator;
+          this.dataSourceSap.sort = this.sort;
+        console.log('getOrders', data);
+      });
+  }
+
+
+  setTable(){
+    if (this.type) {
+      this.columnsToDisplay = [
+        { field: 'recipeRowID', header: 'No' },
+        { field: 'orderID', header: 'Order ID' },
+        { field: 'segmentRequirementID', header: 'Segment Requirement ID' },
+        { field: 'productID', header: 'Recipe ID' },
+        { field: 'productName', header: 'Recipe name' },
+        { field: 'dueDate', header: 'Due date', width: '20%' },
+        { field: 'timeStampWrite', header: 'Due date', width: '20%' },
+      ];
+      this.columnsToDisplayWithExpand = [
+        'expand',
+        ...this.columnsToDisplay.map((c) => c.field),
+        'actions',
+      ];
+      this.getOrdersSap()
+
+    } else {
+      this.columnsToDisplay = [
+        { field: 'no', header: 'No' },
+        { field: 'id', header: 'ID' },
+        { field: 'name', header: 'Order name' },
+        { field: 'customerName', header: 'Customer name' },
+        { field: 'dueDate', header: 'Due date', width: '20%' },
+        
+      ];
+      this.columnsToDisplayWithExpand = [
+        'expand',
+        ...this.columnsToDisplay.map((c) => c.field),
+        'actions',
+      ];
+
+      this.getOrders()
+    }
+  }
+
+
+  changeTypeOfOrder() {
+    console.log(
+      '🚀 ~ file: orders.component.ts:35 ~ OrdersComponent ~ type:',
+      this.type
+    );
+
+    this.setTable() 
+        
+            
+  }
+
+  pdfClickSAP(data: any) {
+    this.router.navigate(['../pdf-sap/' + data.orderRowID], { relativeTo: this.r });
   }
 
   changeFilter() {

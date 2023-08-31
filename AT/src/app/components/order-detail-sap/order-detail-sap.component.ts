@@ -14,7 +14,7 @@ import { NotifierService } from '../../services/notifier.service';
 
 import { OrderSapModel, ComponentModel, ProductionDoneSapModel , RecalculateOrderSapModel, CompliteOrderModel} from '../../models/order-sap.model';
 import { RecalculateOrder } from '../../models/order.model';
-import { UserModel } from '../../models/user.model';
+import { UserModel, UserRole } from '../../models/user.model';
 
 import { RecalculateSapComponent } from '../recalculate-sap/recalculate-sap.component';
 @Component({
@@ -37,6 +37,7 @@ export class OrderDetailSapComponent implements OnInit {
   order?: OrderSapModel;
   form!: FormGroup;
   packingForm!: FormGroup;
+ 
   components: ComponentModel[] = [];
   operator: UserModel | null = null;
   dosePerOrder: RecalculateOrderSapModel = {
@@ -93,6 +94,8 @@ export class OrderDetailSapComponent implements OnInit {
   },
   segmentRequirementID: '',
   componentRowID: 0, 
+  operatorId:'',
+    
   };
   //compliteOrder?: CompliteOrderModel ;
   donePerStation?: ProductionDoneSapModel;
@@ -111,6 +114,7 @@ export class OrderDetailSapComponent implements OnInit {
     this.prepareForm();
     this.auth.user$.subscribe((user) => {
       this.operator = user;
+      console.log("🚀 ~ file: order-detail-sap.component.ts:114 ~ OrderDetailSapComponent ~ this.auth.user$.subscribe ~ user:", user)
       this.form.patchValue({
         operatorId: user?.id || null,
         operatorName: this.ordersService.showFullUserName(user as UserModel),
@@ -258,6 +262,12 @@ export class OrderDetailSapComponent implements OnInit {
         Validators.min(50),
         Validators.max(700),
       ]),
+      operatorId: new FormControl(this.operator?.id || null),
+      operatorName: new FormControl(
+        this.ordersService.showFullUserName(
+          this.order?.operator as UserModel
+        ) || null
+      ),
     });
   }
 
