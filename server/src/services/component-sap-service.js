@@ -3,8 +3,10 @@ const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_SAP_COMPONENTS = 
-    `SELECT *
-    FROM [ATtoSAP_DEV].[dbo].[MATERIAL]`
+    `
+    SELECT *, netWeightKG/netWeightL as specificBulkWeight
+    FROM [ATtoSAP_DEV].[dbo].[MATERIAL]
+    `
 ;
 
 

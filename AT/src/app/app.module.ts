@@ -66,6 +66,7 @@ import { OrderSapComponent } from './components/order-sap/order-sap.component';
 import { OrderDetailSapComponent } from './components/order-detail-sap/order-detail-sap.component';
 import { RecalculateSapComponent } from './components/recalculate-sap/recalculate-sap.component';
 import { PdfSapComponent } from './components/pdf-sap/pdf-sap.component';
+import { ComponentsSapComponent } from './components/components-sap/components-sap.component';
 
 registerLocaleData(localeSk, 'sk')
 
@@ -97,6 +98,7 @@ registerLocaleData(localeSk, 'sk')
     OrderDetailSapComponent,
     RecalculateSapComponent,
     PdfSapComponent,
+    ComponentsSapComponent,
     
   ],
     imports: [

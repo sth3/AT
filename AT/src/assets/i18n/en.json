@@ -12,6 +12,7 @@
   },
   "navBar": {
     "components": "Components",
+    "componentsSAP": "Components SAP",
     "recipes": "Recipes",
     "orders": "Orders",
     "ordersArchive": "Orders Archive",
@@ -221,6 +222,35 @@
     },
     {
       "item": "Last update"
+    }
+  ],
+  "componentsSapTableHead": [
+    {
+      "item": "Row ID"
+    },
+    {
+      "item": "Material ID"
+    },
+    {
+      "item": "Material Name"
+    },
+    {
+      "item": "Net Weight Kg"
+    },
+    {
+      "item": "Net Weight L"
+    },
+    {
+      "item": "Specific Bulk Weight"
+    },
+     {
+      "item": "Pack Weight"
+    },
+    {
+      "item": "Pack Type"
+    },
+    {
+      "item": "Pack Weight Unit"
     }
   ],
   "componentsArchiveTableHead": [

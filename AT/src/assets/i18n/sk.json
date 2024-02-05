@@ -12,6 +12,7 @@
   },
   "navBar": {
     "components": "Komponenty",
+    "componentsSAP": "Komponenty SAP",
     "recipes": "Recepty",
     "orders": "Výrobné príkazy",
     "ordersArchive": "Archív výrobných príkazov",
@@ -224,6 +225,35 @@
     },
     {
       "item": "Posledná aktualizácia"
+    }
+  ],
+  "componentsSapTableHead": [
+    {
+      "item": "ID"
+    },
+    {
+      "item": "Material ID"
+    },
+    {
+      "item": "Meno materialu"
+    },
+    {
+      "item": "Net váha Kg"
+    },
+    {
+      "item": "Net váha L"
+    },
+    {
+      "item": "Špecifická objemová hmotnosť"
+    },
+     {
+      "item": "Váha Balenia"
+    },
+    {
+      "item": "Špecifikácia"
+    },
+    {
+      "item": "Jednotka hmotnosti"
     }
   ],
   "componentsArchiveTableHead": [

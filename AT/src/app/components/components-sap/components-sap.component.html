@@ -1,0 +1,86 @@
+<div style="flex: 1 1 0;">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div style="font-size: 15px">
+          <mat-form-field appearance="outline" style="margin: 20px 10px 0; padding: 0">
+            <mat-label>{{ 'head.quickFilter'  | translate }}</mat-label>
+            <input matInput placeholder="chilli" [(ngModel)]="quickFilter" (ngModelChange)="changeFilter()">
+            <span matSuffix><mat-icon>filter_alt</mat-icon></span>
+          </mat-form-field>
+        </div>     
+        
+        
+        <h2 class="table-title">{{ 'navBar.componentsSAP'  | translate }}</h2>
+  
+        
+        <span class="spacer"></span>
+        <button mat-button [matMenuTriggerFor]="exportMenu">
+          <mat-icon>file_download</mat-icon>
+          {{ 'head.export'  | translate }}
+        </button>        
+      </mat-toolbar-row>
+    </mat-toolbar>
+  
+    
+  
+  
+    <mat-menu #exportMenu="matMenu" [overlapTrigger]="false">
+      <button mat-menu-item (click)="exportCSV(false)">
+        {{ 'head.exportEntire'  | translate }}
+      </button>
+      <button mat-menu-item (click)="exportCSV(true)">
+        {{ 'head.exportVisible'  | translate }}
+      </button>
+    </mat-menu>
+  
+    <table mat-table
+           matSort
+           [dataSource]="dataSource"
+           class="mat-elevation-z8">
+      <ng-container [matColumnDef]="column.field" *ngFor="let  column of columnsToDisplay ; let i = index">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
+            [style]="{'width': column.width || 'auto'}"> {{'componentsSapTableHead.'+i+'.item' | translate}} </th>
+        <ng-container *ngIf="column.field === 'lastUpdate'; else normalTd">
+          <td mat-cell *matCellDef="let element"> {{element[column.field] | date : 'd.M.y, HH:mm:ss' : 'UTC'  }} </td>
+        </ng-container>
+        <ng-container *ngIf="column.field === 'packingType'; else normalTd">
+          <td mat-cell *matCellDef="let element"> {{element[column.field] !== null ? ('selectPacking.'+element[column.field]+'.viewValue' | translate) : ''}}</td>
+        </ng-container>
+        <ng-container *ngIf="column.field === 'specificBulkWeight'; else normalTd">
+          <td mat-cell *matCellDef="let element"> {{element[column.field] | number :'1.3-3':'sk'  }} kg/l</td>
+        </ng-container>
+        <ng-container *ngIf="column.field === 'packingWeight'; else normalTd">
+          <td mat-cell *matCellDef="let element"> {{element[column.field] ?(element[column.field] | number :'1.3-3':'sk') + ' kg':''}} </td>
+        </ng-container>
+        <ng-template #normalTd>
+          <td mat-cell *matCellDef="let element"> {{element[column.field]}} </td>
+        </ng-template>
+      </ng-container>
+  
+      
+  
+      <tr mat-header-row *matHeaderRowDef="allColumnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: allColumnsToDisplay;"
+          class="default-element-row">
+      </tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4"> {{ 'head.noDataFilter'  | translate }} "{{quickFilter}}".</td>
+      </tr>
+    </table>
+    <div *ngIf="isLoading"
+         style="display: flex; justify-content: center; align-items: center; background: white;">
+      <mat-progress-spinner
+        color="primary"
+        mode="indeterminate">
+      </mat-progress-spinner>
+    </div>
+    <mat-paginator [length]="data.length"
+                   [pageSizeOptions]="[10, 20, 50, 100]"
+                   [showFirstLastButtons]="true"
+                   [pageSize]="20" 
+                   aria-label="Select page of components search results">
+                   
+                  </mat-paginator>
+  
+   
+  </div>

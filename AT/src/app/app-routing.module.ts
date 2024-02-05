@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { ComponentsComponent } from './components/components/components.component';
+import { ComponentsSapComponent } from './components/components-sap/components-sap.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { OrderDetailSapComponent } from './components/order-detail-sap/order-detail-sap.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'components', pathMatch: 'full' },
   //{ path: 'home', component: HomeComponent },
   { path: 'components', component: ComponentsComponent },
+  { path: 'components-sap', component: ComponentsSapComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'orders', component: OrdersComponent },

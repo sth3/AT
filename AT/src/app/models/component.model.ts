@@ -7,6 +7,17 @@ export interface ComponentModel {
   specificBulkWeight:number;
   lastUpdate: string;
 }
+export interface ComponentSapModel {
+  rowID: number;
+  materialID: string;
+  materialName: string;  
+  netWeightKG:number;
+  netWeightL:number;
+  specificBulkWeight:number;
+  packWeight:number;
+  packType:string;
+  packWeightUnit: string;
+}
 
 export interface ComponentItemModel extends ComponentModel {
   componentSP: number;
