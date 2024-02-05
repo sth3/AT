@@ -84,7 +84,7 @@ export class ComponentsSapComponent implements OnInit {
 
   }
   exportCSV(visibleDataOnly: boolean) {
-    const headerList = ['no', 'id', 'name', 'specificBulkWeight', 'packingWeight', 'lastUpdate'];
+    const headerList = ['rowID', 'materialID', 'materialName','netWeightKG', 'netWeightL', 'specificBulkWeight', 'packWeight', 'packType', 'packWeightUnit'];
     if (visibleDataOnly) {
       // @ts-ignore
       this.exportService.downloadFile(this.dataSource._renderData.value, headerList, 'components');
