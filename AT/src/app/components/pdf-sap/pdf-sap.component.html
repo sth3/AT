@@ -8,39 +8,34 @@
             <fieldset [disabled]="!editable" class="order-form-container">
               <div class="order-form-field-pdf">
                 <h3 class="order-pdf-h3">{{'orderTableHead.1.item' | translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
+                <mat-form-field appearance="outline" style="width: 300px">
                   <input matInput placeholder="ID" formControlName="id" />
                 </mat-form-field>
               </div>
               <div class="order-form-field-pdf">
                 <h3 class="order-pdf-h3">{{'orderTableHead.2.item' | translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
+                <mat-form-field appearance="outline" style="width: 300px">
                   <input matInput placeholder="Name" formControlName="name" />
                 </mat-form-field>
               </div>
-              <div class="order-form-field-pdf">
-                <h3 class="order-pdf-h3">{{'orderTableHead.3.item' | translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
-                  <input matInput placeholder="Customer name" formControlName="customerName" />
-                </mat-form-field>
-              </div>
+              
               <div class="order-form-field-pdf">
                 <h3 class="order-pdf-h3">{{'orderTableHead.4.item' | translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
+                <mat-form-field appearance="outline" style="width: 300px">
                   <input matInput value="{{ this.orderDueDate | date : 'd.M.y' }}" />
                 </mat-form-field>
               </div>
               <div class="order-form-field-pdf">
-                <h3 class="order-pdf-h3">{{'dialogOrder.recipe'| translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
-                  <input matInput value="{{ this.recipe }} " />
+                <h3 class="order-pdf-h3">{{'dialogOrder.quantity'| translate}}</h3>
+                <mat-form-field appearance="outline" style="width: 300px">
+                  <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity" />
+                  <span matSuffix>kg</span>
                 </mat-form-field>
               </div>
               <div class="order-form-field-pdf">
-                <h3 class="order-pdf-h3">{{'dialogOrder.quantity'| translate}}</h3>
-                <mat-form-field appearance="outline" style="width: 325px">
-                  <input matInput placeholder="Quantity" type="number" min="0" formControlName="quantity" />
-                  <span matSuffix>kg</span>
+                <h3 class="order-pdf-h3">{{'dialogOrder.recipe'| translate}}</h3>
+                <mat-form-field appearance="outline" style="width: 600">
+                  <input matInput value="{{ this.recipe }} " />
                 </mat-form-field>
               </div>
             </fieldset>

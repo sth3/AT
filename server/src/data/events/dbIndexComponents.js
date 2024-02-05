@@ -1,4 +1,4 @@
-const {sqlConfig, sqlConfigProductionSAP, sqlConfigTestSAP} = require("./dbConfig.js"); // DATA NA SPOJENIE S DATABAZOU
+const {sqlConfig, sqlConfigProductionSAP, sqlConfigTestSAP,sqlConfigDEV} = require("./dbConfig.js"); // DATA NA SPOJENIE S DATABAZOU
 const sql = require('mssql/msnodesqlv8');
 const utils = require('../utils');
 const { DateTime } = require("mssql/msnodesqlv8");
@@ -34,8 +34,19 @@ const poolPromise = new sql.ConnectionPool(sqlConfig)
         console.error('Database ATtoSQL TST Connection Failed! Bad Config: ', err)
     });
 
+    const poolPromiseDEV = new sql.ConnectionPool(sqlConfigDEV)
+    .connect()
+    .then(pool => {
+        console.log('Connected to MSSQL ATtoSQL DEV');
+        return pool;
+    })
+    .catch(err => {
+        console.error('Database ATtoSQL DEV Connection Failed! Bad Config: ', err)
+    });
+
 module.exports = {   
     poolPromise: poolPromise,
     poolPromisePRD: poolPromisePRD,
     poolPromiseTST: poolPromiseTST,
+    poolPromiseDEV: poolPromiseDEV
 };

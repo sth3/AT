@@ -7,9 +7,8 @@ const GET_ORDERS = `SELECT DISTINCT
                     O.orderID ,
                     O.segmentRequirementID,
                     O.productID,
-                    O.productName,
-                    O.customerName,                    
-                    O.dueDate,
+                    O.productName,                                        
+                    O.startTime dueDate,
                     O.quantity,
                     O.unitOfMeasure,
                     O.timeStampWrite,
@@ -35,8 +34,8 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                     O.segmentRequirementID,
                     O.productID,
                     O.productName,
-                    O.customerName,                    
-                    O.dueDate,
+                                     
+                    O.startTime dueDate,
                     O.quantity,
                     O.unitOfMeasure,
                     O.timeStampWrite,
@@ -76,9 +75,8 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.orderID
                   ,O.segmentRequirementID
                   ,O.productID
-                  ,O.productName
-                  ,O.customerName                    
-                  ,O.dueDate
+                  ,O.productName                                     
+                  ,O.startTime dueDate
                   ,O.quantity
                   ,O.unitOfMeasure
                   ,O.timeStampWrite
@@ -123,9 +121,8 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.orderID
                   ,O.segmentRequirementID
                   ,O.productID
-                  ,O.productName
-                  ,O.customerName                    
-                  ,O.dueDate
+                  ,O.productName                                    
+                  ,O.startTime dueDate
                   ,O.quantity
                   ,O.unitOfMeasure
                   ,O.timeStampWrite
@@ -170,9 +167,8 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.orderID
                   ,O.segmentRequirementID
                   ,O.productID
-                  ,O.productName
-                  ,O.customerName                    
-                  ,O.dueDate
+                  ,O.productName                                   
+                  ,O.startTime dueDate
                   ,O.quantity
                   ,O.unitOfMeasure
                   ,O.timeStampWrite
@@ -266,6 +262,7 @@ const getOrdersSap = async () => {
 const getOrdersSapAll = async () => {
   const pool = await poolPromiseTST;
   const { recordset } = await pool.request().query(GET_ORDERS_ALL_ACTIVE);
+  console.log("🚀 ~ getOrdersSapAll ~ recipes:", recordset)
   const recipes = trimTrailingWhitespace(recordset);
   recipes.map((recipe) => parseComponentsAndCheckValidity(recipe));
   console.log(
