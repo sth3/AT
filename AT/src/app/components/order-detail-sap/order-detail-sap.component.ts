@@ -252,10 +252,10 @@ export class OrderDetailSapComponent implements OnInit {
         Validators.required
       ),
       packingOrders: new FormArray([]),
-      idMixer: new FormControl(null, [Validators.required, Validators.min(1)]),
+      idMixer: new FormControl(this.order?.mixerID.concat(" - ",  this.order?.mixerName ) || '', [Validators.required]),
       package: new FormControl(1, [Validators.required, Validators.min(1)]),
       mixingTime: new FormControl(null, Validators.required),
-      idPackingMachine: new FormControl(null, Validators.required),
+     // idPackingMachine: new FormControl(null, Validators.required),
       idEmptyingStationBag: new FormControl(null, Validators.required),
       volumePerDose: new FormControl(0, [
         Validators.required,

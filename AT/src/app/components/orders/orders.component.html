@@ -330,7 +330,7 @@
             else normalTd
           ">
           <td mat-cell *matCellDef="let element">
-            {{ element[column.field] | date : "d.M.y" : "UTC" }}
+            {{ element[column.field] | date : "d.M.y, HH:mm" : "UTC" }}
           </td>
         </ng-container>
         <ng-template #normalTd>
@@ -368,8 +368,9 @@
             *ngIf="expandedOrder === element">
             <div style="margin-top: 20px">
               <mat-form-field appearance="outline" style="width: 20%">
-                <mat-label>{{'recipeSAP.customerName'| translate}}</mat-label>
-                <input matInput placeholder="0000000001" readonly [value]="element.customerName" />
+                <mat-label *ngIf="this.type "> {{ 'recipeSAP.productName'| translate }}</mat-label>
+                <mat-label *ngIf="!this.type "> {{ 'recipeSAP.customerName'| translate }}</mat-label>
+                <input matInput placeholder="0000000001" readonly [value]="type ? element.productName: element.customerName" />
               </mat-form-field>
               <mat-form-field appearance="outline" style="width: 30%">
                 <mat-label>{{'recipeSAP.quantity'| translate}} </mat-label>

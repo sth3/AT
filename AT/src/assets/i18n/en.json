@@ -195,7 +195,8 @@
     "select":"Select"    
   },
   "recipeSAP": {
-    "customerName":"Customer Name",    
+    "customerName":"Customer Name",  
+    "productName":"Product Name",   
     "quantity":"Quantity",    
     "timeStampWrite":"Write timestamp",    
     "timeStampRead":"Read timestamp",    
@@ -355,7 +356,7 @@
       "item": "Product Name"
     },
     {
-      "item": "Due Date"
+      "item": "Start time"
     },
     {
       "item": "Write timestamp"

@@ -8,6 +8,8 @@ export interface OrderSapModel {
   productID: string;
   productName: string;
   customerName: string;  
+  mixerID: string;  
+  mixerName: string;  
   dueDate: string;
   quantity: number;
   unitOfMeasure: string;

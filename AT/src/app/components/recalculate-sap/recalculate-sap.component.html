@@ -60,18 +60,18 @@
             <div class="order-form-field-rec">
               <!-- <h3>{{'orderTableHead.4.item'|translate}}</h3> -->
               <mat-form-field appearance="outline" style="width: 180px" class="note">
-                <mat-label>{{'orderTableHead.4.item'|translate}}</mat-label>
+                <mat-label>{{'head.startDate'|translate}}</mat-label>
                 <input matInput placeholder="0001" readonly
-                  [value]="this.data.dueDate | date : 'd.M.y' : 'UTC'">
+                  [value]="this.data.dueDate | date : 'd.M.y, HH:mm' : 'UTC'">
               </mat-form-field>
             </div>
-            <div class="order-form-field-rec">
-                <!-- <h3>{{'dialogOrder.packingMachineID'|translate}}</h3> -->
+            <!-- <div class="order-form-field-rec">
+                <h3>{{'dialogOrder.packingMachineID'|translate}}</h3> 
                 <mat-form-field appearance="outline" style="width: 180px" class="note">
                   <mat-label>{{'dialogOrder.packingMachineID'|translate}}</mat-label>
                   <input matInput placeholder="0001" readonly [value]="this.data.orderSap.idPackingMachine">
                 </mat-form-field>
-              </div>
+              </div>-->
               <div class="order-form-field-rec">
                 <!-- <h3>{{'dialogOrder.emptyingStationID'|translate}}</h3> -->
                 <mat-form-field appearance="outline" style="width: 180px" class="note">
