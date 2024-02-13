@@ -64,7 +64,8 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
 const GET_ALL_ORDER_BY_NO = 
                   `SELECT DISTINCT  R.orderRowID
                   ,R.recipeRowID
-                  ,R.idMixer
+                  ,R.idMixer mixerID
+                  ,R.mixerName
                   ,R.package
                   ,R.mixingTime
                   
@@ -84,6 +85,7 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.productID
                   ,O.productName                                     
                   ,O.startTime dueDate
+                  ,O.lot
                   ,O.quantity
                   ,O.unitOfMeasure
                   ,O.timeStampWrite
@@ -111,6 +113,7 @@ const GET_ALL_ORDER_BY_NO =
                   `SELECT DISTINCT  R.orderRowID
                   ,R.recipeRowID
                   ,R.idMixer
+                  ,R.mixerName
                   ,R.package
                   ,R.mixingTime
                   
@@ -128,7 +131,8 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.orderID
                   ,O.segmentRequirementID
                   ,O.productID
-                  ,O.productName                                    
+                  ,O.productName  
+                  ,O.lot                                  
                   ,O.startTime dueDate
                   ,O.quantity
                   ,O.unitOfMeasure
@@ -157,6 +161,7 @@ const GET_ALL_ORDER_BY_NO =
                   `SELECT DISTINCT  R.orderRowID
                   ,R.recipeRowID
                   ,R.idMixer
+                  ,R.mixerName
                   ,R.package
                   ,R.mixingTime
                   
@@ -174,7 +179,8 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.orderID
                   ,O.segmentRequirementID
                   ,O.productID
-                  ,O.productName                                   
+                  ,O.productName   
+                  ,O.lot                                
                   ,O.startTime dueDate
                   ,O.quantity
                   ,O.unitOfMeasure

@@ -198,6 +198,7 @@
     "customerName":"Customer Name",  
     "productName":"Product Name",   
     "quantity":"Quantity",    
+    "lot":"lot", 
     "timeStampWrite":"Write timestamp",    
     "timeStampRead":"Read timestamp",    
     "status":"Status"   

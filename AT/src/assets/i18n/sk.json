@@ -201,6 +201,7 @@
     "customerName":"Meno zákazníka",    
     "productName":"Meno produktu",    
     "quantity":"Množstvo",    
+    "lot":"Šarža", 
     "timeStampWrite":"Čas zápisu",    
     "timeStampRead":"Čas spracovania",    
     "status":"Status zápisu"   

@@ -6,7 +6,7 @@ import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 
 import { OrderSapService  } from '../../services/order-sap.service';
 import {
-  CompliteOrdersModel, ComponentModel 
+  CompliteOrdersModel, ComponentModel ,OrderSapModel
 } from '../../models/order-sap.model';
 import {  
   RecalculateOrder, selectList
@@ -35,6 +35,7 @@ export class PdfSapComponent implements OnInit {
   isNew!: boolean;
   orderDueDate: string | undefined;
   recipe: string = '';
+  idNameMixer: string = '';
   order?: CompliteOrdersModel;
   orderComponent: ComponentModel [] = [];
   form!: FormGroup;
@@ -85,6 +86,7 @@ export class PdfSapComponent implements OnInit {
         this.editable = false;
         this.isNew = false;
         this.order = order;
+        this.idNameMixer = order.mixerID + ' - ' + order.mixerName;
         console.log("🚀 ~ file: pdf-sap.component.ts:50 ~ PdfSapComponent ~ this.ordersService.getOrderByNo ~ order:", order)
         this.orderComponent = this.order.components;        
         console.log("🚀 ~ file: pdf-sap.component.ts:52 ~ PdfSapComponent ~ this.ordersService.getOrderSapAllByNo ~ this.orderComponent :", this.orderComponent )
@@ -196,7 +198,7 @@ export class PdfSapComponent implements OnInit {
         this.order?.quantity.toFixed(3) || null ,
         Validators.required
       ),
-      idMixer: new FormControl(this.order?.idMixer, Validators.required),
+      idMixer: new FormControl(this.idNameMixer || '', [Validators.required]),
       mixingTime: new FormControl(
         this.order?.mixingTime || null,
         Validators.required

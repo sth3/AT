@@ -34,7 +34,7 @@ export interface ComponentModel {
 }
 
 export interface OrderItemModel extends OrderSapModel {
-  idMixer: number;
+  mixerID: string;
   package: number;
   mixingTime: number;
   idPackingMachine: number;
@@ -80,7 +80,8 @@ export interface CompliteOrderModel {
   done: number;
 
   idEmptyingStationBag: number;
-  idMixer: number;
+  mixerID: string;
+  mixerName: string;
   idPackingMachine: number;
   mixingTime: number;
 
@@ -113,7 +114,8 @@ export interface CompliteOrdersModel {
   done: number;
 
   idEmptyingStationBag: number;
-  idMixer: number;
+  mixerID: string;
+  mixerName: string;  
   idPackingMachine: number;
   mixingTime: number;
 
@@ -131,6 +133,7 @@ export interface CompliteOrdersModel {
   //operator: UserModel;
   rec: RecalculateOrderSapModel;
   segmentRequirementID: string;
+  lot: string;
   componentRowID: number;    
 
   timeStampWrite: number;

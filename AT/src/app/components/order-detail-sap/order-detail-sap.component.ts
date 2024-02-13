@@ -61,7 +61,8 @@ export class OrderDetailSapComponent implements OnInit {
   done: 0,
 
   idEmptyingStationBag: 0,
-  idMixer: 0,
+  mixerID: '',
+  mixerName: '',
   idPackingMachine: 0,
   mixingTime: 0,
 
