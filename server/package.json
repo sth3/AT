@@ -27,7 +27,9 @@
     "msnodesqlv8": "^2.7.0",
     "mssql": "^8.1.4",
     "nodemon": "^2.0.16",
+    "pdf-to-printer": "^5.6.0",
     "qckwinsvc2": "^1.0.2",
+    "tcp-port-used": "^1.0.2",
     "uuid": "^8.3.2"
   }
 }

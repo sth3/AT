@@ -3,5 +3,25 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    style.
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+      }
+      .pagination li {
+        margin: 0 4px;
+        cursor: pointer;
+      }
   body
     block content

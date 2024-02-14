@@ -3,3 +3,35 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  h1 PDF Printer
+    each file in pdfFiles
+      p
+        a(href=`/print/${file}`)= file
+
+
+  h1 Table with Pagination
+    table
+      thead
+        tr
+          th ID
+          
+      tbody
+        each file in paginatedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+          tr
+            td=  file
+            
+    select(name='itemsPerPage' onchange='location=this.value')
+      option(value='/?itemsPerPage=2' selected)= '2 items per page'
+      option(value='/?itemsPerPage=10')= '10 items per page'
+      option(value='/?itemsPerPage=20')= '20 items per page'
+    ul.pagination
+      - if (currentPage !== 1)
+        li
+          a(href=`/?page=${currentPage - 1}&itemsPerPage=${itemsPerPage}`) Previous
+      - for (let i = 1; i <= totalPages; i++)
+        li
+          a(href=`/?page=${i}&itemsPerPage=${itemsPerPage}`)= i
+      - if (currentPage !== totalPages)
+        li
+          a(href=`/?page=${currentPage + 1}&itemsPerPage=${itemsPerPage}`) Next
