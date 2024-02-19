@@ -29,6 +29,7 @@ const GET_ORDERS = `SELECT DISTINCT
                     R.packWeightUnit,
                     R.packType as packingType
                     FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                    where R.recipeRowID = o.rowID
                     FOR JSON PATH) components 
                     FROM [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O WHERE timeStampRead IS NULL `;
 
@@ -59,26 +60,27 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                         R.packWeightUnit,
                         R.packType as packingType
                         FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        where R.recipeRowID = o.rowID
                         FOR JSON PATH) components 
                         FROM [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O WHERE O.rowID = @recipeRowID `;
 const GET_ALL_ORDER_BY_NO = 
-                  `SELECT DISTINCT  R.orderRowID
-                  ,R.recipeRowID
-                  ,R.idMixer mixerID
-                  ,R.mixerName
-                  ,R.package
-                  ,R.mixingTime
+                  `SELECT DISTINCT  S.orderRowID
+                  ,S.recipeRowID
+                  ,S.idMixer mixerID
+                  ,S.mixerName
+                  ,S.package
+                  ,S.mixingTime
                   
-                  ,R.completedAt
-                  ,R.idEmptyingStationBag
-                  ,R.volumePerDose
-                  ,R.done
-                  ,R.BigBagDone
-                  ,R.ADSDone
-                  ,R.LiquidDone
-                  ,R.MicroDone
-                  ,R.createdAt
-                  ,R.operatorId
+                  ,S.completedAt
+                  ,S.idEmptyingStationBag
+                  ,S.volumePerDose
+                  ,S.done
+                  ,S.BigBagDone
+                  ,S.ADSDone
+                  ,S.LiquidDone
+                  ,S.MicroDone
+                  ,S.createdAt
+                  ,S.operatorId
                   ,O.rowID                     
                   ,O.orderID
                   ,O.segmentRequirementID
@@ -93,21 +95,22 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.status,
                         (SELECT 
                         R.rowID componentRowID,
-                        O.componentRowID QcomponentRowID,
+                        Q.componentRowID QcomponentRowID,
                         R.recipeRowID,
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
                         R.netWeightKG/R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
-                        O.packingWeight,
-                        O.packingType
+                        Q.packingWeight,
+                        Q.packingType
                         FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
-                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
+                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
+						WHERE R.recipeRowID = O.rowID 
                         FOR JSON PATH) components 
-                FROM [AT].[dbo].[ORDERS_SAP] R
-                JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
-                WHERE R.orderRowID = @recipeRowID `;
+                FROM [AT].[dbo].[ORDERS_SAP] S
+                JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON S.recipeRowID = O.rowID
+                WHERE S.orderRowID = @recipeRowID `;
 
                 const GET_ORDERS_ALL_ACTIVE = 
                   `SELECT DISTINCT  R.orderRowID
@@ -141,17 +144,18 @@ const GET_ALL_ORDER_BY_NO =
                   ,O.status,
                         (SELECT 
                         R.rowID componentRowID,
-                        O.componentRowID QcomponentRowID,
+                        Q.componentRowID QcomponentRowID,
                         R.recipeRowID,
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
                         R.netWeightKG/R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
-                        O.packingWeight,
-                        O.packingType
+                        Q.packingWeight,
+                        Q.packingType
                         FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
-                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
+                        JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
+						            WHERE R.recipeRowID = O.rowID   
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] R
                 JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
