@@ -159,7 +159,7 @@ const GET_ALL_ORDER_BY_NO =
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] R
                 JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
-                WHERE R.done = 0
+                WHERE R.done = 0 AND (BigBagDone = 0 OR ADSDone = 0 OR LiquidDone = 0 OR  MicroDone = 0 )
                  `;
                 const GET_ORDERS_ALL_DONE = 
                   `SELECT DISTINCT  R.orderRowID
