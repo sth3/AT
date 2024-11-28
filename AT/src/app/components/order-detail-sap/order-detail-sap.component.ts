@@ -213,6 +213,13 @@ export class OrderDetailSapComponent implements OnInit {
   get idMixer() {
     return this.form.get('idMixer') as FormControl;
   }
+  get mixerName() {
+    return this.form.get('mixerName') as FormControl;
+  }
+
+  get mixerID() {
+    return this.form.get('mixerID') as FormControl;
+  }
 
   get package() {
     return this.form.get('package') as FormControl;
@@ -254,6 +261,8 @@ export class OrderDetailSapComponent implements OnInit {
       ),
       packingOrders: new FormArray([]),
       idMixer: new FormControl(this.order?.mixerID.concat(" - ",  this.order?.mixerName ) || '', [Validators.required]),
+      mixerID: new FormControl(this.order?.mixerID || '', [Validators.required]),
+      mixerName: new FormControl(this.order?.mixerName || '', [Validators.required]),
       package: new FormControl(1, [Validators.required, Validators.min(1)]),
       mixingTime: new FormControl(null, Validators.required),
      // idPackingMachine: new FormControl(null, Validators.required),
@@ -330,9 +339,11 @@ export class OrderDetailSapComponent implements OnInit {
       }
 
       
+      console.log("🚀 ~ OrderDetailSapComponent ~ this.translate.get ~ this.compliteOrder :", this.compliteOrder )
       
       //this.compliteOrder =  {...this.donePerStation , ... this.form.value  };
       this.compliteOrder =    {...this.form.value, ...this.donePerStation};
+      console.log("🚀 ~ OrderDetailSapComponent ~ this.translate.get ~ this.form.value:", this.form.value)
 
       if (this.compliteOrder == null || this.dosePerOrder == null) {
         return;

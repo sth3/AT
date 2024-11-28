@@ -1,5 +1,13 @@
 const express = require("express");
+//const dotenv = require('dotenv');
+
+//dotenv.config();
+
 const port = process.env.PORT || 3000;
+//const pathPrint = process.env.PATH_PRINT_REPORTS ;
+//const pathDone = process.env.PATH_DONE_REPORTS ;
+//console.log("🚀 ~ pathDone:", pathDone)
+
 const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload");
 const api = require("./api.js");
@@ -48,12 +56,19 @@ app.use(cookieParser());
 app.use("/api", api);
 // app.use('/deals', dealsRouter);
 // app.use('/components',componentsRouter);
+getPrinters().then(console.log)
+const options = {
+  printer: "ET9C934EE7F5C0",
+};
+
+
+
 
 app.get("/", (req, res) => {
     
     //getPrinters().then(console.log);
     getDefaultPrinter().then(console.log)
-    const folderPath = "C://Users//Lenovo//Desktop//AT//Projects//NodRed//print"; // Update this with your folder path
+    const folderPath = "C:\\inetpub\\ftproot\\nodeRed\\reports"; // Update this with your folder path
     fs.readdir(folderPath, (err, files) => {
       if (err) {
         console.error("Error reading directory:", err);
@@ -77,7 +92,7 @@ app.get("/", (req, res) => {
 app.get("/print/:fileName", (req, res) => {
   const fileName = req.params.fileName;
   const filePath = path.join(
-    "C://Users//Lenovo//Desktop//AT//Projects//NodRed//print",
+    "C:\\inetpub\\ftproot\\nodeRed\\reports",
     fileName
   ); // Update this with your folder path
 
@@ -90,7 +105,7 @@ app.get("/print/:fileName", (req, res) => {
   //res.redirect("/") 
 
   const filePathDone = path.join(
-    "C://Users//Lenovo//Desktop//AT//Projects//NodRed//DONE",
+    "C:\\inetpub\\ftproot\\nodeRed\\done",
     fileName
   ); // Update this with your folder path
   
@@ -98,7 +113,7 @@ app.get("/print/:fileName", (req, res) => {
   fs.rename(filePath, filePathDone, function (err) {
     if (err) throw err;
     console.log("Successfully renamed - AKA moved!")
-    print(filePathDone)
+    print(filePathDone,options)
     .then(console.log(fileName),res.redirect("/") 
     );
   });
@@ -107,7 +122,7 @@ app.get("/print/:fileName", (req, res) => {
 });
 
 var watching = false;
-fs.watch('C://Users//Lenovo//Desktop//AT//Projects//NodRed//print', (eventType, fileName) => {
+fs.watch('C:\\inetpub\\ftproot\\nodeRed\\reports', (eventType, fileName) => {
     if(watching) return;
     if(eventType === 'change')watching = true;
     
@@ -118,11 +133,11 @@ fs.watch('C://Users//Lenovo//Desktop//AT//Projects//NodRed//print', (eventType, 
         console.log("🚀 ~ fs.watch ~ fileName 120:", fileName)
                    
               const filePath = path.join(
-              "C://Users//Lenovo//Desktop//AT//Projects//NodRed//print",
+              "C:\\inetpub\\ftproot\\nodeRed\\reports",
               fileName
             ); 
                        
-            print(filePath)
+            print(filePath, options)
            
         }
         setTimeout(() => {

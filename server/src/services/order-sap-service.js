@@ -28,10 +28,10 @@ const GET_ORDERS = `SELECT DISTINCT
                     R.packWeight as packingWeight,
                     R.packWeightUnit,
                     R.packType as packingType
-                    FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                    FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                     where R.recipeRowID = o.rowID
                     FOR JSON PATH) components 
-                    FROM [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O WHERE timeStampRead IS NULL `;
+                    FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE timeStampRead IS NULL `;
 
 const GET_ORDER_BY_NO = `SELECT DISTINCT 
                         o.rowID recipeRowID,                    
@@ -59,10 +59,10 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                         R.packWeight as packingWeight,
                         R.packWeightUnit,
                         R.packType as packingType
-                        FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         where R.recipeRowID = o.rowID
                         FOR JSON PATH) components 
-                        FROM [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O WHERE O.rowID = @recipeRowID `;
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE O.rowID = @recipeRowID `;
 const GET_ALL_ORDER_BY_NO = 
                   `SELECT DISTINCT  S.orderRowID
                   ,S.recipeRowID
@@ -104,12 +104,12 @@ const GET_ALL_ORDER_BY_NO =
                         R.unitOfMeasure,
                         Q.packingWeight,
                         Q.packingType
-                        FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
 						WHERE R.recipeRowID = O.rowID 
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] S
-                JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON S.recipeRowID = O.rowID
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON S.recipeRowID = O.rowID
                 WHERE S.orderRowID = @recipeRowID `;
 
                 const GET_ORDERS_ALL_ACTIVE = 
@@ -153,12 +153,12 @@ const GET_ALL_ORDER_BY_NO =
                         R.unitOfMeasure,
                         Q.packingWeight,
                         Q.packingType
-                        FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
 						            WHERE R.recipeRowID = O.rowID   
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] R
-                JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
                 WHERE R.done = 0
                  `;
                 const GET_ORDERS_ALL_DONE = 
@@ -202,11 +202,11 @@ const GET_ALL_ORDER_BY_NO =
                         R.unitOfMeasure,
                         O.packingWeight,
                         O.packingType
-                        FROM [ATtoSAP_DEV].[dbo].[RECIPE_COMPONENT_SAP] R 
+                        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
                         FOR JSON PATH) components 
                 FROM [AT].[dbo].[ORDERS_SAP] R
-                JOIN [ATtoSAP_DEV].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
+                JOIN [ATtoSAP_TST].[dbo].[RECIPE_SAP] O ON R.recipeRowID = O.rowID
                 WHERE R.done > 0
                  `;
 
@@ -214,6 +214,8 @@ const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
                     (
                       recipeRowID,                                      
                       idMixer, 
+                      mixerName,
+
                       package, 
                       mixingTime, 
                       
@@ -229,6 +231,7 @@ const ADD_ORDER = `INSERT INTO [AT].[dbo].[ORDERS_SAP]
                     VALUES (
                       @recipeRowID,                      
                       @idMixer,
+                      @mixerName,
                       @package, 
                       @mixingTime,
                       
@@ -261,7 +264,7 @@ const ADD_DOSE = `INSERT INTO [AT].[dbo].[QUANTITY_PER_DOSE_SAP]
                   ) 
                   VALUES `;
 
- const UPDATE_ORDER = ` UPDATE [ATtoSAP_DEV].[dbo].[RECIPE_SAP] SET timeStampRead = GETDATE() where rowID = @rowID  `                 
+ const UPDATE_ORDER = ` UPDATE [ATtoSAP_TST].[dbo].[RECIPE_SAP] SET timeStampRead = GETDATE() where rowID = @rowID  `                 
 
 const getOrdersSap = async () => {
   const pool = await poolPromiseTST;
@@ -372,7 +375,8 @@ const addOrderSap = async (order) => {
     //.input('dueDate', order.dueDate)
     .input('operatorId', sql.Int, order.operatorId)
 
-    .input("idMixer", sql.Int, order.idMixer)
+    .input("idMixer",  order.mixerID)
+    .input("mixerName",  order.mixerName)
     .input("package", sql.Int, order.package)
     .input("mixingTime", sql.Int, order.mixingTime)
     
