@@ -27,7 +27,7 @@ const GET_ORDERS = `SELECT DISTINCT
                     R.unitOfMeasure,
                     R.packWeight as packingWeight,
                     R.packWeightUnit,
-                    R.packType as packingType
+                    ISNULL(TRY_CAST(R.packType AS INT), 0) as packingType
                     FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                     where R.recipeRowID = o.rowID
                     FOR JSON PATH) components 
@@ -103,7 +103,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.netWeightKG/R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         Q.packingWeight,
-                        Q.packingType
+                        ISNULL(TRY_CAST(Q.packingType AS INT), 0) as packingType
                         FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
 						WHERE R.recipeRowID = O.rowID 
@@ -152,7 +152,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.netWeightKG/R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         Q.packingWeight,
-                        Q.packingType
+                        ISNULL(TRY_CAST(Q.packingType AS INT), 0) as packingType
                         FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] Q ON R.rowID = Q.componentRowID
 						            WHERE R.recipeRowID = O.rowID   
@@ -201,7 +201,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.netWeightKG/R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         O.packingWeight,
-                        O.packingType
+                        ISNULL(TRY_CAST(O.packingType AS INT), 0) as packingType
                         FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         JOIN [AT].[dbo].[QUANTITY_PER_DOSE_SAP] O ON R.rowID = O.componentRowID
                         FOR JSON PATH) components 
