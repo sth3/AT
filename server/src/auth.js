@@ -45,12 +45,12 @@ const authorizationCheck = (role, refresh = true) => {
         }
         // if the session has expired, return an unauthorized error, and delete the
         // session from our map
-        if (userSession.isExpired()) {
-            console.error('session expired');
-            delete sessions[sessionToken];
-            res.status(401).end();
-            return;
-        }
+        // if (userSession.isExpired()) {
+        //     console.error('session expired');
+        //     delete sessions[sessionToken];
+        //     res.status(401).end();
+        //     return;
+        // }
 
         if (!isSufficientRole(userSession.role, role)) {
             console.error('insufficient role');

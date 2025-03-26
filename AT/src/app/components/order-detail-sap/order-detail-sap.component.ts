@@ -112,14 +112,14 @@ export class OrderDetailSapComponent implements OnInit {
     private notifier: NotifierService,
     private auth: AuthService
   ) {
-    this.prepareForm();
     this.auth.user$.subscribe((user) => {
       this.operator = user;
+      this.prepareForm();
       console.log("🚀 ~ file: order-detail-sap.component.ts:114 ~ OrderDetailSapComponent ~ this.auth.user$.subscribe ~ user:", user)
-      this.form.patchValue({
-        operatorId: user?.id || null,
-        operatorName: this.ordersService.showFullUserName(user as UserModel),
-      });
+      // this.form.patchValue({
+      //   operatorId: user?.id || null,
+      //   operatorName: this.ordersService.showFullUserName(user as UserModel),
+      // });
     });
   }
 
@@ -275,7 +275,7 @@ export class OrderDetailSapComponent implements OnInit {
       operatorId: new FormControl(this.operator?.id || null),
       operatorName: new FormControl(
         this.ordersService.showFullUserName(
-          this.order?.operator as UserModel
+          this.operator as UserModel
         ) || null
       ),
     });

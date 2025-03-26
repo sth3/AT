@@ -4,8 +4,17 @@ const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_SAP_COMPONENTS = 
     `
-    SELECT *, netWeightKG/netWeightL as specificBulkWeight
-    FROM [ATtoSAP_TST].[dbo].[MATERIAL]
+     SELECT 
+        rowID, 
+         materialID, 
+        materialName, 
+        netWeightKG, 
+        netWeightKG/netWeightL as netWeightL , 
+        netWeightL as specificBulkWeight,
+        packWeight,
+        packWeightUnit,
+        packType
+     FROM [ATtoSAP_TST].[dbo].[MATERIAL]
     `
 ;
 

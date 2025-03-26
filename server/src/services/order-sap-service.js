@@ -23,7 +23,7 @@ const GET_ORDERS = `SELECT DISTINCT
                     R.componentID,
                     R.componentName nameC,
                     R.quantity sp,
-                    R.netWeightKG/R.netWeightL specificBulkWeight,
+                    R.netWeightL specificBulkWeight,
                     R.unitOfMeasure,
                     R.packWeight as packingWeight,
                     R.packWeightUnit,
@@ -54,11 +54,11 @@ const GET_ORDER_BY_NO = `SELECT DISTINCT
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
-                        R.netWeightKG/R.netWeightL specificBulkWeight,
+                        R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         R.packWeight as packingWeight,
                         R.packWeightUnit,
-                        R.packType as packingType
+                        COALESCE(TRY_CAST([packType] AS INT), 0) AS packingType 
                         FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
                         where R.recipeRowID = o.rowID
                         FOR JSON PATH) components 
@@ -100,7 +100,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
-                        R.netWeightKG/R.netWeightL specificBulkWeight,
+                        R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         Q.packingWeight,
                         ISNULL(TRY_CAST(Q.packingType AS INT), 0) as packingType
@@ -149,7 +149,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
-                        R.netWeightKG/R.netWeightL specificBulkWeight,
+                        R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         Q.packingWeight,
                         ISNULL(TRY_CAST(Q.packingType AS INT), 0) as packingType
@@ -198,7 +198,7 @@ const GET_ALL_ORDER_BY_NO =
                         R.componentID,
                         R.componentName nameC,
                         R.quantity sp,
-                        R.netWeightKG/R.netWeightL specificBulkWeight,
+                        R.netWeightL specificBulkWeight,
                         R.unitOfMeasure,
                         O.packingWeight,
                         ISNULL(TRY_CAST(O.packingType AS INT), 0) as packingType
