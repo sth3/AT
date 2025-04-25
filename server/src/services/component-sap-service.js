@@ -4,17 +4,18 @@ const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_SAP_COMPONENTS = 
     `
-     SELECT 
+    SELECT 
         rowID, 
-         materialID, 
+        materialID, 
         materialName, 
         netWeightKG, 
-        netWeightKG/netWeightL as netWeightL , 
-        netWeightL as specificBulkWeight,
+        netWeightKG / NULLIF(netWeightL, 0) AS netWeightL, 
+        netWeightL AS specificBulkWeight,
         packWeight,
         packWeightUnit,
         packType
-     FROM [ATtoSAP_TST].[dbo].[MATERIAL]
+        FROM [ATtoSAP_TST].[dbo].[MATERIAL]
+    WHERE LOWER(materialName) NOT LIKE '%zmes%';
     `
 ;
 

@@ -3,35 +3,71 @@ const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 const { getUserById } = require('./user-service');
 const GET_ORDERS = `SELECT DISTINCT 
-                    o.rowID recipeRowID,                    
-                    O.orderID ,
-                    O.segmentRequirementID,
-                    O.productID,
-                    O.productName,                                        
-                    O.startTime dueDate,
-                    O.quantity,
-                    O.lot,
-                    O.mixerID,
-                    O.mixerName,
-                    O.unitOfMeasure,
-                    O.timeStampWrite,
-                    O.timeStampRead,					
-                    O.status,
-                    (SELECT 
-                    R.rowID componentRowID,
-                    R.recipeRowID,
-                    R.componentID,
-                    R.componentName nameC,
-                    R.quantity sp,
-                    R.netWeightL specificBulkWeight,
-                    R.unitOfMeasure,
-                    R.packWeight as packingWeight,
-                    R.packWeightUnit,
-                    ISNULL(TRY_CAST(R.packType AS INT), 0) as packingType
-                    FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
-                    where R.recipeRowID = o.rowID
-                    FOR JSON PATH) components 
-                    FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O WHERE timeStampRead IS NULL `;
+    o.rowID AS recipeRowID,                    
+    o.orderID,
+    o.segmentRequirementID,
+    o.productID,
+    o.productName,                                        
+    o.startTime AS dueDate,
+    o.quantity,
+    o.lot,
+    o.mixerID,
+    o.mixerName,
+    o.unitOfMeasure,
+    o.timeStampWrite,
+    o.timeStampRead,					
+    o.status,
+    (
+        SELECT 
+            ISNULL(R.rowID, 0) AS componentRowID,
+            ISNULL(R.recipeRowID, 0) AS recipeRowID,
+            ISNULL(R.componentID, '') AS componentID,
+            ISNULL(R.componentName, '') AS nameC,
+            ISNULL(R.quantity, 0) AS sp,
+            ISNULL(R.netWeightL, 0) AS specificBulkWeight,
+            ISNULL(R.unitOfMeasure, '') AS unitOfMeasure,
+            ISNULL(R.packWeight, 0) AS packingWeight,
+            ISNULL(R.packWeightUnit, '') AS packWeightUnit,
+            ISNULL(TRY_CAST(R.packType AS INT), 0) AS packingType
+        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+        WHERE R.recipeRowID = o.rowID
+        FOR JSON PATH
+    ) AS components
+FROM [ATtoSAP_TST].[dbo].[RECIPE_SAP] O 
+WHERE 
+    o.timeStampRead IS NULL
+    AND JSON_QUERY((
+        SELECT 
+            ISNULL(R.rowID, 0) AS componentRowID,
+            ISNULL(R.recipeRowID, 0) AS recipeRowID,
+            ISNULL(R.componentID, '') AS componentID,
+            ISNULL(R.componentName, '') AS nameC,
+            ISNULL(R.quantity, 0) AS sp,
+            ISNULL(R.netWeightL, 0) AS specificBulkWeight,
+            ISNULL(R.unitOfMeasure, '') AS unitOfMeasure,
+            ISNULL(R.packWeight, 0) AS packingWeight,
+            ISNULL(R.packWeightUnit, '') AS packWeightUnit,
+            ISNULL(TRY_CAST(R.packType AS INT), 0) AS packingType
+        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+        WHERE R.recipeRowID = o.rowID
+        FOR JSON PATH
+    )) IS NOT NULL 
+    AND JSON_QUERY((
+        SELECT 
+            ISNULL(R.rowID, 0) AS componentRowID,
+            ISNULL(R.recipeRowID, 0) AS recipeRowID,
+            ISNULL(R.componentID, '') AS componentID,
+            ISNULL(R.componentName, '') AS nameC,
+            ISNULL(R.quantity, 0) AS sp,
+            ISNULL(R.netWeightL, 0) AS specificBulkWeight,
+            ISNULL(R.unitOfMeasure, '') AS unitOfMeasure,
+            ISNULL(R.packWeight, 0) AS packingWeight,
+            ISNULL(R.packWeightUnit, '') AS packWeightUnit,
+            ISNULL(TRY_CAST(R.packType AS INT), 0) AS packingType
+        FROM [ATtoSAP_TST].[dbo].[RECIPE_COMPONENT_SAP] R 
+        WHERE R.recipeRowID = o.rowID
+        FOR JSON PATH
+    )) <> '[]'; `;
 
 const GET_ORDER_BY_NO = `SELECT DISTINCT 
                         o.rowID recipeRowID,                    

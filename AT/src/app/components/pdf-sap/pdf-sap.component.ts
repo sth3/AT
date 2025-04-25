@@ -100,19 +100,39 @@ export class PdfSapComponent implements OnInit {
     });
   }
 
-  quantityComponents(components: ComponentModel[]) {  
-    if(this.order == null){      
-      return
-    }          
-    this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.sp * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
-    this.volumePerDoseTank = Math.ceil(components.reduce((acc, comp) => acc + ((comp.sp * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0)/this.quantityPallete );  
-    this.quantityComponentPerOrder = components.map((comp) => (comp.sp * (Number(this.order?.quantity) / 100)));
-    console.log('this.quantityComponentPerOrder',this.quantityComponentPerOrder);
-    console.log('this.volumePerDoseTank',this.volumePerDoseTank);
+  // quantityComponents(components: ComponentModel[]) {  
+  //   if(this.order == null){      
+  //     return
+  //   }          
+  //   this.quantityPallete = Math.ceil(components.reduce((acc, comp) => acc + ((comp.sp * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0) / Number(this.order.volumePerDose));  
+  //   this.volumePerDoseTank = Math.ceil(components.reduce((acc, comp) => acc + ((comp.sp * (Number(this.order?.quantity) / 100)) / comp.specificBulkWeight), 0)/this.quantityPallete );  
+  //   this.quantityComponentPerOrder = components.map((comp) => (comp.sp * (Number(this.order?.quantity) / 100)));
+  //   console.log('this.quantityComponentPerOrder',this.quantityComponentPerOrder);
+  //   console.log('this.volumePerDoseTank',this.volumePerDoseTank);
     
-       this.recalculateDose()
+  //      this.recalculateDose()
+  // }
+  quantityComponents(components: ComponentModel[]) {
+    if(this.order == null){      
+         return
+       }   
+    this.quantityPallete = Math.ceil(
+      components.reduce(
+        (acc, comp) => acc + comp.sp / comp.specificBulkWeight,
+        0
+      ) / Number(this.order.volumePerDose )
+    );
+    //console.log("🚀 ~ file: recalculate-sap.component.ts:24 ~ RecalculateSapComponent ~ quantityComponents ~ this.quantityPallete :", this.quantityPallete )
+    this.volumePerDoseTank = Math.ceil(
+      components.reduce(
+        (acc, comp) => acc + comp.sp / comp.specificBulkWeight,
+        0
+      ) / this.quantityPallete
+    );
+    //console.log("🚀 ~ file: recalculate-sap.component.ts:26 ~ RecalculateSapComponent ~ quantityComponents ~ this.volumePerDoseTank:", this.volumePerDoseTank)
+    this.quantityComponentPerOrder = components.map((comp) => comp.sp);
+    this.recalculateDose();
   }
-
 
   recalculateDose() {    
     this.quantityBag = [];
