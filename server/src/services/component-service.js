@@ -1,5 +1,5 @@
 const { poolPromise } = require("../data/events/dbIndexComponents");
-const sql = require("mssql/msnodesqlv8");
+const sql = require("mssql");
 const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_ALL_COMPONENTS = "SELECT * FROM [AT].[dbo].[COMPONENT]";

@@ -58,94 +58,135 @@ app.use("/api", api);
 // app.use('/components',componentsRouter);
 getPrinters().then(console.log)
 const options = {
-  printer: "ET9C934EE7F5C0",
+  printer: "ET9C934EE7F5C0", // názov z CMD/PowerShell, nie IP
 };
 
 
+const folderPath = "C:\\inetpub\\ftproot\\nodeRed\\reports";
+const donePath = "C:\\inetpub\\ftproot\\nodeRed\\done";
 
-
+// 📄 Zobrazenie zoznamu PDF súborov + stránkovanie
 app.get("/", (req, res) => {
-    
-    //getPrinters().then(console.log);
-    getDefaultPrinter().then(console.log)
-    const folderPath = "C:\\inetpub\\ftproot\\nodeRed\\reports"; // Update this with your folder path
-    fs.readdir(folderPath, (err, files) => {
-      if (err) {
-        console.error("Error reading directory:", err);
-        return res.status(500).send("Internal Server Error");
-      }
-      const pdfFiles = files.filter(
-        (file) => path.extname(file).toLowerCase() === ".pdf"
-      );
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      return res.status(500).send("Internal Server Error");
+    }
 
-      const currentPage = parseInt(req.query.page) || 1;
-  const itemsPerPage = parseInt(req.query.itemsPerPage) || ITEMS_PER_PAGE;
-  const paginatedData = paginateData(pdfFiles, currentPage, itemsPerPage);
-  const totalPages = Math.ceil(pdfFiles.length / itemsPerPage); 
-      res.render("index", { pdfFiles,paginatedData,
-        currentPage,
-        itemsPerPage,
-        totalPages });
+    const pdfFiles = files.filter(
+      (file) => path.extname(file).toLowerCase() === ".pdf"
+    );
+
+    const currentPage = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || ITEMS_PER_PAGE;
+    const paginatedData = paginateData(pdfFiles, currentPage, itemsPerPage);
+    const totalPages = Math.ceil(pdfFiles.length / itemsPerPage);
+
+    res.render("index", {
+      pdfFiles,
+      paginatedData,
+      currentPage,
+      itemsPerPage,
+      totalPages,
     });
+  });
 });
 
+// 🖨️ Tlač vybraného súboru + presun do DONE
 app.get("/print/:fileName", (req, res) => {
   const fileName = req.params.fileName;
-  const filePath = path.join(
-    "C:\\inetpub\\ftproot\\nodeRed\\reports",
-    fileName
-  ); // Update this with your folder path
+  const filePath = path.join(folderPath, fileName);
+  const filePathDone = path.join(donePath, fileName);
 
-   getPrinters().then(console.log);
-  //getDefaultPrinter().then(console.log);
-  // const options = {
-  //     printer: "HP LaserJet Professional P1606dn",
-  //   };
-  //print(filePath)
-  //res.redirect("/") 
+  fs.rename(filePath, filePathDone, (err) => {
+    if (err) {
+      console.error("Rename error:", err);
+      return res.status(500).send("Failed to move file.");
+    }
 
-  const filePathDone = path.join(
-    "C:\\inetpub\\ftproot\\nodeRed\\done",
-    fileName
-  ); // Update this with your folder path
-  
-//toto ak chces po tlaceni posunut do druhej zlozky
-  fs.rename(filePath, filePathDone, function (err) {
-    if (err) throw err;
-    console.log("Successfully renamed - AKA moved!")
-    print(filePathDone,options)
-    .then(console.log(fileName),res.redirect("/") 
-    );
+    print(filePathDone, options)
+      .then(() => {
+        console.log("Printed:", fileName);
+        res.redirect("/");
+      })
+      .catch((err) => {
+        console.error("Print error:", err);
+        res.status(500).send("Printing failed.");
+      });
   });
-
-  
 });
 
-var watching = false;
-fs.watch('C:\\inetpub\\ftproot\\nodeRed\\reports', (eventType, fileName) => {
-    if(watching) return;
-    if(eventType === 'change')watching = true;
-    
-    console.log(eventType);    
-    console.log(fileName);
-     let i = 0;
-    if (fileName && eventType === 'change'){
-        console.log("🚀 ~ fs.watch ~ fileName 120:", fileName)
-                   
-              const filePath = path.join(
-              "C:\\inetpub\\ftproot\\nodeRed\\reports",
-              fileName
-            ); 
-                       
-            print(filePath, options)
-           
-        }
-        setTimeout(() => {
+function ensureFolderExists(folderPath) {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+    console.log("Vytvorený priečinok:", folderPath);
+  }
+}
+
+function isFileReady(filePath, callback) {
+  fs.open(filePath, "r+", (err, fd) => {
+    if (err) return callback(false);
+    fs.close(fd, () => callback(true));
+  });
+}
+
+const reportsFolder = "C:\\inetpub\\ftproot\\nodeRed\\reports";
+const doneFolder = "C:\\inetpub\\ftproot\\nodeRed\\done";
+
+ensureFolderExists(doneFolder);
+
+let watching = false;
+
+fs.watch(reportsFolder, (eventType, fileName) => {
+  if (watching || !fileName || eventType !== "change") return;
+  watching = true;
+
+  const filePath = path.join(reportsFolder, fileName);
+  const filePathDone = path.join(doneFolder, fileName);
+
+  console.log("Zistený nový/zmenený súbor:", fileName);
+
+  let attempts = 0;
+  const maxAttempts = 10;
+  const delayMs = 500;
+
+  // const checkAndPrint = () => {
+  //   if (attempts >= maxAttempts) {
+  //     console.error(`Súbor ${fileName} nie je pripravený po ${maxAttempts} pokusoch.`);
+  //     watching = false;
+  //     return;
+  //   }
+
+  //   isFileReady(filePath, (ready) => {
+  //     if (!ready) {
+  //       attempts++;
+  //       console.log(`Pokus ${attempts}/${maxAttempts} – súbor nie je pripravený.`);
+  //       return setTimeout(checkAndPrint, delayMs);
+  //     }
+
+      // Súbor je pripravený
+      print(filePath, options)
+        .then(() => {
+          console.log("Tlač dokončená:", fileName);
+          fs.rename(filePath, filePathDone, (err) => {
+            if (err) {
+              console.error("Chyba pri presune súboru:", err);
+            } else {
+              console.log("📁 Súbor presunutý do 'done':", fileName);
+            }
             watching = false;
-        }, 100);
-    })
+          });
+        })
+        .catch((err) => {
+          console.error("❌ Chyba pri tlači:", err);
+          watching = false;
+        });
+//     });
+//   };
 
-
+//   // Spusti kontrolu
+//   setTimeout(checkAndPrint, delayMs);
+});
     const ITEMS_PER_PAGE = 2;
 
 // Function to paginate data

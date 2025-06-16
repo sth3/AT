@@ -1,7 +1,7 @@
 const {sqlConfig, sqlConfigProductionSAP, sqlConfigTestSAP,sqlConfigDEV} = require("./dbConfig.js"); // DATA NA SPOJENIE S DATABAZOU
-const sql = require('mssql/msnodesqlv8');
+const sql = require('mssql');
 const utils = require('../utils');
-const { DateTime } = require("mssql/msnodesqlv8");
+
 const moment = require('moment');
 
 const poolPromise = new sql.ConnectionPool(sqlConfig)

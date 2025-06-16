@@ -1,5 +1,5 @@
 const { poolPromiseTST, poolPromise } = require("../data/events/dbIndexComponents");
-const sql = require("mssql/msnodesqlv8");
+const sql = require("mssql");
 const { trimTrailingWhitespace } = require("../data/utils");
 const { getUserById } = require('./user-service');
 const GET_ORDERS = `SELECT DISTINCT 

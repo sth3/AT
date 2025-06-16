@@ -1,5 +1,5 @@
 const { poolPromise } = require("../data/events/dbIndexComponents");
-const sql = require("mssql/msnodesqlv8");
+//const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 
 const MAX_CHANGE_LENGTH = 512;

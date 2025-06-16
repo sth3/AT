@@ -1,5 +1,5 @@
 const { poolPromiseDEV } = require("../data/events/dbIndexComponents");
-const sql = require("mssql/msnodesqlv8");
+//const sql = require("mssql/msnodesqlv8");
 const { trimTrailingWhitespace } = require("../data/utils");
 
 const GET_SAP_COMPONENTS = 
