@@ -270,7 +270,7 @@ export class OrderDetailSapComponent implements OnInit {
       volumePerDose: new FormControl(0, [
         Validators.required,
         Validators.min(50),
-        Validators.max(700),
+        Validators.max(800),
       ]),
       operatorId: new FormControl(this.operator?.id || null),
       operatorName: new FormControl(

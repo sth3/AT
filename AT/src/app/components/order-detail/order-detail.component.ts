@@ -269,7 +269,7 @@ export class OrderDetailComponent implements OnInit {
       volumePerDose: new FormControl(this.order?.volumePerDose, [
         Validators.required,
         Validators.min(50),
-        Validators.max(700),
+        Validators.max(800),
       ]),
       operatorId: new FormControl(this.order?.operator.id || null),
       operatorName: new FormControl(
